@@ -81,11 +81,11 @@ import org.apache.commons.io.output.UnsynchronizedByteArrayOutputStream;
  * This class provides static utility methods for input/output operations.
  * </p>
  * <ul>
- * <li>closeQuietly - these methods close a stream ignoring nulls and exceptions
- * <li>toXxx/read - these methods read data from a stream
- * <li>write - these methods write data to a stream
- * <li>copy - these methods copy all the data from one stream to another
- * <li>contentEquals - these methods compare the content of two streams
+ * <li>closeQuietly - these methods close a stream ignoring nulls and exceptions</li>
+ * <li>toXxx/read - these methods read data from a stream</li>
+ * <li>write - these methods write data to a stream</li>
+ * <li>copy - these methods copy all the data from one stream to another</li>
+ * <li>contentEquals - these methods compare the content of two streams</li>
  * </ul>
  * <p>
  * The byte-to-char methods and char-to-byte methods involve a conversion step.

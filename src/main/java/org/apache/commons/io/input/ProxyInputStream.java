@@ -298,7 +298,7 @@ public abstract class ProxyInputStream extends FilterInputStream {
      * @return the number of bytes read or {@link IOUtils#EOF EOF} if we reached the end of stream.
      * @throws IOException
      *                     <ul>
-     *                     <li>If the first byte cannot be read for any reason other than the end of the file,
+     *                     <li>If the first byte cannot be read for any reason other than the end of the file,</li>
      *                     <li>if the input stream has been closed, or</li>
      *                     <li>if some other I/O error occurs.</li>
      *                     </ul>
@@ -325,7 +325,7 @@ public abstract class ProxyInputStream extends FilterInputStream {
      * @return the number of bytes read or {@link IOUtils#EOF EOF} if we reached the end of stream.
      * @throws IOException
      *                     <ul>
-     *                     <li>If the first byte cannot be read for any reason other than the end of the file,
+     *                     <li>If the first byte cannot be read for any reason other than the end of the file,</li>
      *                     <li>if the input stream has been closed, or</li>
      *                     <li>if some other I/O error occurs.</li>
      *                     </ul>

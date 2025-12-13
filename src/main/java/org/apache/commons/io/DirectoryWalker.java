@@ -167,7 +167,7 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  * <ul>
  * <li>The decision logic on whether to cancel processing or not.</li>
  * <li>Constructing and throwing a {@link CancelException}.</li>
- * <li>Custom cancel processing in the {@code handleCancelled()} method.
+ * <li>Custom cancel processing in the {@code handleCancelled()} method.</li>
  * </ul>
  * <p>
  * Two possible scenarios are envisaged for cancellation:

@@ -93,16 +93,16 @@ import org.apache.commons.io.function.Uncheck;
  * Facilities are provided in the following areas:
  * </p>
  * <ul>
- * <li>writing to a file
- * <li>reading from a file
- * <li>make a directory including parent directories
- * <li>copying files and directories
- * <li>deleting files and directories
- * <li>converting to and from a URL
- * <li>listing files and directories by filter and extension
- * <li>comparing file content
- * <li>file last changed date
- * <li>calculating a checksum
+ * <li>writing to a file</li>
+ * <li>reading from a file</li>
+ * <li>make a directory including parent directories</li>
+ * <li>copying files and directories</li>
+ * <li>deleting files and directories</li>
+ * <li>converting to and from a URL</li>
+ * <li>listing files and directories by filter and extension</li>
+ * <li>comparing file content</li>
+ * <li>file last changed date</li>
+ * <li>calculating a checksum</li>
  * </ul>
  * <p>
  * Note that a specific charset should be specified whenever possible. Relying on the platform default means that the
