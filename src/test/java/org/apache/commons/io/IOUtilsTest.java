@@ -20,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -537,6 +538,18 @@ class IOUtilsTest {
         assertDoesNotThrow(() -> IOUtils.closeQuietly(Arrays.asList(closeable, null, closeable)));
         assertDoesNotThrow(() -> IOUtils.closeQuietly(Stream.of(closeable, null, closeable)));
         assertDoesNotThrow(() -> IOUtils.closeQuietly((Iterable<Closeable>) null));
+    }
+
+    @SuppressWarnings("resource")
+    @Test
+    void testCloseQuietly_CloseableIOExceptionAddSuppressed() {
+        final Throwable e = new Exception("test").fillInStackTrace();
+        assertEquals(0, e.getSuppressed().length);
+        assertSame(e, IOUtils.closeQuietly(new BrokenInputStream(new EOFException("Suppressed").fillInStackTrace()), e));
+        assertEquals(1, e.getSuppressed().length);
+        final Throwable suppressed0 = e.getSuppressed()[0];
+        assertInstanceOf(EOFException.class, suppressed0);
+        assertEquals("Suppressed", suppressed0.getMessage());
     }
 
     @Test
