@@ -558,11 +558,11 @@ public class IOUtils {
      * }
      * </code></pre>
      *
-     * @param array the array against which the range is validated
-     * @param off   the starting offset into the array (inclusive)
-     * @param len   the number of elements to access
-     * @throws NullPointerException      if {@code array} is {@code null}
-     * @throws IndexOutOfBoundsException if the range {@code [off, off + len)} is out of bounds for {@code array}
+     * @param array the array against which the range is validated.
+     * @param off   the starting offset into the array (inclusive).
+     * @param len   the number of elements to access.
+     * @throws NullPointerException      if {@code array} is {@code null}.
+     * @throws IndexOutOfBoundsException if the range {@code [off, off + len)} is out of bounds for {@code array}.
      * @see InputStream#read(byte[], int, int)
      * @see OutputStream#write(byte[], int, int)
      * @since 2.21.0
@@ -605,11 +605,11 @@ public class IOUtils {
      * }
      * </code></pre>
      *
-     * @param array the array against which the range is validated
-     * @param off   the starting offset into the array (inclusive)
-     * @param len   the number of characters to access
-     * @throws NullPointerException      if {@code array} is {@code null}
-     * @throws IndexOutOfBoundsException if the range {@code [off, off + len)} is out of bounds for {@code array}
+     * @param array the array against which the range is validated.
+     * @param off   the starting offset into the array (inclusive).
+     * @param len   the number of characters to access.
+     * @throws NullPointerException      if {@code array} is {@code null}.
+     * @throws IndexOutOfBoundsException if the range {@code [off, off + len)} is out of bounds for {@code array}.
      * @see Reader#read(char[], int, int)
      * @see Writer#write(char[], int, int)
      * @since 2.21.0
@@ -648,11 +648,11 @@ public class IOUtils {
      * }
      * </code></pre>
      *
-     * @param str the string against which the range is validated
-     * @param off the starting offset into the string (inclusive)
-     * @param len the number of characters to write
-     * @throws NullPointerException      if {@code str} is {@code null}
-     * @throws IndexOutOfBoundsException if the range {@code [off, off + len)} is out of bounds for {@code str}
+     * @param str the string against which the range is validated.
+     * @param off the starting offset into the string (inclusive).
+     * @param len the number of characters to write.
+     * @throws NullPointerException      if {@code str} is {@code null}.
+     * @throws IndexOutOfBoundsException if the range {@code [off, off + len)} is out of bounds for {@code str}.
      * @see Writer#write(String, int, int)
      * @since 2.21.0
      */
@@ -684,10 +684,10 @@ public class IOUtils {
      * }
      * </code></pre>
      *
-     * @param seq       the character sequence to validate (may be {@code null}, treated as {@code "null"})
-     * @param fromIndex the starting index (inclusive)
-     * @param toIndex   the ending index (exclusive)
-     * @throws IndexOutOfBoundsException if the range {@code [fromIndex, toIndex)} is out of bounds for {@code seq}
+     * @param seq       the character sequence to validate (may be {@code null}, treated as {@code "null"}).
+     * @param fromIndex the starting index (inclusive).
+     * @param toIndex   the ending index (exclusive).
+     * @throws IndexOutOfBoundsException if the range {@code [fromIndex, toIndex)} is out of bounds for {@code seq}.
      * @see Appendable#append(CharSequence, int, int)
      * @since 2.21.0
      */
@@ -1889,10 +1889,10 @@ public class IOUtils {
      *
      * @param reader the {@link Reader} to source.
      * @param writer the {@link Writer} to target.
-     * @param buffer the buffer to be used for the copy
-     * @return the number of characters copied
-     * @throws NullPointerException if the input or output is null
-     * @throws IOException          if an I/O error occurs
+     * @param buffer the buffer to be used for the copy.
+     * @return the number of characters copied.
+     * @throws NullPointerException if the input or output is null.
+     * @throws IOException          if an I/O error occurs.
      * @since 2.2
      */
     public static long copyLarge(final Reader reader, final Writer writer, final char[] buffer) throws IOException {
