@@ -294,7 +294,7 @@ public enum FileSystem {
      * Decides if the operating system matches.
      *
      * @param osNamePrefix
-     *            the prefix for the os name
+     *            the prefix for the operating system name
      * @return true if matches, or false if not or can't determine
      */
     private static boolean getOsMatchesName(final String osNamePrefix) {
