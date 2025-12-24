@@ -1256,10 +1256,7 @@ public class IOUtils {
     // TODO Consider making public
     private static boolean contentEquals(final Iterator<?> iterator1, final Iterator<?> iterator2) {
         while (iterator1.hasNext()) {
-            if (!iterator2.hasNext()) {
-                return false;
-            }
-            if (!Objects.equals(iterator1.next(), iterator2.next())) {
+            if (!iterator2.hasNext() || !Objects.equals(iterator1.next(), iterator2.next())) {
                 return false;
             }
         }
@@ -1280,45 +1277,32 @@ public class IOUtils {
      * @since 1.1
      */
     public static boolean contentEquals(final Reader input1, final Reader input2) throws IOException {
+        // See IOUtilsContentEqualsReadersBenchmark_2_22_0 for performance testing.
         if (input1 == input2) {
             return true;
         }
         if (input1 == null || input2 == null) {
             return false;
         }
-
-        // reuse one
         try (ScratchChars scratch = IOUtils.ScratchChars.get()) {
             final char[] array1 = scratch.array();
-            // but allocate another
             final char[] array2 = charArray();
-            int pos1;
-            int pos2;
-            int count1;
-            int count2;
+            int read1;
+            int read2;
             while (true) {
-                pos1 = 0;
-                pos2 = 0;
-                for (int index = 0; index < DEFAULT_BUFFER_SIZE; index++) {
-                    if (pos1 == index) {
-                        do {
-                            count1 = input1.read(array1, pos1, DEFAULT_BUFFER_SIZE - pos1);
-                        } while (count1 == 0);
-                        if (count1 == EOF) {
-                            return pos2 == index && input2.read() == EOF;
-                        }
-                        pos1 += count1;
-                    }
-                    if (pos2 == index) {
-                        do {
-                            count2 = input2.read(array2, pos2, DEFAULT_BUFFER_SIZE - pos2);
-                        } while (count2 == 0);
-                        if (count2 == EOF) {
-                            return pos1 == index && input1.read() == EOF;
-                        }
-                        pos2 += count2;
-                    }
-                    if (array1[index] != array2[index]) {
+                read1 = input1.read(array1, 0, DEFAULT_BUFFER_SIZE);
+                read2 = input2.read(array2, 0, DEFAULT_BUFFER_SIZE);
+                // If both read EOF here, they're equal.
+                if (read1 == EOF && read2 == EOF) {
+                    return true;
+                }
+                // If only one read EOF or different amounts, they're not equal.
+                if (read1 != read2) {
+                    return false;
+                }
+                // Compare the buffers - bulk comparison is faster than character-by-character
+                for (int i = 0; i < read1; i++) {
+                    if (array1[i] != array2[i]) {
                         return false;
                     }
                 }

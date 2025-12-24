@@ -59,7 +59,7 @@ import org.openjdk.jmh.infra.Blackhole;
 @Warmup(iterations = 5, time = 10, timeUnit = TimeUnit.SECONDS)
 @Measurement(iterations = 5, time = 10, timeUnit = TimeUnit.SECONDS)
 @Fork(value = 1, jvmArgs = {"-server"})
-public class IOUtilsContentEqualsReadersBenchmark {
+public class IOUtilsContentEqualsReadersBenchmark_2_9_0 {
 
     private static final int STRING_LEN = 1 << 24;
     private static final String TEST_PATH_A = "/org/apache/commons/io/testfileBOM.xml";
@@ -80,7 +80,6 @@ public class IOUtilsContentEqualsReadersBenchmark {
     static String SPECIAL_CASE_STRING_0 = StringUtils.repeat(StringUtils.repeat("ab", STRING_LEN) + '\n', 2);
     static String SPECIAL_CASE_STRING_1 = StringUtils.repeat(StringUtils.repeat("cd", STRING_LEN) + '\n', 2);
 
-    @SuppressWarnings("resource")
     public static boolean contentEquals_release_2_8_0(final Reader input1, final Reader input2) throws IOException {
         if (input1 == input2) {
             return true;
