@@ -246,7 +246,7 @@ public abstract class AbstractByteArrayOutputStream<T extends AbstractByteArrayO
      * returned stream is backed by buffers of {@code this} stream,
      * avoiding memory allocation and copy, thus saving space and time.<br>
      *
-     * @param <T> the type of the InputStream which makes up
+     * @param <S> the type of the InputStream which makes up
      *            the {@link SequenceInputStream}.
      * @param isConstructor A constructor for an InputStream which makes
      *                     up the {@link SequenceInputStream}.
@@ -257,12 +257,12 @@ public abstract class AbstractByteArrayOutputStream<T extends AbstractByteArrayO
      * @since 2.7
      */
     @SuppressWarnings("resource") // The result InputStream MUST be managed by the call site.
-    protected <T extends InputStream> InputStream toInputStream(final InputStreamConstructor<T> isConstructor) {
+    protected <S extends InputStream> InputStream toInputStream(final InputStreamConstructor<S> isConstructor) {
         int remaining = count;
         if (remaining == 0) {
             return ClosedInputStream.INSTANCE;
         }
-        final List<T> list = new ArrayList<>(buffers.size());
+        final List<S> list = new ArrayList<>(buffers.size());
         for (final byte[] buf : buffers) {
             final int c = Math.min(buf.length, remaining);
             list.add(isConstructor.construct(buf, 0, c));
