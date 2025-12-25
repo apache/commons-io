@@ -144,7 +144,7 @@ public class ObservableInputStream extends ProxyInputStream {
         /**
          * Called to indicate that an error occurred on the underlying stream.
          *
-         * @param exception the exception to throw
+         * @param exception the exception to throw.
          * @throws IOException if an I/O error occurs.
          */
         public void error(final IOException exception) throws IOException {
@@ -361,7 +361,7 @@ public class ObservableInputStream extends ProxyInputStream {
     /**
      * Removes an Observer.
      *
-     * @param observer the observer to remove
+     * @param observer the observer to remove.
      */
     public void remove(final Observer observer) {
         observers.remove(observer);

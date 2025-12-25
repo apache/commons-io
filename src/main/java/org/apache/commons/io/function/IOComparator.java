@@ -24,7 +24,7 @@ import java.util.Comparator;
 /**
  * Like {@link Comparator} but throws {@link IOException}.
  *
- * @param <T> the type of objects that may be compared by this comparator
+ * @param <T> the type of objects that may be compared by this comparator.
  * @see Comparator
  * @since 2.12.0
  */
@@ -48,7 +48,7 @@ public interface IOComparator<T> {
      * @param o2 the second object to be compared.
      * @return a negative integer, zero, or a positive integer as the first argument is less than, equal to, or greater than
      *         the second.
-     * @throws NullPointerException if an argument is null and this comparator does not permit null arguments
+     * @throws NullPointerException if an argument is null and this comparator does not permit null arguments.
      * @throws ClassCastException if the arguments' types prevent them from being compared by this comparator.
      * @throws IOException if an I/O error occurs.
      */

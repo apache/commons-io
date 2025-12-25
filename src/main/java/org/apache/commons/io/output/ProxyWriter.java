@@ -51,8 +51,8 @@ public class ProxyWriter extends FilterWriter {
      * The default implementation does nothing.
      * </p>
      *
-     * @param n number of chars written
-     * @throws IOException if the post-processing fails
+     * @param n number of chars written.
+     * @throws IOException if the post-processing fails.
      * @since 2.0
      */
     @SuppressWarnings("unused") // Possibly thrown from subclasses.

@@ -63,9 +63,9 @@ class LineIteratorTest {
     /**
      * Creates a test file with a specified number of lines.
      *
-     * @param file target file
-     * @param lineCount number of lines to create
-     * @throws IOException If an I/O error occurs
+     * @param file target file.
+     * @param lineCount number of lines to create.
+     * @throws IOException If an I/O error occurs.
      */
     private List<String> createLinesFile(final File file, final int lineCount) throws IOException {
         final List<String> lines = createStringLines(lineCount);
@@ -76,10 +76,10 @@ class LineIteratorTest {
     /**
      * Creates a test file with a specified number of lines.
      *
-     * @param file target file
-     * @param encoding the encoding to use while writing the lines
-     * @param lineCount number of lines to create
-     * @throws IOException If an I/O error occurs
+     * @param file target file.
+     * @param encoding the encoding to use while writing the lines.
+     * @param lineCount number of lines to create.
+     * @throws IOException If an I/O error occurs.
      */
     private List<String> createLinesFile(final File file, final String encoding, final int lineCount) throws IOException {
         final List<String> lines = createStringLines(lineCount);
@@ -90,7 +90,7 @@ class LineIteratorTest {
     /**
      * Creates String data lines.
      *
-     * @param lineCount number of lines to create
+     * @param lineCount number of lines to create.
      * @return a new lines list.
      */
     private List<String> createStringLines(final int lineCount) {
@@ -104,8 +104,8 @@ class LineIteratorTest {
     /**
      * Utility method to create and test a file with a specified number of lines.
      *
-     * @param lineCount the lines to create in the test file
-     * @throws IOException If an I/O error occurs while creating the file
+     * @param lineCount the lines to create in the test file.
+     * @throws IOException If an I/O error occurs while creating the file.
      */
     private void doTestFileWithSpecifiedLines(final int lineCount) throws IOException {
         final String encoding = UTF_8;

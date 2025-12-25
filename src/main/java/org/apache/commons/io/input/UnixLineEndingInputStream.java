@@ -43,8 +43,8 @@ public class UnixLineEndingInputStream extends InputStream {
     /**
      * Constructs an input stream that filters another stream
      *
-     * @param inputStream                        The input stream to wrap
-     * @param ensureLineFeedAtEndOfFile true to ensure that the file ends with LF
+     * @param inputStream                        The input stream to wrap.
+     * @param ensureLineFeedAtEndOfFile true to ensure that the file ends with LF.
      */
     public UnixLineEndingInputStream(final InputStream inputStream, final boolean ensureLineFeedAtEndOfFile) {
         this.in = inputStream;
@@ -112,7 +112,7 @@ public class UnixLineEndingInputStream extends InputStream {
 
     /**
      * Reads the next item from the target, updating internal flags in the process
-     * @return the next int read from the target stream
+     * @return the next int read from the target stream.
      * @throws IOException If an I/O error occurs.
      */
     private int readWithUpdate() throws IOException {

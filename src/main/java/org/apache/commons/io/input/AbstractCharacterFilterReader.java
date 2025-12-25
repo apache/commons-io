@@ -40,7 +40,7 @@ public abstract class AbstractCharacterFilterReader extends FilterReader {
     /**
      * Constructs a new reader.
      *
-     * @param reader the reader to filter
+     * @param reader the reader to filter.
      */
     protected AbstractCharacterFilterReader(final Reader reader) {
         this(reader, SKIP_NONE);

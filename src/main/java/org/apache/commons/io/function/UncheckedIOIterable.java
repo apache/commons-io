@@ -37,7 +37,7 @@ final class UncheckedIOIterable<E> implements Iterable<E> {
     /**
      * Constructs a new instance.
      *
-     * @param delegate The delegate
+     * @param delegate The delegate.
      */
     UncheckedIOIterable(final IOIterable<E> delegate) {
         this.delegate = Objects.requireNonNull(delegate, "delegate");

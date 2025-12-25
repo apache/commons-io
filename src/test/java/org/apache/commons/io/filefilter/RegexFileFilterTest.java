@@ -152,7 +152,7 @@ class RegexFileFilterTest {
     /**
      * Tests https://issues.apache.org/jira/browse/IO-733.
      *
-     * @throws IOException
+     * @throws IOException Thrown on a test failure.
      */
     @SuppressWarnings("unchecked")
     @Test

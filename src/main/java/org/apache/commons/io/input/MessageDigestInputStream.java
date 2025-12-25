@@ -152,7 +152,7 @@ public final class MessageDigestInputStream extends ObservableInputStream {
         /**
          * Constructs an MessageDigestMaintainingObserver for the given MessageDigest.
          *
-         * @param messageDigest the message digest to use
+         * @param messageDigest the message digest to use.
          * @throws NullPointerException if messageDigest is null.
          */
         public MessageDigestMaintainingObserver(final MessageDigest messageDigest) {
@@ -190,7 +190,7 @@ public final class MessageDigestInputStream extends ObservableInputStream {
      * The MD5 cryptographic algorithm is weak and should not be used.
      * </p>
      *
-     * @param builder A builder use to get the stream to calculate the message digest and the message digest to use
+     * @param builder A builder use to get the stream to calculate the message digest and the message digest to use.
      * @throws NullPointerException if messageDigest is null.
      */
     private MessageDigestInputStream(final Builder builder) throws IOException {

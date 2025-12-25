@@ -44,7 +44,7 @@ public class SequenceReader extends Reader {
     /**
      * Constructs a new instance with readers
      *
-     * @param readers the readers to read
+     * @param readers the readers to read.
      */
     public SequenceReader(final Iterable<? extends Reader> readers) {
         this.readers = Objects.requireNonNull(readers, "readers").iterator();
@@ -54,7 +54,7 @@ public class SequenceReader extends Reader {
     /**
      * Constructs a new instance with readers
      *
-     * @param readers the readers to read
+     * @param readers the readers to read.
      */
     public SequenceReader(final Reader... readers) {
         this(Arrays.asList(readers));

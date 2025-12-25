@@ -75,10 +75,10 @@ public class AppendableWriter<T extends Appendable> extends Writer {
     /**
      * Appends a subsequence of the specified character sequence to the underlying appendable.
      *
-     * @param csq   the character sequence from which a subsequence will be appended
-     * @param start the index of the first character in the subsequence
-     * @param end   the index of the character following the last character in the subsequence
-     * @return this writer
+     * @param csq   the character sequence from which a subsequence will be appended.
+     * @param start the index of the first character in the subsequence.
+     * @param end   the index of the character following the last character in the subsequence.
+     * @return this writer.
      * @throws IndexOutOfBoundsException If {@code start} or {@code end} are negative, {@code start} is greater than
      *                                   {@code end}, or {@code end} is greater than {@code csq.length()}.
      * @throws IOException If an I/O error occurs.

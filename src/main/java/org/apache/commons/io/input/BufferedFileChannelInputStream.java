@@ -150,7 +150,7 @@ public final class BufferedFileChannelInputStream extends InputStream {
      * Constructs a new instance for the given File.
      *
      * @param file The file to stream.
-     * @throws IOException If an I/O error occurs
+     * @throws IOException If an I/O error occurs.
      * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
      */
     @Deprecated
@@ -163,7 +163,7 @@ public final class BufferedFileChannelInputStream extends InputStream {
      *
      * @param file       The file to stream.
      * @param bufferSize buffer size.
-     * @throws IOException If an I/O error occurs
+     * @throws IOException If an I/O error occurs.
      * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
      */
     @Deprecated
@@ -175,7 +175,7 @@ public final class BufferedFileChannelInputStream extends InputStream {
      * Constructs a new instance for the given Path.
      *
      * @param path The path to stream.
-     * @throws IOException If an I/O error occurs
+     * @throws IOException If an I/O error occurs.
      * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
      */
     @Deprecated
@@ -188,7 +188,7 @@ public final class BufferedFileChannelInputStream extends InputStream {
      *
      * @param path       The path to stream.
      * @param bufferSize buffer size.
-     * @throws IOException If an I/O error occurs
+     * @throws IOException If an I/O error occurs.
      * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
      */
     @Deprecated
@@ -269,7 +269,7 @@ public final class BufferedFileChannelInputStream extends InputStream {
     /**
      * Checks whether data is left to be read from the input stream.
      *
-     * @return true if data is left, false otherwise
+     * @return true if data is left, false otherwise.
      * @throws IOException if an I/O error occurs.
      */
     private boolean refill() throws IOException {

@@ -53,7 +53,7 @@ public abstract class AbstractMonitorTest {
     /**
      * Check all the Collections are empty
      *
-     * @param label the label to use for this check
+     * @param label the label to use for this check.
      */
     protected void checkCollectionsEmpty(final String label) {
         checkCollectionSizes("EMPTY-" + label, 0, 0, 0, 0, 0, 0);
@@ -62,13 +62,13 @@ public abstract class AbstractMonitorTest {
     /**
      * Check all the Collections have the expected sizes.
      *
-     * @param label the label to use for this check
-     * @param dirCreate expected number of dirs created
-     * @param dirChange expected number of dirs changed
-     * @param dirDelete expected number of dirs deleted
-     * @param fileCreate expected number of files created
-     * @param fileChange expected number of files changed
-     * @param fileDelete expected number of files deleted
+     * @param label the label to use for this check.
+     * @param dirCreate expected number of dirs created.
+     * @param dirChange expected number of dirs changed.
+     * @param dirDelete expected number of dirs deleted.
+     * @param fileCreate expected number of files created.
+     * @param fileChange expected number of files changed.
+     * @param fileDelete expected number of files deleted.
      */
     protected void checkCollectionSizes(String label,
                                         final int dirCreate,
@@ -94,8 +94,8 @@ public abstract class AbstractMonitorTest {
     /**
      * Create a {@link FileAlterationObserver}.
      *
-     * @param file The directory to observe
-     * @param fileFilter The file filter to apply
+     * @param file The directory to observe.
+     * @param fileFilter The file filter to apply.
      */
     protected void createObserver(final File file, final FileFilter fileFilter) {
         observer = FileAlterationObserver.builder().setFile(file).setFileFilter(fileFilter).getUnchecked();
@@ -127,8 +127,8 @@ public abstract class AbstractMonitorTest {
      * Either creates a file if it doesn't exist or updates the last modified date/time
      * if it does.
      *
-     * @param file The file to touch
-     * @return The file
+     * @param file The file to touch.
+     * @return The file.
      * @throws IOException if an I/O error occurs.
      */
     protected File touch(File file) throws IOException {

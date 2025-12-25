@@ -501,7 +501,7 @@ public class FileAlterationObserver implements Serializable {
     /**
      * Returns the set of registered file system listeners.
      *
-     * @return The file system listeners
+     * @return The file system listeners.
      */
     public Iterable<FileAlterationListener> getListeners() {
         return new ArrayList<>(listeners);
@@ -533,7 +533,7 @@ public class FileAlterationObserver implements Serializable {
      * Lists the contents of a directory.
      *
      * @param directory The directory to list.
-     * @return the directory contents or a zero length array if the empty or the file is not a directory
+     * @return the directory contents or a zero length array if the empty or the file is not a directory.
      */
     private File[] listFiles(final File directory) {
         return directory.isDirectory() ? sort(directory.listFiles(fileFilter)) : FileUtils.EMPTY_FILE_ARRAY;

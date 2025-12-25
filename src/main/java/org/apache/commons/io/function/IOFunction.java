@@ -37,8 +37,8 @@ public interface IOFunction<T, R> {
     /**
      * Returns a {@link IOFunction} that always returns its input argument.
      *
-     * @param <T> the type of the input and output objects to the function
-     * @return a function that always returns its input argument
+     * @param <T> the type of the input and output objects to the function.
+     * @return a function that always returns its input argument.
      */
     @SuppressWarnings("unchecked")
     static <T> IOFunction<T, T> identity() {
@@ -50,9 +50,9 @@ public interface IOFunction<T, R> {
      * {@code after} consumer to the result. If evaluation of either function throws an exception, it is relayed to the
      * caller of the composed function.
      *
-     * @param after the consumer to apply after this function is applied
-     * @return a composed function that first applies this function and then applies the {@code after} consumer
-     * @throws NullPointerException if after is null
+     * @param after the consumer to apply after this function is applied.
+     * @return a composed function that first applies this function and then applies the {@code after} consumer.
+     * @throws NullPointerException if after is null.
      * @see #compose(IOFunction)
      */
     default IOConsumer<T> andThen(final Consumer<? super R> after) {
@@ -65,10 +65,10 @@ public interface IOFunction<T, R> {
      * {@code after} function to the result. If evaluation of either function throws an exception, it is relayed to the
      * caller of the composed function.
      *
-     * @param <V> the type of output of the {@code after} function, and of the composed function
-     * @param after the function to apply after this function is applied
-     * @return a composed function that first applies this function and then applies the {@code after} function
-     * @throws NullPointerException if after is null
+     * @param <V> the type of output of the {@code after} function, and of the composed function.
+     * @param after the function to apply after this function is applied.
+     * @return a composed function that first applies this function and then applies the {@code after} function.
+     * @throws NullPointerException if after is null.
      * @see #compose(IOFunction)
      */
     default <V> IOFunction<T, V> andThen(final Function<? super R, ? extends V> after) {
@@ -81,9 +81,9 @@ public interface IOFunction<T, R> {
      * {@code after} consumer to the result. If evaluation of either function throws an exception, it is relayed to the
      * caller of the composed function.
      *
-     * @param after the consumer to apply after this function is applied
-     * @return a composed function that first applies this function and then applies the {@code after} consumer
-     * @throws NullPointerException if after is null
+     * @param after the consumer to apply after this function is applied.
+     * @return a composed function that first applies this function and then applies the {@code after} consumer.
+     * @throws NullPointerException if after is null.
      * @see #compose(IOFunction)
      */
     default IOConsumer<T> andThen(final IOConsumer<? super R> after) {
@@ -96,10 +96,10 @@ public interface IOFunction<T, R> {
      * {@code after} function to the result. If evaluation of either function throws an exception, it is relayed to the
      * caller of the composed function.
      *
-     * @param <V> the type of output of the {@code after} function, and of the composed function
-     * @param after the function to apply after this function is applied
-     * @return a composed function that first applies this function and then applies the {@code after} function
-     * @throws NullPointerException if after is null
+     * @param <V> the type of output of the {@code after} function, and of the composed function.
+     * @param after the function to apply after this function is applied.
+     * @return a composed function that first applies this function and then applies the {@code after} function.
+     * @throws NullPointerException if after is null.
      * @see #compose(IOFunction)
      */
     default <V> IOFunction<T, V> andThen(final IOFunction<? super R, ? extends V> after) {
@@ -110,8 +110,8 @@ public interface IOFunction<T, R> {
     /**
      * Applies this function to the given argument.
      *
-     * @param t the function argument
-     * @return the function result
+     * @param t the function argument.
+     * @return the function result.
      * @throws IOException if an I/O error occurs.
      */
     R apply(T t) throws IOException;
@@ -131,10 +131,10 @@ public interface IOFunction<T, R> {
      * this function to the result. If evaluation of either function throws an exception, it is relayed to the caller of the
      * composed function.
      *
-     * @param <V> the type of input to the {@code before} function, and to the composed function
-     * @param before the function to apply before this function is applied
-     * @return a composed function that first applies the {@code before} function and then applies this function
-     * @throws NullPointerException if before is null
+     * @param <V> the type of input to the {@code before} function, and to the composed function.
+     * @param before the function to apply before this function is applied.
+     * @return a composed function that first applies the {@code before} function and then applies this function.
+     * @throws NullPointerException if before is null.
      * @see #andThen(IOFunction)
      */
     default <V> IOFunction<V, R> compose(final Function<? super V, ? extends T> before) {
@@ -147,10 +147,10 @@ public interface IOFunction<T, R> {
      * this function to the result. If evaluation of either function throws an exception, it is relayed to the caller of the
      * composed function.
      *
-     * @param <V> the type of input to the {@code before} function, and to the composed function
-     * @param before the function to apply before this function is applied
-     * @return a composed function that first applies the {@code before} function and then applies this function
-     * @throws NullPointerException if before is null
+     * @param <V> the type of input to the {@code before} function, and to the composed function.
+     * @param before the function to apply before this function is applied.
+     * @return a composed function that first applies the {@code before} function and then applies this function.
+     * @throws NullPointerException if before is null.
      * @see #andThen(IOFunction)
      */
     default <V> IOFunction<V, R> compose(final IOFunction<? super V, ? extends T> before) {
@@ -163,9 +163,9 @@ public interface IOFunction<T, R> {
      * this function to the result. If evaluation of either function throws an exception, it is relayed to the caller of the
      * composed function.
      *
-     * @param before the supplier which feeds the application of this function
-     * @return a composed function that first applies the {@code before} function and then applies this function
-     * @throws NullPointerException if before is null
+     * @param before the supplier which feeds the application of this function.
+     * @return a composed function that first applies the {@code before} function and then applies this function.
+     * @throws NullPointerException if before is null.
      * @see #andThen(IOFunction)
      */
     default IOSupplier<R> compose(final IOSupplier<? extends T> before) {
@@ -178,9 +178,9 @@ public interface IOFunction<T, R> {
      * this function to the result. If evaluation of either function throws an exception, it is relayed to the caller of the
      * composed function.
      *
-     * @param before the supplier which feeds the application of this function
-     * @return a composed function that first applies the {@code before} function and then applies this function
-     * @throws NullPointerException if before is null
+     * @param before the supplier which feeds the application of this function.
+     * @return a composed function that first applies the {@code before} function and then applies this function.
+     * @throws NullPointerException if before is null.
      * @see #andThen(IOFunction)
      */
     default IOSupplier<R> compose(final Supplier<? extends T> before) {

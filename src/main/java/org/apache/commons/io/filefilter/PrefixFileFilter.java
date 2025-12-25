@@ -83,9 +83,9 @@ public class PrefixFileFilter extends AbstractFileFilter implements Serializable
     /**
      * Constructs a new Prefix file filter for a list of prefixes.
      *
-     * @param prefixes  the prefixes to allow, must not be null
-     * @throws NullPointerException if the prefix list is null
-     * @throws ClassCastException if the list does not contain Strings
+     * @param prefixes  the prefixes to allow, must not be null.
+     * @throws NullPointerException if the prefix list is null.
+     * @throws ClassCastException if the list does not contain Strings.
      */
     public PrefixFileFilter(final List<String> prefixes) {
         this(prefixes, IOCase.SENSITIVE);
@@ -95,10 +95,10 @@ public class PrefixFileFilter extends AbstractFileFilter implements Serializable
      * Constructs a new Prefix file filter for a list of prefixes
      * specifying case-sensitivity.
      *
-     * @param prefixes  the prefixes to allow, must not be null
-     * @param ioCase  how to handle case sensitivity, null means case-sensitive
-     * @throws NullPointerException if the prefix list is null
-     * @throws ClassCastException if the list does not contain Strings
+     * @param prefixes  the prefixes to allow, must not be null.
+     * @param ioCase  how to handle case sensitivity, null means case-sensitive.
+     * @throws NullPointerException if the prefix list is null.
+     * @throws ClassCastException if the list does not contain Strings.
      * @since 1.4
      */
     public PrefixFileFilter(final List<String> prefixes, final IOCase ioCase) {
@@ -110,8 +110,8 @@ public class PrefixFileFilter extends AbstractFileFilter implements Serializable
     /**
      * Constructs a new Prefix file filter for a single prefix.
      *
-     * @param prefix  the prefix to allow, must not be null
-     * @throws IllegalArgumentException if the prefix is null
+     * @param prefix  the prefix to allow, must not be null.
+     * @throws IllegalArgumentException if the prefix is null.
      */
     public PrefixFileFilter(final String prefix) {
         this(prefix, IOCase.SENSITIVE);
@@ -124,8 +124,8 @@ public class PrefixFileFilter extends AbstractFileFilter implements Serializable
      * instance. This would be inadvisable however.
      * </p>
      *
-     * @param prefixes  the prefixes to allow, must not be null
-     * @throws IllegalArgumentException if the prefix array is null
+     * @param prefixes  the prefixes to allow, must not be null.
+     * @throws IllegalArgumentException if the prefix array is null.
      */
     public PrefixFileFilter(final String... prefixes) {
         this(prefixes, IOCase.SENSITIVE);
@@ -135,9 +135,9 @@ public class PrefixFileFilter extends AbstractFileFilter implements Serializable
      * Constructs a new Prefix file filter for a single prefix
      * specifying case-sensitivity.
      *
-     * @param prefix  the prefix to allow, must not be null
-     * @param ioCase  how to handle case sensitivity, null means case-sensitive
-     * @throws IllegalArgumentException if the prefix is null
+     * @param prefix  the prefix to allow, must not be null.
+     * @param ioCase  how to handle case sensitivity, null means case-sensitive.
+     * @throws IllegalArgumentException if the prefix is null.
      * @since 1.4
      */
     public PrefixFileFilter(final String prefix, final IOCase ioCase) {
@@ -150,9 +150,9 @@ public class PrefixFileFilter extends AbstractFileFilter implements Serializable
      * Constructs a new Prefix file filter for any of an array of prefixes
      * specifying case-sensitivity.
      *
-     * @param prefixes  the prefixes to allow, must not be null
-     * @param ioCase  how to handle case sensitivity, null means case-sensitive
-     * @throws IllegalArgumentException if the prefix is null
+     * @param prefixes  the prefixes to allow, must not be null.
+     * @param ioCase  how to handle case sensitivity, null means case-sensitive.
+     * @throws IllegalArgumentException if the prefix is null.
      * @since 1.4
      */
     public PrefixFileFilter(final String[] prefixes, final IOCase ioCase) {
@@ -164,8 +164,8 @@ public class PrefixFileFilter extends AbstractFileFilter implements Serializable
     /**
      * Tests to see if the file name starts with the prefix.
      *
-     * @param file  the File to check
-     * @return true if the file name starts with one of our prefixes
+     * @param file  the File to check.
+     * @return true if the file name starts with one of our prefixes.
      */
     @Override
     public boolean accept(final File file) {
@@ -175,9 +175,9 @@ public class PrefixFileFilter extends AbstractFileFilter implements Serializable
     /**
      * Tests to see if the file name starts with the prefix.
      *
-     * @param file  the File directory
-     * @param name  the file name
-     * @return true if the file name starts with one of our prefixes
+     * @param file  the File directory.
+     * @param name  the file name.
+     * @return true if the file name starts with one of our prefixes.
      */
     @Override
     public boolean accept(final File file, final String name) {
@@ -187,9 +187,9 @@ public class PrefixFileFilter extends AbstractFileFilter implements Serializable
     /**
      * Tests to see if the file name starts with the prefix.
      *
-     * @param file  the File to check
+     * @param file  the File to check.
      * @param attributes the path's basic attributes (may be null).
-     * @return true if the file name starts with one of our prefixes
+     * @return true if the file name starts with one of our prefixes.
      * @since 2.9.0
      */
     @Override
@@ -204,7 +204,7 @@ public class PrefixFileFilter extends AbstractFileFilter implements Serializable
     /**
      * Provides a String representation of this file filter.
      *
-     * @return a String representation
+     * @return a String representation.
      */
     @Override
     public String toString() {

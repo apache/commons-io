@@ -137,10 +137,10 @@ public class ReversedLinesFileReader implements Closeable, IOIterable<String> {
         /**
          * Constructs a new instance.
          *
-         * @param partNumber             the part number
-         * @param length                 its length
-         * @param leftOverOfLastFilePart remainder
-         * @throws IOException if there is a problem reading the file
+         * @param partNumber             the part number.
+         * @param length                 its length.
+         * @param leftOverOfLastFilePart remainder.
+         * @throws IOException if there is a problem reading the file.
          */
         private FilePart(final long partNumber, final int length, final byte[] leftOverOfLastFilePart) throws IOException {
             this.partNumber = partNumber;
@@ -181,9 +181,9 @@ public class ReversedLinesFileReader implements Closeable, IOIterable<String> {
         /**
          * Finds the new-line sequence and return its length.
          *
-         * @param data buffer to scan
-         * @param i    start offset in buffer
-         * @return length of newline sequence or 0 if none found
+         * @param data buffer to scan.
+         * @param i    start offset in buffer.
+         * @return length of newline sequence or 0 if none found.
          */
         private int getNewLineMatchByteCount(final byte[] data, final int i) {
             for (final byte[] newLineSequence : newLineSequences) {
@@ -202,7 +202,7 @@ public class ReversedLinesFileReader implements Closeable, IOIterable<String> {
         /**
          * Reads a line.
          *
-         * @return the line or null
+         * @return the line or null.
          */
         private String readLine() { //NOPMD Bug in PMD
 
@@ -260,8 +260,8 @@ public class ReversedLinesFileReader implements Closeable, IOIterable<String> {
         /**
          * Handles block rollover
          *
-         * @return the new FilePart or null
-         * @throws IOException if there was a problem reading the file
+         * @return the new FilePart or null.
+         * @throws IOException if there was a problem reading the file.
          */
         private FilePart rollOver() throws IOException {
 
@@ -356,7 +356,7 @@ public class ReversedLinesFileReader implements Closeable, IOIterable<String> {
     /**
      * Constructs a ReversedLinesFileReader with default block size of 4KB and the virtual machine's {@linkplain Charset#defaultCharset() default charset}.
      *
-     * @param file the file to be read
+     * @param file the file to be read.
      * @throws IOException if an I/O error occurs.
      * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
      */
@@ -369,7 +369,7 @@ public class ReversedLinesFileReader implements Closeable, IOIterable<String> {
      * Constructs a ReversedLinesFileReader with default block size of 4KB and the
      * specified encoding.
      *
-     * @param file    the file to be read
+     * @param file    the file to be read.
      * @param charset the charset to use, null uses the default Charset.
      * @throws IOException if an I/O error occurs.
      * @since 2.5
@@ -383,7 +383,7 @@ public class ReversedLinesFileReader implements Closeable, IOIterable<String> {
     /**
      * Constructs a ReversedLinesFileReader with the given block size and encoding.
      *
-     * @param file      the file to be read
+     * @param file      the file to be read.
      * @param blockSize size of the internal buffer (for ideal performance this
      *                  should match with the block size of the underlying file
      *                  system).
@@ -400,13 +400,13 @@ public class ReversedLinesFileReader implements Closeable, IOIterable<String> {
     /**
      * Constructs a ReversedLinesFileReader with the given block size and encoding.
      *
-     * @param file      the file to be read
+     * @param file      the file to be read.
      * @param blockSize size of the internal buffer (for ideal performance this
      *                  should match with the block size of the underlying file
      *                  system).
      * @param charsetName  the encoding of the file, null uses the default Charset.
-     * @throws IOException                                  if an I/O error occurs
-     * @throws java.nio.charset.UnsupportedCharsetException if the encoding is not supported
+     * @throws IOException                                  if an I/O error occurs.
+     * @throws java.nio.charset.UnsupportedCharsetException if the encoding is not supported.
      * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
      */
     @Deprecated
@@ -418,7 +418,7 @@ public class ReversedLinesFileReader implements Closeable, IOIterable<String> {
      * Constructs a ReversedLinesFileReader with default block size of 4KB and the
      * specified encoding.
      *
-     * @param file    the file to be read
+     * @param file    the file to be read.
      * @param charset the charset to use, null uses the default Charset.
      * @throws IOException if an I/O error occurs.
      * @since 2.7
@@ -432,7 +432,7 @@ public class ReversedLinesFileReader implements Closeable, IOIterable<String> {
     /**
      * Constructs a ReversedLinesFileReader with the given block size and encoding.
      *
-     * @param file      the file to be read
+     * @param file      the file to be read.
      * @param blockSize size of the internal buffer (for ideal performance this
      *                  should match with the block size of the underlying file
      *                  system).
@@ -449,13 +449,13 @@ public class ReversedLinesFileReader implements Closeable, IOIterable<String> {
     /**
      * Constructs a ReversedLinesFileReader with the given block size and encoding.
      *
-     * @param file        the file to be read
+     * @param file        the file to be read.
      * @param blockSize   size of the internal buffer (for ideal performance this
      *                    should match with the block size of the underlying file
      *                    system).
      * @param charsetName the encoding of the file, null uses the default Charset.
-     * @throws IOException                                  if an I/O error occurs
-     * @throws java.nio.charset.UnsupportedCharsetException if the encoding is not supported
+     * @throws IOException                                  if an I/O error occurs.
+     * @throws java.nio.charset.UnsupportedCharsetException if the encoding is not supported.
      * @since 2.7
      * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
      */
@@ -509,7 +509,7 @@ public class ReversedLinesFileReader implements Closeable, IOIterable<String> {
     /**
      * Returns the lines of the file from bottom to top.
      *
-     * @return the next line or null if the start of the file is reached
+     * @return the next line or null if the start of the file is reached.
      * @throws IOException if an I/O error occurs.
      */
     public String readLine() throws IOException {
@@ -541,7 +541,7 @@ public class ReversedLinesFileReader implements Closeable, IOIterable<String> {
      * </p>
      *
      * @param lineCount How many lines to read.
-     * @return A new list
+     * @return A new list.
      * @throws IOException if an I/O error occurs.
      * @since 2.8.0
      */

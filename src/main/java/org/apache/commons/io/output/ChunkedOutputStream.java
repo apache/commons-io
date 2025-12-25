@@ -143,7 +143,7 @@ public class ChunkedOutputStream extends FilterOutputStream {
     /**
      * Constructs a new stream that uses the specified chunk size.
      *
-     * @param stream    the stream to wrap
+     * @param stream    the stream to wrap.
      * @param chunkSize the chunk size to use; must be a positive number.
      * @throws IllegalArgumentException if the chunk size is &lt;= 0.
      * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}.

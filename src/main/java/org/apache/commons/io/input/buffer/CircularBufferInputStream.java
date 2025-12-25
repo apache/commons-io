@@ -104,8 +104,8 @@ public class CircularBufferInputStream extends FilterInputStream {
     /**
      * Fills the buffer from the input stream until the given number of bytes have been added to the buffer.
      *
-     * @param count number of byte to fill into the buffer
-     * @return true if the buffer has bytes
+     * @param count number of byte to fill into the buffer.
+     * @return true if the buffer has bytes.
      * @throws IOException in case of an error while reading from the input stream.
      */
     protected boolean haveBytes(final int count) throws IOException {

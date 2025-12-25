@@ -110,7 +110,7 @@ public final class UncheckedFilterInputStream extends FilterInputStream {
      * Constructs a {@link UncheckedFilterInputStream}.
      *
      * @param builder A builder providing the underlying input stream.
-     * @throws IOException
+     * @throws IOException if an I/O error occurs.
      */
     @SuppressWarnings("resource") // caller closes
     private UncheckedFilterInputStream(final Builder builder) throws IOException {

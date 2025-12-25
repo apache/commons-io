@@ -40,7 +40,7 @@ public class MarkShieldInputStream extends ProxyInputStream {
      * Constructs a proxy that shields the given input stream from being
      * marked or rest.
      *
-     * @param in underlying input stream
+     * @param in underlying input stream.
      */
     public MarkShieldInputStream(final InputStream in) {
         super(in);

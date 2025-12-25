@@ -69,7 +69,7 @@ public class NullWriter extends Writer {
      * Does nothing, like writing to {@code /dev/null}.
      *
      * @param csq The character sequence to write.
-     * @return this writer
+     * @return this writer.
      * @since 2.0
      */
     @Override

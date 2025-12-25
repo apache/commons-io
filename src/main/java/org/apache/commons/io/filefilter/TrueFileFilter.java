@@ -60,8 +60,8 @@ public class TrueFileFilter implements IOFileFilter, Serializable {
     /**
      * Returns true.
      *
-     * @param file the file to check (ignored)
-     * @return true
+     * @param file the file to check (ignored).
+     * @return true.
      */
     @Override
     public boolean accept(final File file) {
@@ -71,9 +71,9 @@ public class TrueFileFilter implements IOFileFilter, Serializable {
     /**
      * Returns true.
      *
-     * @param dir the directory to check (ignored)
-     * @param name the file name (ignored)
-     * @return true
+     * @param dir the directory to check (ignored).
+     * @param name the file name (ignored).
+     * @return true.
      */
     @Override
     public boolean accept(final File dir, final String name) {
@@ -83,9 +83,9 @@ public class TrueFileFilter implements IOFileFilter, Serializable {
     /**
      * Returns true.
      *
-     * @param file the file to check (ignored)
+     * @param file the file to check (ignored).
      * @param attributes the path's basic attributes (may be null).
-     * @return true
+     * @return true.
      * @since 2.9.0
      */
     @Override

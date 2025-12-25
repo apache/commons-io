@@ -30,9 +30,9 @@ import java.util.function.BiFunction;
  * {@link #apply(Object, Object)}.
  * </p>
  *
- * @param <T> the type of the first argument to the function
- * @param <U> the type of the second argument to the function
- * @param <R> the type of the result of the function
+ * @param <T> the type of the first argument to the function.
+ * @param <U> the type of the second argument to the function.
+ * @param <R> the type of the result of the function.
  * @see BiFunction
  * @since 2.12.0
  */
@@ -44,10 +44,10 @@ public interface IOBiFunction<T, U, R> {
      * function to the result. If evaluation of either function throws an exception, it is relayed to the caller of the
      * composed function.
      *
-     * @param <V> the type of output of the {@code after} function, and of the composed function
-     * @param after the function to apply after this function is applied
-     * @return a composed function that first applies this function and then applies the {@code after} function
-     * @throws NullPointerException if after is null
+     * @param <V> the type of output of the {@code after} function, and of the composed function.
+     * @param after the function to apply after this function is applied.
+     * @return a composed function that first applies this function and then applies the {@code after} function.
+     * @throws NullPointerException if after is null.
      */
     default <V> IOBiFunction<T, U, V> andThen(final IOFunction<? super R, ? extends V> after) {
         Objects.requireNonNull(after);
@@ -57,9 +57,9 @@ public interface IOBiFunction<T, U, R> {
     /**
      * Applies this function to the given arguments.
      *
-     * @param t the first function argument
-     * @param u the second function argument
-     * @return the function result
+     * @param t the first function argument.
+     * @param u the second function argument.
+     * @return the function result.
      * @throws IOException if an I/O error occurs.
      */
     R apply(T t, U u) throws IOException;

@@ -40,7 +40,7 @@ public class FileExistsException extends IOException {
     /**
      * Constructs an instance with the specified file.
      *
-     * @param file The file that exists
+     * @param file The file that exists.
      */
     public FileExistsException(final File file) {
         super("File " + file + " exists");
@@ -49,7 +49,7 @@ public class FileExistsException extends IOException {
     /**
      * Constructs an instance with the specified message.
      *
-     * @param message The error message
+     * @param message The error message.
      */
     public FileExistsException(final String message) {
         super(message);

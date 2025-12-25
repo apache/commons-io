@@ -48,8 +48,8 @@ public class CopyDirectoryVisitor extends CountingPathVisitor {
      * Constructs an instance that copies all files.
      *
      * @param pathCounter How to count visits.
-     * @param sourceDirectory The source directory
-     * @param targetDirectory The target directory
+     * @param sourceDirectory The source directory.
+     * @param targetDirectory The target directory.
      * @param copyOptions Specifies how the copying should be done.
      */
     public CopyDirectoryVisitor(final PathCounters pathCounter, final Path sourceDirectory, final Path targetDirectory, final CopyOption... copyOptions) {
@@ -65,8 +65,8 @@ public class CopyDirectoryVisitor extends CountingPathVisitor {
      * @param pathCounter How to count visits.
      * @param fileFilter How to filter file paths.
      * @param dirFilter How to filter directory paths.
-     * @param sourceDirectory The source directory
-     * @param targetDirectory The target directory
+     * @param sourceDirectory The source directory.
+     * @param targetDirectory The target directory.
      * @param copyOptions Specifies how the copying should be done.
      * @since 2.9.0
      */

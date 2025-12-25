@@ -51,10 +51,10 @@ public class FileDeleteStrategy {
          * if the file exists.
          * </p>
          *
-         * @param fileToDelete  the file to delete, not null
+         * @param fileToDelete  the file to delete, not null.
          * @return Always returns {@code true}
-         * @throws NullPointerException if the file is null
-         * @throws IOException if an error occurs during file deletion
+         * @throws NullPointerException if the file is null.
+         * @throws IOException if an error occurs during file deletion.
          */
         @Override
         protected boolean doDelete(final File fileToDelete) throws IOException {
@@ -81,7 +81,7 @@ public class FileDeleteStrategy {
     /**
      * Restricted constructor.
      *
-     * @param name  the name by which the strategy is known
+     * @param name  the name by which the strategy is known.
      */
     protected FileDeleteStrategy(final String name) {
         this.name = name;
@@ -94,9 +94,9 @@ public class FileDeleteStrategy {
      * Subclass writers should override {@link #doDelete(File)}, not this method.
      * </p>
      *
-     * @param fileToDelete  the file to delete, not null
-     * @throws NullPointerException if the file is null
-     * @throws IOException if an error occurs during file deletion
+     * @param fileToDelete  the file to delete, not null.
+     * @throws NullPointerException if the file is null.
+     * @throws IOException if an error occurs during file deletion.
      */
     public void delete(final File fileToDelete) throws IOException {
         if (fileToDelete.exists() && !doDelete(fileToDelete)) {
@@ -112,8 +112,8 @@ public class FileDeleteStrategy {
      * Subclass writers should override {@link #doDelete(File)}, not this method.
      * </p>
      *
-     * @param fileToDelete  the file to delete, null returns true
-     * @return true if the file was deleted, or there was no such file
+     * @param fileToDelete  the file to delete, null returns true.
+     * @return true if the file was deleted, or there was no such file.
      */
     public boolean deleteQuietly(final File fileToDelete) {
         if (fileToDelete == null || !fileToDelete.exists()) {
@@ -139,10 +139,10 @@ public class FileDeleteStrategy {
      * This implementation uses {@link FileUtils#delete(File)}.
      * </p>
      *
-     * @param file  the file to delete, exists, not null
-     * @return true if the file was deleted
-     * @throws NullPointerException if the file is null
-     * @throws IOException if an error occurs during file deletion
+     * @param file  the file to delete, exists, not null.
+     * @return true if the file was deleted.
+     * @throws NullPointerException if the file is null.
+     * @throws IOException if an error occurs during file deletion.
      */
     protected boolean doDelete(final File file) throws IOException {
         FileUtils.delete(file);
@@ -152,7 +152,7 @@ public class FileDeleteStrategy {
     /**
      * Gets a string describing the delete strategy.
      *
-     * @return a string describing the delete strategy
+     * @return a string describing the delete strategy.
      */
     @Override
     public String toString() {

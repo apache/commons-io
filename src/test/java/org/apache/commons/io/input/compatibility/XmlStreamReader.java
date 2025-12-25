@@ -455,7 +455,7 @@ public class XmlStreamReader extends Reader {
      *        the charset encoding.
      * @param lenient indicates if the charset encoding detection should be
      *        relaxed.
-     * @param defaultEncoding the default encoding to use
+     * @param defaultEncoding the default encoding to use.
      * @throws IOException thrown if there is a problem reading the file.
      * @throws XmlStreamReaderException thrown if the charset encoding could not
      *         be determined according to the specification.

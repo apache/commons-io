@@ -56,7 +56,7 @@ public class ByteArraySeekableByteChannel implements SeekableByteChannel {
      * automatically allocate a larger backing array and copy the existing contents.</p>
      *
      * @param bytes The byte array to wrap, must not be {@code null}
-     * @return A new channel that uses the given array as its initial backing store
+     * @return A new channel that uses the given array as its initial backing store.
      * @throws NullPointerException If {@code bytes} is {@code null}
      * @see #array()
      * @see ByteArrayInputStream#ByteArrayInputStream(byte[])

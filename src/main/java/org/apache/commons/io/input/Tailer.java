@@ -275,7 +275,7 @@ public class Tailer implements Runnable, AutoCloseable {
         /**
          * Sets the re-open behavior.
          *
-         * @param reOpen whether to close/reopen the file between chunks
+         * @param reOpen whether to close/reopen the file between chunks.
          * @return {@code this} instance.
          */
         public Builder setReOpen(final boolean reOpen) {
@@ -740,12 +740,12 @@ public class Tailer implements Runnable, AutoCloseable {
      * Creates a Tailer for the given file, with a specified buffer size.
      *
      * @param file the file to follow.
-     * @param charset the Charset to be used for reading the file
+     * @param charset the Charset to be used for reading the file.
      * @param tailerListener the TailerListener to use.
      * @param delayMillis the delay between checks of the file for new content in milliseconds.
      * @param end Set to true to tail from the end of the file, false to tail from the beginning of the file.
-     * @param reOpen if true, close and reopen the file between reading chunks
-     * @param bufSize Buffer size
+     * @param reOpen if true, close and reopen the file between reading chunks.
+     * @param bufSize Buffer size.
      * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}.
      */
     @Deprecated
@@ -800,7 +800,7 @@ public class Tailer implements Runnable, AutoCloseable {
      * @param tailerListener the TailerListener to use.
      * @param delayMillis the delay between checks of the file for new content in milliseconds.
      * @param end Set to true to tail from the end of the file, false to tail from the beginning of the file.
-     * @param reOpen if true, close and reopen the file between reading chunks
+     * @param reOpen if true, close and reopen the file between reading chunks.
      * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}.
      */
     @Deprecated
@@ -815,8 +815,8 @@ public class Tailer implements Runnable, AutoCloseable {
      * @param tailerListener the TailerListener to use.
      * @param delayMillis the delay between checks of the file for new content in milliseconds.
      * @param end Set to true to tail from the end of the file, false to tail from the beginning of the file.
-     * @param reOpen if true, close and reopen the file between reading chunks
-     * @param bufferSize Buffer size
+     * @param reOpen if true, close and reopen the file between reading chunks.
+     * @param bufferSize Buffer size.
      * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}.
      */
     @Deprecated
@@ -831,7 +831,7 @@ public class Tailer implements Runnable, AutoCloseable {
      * @param tailerListener the TailerListener to use.
      * @param delayMillis the delay between checks of the file for new content in milliseconds.
      * @param end Set to true to tail from the end of the file, false to tail from the beginning of the file.
-     * @param bufferSize Buffer size
+     * @param bufferSize Buffer size.
      * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}.
      */
     @Deprecated
@@ -843,13 +843,13 @@ public class Tailer implements Runnable, AutoCloseable {
      * Creates a Tailer for the given file, with a specified buffer size.
      *
      * @param tailable the file to follow.
-     * @param charset the Charset to be used for reading the file
+     * @param charset the Charset to be used for reading the file.
      * @param tailerListener the TailerListener to use.
      * @param delayDuration the delay between checks of the file for new content in milliseconds.
      * @param tailAtEnd Set to true to tail from the end of the file, false to tail from the beginning of the file.
-     * @param reOpen if true, close and reopen the file between reading chunks
-     * @param ignoreTouch if true, file timestamp changes without content change get ignored
-     * @param bufferSize Buffer size
+     * @param reOpen if true, close and reopen the file between reading chunks.
+     * @param ignoreTouch if true, file timestamp changes without content change get ignored.
+     * @param bufferSize Buffer size.
      */
     private Tailer(final Tailable tailable, final Charset charset, final TailerListener tailerListener, final Duration delayDuration, final boolean tailAtEnd,
             final boolean reOpen, final int bufferSize, final boolean ignoreTouch) {
@@ -897,8 +897,8 @@ public class Tailer implements Runnable, AutoCloseable {
     /**
      * Gets the file.
      *
-     * @return the file
-     * @throws IllegalStateException if constructed using a user provided {@link Tailable} implementation
+     * @return the file.
+     * @throws IllegalStateException if constructed using a user provided {@link Tailable} implementation.
      */
     public File getFile() {
         if (tailable instanceof TailablePath) {
@@ -920,7 +920,7 @@ public class Tailer implements Runnable, AutoCloseable {
     /**
      * Gets the Tailable.
      *
-     * @return the Tailable
+     * @return the Tailable.
      * @since 2.12.0
      */
     public Tailable getTailable() {
@@ -930,8 +930,8 @@ public class Tailer implements Runnable, AutoCloseable {
     /**
      * Reads new lines.
      *
-     * @param reader The file to read
-     * @return The new position after the lines have been read
+     * @param reader The file to read.
+     * @return The new position after the lines have been read.
      * @throws IOException if an I/O error occurs.
      */
     private long readLines(final RandomAccessResourceBridge reader) throws IOException {

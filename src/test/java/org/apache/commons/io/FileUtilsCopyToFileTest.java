@@ -70,7 +70,7 @@ class FileUtilsCopyToFileTest {
     /**
      * Tests that {@code copyInputStreamToFile(InputStream, File)} closes the input stream.
      *
-     * @throws IOException
+     * @throws IOException Thrown on a test failure.
      * @see FileUtils#copyInputStreamToFile(InputStream, File)
      * @see FileUtils#copyToFile(InputStream, File)
      */
@@ -85,7 +85,7 @@ class FileUtilsCopyToFileTest {
     /**
      * Tests that {@code copyToFile(InputStream, File)} does not close the input stream.
      *
-     * @throws IOException
+     * @throws IOException Thrown on a test failure.
      * @see FileUtils#copyToFile(InputStream, File)
      * @see FileUtils#copyInputStreamToFile(InputStream, File)
      */

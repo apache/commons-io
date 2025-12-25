@@ -45,7 +45,7 @@ public class DelegateFileFilter extends AbstractFileFilter implements Serializab
     /**
      * Constructs a delegate file filter around an existing FileFilter.
      *
-     * @param fileFilter  the filter to decorate
+     * @param fileFilter  the filter to decorate.
      */
     public DelegateFileFilter(final FileFilter fileFilter) {
         Objects.requireNonNull(fileFilter, "filter");
@@ -56,7 +56,7 @@ public class DelegateFileFilter extends AbstractFileFilter implements Serializab
     /**
      * Constructs a delegate file filter around an existing FilenameFilter.
      *
-     * @param fileNameFilter  the filter to decorate
+     * @param fileNameFilter  the filter to decorate.
      */
     public DelegateFileFilter(final FilenameFilter fileNameFilter) {
         Objects.requireNonNull(fileNameFilter, "filter");
@@ -67,8 +67,8 @@ public class DelegateFileFilter extends AbstractFileFilter implements Serializab
     /**
      * Tests the filter.
      *
-     * @param file  the file to check
-     * @return true if the filter matches
+     * @param file  the file to check.
+     * @return true if the filter matches.
      */
     @Override
     public boolean accept(final File file) {
@@ -81,9 +81,9 @@ public class DelegateFileFilter extends AbstractFileFilter implements Serializab
     /**
      * Tests the filter.
      *
-     * @param dir  the directory
-     * @param name  the file name in the directory
-     * @return true if the filter matches
+     * @param dir  the directory.
+     * @param name  the file name in the directory.
+     * @return true if the filter matches.
      */
     @Override
     public boolean accept(final File dir, final String name) {
@@ -96,7 +96,7 @@ public class DelegateFileFilter extends AbstractFileFilter implements Serializab
     /**
      * Provide a String representation of this file filter.
      *
-     * @return a String representation
+     * @return a String representation.
      */
     @Override
     public String toString() {

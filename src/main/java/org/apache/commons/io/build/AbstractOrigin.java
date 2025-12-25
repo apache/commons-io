@@ -1102,7 +1102,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
      * @param length   How many bytes to copy.
      * @return this origin as a byte array, if possible.
      * @throws UnsupportedOperationException if the origin cannot be converted to a Path.
-     * @throws ArithmeticException           if the {@code position} overflows an int
+     * @throws ArithmeticException           if the {@code position} overflows an int.
      * @throws IOException                   if an I/O error occurs.
      * @since 2.13.0
      */
@@ -1176,7 +1176,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
     /**
      * Gets this origin as an InputStream, if possible.
      *
-     * @param options options specifying how the file is opened
+     * @param options options specifying how the file is opened.
      * @return this origin as an InputStream, if possible.
      * @throws IOException                   if an I/O error occurs.
      * @throws UnsupportedOperationException if the origin cannot be converted to a Path.
@@ -1188,7 +1188,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
     /**
      * Gets this origin as an OutputStream, if possible.
      *
-     * @param options options specifying how the file is opened
+     * @param options options specifying how the file is opened.
      * @return this origin as an OutputStream, if possible.
      * @throws IOException                   if an I/O error occurs.
      * @throws UnsupportedOperationException if the origin cannot be converted to a Path.
@@ -1243,8 +1243,8 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
     /**
      * Gets a new Writer on the origin, buffered by default.
      *
-     * @param charset the charset to use for encoding
-     * @param options options specifying how the file is opened
+     * @param charset the charset to use for encoding.
+     * @param options options specifying how the file is opened.
      * @return a new Writer on the origin.
      * @throws IOException                   if an I/O error occurs opening or creating the file.
      * @throws UnsupportedOperationException if the origin cannot be converted to a Path.

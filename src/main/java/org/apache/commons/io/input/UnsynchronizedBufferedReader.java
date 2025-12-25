@@ -212,8 +212,8 @@ public class UnsynchronizedBufferedReader extends UnsynchronizedReader {
     /**
      * Returns the next character in the current reader without consuming it. So the next call to {@link #read()} will still return this value.
      *
-     * @return the next character
-     * @throws IOException If an I/O error occurs
+     * @return the next character.
+     * @throws IOException If an I/O error occurs.
      */
     public int peek() throws IOException {
         mark(1);
@@ -227,8 +227,8 @@ public class UnsynchronizedBufferedReader extends UnsynchronizedReader {
      * still return the next value.
      *
      * @param buf the buffer to fill for the look ahead.
-     * @return the buffer itself
-     * @throws IOException If an I/O error occurs
+     * @return the buffer itself.
+     * @throws IOException If an I/O error occurs.
      */
     public int peek(final char[] buf) throws IOException {
         final int n = buf.length;

@@ -93,7 +93,7 @@ public class ExtensionFileComparator extends AbstractFileComparator implements S
     /**
      * Constructs a file extension comparator instance with the specified case-sensitivity.
      *
-     * @param ioCase how to handle case sensitivity, null means case-sensitive
+     * @param ioCase how to handle case sensitivity, null means case-sensitive.
      */
     public ExtensionFileComparator(final IOCase ioCase) {
         this.ioCase = IOCase.value(ioCase, IOCase.SENSITIVE);
@@ -102,8 +102,8 @@ public class ExtensionFileComparator extends AbstractFileComparator implements S
     /**
      * Compares the extensions of two files the specified case sensitivity.
      *
-     * @param file1 The first file to compare
-     * @param file2 The second file to compare
+     * @param file1 The first file to compare.
+     * @param file2 The second file to compare.
      * @return a negative value if the first file's extension
      * is less than the second, zero if the extensions are the
      * same and a positive value if the first files extension
@@ -119,7 +119,7 @@ public class ExtensionFileComparator extends AbstractFileComparator implements S
     /**
      * String representation of this file comparator.
      *
-     * @return String representation of this file comparator
+     * @return String representation of this file comparator.
      */
     @Override
     public String toString() {

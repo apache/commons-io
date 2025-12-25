@@ -31,56 +31,56 @@ public interface FileAlterationListener {
     /**
      * Directory changed Event.
      *
-     * @param directory The directory changed
+     * @param directory The directory changed.
      */
     void onDirectoryChange(File directory);
 
     /**
      * Directory created Event.
      *
-     * @param directory The directory created
+     * @param directory The directory created.
      */
     void onDirectoryCreate(File directory);
 
     /**
      * Directory deleted Event.
      *
-     * @param directory The directory deleted
+     * @param directory The directory deleted.
      */
     void onDirectoryDelete(File directory);
 
     /**
      * File changed Event.
      *
-     * @param file The file changed
+     * @param file The file changed.
      */
     void onFileChange(File file);
 
     /**
      * File created Event.
      *
-     * @param file The file created
+     * @param file The file created.
      */
     void onFileCreate(File file);
 
     /**
      * File deleted Event.
      *
-     * @param file The file deleted
+     * @param file The file deleted.
      */
     void onFileDelete(File file);
 
     /**
      * File system observer started checking event.
      *
-     * @param observer The file system observer
+     * @param observer The file system observer.
      */
     void onStart(FileAlterationObserver observer);
 
     /**
      * File system observer finished checking event.
      *
-     * @param observer The file system observer
+     * @param observer The file system observer.
      */
     void onStop(FileAlterationObserver observer);
 }

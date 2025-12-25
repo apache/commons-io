@@ -34,8 +34,8 @@ final class RegexpClassNameMatcher implements ClassNameMatcher {
     /**
      * Constructs an object based on the specified pattern.
      *
-     * @param pattern a pattern for evaluating acceptable class names
-     * @throws NullPointerException if {@code pattern} is null
+     * @param pattern a pattern for evaluating acceptable class names.
+     * @throws NullPointerException if {@code pattern} is null.
      */
     RegexpClassNameMatcher(final Pattern pattern) {
         this.pattern = Objects.requireNonNull(pattern, "pattern");
@@ -44,7 +44,7 @@ final class RegexpClassNameMatcher implements ClassNameMatcher {
     /**
      * Constructs an object based on the specified regular expression.
      *
-     * @param regex a regular expression for evaluating acceptable class names
+     * @param regex a regular expression for evaluating acceptable class names.
      */
     RegexpClassNameMatcher(final String regex) {
         this(Pattern.compile(regex));

@@ -266,7 +266,7 @@ public enum FileSystem {
     /**
      * Gets the current file system.
      *
-     * @return the current file system
+     * @return the current file system.
      */
     private static FileSystem current() {
         if (IS_OS_LINUX) {
@@ -284,7 +284,7 @@ public enum FileSystem {
     /**
      * Gets the current file system.
      *
-     * @return the current file system
+     * @return the current file system.
      */
     public static FileSystem getCurrent() {
         return CURRENT;
@@ -294,8 +294,8 @@ public enum FileSystem {
      * Decides if the operating system matches.
      *
      * @param osNamePrefix
-     *            the prefix for the operating system name
-     * @return true if matches, or false if not or can't determine
+     *            the prefix for the operating system name.
+     * @return true if matches, or false if not or can't determine.
      */
     private static boolean getOsMatchesName(final String osNamePrefix) {
         return isOsNameMatch(getSystemProperty("os.name"), osNamePrefix);
@@ -309,8 +309,8 @@ public enum FileSystem {
      * </p>
      *
      * @param property
-     *            the system property name
-     * @return the system property value or {@code null} if a security problem occurs
+     *            the system property name.
+     * @return the system property value or {@code null} if a security problem occurs.
      */
     private static String getSystemProperty(final String property) {
         try {
@@ -345,10 +345,10 @@ public enum FileSystem {
      * </p>
      *
      * @param osName
-     *            the actual OS name
+     *            the actual OS name.
      * @param osNamePrefix
-     *            the prefix for the expected OS name
-     * @return true if matches, or false if not or can't determine
+     *            the prefix for the expected OS name.
+     * @return true if matches, or false if not or can't determine.
      */
     private static boolean isOsNameMatch(final String osName, final String osNamePrefix) {
         if (osName == null) {

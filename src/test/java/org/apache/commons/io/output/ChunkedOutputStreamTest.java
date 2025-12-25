@@ -48,7 +48,7 @@ class ChunkedOutputStreamTest {
     /**
      * Tests the default chunk size with a ByteArrayOutputStream.
      *
-     * @throws IOException
+     * @throws IOException.
      */
     @Test
     void testBuildSetByteArrayOutputStream() throws IOException {
@@ -64,7 +64,7 @@ class ChunkedOutputStreamTest {
     /**
      * Tests the default chunk size with a Path.
      *
-     * @throws IOException
+     * @throws IOException Thrown on test failure.
      */
     @Test
     void testBuildSetPath() throws IOException {

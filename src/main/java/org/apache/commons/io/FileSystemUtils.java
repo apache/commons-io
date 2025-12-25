@@ -53,12 +53,12 @@ public class FileSystemUtils {
      * FileSystemUtils.freeSpace("/volume"); // *nix
      * </pre>
      *
-     * @param path the path to get free space for, not null, not empty on Unix
-     * @return the amount of free drive space on the drive or volume
+     * @param path the path to get free space for, not null, not empty on Unix.
+     * @return the amount of free drive space on the drive or volume.
      * @throws IOException              if an I/O error occurs.
      * @throws IllegalArgumentException if the path is invalid.
      * @since 1.1, enhanced OS support in 1.2 and 1.3
-     * @deprecated Use freeSpaceKb(String) Deprecated from 1.3, may be removed in 2.0
+     * @deprecated Use freeSpaceKb(String) Deprecated from 1.3, may be removed in 2.0.
      */
     @Deprecated
     public static long freeSpace(final String path) throws IOException {
@@ -75,7 +75,7 @@ public class FileSystemUtils {
      * freeSpaceKb(FileUtils.current().getAbsolutePath())
      * </pre>
      *
-     * @return the amount of free drive space on the drive or volume in kilobytes
+     * @return the amount of free drive space on the drive or volume in kilobytes.
      * @throws IOException              if an I/O error occurs.
      * @throws IllegalArgumentException if the path is invalid.
      * @since 2.0
@@ -97,7 +97,7 @@ public class FileSystemUtils {
      * </pre>
      *
      * @param timeout ignored.
-     * @return the amount of free drive space on the drive or volume in kilobytes
+     * @return the amount of free drive space on the drive or volume in kilobytes.
      * @throws IOException              if an I/O error occurs.
      * @throws IllegalArgumentException if the path is invalid.
      * @since 2.0
@@ -116,8 +116,8 @@ public class FileSystemUtils {
      * FileSystemUtils.freeSpaceKb("/volume"); // *nix
      * </pre>
      *
-     * @param path the path to get free space for, not null, not empty on Unix
-     * @return the amount of free drive space on the drive or volume in kilobytes
+     * @param path the path to get free space for, not null, not empty on Unix.
+     * @return the amount of free drive space on the drive or volume in kilobytes.
      * @throws IOException              if an I/O error occurs.
      * @throws IllegalArgumentException if the path is invalid.
      * @since 1.2, enhanced OS support in 1.3
@@ -136,9 +136,9 @@ public class FileSystemUtils {
      * FileSystemUtils.freeSpaceKb("/volume"); // *nix
      * </pre>
      *
-     * @param path    the path to get free space for, not null, not empty on Unix
+     * @param path    the path to get free space for, not null, not empty on Unix.
      * @param timeout ignored.
-     * @return the amount of free drive space on the drive or volume in kilobytes
+     * @return the amount of free drive space on the drive or volume in kilobytes.
      * @throws IOException              if an I/O error occurs.
      * @throws IllegalArgumentException if the path is invalid.
      * @since 2.0
@@ -157,8 +157,8 @@ public class FileSystemUtils {
      * FileSystemUtils.freeSpace("/volume"); // *nix
      * </pre>
      *
-     * @param pathStr the path to get free space for, not null, not empty on Unix
-     * @return the amount of free drive space on the drive or volume
+     * @param pathStr the path to get free space for, not null, not empty on Unix.
+     * @return the amount of free drive space on the drive or volume.
      * @throws IOException              if an I/O error occurs.
      * @throws IllegalArgumentException if the path is invalid.
      */

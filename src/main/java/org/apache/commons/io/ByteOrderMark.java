@@ -128,10 +128,10 @@ public class ByteOrderMark implements Serializable {
     /**
      * Constructs a new instance.
      *
-     * @param charsetName The name of the charset the BOM represents
-     * @param bytes The BOM's bytes
-     * @throws IllegalArgumentException if the charsetName is zero length
-     * @throws IllegalArgumentException if the bytes are zero length
+     * @param charsetName The name of the charset the BOM represents.
+     * @param bytes The BOM's bytes.
+     * @throws IllegalArgumentException if the charsetName is zero length.
+     * @throws IllegalArgumentException if the bytes are zero length.
      */
     public ByteOrderMark(final String charsetName, final int... bytes) {
         Objects.requireNonNull(charsetName, "charsetName");
@@ -149,9 +149,9 @@ public class ByteOrderMark implements Serializable {
     /**
      * Indicates if this instance's bytes equals another.
      *
-     * @param obj The object to compare to
+     * @param obj The object to compare to.
      * @return true if the bom's bytes are equal, otherwise
-     * false
+     * false.
      */
     @Override
     public boolean equals(final Object obj) {
@@ -173,8 +173,8 @@ public class ByteOrderMark implements Serializable {
     /**
      * Gets the byte at the specified position.
      *
-     * @param pos The position
-     * @return The specified byte
+     * @param pos The position.
+     * @return The specified byte.
      */
     public int get(final int pos) {
         return bytes[pos];
@@ -183,7 +183,7 @@ public class ByteOrderMark implements Serializable {
     /**
      * Gets a copy of the BOM's bytes.
      *
-     * @return a copy of the BOM's bytes
+     * @return a copy of the BOM's bytes.
      */
     public byte[] getBytes() {
         final byte[] copy = IOUtils.byteArray(bytes.length);
@@ -196,7 +196,7 @@ public class ByteOrderMark implements Serializable {
     /**
      * Gets the name of the {@link java.nio.charset.Charset} the BOM represents.
      *
-     * @return the character set name
+     * @return the character set name.
      */
     public String getCharsetName() {
         return charsetName;
@@ -224,7 +224,7 @@ public class ByteOrderMark implements Serializable {
     /**
      * Gets the length of the BOM's bytes.
      *
-     * @return the length of the BOM's bytes
+     * @return the length of the BOM's bytes.
      */
     public int length() {
         return bytes.length;
@@ -260,7 +260,7 @@ public class ByteOrderMark implements Serializable {
     /**
      * Converts this instance to a String representation of the BOM.
      *
-     * @return the length of the BOM's bytes
+     * @return the length of the BOM's bytes.
      */
     @Override
     public String toString() {

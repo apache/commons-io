@@ -36,7 +36,7 @@ final class FullClassNameMatcher implements ClassNameMatcher {
     /**
      * Constructs an object based on the specified class names.
      *
-     * @param classes a list of class names
+     * @param classes a list of class names.
      */
     FullClassNameMatcher(final String... classes) {
         classesSet = Collections.unmodifiableSet(new HashSet<>(Arrays.asList(classes)));

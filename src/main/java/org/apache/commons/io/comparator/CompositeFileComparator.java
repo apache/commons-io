@@ -58,7 +58,7 @@ public class CompositeFileComparator extends AbstractFileComparator implements S
     /**
      * Constructs a composite comparator for the set of delegate comparators.
      *
-     * @param delegates The delegate file comparators
+     * @param delegates The delegate file comparators.
      */
     public CompositeFileComparator(@SuppressWarnings("unchecked") final Comparator<File>... delegates) {
         this.delegates = delegates == null ? emptyArray() : delegates.clone();
@@ -67,7 +67,7 @@ public class CompositeFileComparator extends AbstractFileComparator implements S
     /**
      * Constructs a composite comparator for the set of delegate comparators.
      *
-     * @param delegates The delegate file comparators
+     * @param delegates The delegate file comparators.
      */
     public CompositeFileComparator(final Iterable<Comparator<File>> delegates) {
         this.delegates = delegates == null ? emptyArray()
@@ -77,8 +77,8 @@ public class CompositeFileComparator extends AbstractFileComparator implements S
     /**
      * Compares the two files using delegate comparators.
      *
-     * @param file1 The first file to compare
-     * @param file2 The second file to compare
+     * @param file1 The first file to compare.
+     * @param file2 The second file to compare.
      * @return the first non-zero result returned from the delegate comparators or zero.
      */
     @Override
@@ -94,7 +94,7 @@ public class CompositeFileComparator extends AbstractFileComparator implements S
     /**
      * String representation of this file comparator.
      *
-     * @return String representation of this file comparator
+     * @return String representation of this file comparator.
      */
     @Override
     public String toString() {

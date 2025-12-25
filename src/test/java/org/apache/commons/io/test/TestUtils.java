@@ -48,9 +48,9 @@ public abstract class TestUtils {
     /**
      * Assert that the content of a file is equal to that in a byte[].
      *
-     * @param b0   the expected contents
-     * @param file the file to check
-     * @throws IOException If an I/O error occurs while reading the file contents
+     * @param b0   the expected contents.
+     * @param file the file to check.
+     * @throws IOException If an I/O error occurs while reading the file contents.
      */
     public static void assertEqualContent(final byte[] b0, final File file) throws IOException {
         assertEqualContent(b0, file.toPath());
@@ -59,9 +59,9 @@ public abstract class TestUtils {
     /**
      * Assert that the content of a file is equal to that in a byte[].
      *
-     * @param b0   the expected contents
-     * @param file the file to check
-     * @throws IOException If an I/O error occurs while reading the file contents
+     * @param b0   the expected contents.
+     * @param file the file to check.
+     * @throws IOException If an I/O error occurs while reading the file contents.
      */
     public static void assertEqualContent(final byte[] b0, final Path file) throws IOException {
         int count = 0;
@@ -82,9 +82,9 @@ public abstract class TestUtils {
     /**
      * Assert that the content of a file is equal to that in a char[].
      *
-     * @param c0   the expected contents
-     * @param file the file to check
-     * @throws IOException If an I/O error occurs while reading the file contents
+     * @param c0   the expected contents.
+     * @param file the file to check.
+     * @throws IOException If an I/O error occurs while reading the file contents.
      */
     public static void assertEqualContent(final char[] c0, final File file) throws IOException {
         assertEqualContent(c0, file.toPath());
@@ -93,9 +93,9 @@ public abstract class TestUtils {
     /**
      * Assert that the content of a file is equal to that in a char[].
      *
-     * @param c0   the expected contents
-     * @param file the file to check
-     * @throws IOException If an I/O error occurs while reading the file contents
+     * @param c0   the expected contents.
+     * @param file the file to check.
+     * @throws IOException If an I/O error occurs while reading the file contents.
      */
     public static void assertEqualContent(final char[] c0, final Path file) throws IOException {
         int count = 0;

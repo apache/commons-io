@@ -128,7 +128,7 @@ public final class ThrottledInputStream extends CountingInputStream {
          * To test idle timeouts for example, use 1 byte per minute, 1 byte per 30 seconds, and so on.
          * </p>
          *
-         * @param value the maximum bytes
+         * @param value the maximum bytes.
          * @param chronoUnit a duration scale goal.
          * @return {@code this} instance.
          * @throws IllegalArgumentException Thrown if maxBytesPerSecond &lt;= 0.
@@ -151,7 +151,7 @@ public final class ThrottledInputStream extends CountingInputStream {
          * To test idle timeouts for example, use 1 byte per minute, 1 byte per 30 seconds, and so on.
          * </p>
          *
-         * @param value the maximum bytes
+         * @param value the maximum bytes.
          * @param duration a duration goal.
          * @return {@code this} instance.
          * @throws IllegalArgumentException Thrown if maxBytesPerSecond &lt;= 0.

@@ -53,8 +53,8 @@ public class PeekableInputStream extends CircularBufferInputStream {
      * Returns whether the next bytes in the buffer are as given by {@code sourceBuffer}. This is equivalent to
      * {@link #peek(byte[], int, int)} with {@code offset} == 0, and {@code length} == {@code sourceBuffer.length}
      *
-     * @param sourceBuffer the buffer to compare against
-     * @return true if the next bytes are as given
+     * @param sourceBuffer the buffer to compare against.
+     * @return true if the next bytes are as given.
      * @throws IOException Refilling the buffer failed.
      */
     public boolean peek(final byte[] sourceBuffer) throws IOException {
@@ -66,11 +66,11 @@ public class PeekableInputStream extends CircularBufferInputStream {
      * Returns whether the next bytes in the buffer are as given by {@code sourceBuffer}, {code offset}, and
      * {@code length}.
      *
-     * @param sourceBuffer the buffer to compare against
-     * @param offset the start offset
-     * @param length the length to compare
-     * @return true if the next bytes in the buffer are as given
-     * @throws IOException if there is a problem calling fillBuffer()
+     * @param sourceBuffer the buffer to compare against.
+     * @param offset the start offset.
+     * @param length the length to compare.
+     * @return true if the next bytes in the buffer are as given.
+     * @throws IOException if there is a problem calling fillBuffer().
      */
     public boolean peek(final byte[] sourceBuffer, final int offset, final int length) throws IOException {
         Objects.requireNonNull(sourceBuffer, "sourceBuffer");

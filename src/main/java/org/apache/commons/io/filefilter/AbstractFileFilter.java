@@ -77,8 +77,8 @@ public abstract class AbstractFileFilter implements IOFileFilter, PathVisitor {
     /**
      * Tests to see if the File should be accepted by this filter.
      *
-     * @param file the File to check
-     * @return true if this file matches the test
+     * @param file the File to check.
+     * @return true if this file matches the test.
      */
     @Override
     public boolean accept(final File file) {
@@ -89,9 +89,9 @@ public abstract class AbstractFileFilter implements IOFileFilter, PathVisitor {
     /**
      * Tests to see if the File should be accepted by this filter.
      *
-     * @param dir the directory File to check
-     * @param name the file name within the directory to check
-     * @return true if this file matches the test
+     * @param dir the directory File to check.
+     * @param name the file name within the directory to check.
+     * @return true if this file matches the test.
      */
     @Override
     public boolean accept(final File dir, final String name) {
@@ -167,7 +167,7 @@ public abstract class AbstractFileFilter implements IOFileFilter, PathVisitor {
     /**
      * Provides a String representation of this file filter.
      *
-     * @return a String representation
+     * @return a String representation.
      */
     @Override
     public String toString() {

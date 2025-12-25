@@ -135,7 +135,7 @@ public final class FileChannels {
      *
      * @param channel The source channel.
      * @param dst     The buffer into which bytes are to be transferred.
-     * @return The number of bytes read, <em>never</em> zero, or {@code -1} if the channel has reached end-of-stream
+     * @return The number of bytes read, <em>never</em> zero, or {@code -1} if the channel has reached end-of-stream.
      * @throws IOException              If some other I/O error occurs.
      * @throws IllegalArgumentException If there is room in the given buffer.
      */

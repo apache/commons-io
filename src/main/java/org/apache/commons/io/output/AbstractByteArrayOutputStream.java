@@ -56,7 +56,7 @@ import org.apache.commons.io.input.ClosedInputStream;
  * ignored.
  * </p>
  *
- * @param <T> The AbstractByteArrayOutputStream subclass
+ * @param <T> The AbstractByteArrayOutputStream subclass.
  * @since 2.7
  */
 public abstract class AbstractByteArrayOutputStream<T extends AbstractByteArrayOutputStream<T>> extends OutputStream {
@@ -110,7 +110,7 @@ public abstract class AbstractByteArrayOutputStream<T extends AbstractByteArrayO
     /**
      * Returns this instance typed to {@code T}.
      *
-     * @return {@code this} instance
+     * @return {@code this} instance.
      */
     @SuppressWarnings("unchecked")
     protected T asThis() {
@@ -349,7 +349,7 @@ public abstract class AbstractByteArrayOutputStream<T extends AbstractByteArrayO
      * this stream.
      *
      * @param in the input stream to read from.
-     * @return total number of bytes read from the input stream (and written to this stream)
+     * @return total number of bytes read from the input stream (and written to this stream).
      * @throws IOException if an I/O error occurs while reading the input stream.
      * @since 1.4
      */

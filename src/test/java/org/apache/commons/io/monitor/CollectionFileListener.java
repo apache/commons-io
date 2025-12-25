@@ -60,7 +60,7 @@ public class CollectionFileListener implements FileAlterationListener, Serializa
     /**
      * Gets the set of changed directories.
      *
-     * @return Directories which have changed
+     * @return Directories which have changed.
      */
     public Collection<File> getChangedDirectories() {
         return changedDirectories;
@@ -69,7 +69,7 @@ public class CollectionFileListener implements FileAlterationListener, Serializa
     /**
      * Gets the set of changed files.
      *
-     * @return Files which have changed
+     * @return Files which have changed.
      */
     public Collection<File> getChangedFiles() {
         return changedFiles;
@@ -78,7 +78,7 @@ public class CollectionFileListener implements FileAlterationListener, Serializa
     /**
      * Gets the set of created directories.
      *
-     * @return Directories which have been created
+     * @return Directories which have been created.
      */
     public Collection<File> getCreatedDirectories() {
         return createdDirectories;
@@ -87,7 +87,7 @@ public class CollectionFileListener implements FileAlterationListener, Serializa
     /**
      * Gets the set of created files.
      *
-     * @return Files which have been created
+     * @return Files which have been created.
      */
     public Collection<File> getCreatedFiles() {
         return createdFiles;
@@ -96,7 +96,7 @@ public class CollectionFileListener implements FileAlterationListener, Serializa
     /**
      * Gets the set of deleted directories.
      *
-     * @return Directories which been deleted
+     * @return Directories which been deleted.
      */
     public Collection<File> getDeletedDirectories() {
         return deletedDirectories;
@@ -105,7 +105,7 @@ public class CollectionFileListener implements FileAlterationListener, Serializa
     /**
      * Gets the set of deleted files.
      *
-     * @return Files which been deleted
+     * @return Files which been deleted.
      */
     public Collection<File> getDeletedFiles() {
         return deletedFiles;
@@ -114,7 +114,7 @@ public class CollectionFileListener implements FileAlterationListener, Serializa
     /**
      * Directory changed Event.
      *
-     * @param directory The directory changed
+     * @param directory The directory changed.
      */
     @Override
     public void onDirectoryChange(final File directory) {
@@ -124,7 +124,7 @@ public class CollectionFileListener implements FileAlterationListener, Serializa
     /**
      * Directory created Event.
      *
-     * @param directory The directory created
+     * @param directory The directory created.
      */
     @Override
     public void onDirectoryCreate(final File directory) {
@@ -134,7 +134,7 @@ public class CollectionFileListener implements FileAlterationListener, Serializa
     /**
      * Directory deleted Event.
      *
-     * @param directory The directory deleted
+     * @param directory The directory deleted.
      */
     @Override
     public void onDirectoryDelete(final File directory) {
@@ -144,7 +144,7 @@ public class CollectionFileListener implements FileAlterationListener, Serializa
     /**
      * File changed Event.
      *
-     * @param file The file changed
+     * @param file The file changed.
      */
     @Override
     public void onFileChange(final File file) {
@@ -154,7 +154,7 @@ public class CollectionFileListener implements FileAlterationListener, Serializa
     /**
      * File created Event.
      *
-     * @param file The file created
+     * @param file The file created.
      */
     @Override
     public void onFileCreate(final File file) {
@@ -164,7 +164,7 @@ public class CollectionFileListener implements FileAlterationListener, Serializa
     /**
      * File deleted Event.
      *
-     * @param file The file deleted
+     * @param file The file deleted.
      */
     @Override
     public void onFileDelete(final File file) {
@@ -174,7 +174,7 @@ public class CollectionFileListener implements FileAlterationListener, Serializa
     /**
      * File system observer started checking event.
      *
-     * @param observer The file system observer
+     * @param observer The file system observer.
      */
     @Override
     public void onStart(final FileAlterationObserver observer) {
@@ -186,7 +186,7 @@ public class CollectionFileListener implements FileAlterationListener, Serializa
     /**
      * File system observer finished checking event.
      *
-     * @param observer The file system observer
+     * @param observer The file system observer.
      */
     @Override
     public void onStop(final FileAlterationObserver observer) {

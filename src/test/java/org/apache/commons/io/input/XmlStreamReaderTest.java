@@ -150,12 +150,12 @@ class XmlStreamReaderTest {
     }
 
     /**
-     * @param bomType   no-bom, UTF-16BE-bom, UTF-16LE-bom, UTF-8-bom
-     * @param xmlType   xml, xml-prolog, xml-prolog-charset
-     * @param streamEnc encoding of the stream
-     * @param prologEnc encoding of the prolog
-     * @return XML stream
-     * @throws IOException If an I/O error occurs
+     * @param bomType   no-bom, UTF-16BE-bom, UTF-16LE-bom, UTF-8-bom.
+     * @param xmlType   xml, xml-prolog, xml-prolog-charset.
+     * @param streamEnc encoding of the stream.
+     * @param prologEnc encoding of the prolog.
+     * @return XML stream.
+     * @throws IOException If an I/O error occurs.
      */
     protected InputStream getXmlInputStream(final String bomType, final String xmlType,
         final String streamEnc, final String prologEnc) throws IOException {

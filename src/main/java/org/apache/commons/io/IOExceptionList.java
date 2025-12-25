@@ -126,7 +126,7 @@ public class IOExceptionList extends IOException implements Iterable<Throwable> 
      * Works around Throwable and Generics, may fail at runtime depending on the argument value.
      *
      * @param <T> type of exception to return.
-     * @param clazz the target type
+     * @param clazz the target type.
      * @return The list of causes.
      */
     public <T extends Throwable> List<T> getCauseList(final Class<T> clazz) {

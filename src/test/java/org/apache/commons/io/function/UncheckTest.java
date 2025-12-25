@@ -336,7 +336,7 @@ class UncheckTest {
     /**
      * Tests {@link Uncheck#run(IORunnable, Supplier))}.
      *
-     * @throws IOException
+     * @throws IOException Thrown on a test failure.
      */
     @Test
     void testRunMessage() throws IOException {

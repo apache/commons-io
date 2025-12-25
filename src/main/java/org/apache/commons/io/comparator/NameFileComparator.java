@@ -89,7 +89,7 @@ public class NameFileComparator extends AbstractFileComparator implements Serial
     /**
      * Constructs a file name comparator instance with the specified case-sensitivity.
      *
-     * @param ioCase  how to handle case sensitivity, null means case-sensitive
+     * @param ioCase  how to handle case sensitivity, null means case-sensitive.
      */
     public NameFileComparator(final IOCase ioCase) {
         this.ioCase = IOCase.value(ioCase, IOCase.SENSITIVE);
@@ -98,8 +98,8 @@ public class NameFileComparator extends AbstractFileComparator implements Serial
     /**
      * Compares the names of two files with the specified case sensitivity.
      *
-     * @param file1 The first file to compare
-     * @param file2 The second file to compare
+     * @param file1 The first file to compare.
+     * @param file2 The second file to compare.
      * @return a negative value if the first file's name
      * is less than the second, zero if the names are the
      * same and a positive value if the first files name
@@ -113,7 +113,7 @@ public class NameFileComparator extends AbstractFileComparator implements Serial
     /**
      * String representation of this file comparator.
      *
-     * @return String representation of this file comparator
+     * @return String representation of this file comparator.
      */
     @Override
     public String toString() {

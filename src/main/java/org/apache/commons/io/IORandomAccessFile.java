@@ -37,7 +37,7 @@ public final class IORandomAccessFile extends RandomAccessFile {
     /**
      * Constructs a new instance by calling {@link RandomAccessFile#RandomAccessFile(File, String)}.
      *
-     * @param file the file object
+     * @param file the file object.
      * @param mode the access mode, as described in {@link RandomAccessFile#RandomAccessFile(File, String)}.
      * @throws FileNotFoundException Thrown by {@link RandomAccessFile#RandomAccessFile(File, String)}.
      * @see RandomAccessFile#RandomAccessFile(File, String)
@@ -51,7 +51,7 @@ public final class IORandomAccessFile extends RandomAccessFile {
     /**
      * Constructs a new instance by calling {@link RandomAccessFile#RandomAccessFile(String, String)}.
      *
-     * @param name the file object
+     * @param name the file object.
      * @param mode the access mode, as described in {@link RandomAccessFile#RandomAccessFile(String, String)}.
      * @throws FileNotFoundException Thrown by {@link RandomAccessFile#RandomAccessFile(String, String)}.
      * @see RandomAccessFile#RandomAccessFile(String, String)

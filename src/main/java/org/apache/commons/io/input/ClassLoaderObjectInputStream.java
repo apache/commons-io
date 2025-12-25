@@ -40,10 +40,10 @@ public class ClassLoaderObjectInputStream extends ObjectInputStream {
     /**
      * Constructs a new ClassLoaderObjectInputStream.
      *
-     * @param classLoader  the ClassLoader from which classes should be loaded
-     * @param inputStream  the InputStream to work on
-     * @throws IOException in case of an I/O error
-     * @throws StreamCorruptedException if the stream is corrupted
+     * @param classLoader  the ClassLoader from which classes should be loaded.
+     * @param inputStream  the InputStream to work on.
+     * @throws IOException in case of an I/O error.
+     * @throws StreamCorruptedException if the stream is corrupted.
      */
     public ClassLoaderObjectInputStream(
             final ClassLoader classLoader, final InputStream inputStream)
@@ -56,10 +56,10 @@ public class ClassLoaderObjectInputStream extends ObjectInputStream {
      * Resolve a class specified by the descriptor using the
      * specified ClassLoader or the super ClassLoader.
      *
-     * @param objectStreamClass  descriptor of the class
-     * @return the Class object described by the ObjectStreamClass
-     * @throws IOException in case of an I/O error
-     * @throws ClassNotFoundException if the Class cannot be found
+     * @param objectStreamClass  descriptor of the class.
+     * @return the Class object described by the ObjectStreamClass.
+     * @throws IOException in case of an I/O error.
+     * @throws ClassNotFoundException if the Class cannot be found.
      */
     @Override
     protected Class<?> resolveClass(final ObjectStreamClass objectStreamClass)
@@ -76,10 +76,10 @@ public class ClassLoaderObjectInputStream extends ObjectInputStream {
      * Create a proxy class that implements the specified interfaces using
      * the specified ClassLoader or the super ClassLoader.
      *
-     * @param interfaces the interfaces to implement
-     * @return a proxy class implementing the interfaces
-     * @throws IOException in case of an I/O error
-     * @throws ClassNotFoundException if the Class cannot be found
+     * @param interfaces the interfaces to implement.
+     * @return a proxy class implementing the interfaces.
+     * @throws IOException in case of an I/O error.
+     * @throws ClassNotFoundException if the Class cannot be found.
      * @see ObjectInputStream#resolveProxyClass(String[])
      * @since 2.1
      */

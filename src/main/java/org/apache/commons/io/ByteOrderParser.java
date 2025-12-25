@@ -41,8 +41,8 @@ public final class ByteOrderParser {
      * </ul>
      *
      * @param value
-     *            the {@link String} containing the ByteOrder representation to be parsed
-     * @return the ByteOrder represented by the string argument
+     *            the {@link String} containing the ByteOrder representation to be parsed.
+     * @return the ByteOrder represented by the string argument.
      * @throws IllegalArgumentException
      *             if the {@link String} containing the ByteOrder representation to be parsed is unknown.
      */

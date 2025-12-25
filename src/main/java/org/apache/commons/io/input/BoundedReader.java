@@ -53,8 +53,8 @@ public class BoundedReader extends Reader {
     /**
      * Constructs a bounded reader
      *
-     * @param target                   The target stream that will be used
-     * @param maxCharsFromTargetReader The maximum number of characters that can be read from target
+     * @param target                   The target stream that will be used.
+     * @param maxCharsFromTargetReader The maximum number of characters that can be read from target.
      */
     public BoundedReader(final Reader target, final int maxCharsFromTargetReader) {
         this.target = target;
@@ -64,7 +64,7 @@ public class BoundedReader extends Reader {
     /**
      * Closes the target
      *
-     * @throws IOException If an I/O error occurs while calling the underlying reader's close method
+     * @throws IOException If an I/O error occurs while calling the underlying reader's close method.
      */
     @Override
     public void close() throws IOException {
@@ -78,7 +78,7 @@ public class BoundedReader extends Reader {
      *                       Note that this parameter is not validated with respect to maxCharsFromTargetReader. There
      *                       is no way to pass past maxCharsFromTargetReader, even if this value is greater.
      *
-     * @throws IOException If an I/O error occurs while calling the underlying reader's mark method
+     * @throws IOException If an I/O error occurs while calling the underlying reader's mark method.
      * @see Reader#mark(int)
      */
     @Override
@@ -93,8 +93,8 @@ public class BoundedReader extends Reader {
     /**
      * Reads a single character
      *
-     * @return -1 on EOF or the character read
-     * @throws IOException If an I/O error occurs while calling the underlying reader's read method
+     * @return -1 on EOF or the character read.
+     * @throws IOException If an I/O error occurs while calling the underlying reader's read method.
      * @see Reader#read()
      */
     @Override
@@ -114,13 +114,13 @@ public class BoundedReader extends Reader {
     /**
      * Reads into an array
      *
-     * @param cbuf The buffer to fill
-     * @param off  The offset
-     * @param len  The number of chars to read
-     * @return the number of chars read
+     * @param cbuf The buffer to fill.
+     * @param off  The offset.
+     * @param len  The number of chars to read.
+     * @return the number of chars read.
      * @throws NullPointerException if the buffer is {@code null}.
      * @throws IndexOutOfBoundsException if {@code off} or {@code len} are negative, or if {@code off + len} is greater than {@code cbuf.length}.
-     * @throws IOException If an I/O error occurs while calling the underlying reader's read method
+     * @throws IOException If an I/O error occurs while calling the underlying reader's read method.
      * @see Reader#read(char[], int, int)
      */
     @Override
@@ -140,7 +140,7 @@ public class BoundedReader extends Reader {
     /**
      * Resets the target to the latest mark,
      *
-     * @throws IOException If an I/O error occurs while calling the underlying reader's reset method
+     * @throws IOException If an I/O error occurs while calling the underlying reader's reset method.
      * @see Reader#reset()
      */
     @Override

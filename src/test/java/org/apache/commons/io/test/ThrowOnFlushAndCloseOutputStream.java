@@ -33,8 +33,8 @@ public class ThrowOnFlushAndCloseOutputStream extends ProxyOutputStream {
 
     /**
      * @param proxy OutputStream to delegate to.
-     * @param throwOnFlush True if flush() is forbidden
-     * @param throwOnClose True if close() is forbidden
+     * @param throwOnFlush True if flush() is forbidden.
+     * @param throwOnClose True if close() is forbidden.
      */
     public ThrowOnFlushAndCloseOutputStream(final OutputStream proxy, final boolean throwOnFlush,
         final boolean throwOnClose) {
