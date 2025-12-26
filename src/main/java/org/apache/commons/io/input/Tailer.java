@@ -1043,7 +1043,7 @@ public class Tailer implements Runnable, AutoCloseable {
                      * - gets "touched"
                      * - Files.getLastModifiedTime returns a new timestamp but newer data is not yet there (
                      *   was reported to happen on busy systems or samba network shares, see IO-279)
-                     * The default behaviour is to replay the whole file. If this is unsdesired in your usecase,
+                     * The default behavior is to replay the whole file. If this is undesired in your usecase,
                      * use the ignoreTouch builder flag
                      */
                     if (!ignoreTouch) {
