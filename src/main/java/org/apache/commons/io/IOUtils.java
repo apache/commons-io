@@ -1556,7 +1556,7 @@ public class IOUtils {
     }
 
     /**
-     * Copies chars from a {@link Reader} to bytes on an {@link OutputStream} using the the virtual machine's {@linkplain Charset#defaultCharset() default
+     * Copies chars from a {@link Reader} to bytes on an {@link OutputStream} using the virtual machine's {@linkplain Charset#defaultCharset() default
      * charset}, and calling flush.
      * <p>
      * This method buffers the input internally, so there is no need to use a {@link BufferedReader}.
