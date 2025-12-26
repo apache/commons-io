@@ -196,14 +196,14 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  * <pre>
  * public class FooDirectoryWalker extends DirectoryWalker {
  *
- *     private volatile boolean cancelled = false;
+ *     private volatile boolean canceled = false;
  *
  *     public void cancel() {
- *         cancelled = true;
+ *         canceled = true;
  *     }
  *
  *     protected boolean handleIsCancelled(File file, int depth, Collection results) {
- *         return cancelled;
+ *         return canceled;
  *     }
  *
  *     protected void handleCancelled(File startDirectory, Collection results, CancelException cancel) {
@@ -272,8 +272,8 @@ public abstract class DirectoryWalker<T> {
          * Constructs a {@link CancelException} with
          * the file and depth when cancellation occurred.
          *
-         * @param file  the file when the operation was cancelled, may be null.
-         * @param depth  the depth when the operation was cancelled, may be null.
+         * @param file  the file when the operation was canceled, may be null.
+         * @param depth  the depth when the operation was canceled, may be null.
          */
         public CancelException(final File file, final int depth) {
             this("Operation Cancelled", file, depth);
@@ -285,8 +285,8 @@ public abstract class DirectoryWalker<T> {
          * cancellation occurred.
          *
          * @param message  the detail message.
-         * @param file  the file when the operation was cancelled.
-         * @param depth  the depth when the operation was cancelled.
+         * @param file  the file when the operation was canceled.
+         * @param depth  the depth when the operation was canceled.
          */
         public CancelException(final String message, final File file, final int depth) {
             super(message);
@@ -295,18 +295,18 @@ public abstract class DirectoryWalker<T> {
         }
 
         /**
-         * Returns the depth when the operation was cancelled.
+         * Returns the depth when the operation was canceled.
          *
-         * @return the depth when the operation was cancelled.
+         * @return the depth when the operation was canceled.
          */
         public int getDepth() {
             return depth;
         }
 
         /**
-         * Returns the file when the operation was cancelled.
+         * Returns the file when the operation was canceled.
          *
-         * @return the file when the operation was cancelled.
+         * @return the file when the operation was canceled.
          */
         public File getFile() {
             return file;
@@ -376,7 +376,7 @@ public abstract class DirectoryWalker<T> {
     }
 
     /**
-     * Checks whether the walk has been cancelled by calling {@link #handleIsCancelled},
+     * Checks whether the walk has been canceled by calling {@link #handleIsCancelled},
      * throwing a {@link CancelException} if it has.
      * <p>
      * Writers of subclasses should not normally call this method as it is called
@@ -417,7 +417,7 @@ public abstract class DirectoryWalker<T> {
     }
 
     /**
-     * Overridable callback method invoked when the operation is cancelled.
+     * Overridable callback method invoked when the operation is canceled.
      * The file being processed when the cancellation occurred can be
      * obtained from the exception.
      * <p>
@@ -526,7 +526,7 @@ public abstract class DirectoryWalker<T> {
 
     /**
      * Overridable callback method invoked to determine if the entire walk
-     * operation should be immediately cancelled.
+     * operation should be immediately canceled.
      * <p>
      * This method should be implemented by those subclasses that want to
      * provide a public {@code cancel()} method available from another
@@ -534,13 +534,13 @@ public abstract class DirectoryWalker<T> {
      * </p>
      * <pre>
      *  public class FooDirectoryWalker extends DirectoryWalker {
-     *    private volatile boolean cancelled = false;
+     *    private volatile boolean canceled = false;
      *
      *    public void cancel() {
-     *        cancelled = true;
+     *        canceled = true;
      *    }
      *    private void handleIsCancelled(File file, int depth, Collection results) {
-     *        return cancelled;
+     *        return canceled;
      *    }
      *    protected void handleCancelled(File startDirectory,
      *              Collection results, CancelException cancel) {
@@ -550,7 +550,7 @@ public abstract class DirectoryWalker<T> {
      * </pre>
      * <p>
      * If this method returns true, then the directory walk is immediately
-     * cancelled. The next callback method will be {@link #handleCancelled}.
+     * canceled. The next callback method will be {@link #handleCancelled}.
      * </p>
      * <p>
      * This implementation returns false.
@@ -559,14 +559,14 @@ public abstract class DirectoryWalker<T> {
      * @param file  the file or directory being processed.
      * @param depth  the current directory level (starting directory = 0).
      * @param results  the collection of result objects, may be updated.
-     * @return true if the walk has been cancelled.
+     * @return true if the walk has been canceled.
      * @throws IOException if an I/O Error occurs.
      */
     @SuppressWarnings("unused") // Possibly thrown from subclasses.
     protected boolean handleIsCancelled(
             final File file, final int depth, final Collection<T> results) throws IOException {
         // do nothing - overridable by subclass
-        return false;  // not cancelled
+        return false;  // not canceled
     }
 
     /**
