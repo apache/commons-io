@@ -300,12 +300,13 @@ public class IOUtils {
     /**
      * A singleton empty byte array.
      *
-     *  @since 2.9.0
+     * @since 2.9.0
      */
     public static final byte[] EMPTY_BYTE_ARRAY = {};
 
     /**
      * Represents the end-of-file (or stream) value {@value}.
+     *
      * @since 2.5 (made public)
      */
     public static final int EOF = -1;
