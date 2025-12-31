@@ -53,6 +53,7 @@ public class UnixLineEndingInputStream extends InputStream {
 
     /**
      * Closes the stream. Also closes the underlying stream.
+     *
      * @throws IOException If an I/O error occurs.
      */
     @Override
@@ -112,6 +113,7 @@ public class UnixLineEndingInputStream extends InputStream {
 
     /**
      * Reads the next item from the target, updating internal flags in the process
+     *
      * @return the next int read from the target stream.
      * @throws IOException If an I/O error occurs.
      */

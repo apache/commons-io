@@ -51,6 +51,7 @@ import org.apache.commons.io.IOCase;
  * <p>
  * <em>Serialization is deprecated and will be removed in 3.0.</em>
  * </p>
+ *
  * @since 1.4
  */
 public class PathFileComparator extends AbstractFileComparator implements Serializable {

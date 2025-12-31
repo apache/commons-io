@@ -110,6 +110,7 @@ public interface IOIterator<E> {
      * <p>
      * Implementations may not have anything to unwrap and that behavior is undefined for now.
      * </p>
+     *
      * @return the underlying Iterator.
      */
     Iterator<E> unwrap();

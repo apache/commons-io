@@ -117,6 +117,7 @@ public class CopyUtils {
 
     /**
      * Copies bytes from a {@code byte[]} to an {@link OutputStream}.
+     *
      * @param input the byte array to read from.
      * @param output the {@link OutputStream} to write to.
      * @throws IOException In case of an I/O problem.

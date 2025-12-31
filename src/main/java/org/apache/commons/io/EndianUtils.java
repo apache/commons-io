@@ -50,6 +50,7 @@ public class EndianUtils {
 
     /**
      * Reads the next byte from the input stream.
+     *
      * @param input  the stream.
      * @return the byte.
      * @throws IOException if the end of file is reached.

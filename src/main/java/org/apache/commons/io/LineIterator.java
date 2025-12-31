@@ -142,6 +142,7 @@ public class LineIterator implements Iterator<String>, Closeable {
     /**
      * Overridable method to validate each line that is returned.
      * This implementation always returns true.
+     *
      * @param line  the line that is to be validated.
      * @return true if valid, false to remove from the iterator.
      */

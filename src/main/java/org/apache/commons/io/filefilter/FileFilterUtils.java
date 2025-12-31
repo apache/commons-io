@@ -226,13 +226,13 @@ public class FileFilterUtils {
      * Set&lt;File&gt; javaFiles = FileFilterUtils.filterSet(allFiles,
      *     FileFilterUtils.suffixFileFilter(".java"));
      * </pre>
+     *
      * @param filter the filter to apply to the set of files.
      * @param files the array of files to apply the filter to.
      * @return a subset of {@code files} that is accepted by the
      *         file filter.
      * @throws NullPointerException if the filter is {@code null}
      *         or {@code files} contains a {@code null} value.
-     *
      * @since 2.0
      */
     public static File[] filter(final IOFileFilter filter, final File... files) {
@@ -259,13 +259,13 @@ public class FileFilterUtils {
      * Set&lt;File&gt; javaFiles = FileFilterUtils.filterSet(allFiles,
      *     FileFilterUtils.suffixFileFilter(".java"));
      * </pre>
+     *
      * @param filter the filter to apply to the set of files.
      * @param files the array of files to apply the filter to.
      * @return a subset of {@code files} that is accepted by the
      *         file filter.
      * @throws IllegalArgumentException if the filter is {@code null}
      *         or {@code files} contains a {@code null} value.
-     *
      * @since 2.0
      */
     public static File[] filter(final IOFileFilter filter, final Iterable<File> files) {
@@ -311,6 +311,7 @@ public class FileFilterUtils {
      * List&lt;File&gt; directories = FileFilterUtils.filterList(filesAndDirectories,
      *     FileFilterUtils.directoryFileFilter());
      * </pre>
+     *
      * @param filter the filter to apply to each files in the list.
      * @param files the collection of files to apply the filter to.
      * @return a subset of {@code files} that is accepted by the
@@ -339,6 +340,7 @@ public class FileFilterUtils {
      * List&lt;File&gt; directories = FileFilterUtils.filterList(filesAndDirectories,
      *     FileFilterUtils.directoryFileFilter());
      * </pre>
+     *
      * @param filter the filter to apply to each files in the list.
      * @param files the collection of files to apply the filter to.
      * @return a subset of {@code files} that is accepted by the
@@ -369,6 +371,7 @@ public class FileFilterUtils {
      * Set&lt;File&gt; javaFiles = FileFilterUtils.filterSet(allFiles,
      *     FileFilterUtils.suffixFileFilter(".java"));
      * </pre>
+     *
      * @param filter the filter to apply to the set of files.
      * @param files the collection of files to apply the filter to.
      * @return a subset of {@code files} that is accepted by the
@@ -398,6 +401,7 @@ public class FileFilterUtils {
      * Set&lt;File&gt; javaFiles = FileFilterUtils.filterSet(allFiles,
      *     FileFilterUtils.suffixFileFilter(".java"));
      * </pre>
+     *
      * @param filter the filter to apply to the set of files.
      * @param files the collection of files to apply the filter to.
      * @return a subset of {@code files} that is accepted by the

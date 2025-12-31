@@ -144,6 +144,7 @@ public class ProxyWriter extends FilterWriter {
 
     /**
      * Invokes the delegate's {@code close()} method.
+     *
      * @throws IOException if an I/O error occurs.
      */
     @Override
@@ -153,6 +154,7 @@ public class ProxyWriter extends FilterWriter {
 
     /**
      * Invokes the delegate's {@code flush()} method.
+     *
      * @throws IOException if an I/O error occurs.
      */
     @Override

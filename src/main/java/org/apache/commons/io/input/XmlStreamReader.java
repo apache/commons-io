@@ -695,6 +695,7 @@ public class XmlStreamReader extends Reader {
 
     /**
      * Calculates the HTTP encoding.
+     *
      * @param bomEnc          BOM encoding.
      * @param xmlGuessEnc     XML Guess encoding.
      * @param xmlEnc          XML encoding.

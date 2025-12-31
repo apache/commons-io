@@ -82,6 +82,7 @@ import org.apache.commons.io.function.IOBiConsumer;
  *   .get();
  * }
  * </pre>
+ *
  * @see Builder
  * @since 2.0
  */

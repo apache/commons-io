@@ -708,6 +708,7 @@ public class IOUtils {
      * <li>Removes the current thread's value for thread-local variables.</li>
      * <li>Sets static scratch arrays to 0s.</li>
      * </ul>
+     *
      * @see IO#clear()
      */
     static void clear() {
@@ -902,6 +903,7 @@ public class IOUtils {
      * <p>
      * Also consider using a try-with-resources statement where appropriate.
      * </p>
+     *
      * @param closeables the objects to close, may be null or already closed.
      * @see #closeQuietly(Closeable)
      * @since 2.5

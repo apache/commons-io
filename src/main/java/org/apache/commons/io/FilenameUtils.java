@@ -143,12 +143,14 @@ public class FilenameUtils {
 
     /**
      * The extension separator character.
+     *
      * @since 1.4
      */
     public static final char EXTENSION_SEPARATOR = '.';
 
     /**
      * The extension separator String.
+     *
      * @since 1.4
      */
     public static final String EXTENSION_SEPARATOR_STR = Character.toString(EXTENSION_SEPARATOR);

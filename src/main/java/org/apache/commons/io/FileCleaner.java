@@ -63,6 +63,7 @@ public class FileCleaner {
      * in the resource cleanup code, such as
      * {@code javax.servlet.ServletContextListener.contextDestroyed(javax.servlet.ServletContextEvent)}.
      * One called, no new objects can be tracked by the file cleaner.
+     *
      * @deprecated Use {@link FileCleaningTracker#exitWhenFinished()}.
      */
     @Deprecated

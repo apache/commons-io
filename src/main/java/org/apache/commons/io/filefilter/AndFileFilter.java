@@ -129,6 +129,7 @@ public class AndFileFilter extends AbstractFileFilter implements ConditionalFile
 
     /**
      * {@inheritDoc}
+     *
      * @since 2.9.0
      */
     @Override

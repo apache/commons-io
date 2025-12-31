@@ -270,6 +270,7 @@ public class MagicNumberFileFilter extends AbstractFileFilter implements Seriali
      * be rejected.
      *
      * </p>
+     *
      * @param file the file to accept or reject.
      * @param attributes the path's basic attributes (may be null).
      * @return {@code true} if the file contains the filter's magic number

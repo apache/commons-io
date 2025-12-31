@@ -48,6 +48,7 @@ import org.apache.commons.io.file.attribute.FileTimes;
  * <p>
  * <em>Serialization is deprecated and will be removed in 3.0.</em>
  * </p>
+ *
  * @see FileAlterationObserver
  * @since 2.0
  */
