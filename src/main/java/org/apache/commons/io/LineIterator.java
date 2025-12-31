@@ -56,9 +56,9 @@ public class LineIterator implements Iterator<String>, Closeable {
      * Closes a {@link LineIterator} quietly.
      *
      * @param iterator The iterator to close, or {@code null}.
+     * @see Throwable#addSuppressed(Throwable)
      * @deprecated As of 2.6 deprecated without replacement. Please use the try-with-resources statement or handle
      * suppressed exceptions manually.
-     * @see Throwable#addSuppressed(Throwable)
      */
     @Deprecated
     public static void closeQuietly(final LineIterator iterator) {
