@@ -37,7 +37,7 @@ public abstract class AbstractCloseableListTest {
     /**
      * Adds a {@link Closeable} to close after each test.
      *
-     * @param <T> The Closeable type
+     * @param <T> The Closeable type.
      * @param t The Closeable.
      * @return The Closeable.
      * @see Closeable

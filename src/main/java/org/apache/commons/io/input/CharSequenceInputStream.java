@@ -281,6 +281,7 @@ public class CharSequenceInputStream extends InputStream {
 
     /**
      * {@inheritDoc}
+     *
      * @param readLimit max read limit (ignored).
      */
     @Override

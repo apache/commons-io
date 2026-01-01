@@ -99,7 +99,7 @@ public class EmptyFileFilter extends AbstractFileFilter implements Serializable 
     /**
      * Tests to see if the file is empty.
      *
-     * @param file the file or directory to check
+     * @param file the file or directory to check.
      * @return {@code true} if the file or directory is <em>empty</em>, otherwise {@code false}.
      */
     @Override
@@ -117,7 +117,7 @@ public class EmptyFileFilter extends AbstractFileFilter implements Serializable 
     /**
      * Tests to see if the file is empty.
      *
-     * @param file the file or directory to check
+     * @param file the file or directory to check.
      * @param attributes the path's basic attributes (may be null).
      * @return {@code true} if the file or directory is <em>empty</em>, otherwise {@code false}.
      * @since 2.9.0

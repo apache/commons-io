@@ -44,8 +44,8 @@ public class CloseShieldInputStream extends ProxyInputStream {
     /**
      * Constructs a proxy that shields the given input stream from being closed.
      *
-     * @param inputStream the input stream to wrap
-     * @return the created proxy
+     * @param inputStream the input stream to wrap.
+     * @return the created proxy.
      * @since 2.9.0
      */
     public static CloseShieldInputStream wrap(final InputStream inputStream) {
@@ -55,7 +55,7 @@ public class CloseShieldInputStream extends ProxyInputStream {
     /**
      * Constructs a proxy that shields the given input stream from being closed.
      *
-     * @param inputStream underlying input stream
+     * @param inputStream underlying input stream.
      * @deprecated Using this constructor prevents IDEs from warning if the
      *             underlying input stream is never closed. Use
      *             {@link #wrap(InputStream)} instead.

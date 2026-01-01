@@ -217,7 +217,7 @@ public class NullReader extends Reader {
      * This implementation leaves the character array unchanged.
      * </p>
      *
-     * @param chars The character array
+     * @param chars The character array.
      * @param offset The offset to start at.
      * @param length The number of characters.
      */
@@ -250,7 +250,7 @@ public class NullReader extends Reader {
     /**
      * Reads some characters into the specified array.
      *
-     * @param chars The character array to read into
+     * @param chars The character array to read into.
      * @return The number of characters read or {@code -1}
      * if the end of file has been reached and
      * {@code throwEofException} is set to {@code false}.

@@ -40,8 +40,8 @@ public class DemuxInputStream extends InputStream {
     /**
      * Binds the specified stream to the current thread.
      *
-     * @param input the stream to bind
-     * @return the InputStream that was previously active
+     * @param input the stream to bind.
+     * @return the InputStream that was previously active.
      */
     public InputStream bindStream(final InputStream input) {
         final InputStream oldValue = inputStreamLocal.get();
@@ -52,7 +52,7 @@ public class DemuxInputStream extends InputStream {
     /**
      * Closes stream associated with current thread.
      *
-     * @throws IOException if an error occurs
+     * @throws IOException if an error occurs.
      */
     @SuppressWarnings("resource") // we actually close the stream here
     @Override
@@ -63,8 +63,8 @@ public class DemuxInputStream extends InputStream {
     /**
      * Reads byte from stream associated with current thread.
      *
-     * @return the byte read from stream
-     * @throws IOException if an error occurs
+     * @return the byte read from stream.
+     * @throws IOException if an error occurs.
      */
     @Override
     public int read() throws IOException {

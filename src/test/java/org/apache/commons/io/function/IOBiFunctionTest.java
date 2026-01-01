@@ -45,7 +45,7 @@ class IOBiFunctionTest {
     /**
      * Tests {@link IOBiFunction#andThen(IOFunction)}.
      *
-     * @throws IOException thrown on test failure
+     * @throws IOException thrown on test failure.
      */
     @Test
     void testAndThenIOFunction() throws IOException {
@@ -59,7 +59,7 @@ class IOBiFunctionTest {
     /**
      * Tests {@link IOBiFunction#apply(Object, Object)}.
      *
-     * @throws IOException thrown on test failure
+     * @throws IOException thrown on test failure.
      */
     @Test
     void testApply() throws IOException {

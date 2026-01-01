@@ -50,8 +50,8 @@ public class TeeReader extends ProxyReader {
      * Constructs a TeeReader that proxies the given {@link Reader} and copies all read characters to the given
      * {@link Writer}. The given writer will not be closed when this reader gets closed.
      *
-     * @param input  reader to be proxied
-     * @param branch writer that will receive a copy of all characters read
+     * @param input  reader to be proxied.
+     * @param branch writer that will receive a copy of all characters read.
      */
     public TeeReader(final Reader input, final Writer branch) {
         this(input, branch, false);
@@ -62,9 +62,9 @@ public class TeeReader extends ProxyReader {
      * {@link Writer}. The given writer will be closed when this reader gets closed if the closeBranch parameter is
      * {@code true}.
      *
-     * @param input       reader to be proxied
-     * @param branch      writer that will receive a copy of all characters read
-     * @param closeBranch flag for closing also the writer when this reader is closed
+     * @param input       reader to be proxied.
+     * @param branch      writer that will receive a copy of all characters read.
+     * @param closeBranch flag for closing also the writer when this reader is closed.
      */
     public TeeReader(final Reader input, final Writer branch, final boolean closeBranch) {
         super(input);
@@ -76,7 +76,7 @@ public class TeeReader extends ProxyReader {
      * Closes the proxied reader and, if so configured, the associated writer. An exception thrown from the reader will
      * not prevent closing of the writer.
      *
-     * @throws IOException if either the reader or writer could not be closed
+     * @throws IOException if either the reader or writer could not be closed.
      */
     @Override
     public void close() throws IOException {
@@ -92,8 +92,8 @@ public class TeeReader extends ProxyReader {
     /**
      * Reads a single character from the proxied reader and writes it to the associated writer.
      *
-     * @return next character from the reader, or -1 if the reader has ended
-     * @throws IOException if the reader could not be read (or written)
+     * @return next character from the reader, or -1 if the reader has ended.
+     * @throws IOException if the reader could not be read (or written).
      */
     @Override
     public int read() throws IOException {
@@ -107,9 +107,9 @@ public class TeeReader extends ProxyReader {
     /**
      * Reads characters from the proxied reader and writes the read characters to the associated writer.
      *
-     * @param chr character buffer
-     * @return number of characters read, or -1 if the reader has ended
-     * @throws IOException if the reader could not be read (or written)
+     * @param chr character buffer.
+     * @return number of characters read, or -1 if the reader has ended.
+     * @throws IOException if the reader could not be read (or written).
      */
     @Override
     public int read(final char[] chr) throws IOException {
@@ -123,11 +123,11 @@ public class TeeReader extends ProxyReader {
     /**
      * Reads characters from the proxied reader and writes the read characters to the associated writer.
      *
-     * @param chr character buffer
-     * @param st  start offset within the buffer
-     * @param end maximum number of characters to read
-     * @return number of characters read, or -1 if the reader has ended
-     * @throws IOException if the reader could not be read (or written)
+     * @param chr character buffer.
+     * @param st  start offset within the buffer.
+     * @param end maximum number of characters to read.
+     * @return number of characters read, or -1 if the reader has ended.
+     * @throws IOException if the reader could not be read (or written).
      */
     @Override
     public int read(final char[] chr, final int st, final int end) throws IOException {
@@ -141,9 +141,9 @@ public class TeeReader extends ProxyReader {
     /**
      * Reads characters from the proxied reader and writes the read characters to the associated writer.
      *
-     * @param target character buffer
-     * @return number of characters read, or -1 if the reader has ended
-     * @throws IOException if the reader could not be read (or written)
+     * @param target character buffer.
+     * @return number of characters read, or -1 if the reader has ended.
+     * @throws IOException if the reader could not be read (or written).
      */
     @Override
     public int read(final CharBuffer target) throws IOException {

@@ -75,7 +75,7 @@ public class TaggedReader extends ProxyReader {
     /**
      * Constructs a tagging decorator for the given reader.
      *
-     * @param proxy reader to be decorated
+     * @param proxy reader to be decorated.
      */
     public TaggedReader(final Reader proxy) {
         super(proxy);
@@ -84,7 +84,7 @@ public class TaggedReader extends ProxyReader {
     /**
      * Tags any IOExceptions thrown, wrapping and re-throwing.
      *
-     * @param e The IOException thrown
+     * @param e The IOException thrown.
      * @throws IOException if an I/O error occurs.
      */
     @Override
@@ -95,8 +95,8 @@ public class TaggedReader extends ProxyReader {
     /**
      * Tests if the given exception was caused by this reader.
      *
-     * @param exception an exception
-     * @return {@code true} if the exception was thrown by this reader, {@code false} otherwise
+     * @param exception an exception.
+     * @return {@code true} if the exception was thrown by this reader, {@code false} otherwise.
      */
     public boolean isCauseOf(final Throwable exception) {
         return TaggedIOException.isTaggedWith(exception, tag);
@@ -107,8 +107,8 @@ public class TaggedReader extends ProxyReader {
      * {@link TaggedIOException} wrapper created by this decorator, and then unwraps and throws the original wrapped
      * exception. Returns normally if the exception was not thrown by this reader.
      *
-     * @param throwable an exception
-     * @throws IOException original exception, if any, thrown by this reader
+     * @param throwable an exception.
+     * @throws IOException original exception, if any, thrown by this reader.
      */
     public void throwIfCauseOf(final Throwable throwable) throws IOException {
         TaggedIOException.throwCauseIfTaggedWith(throwable, tag);

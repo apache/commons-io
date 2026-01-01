@@ -378,7 +378,7 @@ public final class PathUtils {
      * @param sourceFile  The source URL.
      * @param targetFile  The target file.
      * @param copyOptions Specifies how the copying should be done.
-     * @return The target file
+     * @return The target file.
      * @throws IOException if an I/O error occurs.
      * @see Files#copy(InputStream, Path, CopyOption...)
      */
@@ -393,7 +393,7 @@ public final class PathUtils {
      * @param sourceFile      The source file.
      * @param targetDirectory The target directory.
      * @param copyOptions     Specifies how the copying should be done.
-     * @return The target file
+     * @return The target file.
      * @throws IOException if an I/O error occurs.
      * @see Files#copy(Path, Path, CopyOption...)
      */
@@ -410,7 +410,7 @@ public final class PathUtils {
      * @param sourceFile      The source URL.
      * @param targetDirectory The target directory.
      * @param copyOptions     Specifies how the copying should be done.
-     * @return The target file
+     * @return The target file.
      * @throws IOException if an I/O error occurs.
      * @see Files#copy(InputStream, Path, CopyOption...)
      */
@@ -603,7 +603,7 @@ public final class PathUtils {
      * @param file The file to delete.
      * @return A visitor with path counts set to 1 file, 0 directories, and the size of the deleted file.
      * @throws IOException         if an I/O error occurs.
-     * @throws NoSuchFileException if the file is a directory
+     * @throws NoSuchFileException if the file is a directory.
      */
     public static PathCounters deleteFile(final Path file) throws IOException {
         return deleteFile(file, EMPTY_DELETE_OPTION_ARRAY);
@@ -771,7 +771,7 @@ public final class PathUtils {
      * @param path2            The second directory.
      * @param maxDepth         See {@link Files#walkFileTree(Path,Set,int,FileVisitor)}.
      * @param linkOptions      options to follow links.
-     * @param fileVisitOptions options to configure the traversal
+     * @param fileVisitOptions options to configure the traversal.
      * @return Whether the two directories contain the same files without considering file contents.
      * @throws IOException if an I/O error is thrown by a visitor method.
      */
@@ -944,7 +944,7 @@ public final class PathUtils {
      * Will return the file name itself if it doesn't contain any periods. All leading directories of the {@code file name} parameter are skipped.
      * </p>
      *
-     * @return the base name of file name
+     * @return the base name of file name.
      * @param path the path of the file to obtain the base name of.
      * @since 2.16.0
      */
@@ -1136,7 +1136,7 @@ public final class PathUtils {
      * {@code Files.isDirectory(Path path, LinkOption... options)}.
      *
      * @param path    the path to the file.
-     * @param options options indicating how to handle symbolic links
+     * @param options options indicating how to handle symbolic links.
      * @return {@code true} if the file is a directory; {@code false} if the path is null, the file does not exist, is not a directory, or it cannot be
      *         determined if the file is a directory or not.
      * @throws SecurityException In the case of the default provider, and a security manager is installed, the {@link SecurityManager#checkRead(String)
@@ -1240,7 +1240,7 @@ public final class PathUtils {
      * Tests if the given {@link Path} is newer than the given time reference.
      *
      * @param file       the {@link Path} to test.
-     * @param timeMillis the time reference measured in milliseconds since the epoch (00:00:00 GMT, January 1, 1970)
+     * @param timeMillis the time reference measured in milliseconds since the epoch (00:00:00 GMT, January 1, 1970).
      * @param options    options indicating how to handle symbolic links.
      * @return true if the {@link Path} exists and has been modified after the given time reference.
      * @throws IOException          if an I/O error occurs.
@@ -1301,7 +1301,7 @@ public final class PathUtils {
      * Tests if the given {@link Path} is older than the given time reference.
      *
      * @param file       the {@link Path} to test.
-     * @param timeMillis the time reference measured in milliseconds since the epoch (00:00:00 GMT, January 1, 1970)
+     * @param timeMillis the time reference measured in milliseconds since the epoch (00:00:00 GMT, January 1, 1970).
      * @param options    options indicating how to handle symbolic links.
      * @return true if the {@link Path} exists and has been modified before the given time reference.
      * @throws IOException          if an I/O error occurs.
@@ -1425,7 +1425,7 @@ public final class PathUtils {
     /**
      * Reads the BasicFileAttributes from the given path. Returns null if the attributes can't be read.
      *
-     * @param <A>     The {@link BasicFileAttributes} type
+     * @param <A>     The {@link BasicFileAttributes} type.
      * @param path    The Path to test.
      * @param type    the {@link Class} of the file attributes required to read.
      * @param options options indicating how to handle symbolic links.
@@ -1827,7 +1827,7 @@ public final class PathUtils {
      * @param file the file to touch.
      * @return The given file.
      * @throws NullPointerException if the parameter is {@code null}.
-     * @throws IOException          if setting the last-modified time failed or an I/O problem occurs.\
+     * @throws IOException          if setting the last-modified time failed or an I/O problem occurs.
      * @since 2.12.0
      */
     public static Path touch(final Path file) throws IOException {
@@ -1957,8 +1957,8 @@ public final class PathUtils {
      * closed stream causes a {@link IllegalStateException}.
      * </p>
      *
-     * @param start          the start path
-     * @param pathFilter     the path filter
+     * @param start          the start path.
+     * @param pathFilter     the path filter.
      * @param maxDepth       the maximum depth of directories to walk.
      * @param readAttributes whether to call the filters with file attributes (false passes null).
      * @param options        the options to configure the walk.

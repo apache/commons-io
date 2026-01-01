@@ -68,7 +68,7 @@ class FileUtilsFileNewerTest {
     /**
      * Tests the {@code isFileNewer(File, *)} methods which a "normal" file.
      *
-     * @throws IOException
+     * @throws IOException Thrown on a test failure.
      * @see FileUtils#isFileNewer(File, long)
      * @see FileUtils#isFileNewer(File, Date)
      * @see FileUtils#isFileNewer(File, File)
@@ -100,10 +100,10 @@ class FileUtilsFileNewerTest {
      * <p>
      * The test is successful if the three comparisons return the specified wanted result.
      *
-     * @param description describes the tested situation
-     * @param file the file of which the last modification date is compared
-     * @param fileTime the time reference measured in milliseconds since the epoch
-     * @param wantedResult the expected result
+     * @param description describes the tested situation.
+     * @param file the file of which the last modification date is compared.
+     * @param fileTime the time reference measured in milliseconds since the epoch.
+     * @param wantedResult the expected result.
      * @throws IOException if an I/O error occurs.
      */
     protected void testIsFileNewer(final String description, final File file, final FileTime fileTime, final boolean wantedResult) throws IOException {

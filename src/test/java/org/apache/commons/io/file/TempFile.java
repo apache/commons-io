@@ -37,7 +37,7 @@ public class TempFile extends DeletablePath {
      * @param prefix See {@link Files#createTempFile(Path, String, String, FileAttribute...)}.
      * @param suffix See {@link Files#createTempFile(Path, String, String, FileAttribute...)}.
      * @param attrs See {@link Files#createTempFile(Path, String, String, FileAttribute...)}.
-     * @return a new instance for a new temporary directory
+     * @return a new instance for a new temporary directory.
      * @throws IOException See {@link Files#createTempFile(Path, String, String, FileAttribute...)}.
      */
     public static TempFile create(final Path dir, final String prefix, final String suffix, final FileAttribute<?>... attrs) throws IOException {
@@ -51,7 +51,7 @@ public class TempFile extends DeletablePath {
      * @param prefix See {@link Files#createTempFile(Path, String, String, FileAttribute...)}.
      * @param suffix See {@link Files#createTempFile(Path, String, String, FileAttribute...)}.
      * @param attrs See {@link Files#createTempFile(Path, String, String, FileAttribute...)}.
-     * @return a new instance for a new temporary directory
+     * @return a new instance for a new temporary directory.
      * @throws IOException See {@link Files#createTempFile(Path, String, String, FileAttribute...)}.
      */
     public static TempFile create(final String prefix, final String suffix, final FileAttribute<?>... attrs) throws IOException {

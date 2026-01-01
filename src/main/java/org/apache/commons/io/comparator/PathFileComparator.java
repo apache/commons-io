@@ -51,6 +51,7 @@ import org.apache.commons.io.IOCase;
  * <p>
  * <em>Serialization is deprecated and will be removed in 3.0.</em>
  * </p>
+ *
  * @since 1.4
  */
 public class PathFileComparator extends AbstractFileComparator implements Serializable {
@@ -88,7 +89,7 @@ public class PathFileComparator extends AbstractFileComparator implements Serial
     /**
      * Constructs a file path comparator instance with the specified case-sensitivity.
      *
-     * @param ioCase  how to handle case sensitivity, null means case-sensitive
+     * @param ioCase  how to handle case sensitivity, null means case-sensitive.
      */
     public PathFileComparator(final IOCase ioCase) {
         this.ioCase = IOCase.value(ioCase, IOCase.SENSITIVE);
@@ -97,8 +98,8 @@ public class PathFileComparator extends AbstractFileComparator implements Serial
     /**
      * Compares the paths of two files the specified case sensitivity.
      *
-     * @param file1 The first file to compare
-     * @param file2 The second file to compare
+     * @param file1 The first file to compare.
+     * @param file2 The second file to compare.
      * @return a negative value if the first file's path
      * is less than the second, zero if the paths are the
      * same and a positive value if the first files path
@@ -112,7 +113,7 @@ public class PathFileComparator extends AbstractFileComparator implements Serial
     /**
      * String representation of this file comparator.
      *
-     * @return String representation of this file comparator
+     * @return String representation of this file comparator.
      */
     @Override
     public String toString() {

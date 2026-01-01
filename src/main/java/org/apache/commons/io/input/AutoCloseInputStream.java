@@ -112,7 +112,7 @@ public class AutoCloseInputStream extends ProxyInputStream {
     /**
      * Constructs an automatically closing proxy for the given input stream.
      *
-     * @param in underlying input stream
+     * @param in underlying input stream.
      * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
      */
     @SuppressWarnings("resource") // ClosedInputStream.nonNull() doesn't allocate
@@ -124,8 +124,8 @@ public class AutoCloseInputStream extends ProxyInputStream {
     /**
      * Automatically closes the stream if the end of stream was reached.
      *
-     * @param n number of bytes read, or -1 if no more bytes are available
-     * @throws IOException if the stream could not be closed
+     * @param n number of bytes read, or -1 if no more bytes are available.
+     * @throws IOException if the stream could not be closed.
      * @since 2.0
      */
     @Override
@@ -146,7 +146,7 @@ public class AutoCloseInputStream extends ProxyInputStream {
      * first called.
      * </p>
      *
-     * @throws IOException if the underlying input stream cannot be closed
+     * @throws IOException if the underlying input stream cannot be closed.
      */
     @Override
     public void close() throws IOException {
@@ -158,7 +158,7 @@ public class AutoCloseInputStream extends ProxyInputStream {
      * Ensures that the stream is closed before it gets garbage-collected. As mentioned in {@link #close()}, this is a no-op if the stream has already been
      * closed.
      *
-     * @throws Throwable if an error occurs
+     * @throws Throwable if an error occurs.
      */
     @Override
     protected void finalize() throws Throwable {

@@ -52,7 +52,7 @@ final class ThreadMonitor implements Runnable {
     /**
      * Starts monitoring the specified thread.
      *
-     * @param thread The thread to monitor
+     * @param thread The thread to monitor.
      * @param timeout The timeout amount. or no timeout if the value is zero or less.
      * @return The monitor thread or {@code null} if the timeout amount is not greater than zero.
      */

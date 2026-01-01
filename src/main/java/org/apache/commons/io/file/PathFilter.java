@@ -34,7 +34,7 @@ public interface PathFilter {
      *
      * @param path The Path to test.
      * @param attributes the path's basic attributes (may be null).
-     * @return a FileVisitResult
+     * @return a FileVisitResult.
      */
     FileVisitResult accept(Path path, BasicFileAttributes attributes);
 }

@@ -42,7 +42,7 @@ public interface IOBooleanSupplier {
     /**
      * Gets a result.
      *
-     * @return a result
+     * @return a result.
      * @throws IOException if an I/O error occurs.
      */
     boolean getAsBoolean() throws IOException;

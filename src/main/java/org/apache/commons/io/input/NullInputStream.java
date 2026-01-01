@@ -272,7 +272,7 @@ public class NullInputStream extends AbstractInputStream {
     /**
      * Reads some bytes into the specified array.
      *
-     * @param bytes The byte array to read into
+     * @param bytes The byte array to read into.
      * @return The number of bytes read or {@code -1} if the end of file has been reached and {@code throwEofException} is set to {@code false}.
      * @throws NullPointerException if the byte array is {@code null}.
      * @throws EOFException if the end of file is reached and {@code throwEofException} is set to {@code true}.

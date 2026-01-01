@@ -57,8 +57,8 @@ public class TaggedIOException extends IOExceptionWithCause {
      * }
      * </pre>
      *
-     * @param throwable The Throwable object to check
-     * @param tag tag object
+     * @param throwable The Throwable object to check.
+     * @param tag tag object.
      * @return {@code true} if the throwable has the specified tag,
      * otherwise {@code false}
      */
@@ -86,9 +86,9 @@ public class TaggedIOException extends IOExceptionWithCause {
      * }
      * </pre>
      *
-     * @param throwable an exception
-     * @param tag tag object
-     * @throws IOException original exception from the tagged decorator, if any
+     * @param throwable an exception.
+     * @param tag tag object.
+     * @throws IOException original exception from the tagged decorator, if any.
      */
     public static void throwCauseIfTaggedWith(final Throwable throwable, final Object tag)
             throws IOException {
@@ -105,8 +105,8 @@ public class TaggedIOException extends IOExceptionWithCause {
     /**
      * Constructs a tagged wrapper for the given exception.
      *
-     * @param original the exception to be tagged
-     * @param tag tag of this exception
+     * @param original the exception to be tagged.
+     * @param tag tag of this exception.
      */
     public TaggedIOException(final IOException original, final Serializable tag) {
         super(original.getMessage(), original);
@@ -117,7 +117,7 @@ public class TaggedIOException extends IOExceptionWithCause {
      * Returns the wrapped exception. The only difference to the overridden
      * {@link Throwable#getCause()} method is the narrower return type.
      *
-     * @return wrapped exception
+     * @return wrapped exception.
      */
     @Override
     public synchronized IOException getCause() {
@@ -127,7 +127,7 @@ public class TaggedIOException extends IOExceptionWithCause {
     /**
      * Returns the serializable tag object.
      *
-     * @return tag object
+     * @return tag object.
      */
     public Serializable getTag() {
         return tag;

@@ -75,6 +75,7 @@ public interface IOIterable<T> {
      * <p>
      * Implementations may not have anything to unwrap and that behavior is undefined for now.
      * </p>
+     *
      * @return the underlying Iterable.
      */
     Iterable<T> unwrap();

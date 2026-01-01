@@ -48,6 +48,7 @@ import org.apache.commons.io.file.attribute.FileTimes;
  * <p>
  * <em>Serialization is deprecated and will be removed in 3.0.</em>
  * </p>
+ *
  * @see FileAlterationObserver
  * @since 2.0
  */
@@ -84,7 +85,7 @@ public class FileEntry implements Serializable {
     /**
      * Constructs a new monitor for a specified {@link File}.
      *
-     * @param file The file being monitored
+     * @param file The file being monitored.
      */
     public FileEntry(final File file) {
         this(null, file);
@@ -107,7 +108,7 @@ public class FileEntry implements Serializable {
      *
      * @return This directory's files or an empty
      * array if the file is not a directory or the
-     * directory is empty
+     * directory is empty.
      */
     public FileEntry[] getChildren() {
         return children != null ? children : EMPTY_FILE_ENTRY_ARRAY;
@@ -116,7 +117,7 @@ public class FileEntry implements Serializable {
     /**
      * Gets the file being monitored.
      *
-     * @return the file being monitored
+     * @return the file being monitored.
      */
     public File getFile() {
         return file;
@@ -145,7 +146,7 @@ public class FileEntry implements Serializable {
     /**
      * Gets the length.
      *
-     * @return the length
+     * @return the length.
      */
     public long getLength() {
         return length;
@@ -154,7 +155,7 @@ public class FileEntry implements Serializable {
     /**
      * Gets the level
      *
-     * @return the level
+     * @return the level.
      */
     public int getLevel() {
         return parent == null ? 0 : parent.getLevel() + 1;
@@ -163,7 +164,7 @@ public class FileEntry implements Serializable {
     /**
      * Gets the file name.
      *
-     * @return the file name
+     * @return the file name.
      */
     public String getName() {
         return name;
@@ -172,7 +173,7 @@ public class FileEntry implements Serializable {
     /**
      * Gets the parent entry.
      *
-     * @return the parent entry
+     * @return the parent entry.
      */
     public FileEntry getParent() {
         return parent;
@@ -181,7 +182,7 @@ public class FileEntry implements Serializable {
     /**
      * Tests whether the file is a directory or not.
      *
-     * @return whether the file is a directory or not
+     * @return whether the file is a directory or not.
      */
     public boolean isDirectory() {
         return directory;
@@ -191,7 +192,7 @@ public class FileEntry implements Serializable {
      * Tests whether the file existed the last time it
      * was checked.
      *
-     * @return whether the file existed
+     * @return whether the file existed.
      */
     public boolean isExists() {
         return exists;
@@ -204,8 +205,8 @@ public class FileEntry implements Serializable {
      * a new instance of the appropriate type.
      * </p>
      *
-     * @param file The child file
-     * @return a new child instance
+     * @param file The child file.
+     * @return a new child instance.
      */
     public FileEntry newChildInstance(final File file) {
         return new FileEntry(this, file);
@@ -224,8 +225,8 @@ public class FileEntry implements Serializable {
      * and {@code length} properties are compared for changes
      * </p>
      *
-     * @param file the file instance to compare to
-     * @return {@code true} if the file has changed, otherwise {@code false}
+     * @param file the file instance to compare to.
+     * @return {@code true} if the file has changed, otherwise {@code false}.
      */
     public boolean refresh(final File file) {
         // cache original values
@@ -253,7 +254,7 @@ public class FileEntry implements Serializable {
     /**
      * Sets the directory's files.
      *
-     * @param children This directory's files, may be null
+     * @param children This directory's files, may be null.
      */
     public void setChildren(final FileEntry... children) {
         this.children = children;
@@ -262,7 +263,7 @@ public class FileEntry implements Serializable {
     /**
      * Sets whether the file is a directory or not.
      *
-     * @param directory whether the file is a directory or not
+     * @param directory whether the file is a directory or not.
      */
     public void setDirectory(final boolean directory) {
         this.directory = directory;
@@ -272,7 +273,7 @@ public class FileEntry implements Serializable {
      * Sets whether the file existed the last time it
      * was checked.
      *
-     * @param exists whether the file exists or not
+     * @param exists whether the file exists or not.
      */
     public void setExists(final boolean exists) {
         this.exists = exists;
@@ -305,7 +306,7 @@ public class FileEntry implements Serializable {
     /**
      * Sets the length.
      *
-     * @param length the length
+     * @param length the length.
      */
     public void setLength(final long length) {
         this.length = length;
@@ -314,7 +315,7 @@ public class FileEntry implements Serializable {
     /**
      * Sets the file name.
      *
-     * @param name the file name
+     * @param name the file name.
      */
     public void setName(final String name) {
         this.name = name;

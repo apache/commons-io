@@ -119,8 +119,8 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
         /**
          * Accepts the specified classes for deserialization, unless they are otherwise rejected.
          *
-         * @param classes Classes to accept
-         * @return this object
+         * @param classes Classes to accept.
+         * @return this object.
          * @since 2.18.0
          */
         public Builder accept(final Class<?>... classes) {
@@ -204,7 +204,7 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
         /**
          * Rejects the specified classes for deserialization, even if they are otherwise accepted.
          *
-         * @param classes Classes to reject
+         * @param classes Classes to reject.
          * @return {@code this} instance.
          * @since 2.18.0
          */
@@ -216,7 +216,7 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
         /**
          * Rejects class names where the supplied ClassNameMatcher matches for deserialization, even if they are otherwise accepted.
          *
-         * @param matcher the matcher to use
+         * @param matcher the matcher to use.
          * @return {@code this} instance.
          * @since 2.18.0
          */
@@ -228,7 +228,7 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
         /**
          * Rejects class names that match the supplied pattern for deserialization, even if they are otherwise accepted.
          *
-         * @param pattern standard Java regexp
+         * @param pattern standard Java regexp.
          * @return {@code this} instance.
          * @since 2.18.0
          */
@@ -285,8 +285,8 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
      * Constructs an instance to deserialize the specified input stream. At least one accept method needs to be called to specify which classes can be
      * deserialized, as by default no classes are accepted.
      *
-     * @param input an input stream
-     * @throws IOException if an I/O error occurs while reading stream header
+     * @param input an input stream.
+     * @throws IOException if an I/O error occurs while reading stream header.
      * @deprecated Use {@link #builder()}.
      */
     @Deprecated
@@ -313,7 +313,7 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
      * The reject list takes precedence over the accept list.
      * </p>
      *
-     * @param classes Classes to accept
+     * @param classes Classes to accept.
      * @return {@code this} instance.
      */
     public ValidatingObjectInputStream accept(final Class<?>... classes) {

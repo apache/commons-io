@@ -127,8 +127,9 @@ class FileUtilsDirectoryContainsTest {
     }
 
     /**
-     * Test to demonstrate a file which does not exist returns false
-     * @throws IOException If an I/O error occurs
+     * Test to demonstrate a file which does not exist returns false.
+     *
+     * @throws IOException If an I/O error occurs.
      */
     @Test
     void testFileDoesNotExistBug() throws IOException {

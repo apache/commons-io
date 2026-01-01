@@ -1916,7 +1916,7 @@ class IOUtilsTest {
      * Note, this test utilizes on {@link IOUtils#toByteArray(InputStream)} and so relies on
      * {@link #testToByteArray_InputStream()} to ensure this method functions correctly.
      *
-     * @throws Exception on error
+     * @throws Exception on error.
      */
     @Test
     void testToInputStream_CharSequence() throws Exception {
@@ -1937,7 +1937,7 @@ class IOUtilsTest {
      * utilizes on {@link IOUtils#toByteArray(InputStream)} and so relies on
      * {@link #testToByteArray_InputStream()} to ensure this method functions correctly.
      *
-     * @throws Exception on error
+     * @throws Exception on error.
      */
     @Test
     void testToInputStream_String() throws Exception {

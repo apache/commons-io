@@ -132,8 +132,8 @@ public class RegexFileFilter extends AbstractFileFilter implements Serializable 
     /**
      * Constructs a new regular expression filter.
      *
-     * @param pattern regular string expression to match
-     * @throws NullPointerException if the pattern is null
+     * @param pattern regular string expression to match.
+     * @throws NullPointerException if the pattern is null.
      */
     public RegexFileFilter(final String pattern) {
         this(pattern, 0);
@@ -142,9 +142,9 @@ public class RegexFileFilter extends AbstractFileFilter implements Serializable 
     /**
      * Constructs a new regular expression filter with the specified flags.
      *
-     * @param pattern regular string expression to match
+     * @param pattern regular string expression to match.
      * @param flags pattern flags - e.g. {@link Pattern#CASE_INSENSITIVE}
-     * @throws IllegalArgumentException if the pattern is null
+     * @throws IllegalArgumentException if the pattern is null.
      */
     public RegexFileFilter(final String pattern, final int flags) {
         this(compile(pattern, flags));
@@ -153,9 +153,9 @@ public class RegexFileFilter extends AbstractFileFilter implements Serializable 
     /**
      * Constructs a new regular expression filter with the specified flags case sensitivity.
      *
-     * @param pattern regular string expression to match
-     * @param ioCase how to handle case sensitivity, null means case-sensitive
-     * @throws IllegalArgumentException if the pattern is null
+     * @param pattern regular string expression to match.
+     * @param ioCase how to handle case sensitivity, null means case-sensitive.
+     * @throws IllegalArgumentException if the pattern is null.
      */
     public RegexFileFilter(final String pattern, final IOCase ioCase) {
         this(compile(pattern, toFlags(ioCase)));
@@ -164,9 +164,9 @@ public class RegexFileFilter extends AbstractFileFilter implements Serializable 
     /**
      * Tests to see if the file name matches one of the regular expressions.
      *
-     * @param dir the file directory (ignored)
-     * @param name the file name
-     * @return true if the file name matches one of the regular expressions
+     * @param dir the file directory (ignored).
+     * @param name the file name.
+     * @return true if the file name matches one of the regular expressions.
      */
     @Override
     public boolean accept(final File dir, final String name) {
@@ -176,9 +176,9 @@ public class RegexFileFilter extends AbstractFileFilter implements Serializable 
     /**
      * Tests to see if the file name matches one of the regular expressions.
      *
-     * @param path the path
+     * @param path the path.
      * @param attributes the path's basic attributes (may be null).
-     * @return true if the file name matches one of the regular expressions
+     * @return true if the file name matches one of the regular expressions.
      */
     @Override
     public FileVisitResult accept(final Path path, final BasicFileAttributes attributes) {

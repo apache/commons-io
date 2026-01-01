@@ -92,8 +92,8 @@ public class DirectoryFileFilter extends AbstractFileFilter implements Serializa
     /**
      * Tests to see if the file is a directory.
      *
-     * @param file the File to check
-     * @return true if the file is a directory
+     * @param file the File to check.
+     * @return true if the file is a directory.
      */
     @Override
     public boolean accept(final File file) {
@@ -103,9 +103,9 @@ public class DirectoryFileFilter extends AbstractFileFilter implements Serializa
     /**
      * Tests to see if the file is a directory.
      *
-     * @param file the File to check
+     * @param file the File to check.
      * @param attributes the path's basic attributes (may be null).
-     * @return true if the file is a directory
+     * @return true if the file is a directory.
      * @since 2.9.0
      */
     @Override

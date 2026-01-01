@@ -308,7 +308,7 @@ public final class FileTimes {
      * An NTFS file time is a 64-bit value for the number of 100-nanosecond intervals since 12:00 A.M. January 1, 1601 Coordinated Universal Time (UTC).
      * </p>
      *
-     * @param javaTime the Java time
+     * @param javaTime the Java time.
      * @return the NTFS time, 100-nanosecond units since 1 January 1601.
      * @since 2.16.0
      */

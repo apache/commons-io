@@ -128,8 +128,9 @@ class FileAlterationMonitorTest extends AbstractMonitorTest {
     }
 
     /**
-     * Test checkAndNotify() method
-     * @throws Exception
+     * Test checkAndNotify() method.
+     *
+     * @throws Exception Thrown on a test failure.
      */
     @Test
     void testMonitor() throws Exception {
@@ -201,7 +202,7 @@ class FileAlterationMonitorTest extends AbstractMonitorTest {
 
     /**
      * Test using a thread factory.
-     * @throws Exception
+     * @throws Exception.
      */
     @Test
     void testThreadFactory() throws Exception {

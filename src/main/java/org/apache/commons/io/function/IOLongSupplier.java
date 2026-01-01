@@ -42,7 +42,7 @@ public interface IOLongSupplier {
     /**
      * Gets a result.
      *
-     * @return a result
+     * @return a result.
      * @throws IOException if an I/O error occurs.
      */
     long getAsLong() throws IOException;

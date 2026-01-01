@@ -76,7 +76,7 @@ public class TaggedInputStream extends ProxyInputStream {
     /**
      * Constructs a tagging decorator for the given input stream.
      *
-     * @param proxy input stream to be decorated
+     * @param proxy input stream to be decorated.
      */
     public TaggedInputStream(final InputStream proxy) {
         super(proxy);
@@ -85,7 +85,7 @@ public class TaggedInputStream extends ProxyInputStream {
     /**
      * Tags any IOExceptions thrown, wrapping and re-throwing.
      *
-     * @param e The IOException thrown
+     * @param e The IOException thrown.
      * @throws IOException if an I/O error occurs.
      */
     @Override
@@ -96,9 +96,9 @@ public class TaggedInputStream extends ProxyInputStream {
     /**
      * Tests if the given exception was caused by this stream.
      *
-     * @param exception an exception
+     * @param exception an exception.
      * @return {@code true} if the exception was thrown by this stream,
-     *         {@code false} otherwise
+     *         {@code false} otherwise.
      */
     public boolean isCauseOf(final Throwable exception) {
         return TaggedIOException.isTaggedWith(exception, tag);
@@ -111,8 +111,8 @@ public class TaggedInputStream extends ProxyInputStream {
      * original wrapped exception. Returns normally if the exception was
      * not thrown by this stream.
      *
-     * @param throwable an exception
-     * @throws IOException original exception, if any, thrown by this stream
+     * @param throwable an exception.
+     * @throws IOException original exception, if any, thrown by this stream.
      */
     public void throwIfCauseOf(final Throwable throwable) throws IOException {
         TaggedIOException.throwCauseIfTaggedWith(throwable, tag);

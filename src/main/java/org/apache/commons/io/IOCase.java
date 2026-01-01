@@ -72,9 +72,9 @@ public enum IOCase {
     /**
      * Looks up an IOCase by name.
      *
-     * @param name  the name to find
-     * @return the IOCase object
-     * @throws IllegalArgumentException if the name is invalid
+     * @param name  the name to find.
+     * @return the IOCase object.
+     * @throws IllegalArgumentException if the name is invalid.
      */
     public static IOCase forName(final String name) {
         return Stream.of(values()).filter(ioCase -> ioCase.getName().equals(name)).findFirst()
@@ -236,7 +236,7 @@ public enum IOCase {
     /**
      * Gets the name of the constant.
      *
-     * @return the name of the constant
+     * @return the name of the constant.
      */
     public String getName() {
         return name;

@@ -195,7 +195,6 @@ public class AccumulatorPathVisitor extends CountingPathVisitor {
      * @since 2.12.0
      * @deprecated Use {@link #builder()}.
      */
-    @SuppressWarnings("deprecation")
     @Deprecated
     public AccumulatorPathVisitor(final PathCounters pathCounter, final PathFilter fileFilter, final PathFilter dirFilter,
         final IOBiFunction<Path, IOException, FileVisitResult> visitFileFailed) {
@@ -251,10 +250,10 @@ public class AccumulatorPathVisitor extends CountingPathVisitor {
      * Relativizes each directory path with {@link Path#relativize(Path)} against the given {@code parent}, optionally
      * sorting the result.
      *
-     * @param parent A parent path
-     * @param sort Whether to sort
+     * @param parent A parent path.
+     * @param sort Whether to sort.
      * @param comparator How to sort, null uses default sorting.
-     * @return A new list
+     * @return A new list.
      */
     public List<Path> relativizeDirectories(final Path parent, final boolean sort,
         final Comparator<? super Path> comparator) {
@@ -265,10 +264,10 @@ public class AccumulatorPathVisitor extends CountingPathVisitor {
      * Relativizes each file path with {@link Path#relativize(Path)} against the given {@code parent}, optionally
      * sorting the result.
      *
-     * @param parent A parent path
-     * @param sort Whether to sort
+     * @param parent A parent path.
+     * @param sort Whether to sort.
      * @param comparator How to sort, null uses default sorting.
-     * @return A new list
+     * @return A new list.
      */
     public List<Path> relativizeFiles(final Path parent, final boolean sort,
         final Comparator<? super Path> comparator) {

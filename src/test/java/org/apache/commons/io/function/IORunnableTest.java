@@ -39,7 +39,7 @@ class IORunnableTest {
     /**
      * Tests {@link IORunnable#run()}.
      *
-     * @throws IOException thrown on test failure
+     * @throws IOException thrown on test failure.
      */
     @Test
     void testAccept() throws IOException {

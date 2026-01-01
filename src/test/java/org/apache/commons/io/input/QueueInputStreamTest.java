@@ -50,7 +50,6 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.QueueOutputStream;
 import org.apache.commons.io.output.QueueOutputStreamTest;
 import org.apache.commons.lang3.StringUtils;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestFactory;
@@ -312,7 +311,7 @@ public class QueueInputStreamTest {
     }
 
     @Test
-    @DisplayName("If read is interrupted while waiting, then exception is thrown")
+    /** If read is interrupted while waiting, then exception is thrown */
     void testTimeoutInterrupted() throws Exception {
         try (QueueInputStream inputStream = QueueInputStream.builder().setTimeout(Duration.ofMinutes(2)).get();
                 QueueOutputStream outputStream = inputStream.newQueueOutputStream()) {
@@ -338,7 +337,7 @@ public class QueueInputStreamTest {
     }
 
     @Test
-    @DisplayName("If data is not available in queue, then read will wait until wait time elapses")
+    /** If data is not available in queue, then read will wait until wait time elapses */
     void testTimeoutUnavailableData() throws IOException {
         try (QueueInputStream inputStream = QueueInputStream.builder().setTimeout(Duration.ofMillis(500)).get();
                 QueueOutputStream outputStream = inputStream.newQueueOutputStream()) {

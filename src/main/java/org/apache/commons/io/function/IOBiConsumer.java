@@ -25,8 +25,8 @@ import java.util.function.BiConsumer;
 /**
  * Like {@link BiConsumer} but throws {@link IOException}.
  *
- * @param <T> the type of the first argument to the operation
- * @param <U> the type of the second argument to the operation
+ * @param <T> the type of the first argument to the operation.
+ * @param <U> the type of the second argument to the operation.
  * @see BiConsumer
  * @since 2.12.0
  */
@@ -36,8 +36,8 @@ public interface IOBiConsumer<T, U> {
     /**
      * Returns the no-op singleton.
      *
-     * @param <T> the type of the first argument to the operation
-     * @param <U> the type of the second argument to the operation
+     * @param <T> the type of the first argument to the operation.
+     * @param <U> the type of the second argument to the operation.
      * @return The no-op singleton.
      */
     @SuppressWarnings("unchecked")
@@ -48,8 +48,8 @@ public interface IOBiConsumer<T, U> {
     /**
      * Performs this operation on the given arguments.
      *
-     * @param t the first input argument
-     * @param u the second input argument
+     * @param t the first input argument.
+     * @param u the second input argument.
      * @throws IOException if an I/O error occurs.
      */
     void accept(T t, U u) throws IOException;
@@ -59,10 +59,10 @@ public interface IOBiConsumer<T, U> {
      * operation. If performing either operation throws an exception, it is relayed to the caller of the composed operation.
      * If performing this operation throws an exception, the {@code after} operation will not be performed.
      *
-     * @param after the operation to perform after this operation
+     * @param after the operation to perform after this operation.
      * @return a composed {@link IOBiConsumer} that performs in sequence this operation followed by the {@code after}
-     *         operation
-     * @throws NullPointerException if {@code after} is null
+     *         operation.
+     * @throws NullPointerException if {@code after} is null.
      */
     default IOBiConsumer<T, U> andThen(final IOBiConsumer<? super T, ? super U> after) {
         Objects.requireNonNull(after);

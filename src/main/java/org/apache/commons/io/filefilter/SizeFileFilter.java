@@ -82,8 +82,8 @@ public class SizeFileFilter extends AbstractFileFilter implements Serializable {
      * Constructs a new size file filter for files equal to or
      * larger than a certain size.
      *
-     * @param size  the threshold size of the files
-     * @throws IllegalArgumentException if the size is negative
+     * @param size  the threshold size of the files.
+     * @throws IllegalArgumentException if the size is negative.
      */
     public SizeFileFilter(final long size) {
         this(size, true);
@@ -93,10 +93,10 @@ public class SizeFileFilter extends AbstractFileFilter implements Serializable {
      * Constructs a new size file filter for files based on a certain size
      * threshold.
      *
-     * @param size  the threshold size of the files
+     * @param size  the threshold size of the files.
      * @param acceptLarger  if true, files equal to or larger are accepted,
-     * otherwise smaller ones (but not equal to)
-     * @throws IllegalArgumentException if the size is negative
+     * otherwise smaller ones (but not equal to).
+     * @throws IllegalArgumentException if the size is negative.
      */
     public SizeFileFilter(final long size, final boolean acceptLarger) {
         if (size < 0) {
@@ -115,8 +115,8 @@ public class SizeFileFilter extends AbstractFileFilter implements Serializable {
      * file <strong>IS</strong> selected.
      * </p>
      *
-     * @param file  the File to check
-     * @return true if the file name matches
+     * @param file  the File to check.
+     * @return true if the file name matches.
      */
     @Override
     public boolean accept(final File file) {
@@ -134,9 +134,9 @@ public class SizeFileFilter extends AbstractFileFilter implements Serializable {
      * file <strong>IS</strong> selected.
      * </p>
      *
-     * @param file       the File to check
+     * @param file       the File to check.
      * @param attributes the path's basic attributes (may be null).
-     * @return true if the file name matches
+     * @return true if the file name matches.
      */
     @Override
     public FileVisitResult accept(final Path file, final BasicFileAttributes attributes) {
@@ -146,7 +146,7 @@ public class SizeFileFilter extends AbstractFileFilter implements Serializable {
     /**
      * Provide a String representation of this file filter.
      *
-     * @return a String representation
+     * @return a String representation.
      */
     @Override
     public String toString() {

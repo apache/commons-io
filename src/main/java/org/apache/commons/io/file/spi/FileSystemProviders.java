@@ -39,7 +39,7 @@ public class FileSystemProviders { // NOPMD Class will be final in 3.0.
     /**
      * Gets the {@link FileSystemProvider} for the given Path.
      *
-     * @param path The Path to query
+     * @param path The Path to query.
      * @return the {@link FileSystemProvider} for the given Path.
      */
     @SuppressWarnings("resource") // FileSystem is not allocated here.
@@ -86,7 +86,7 @@ public class FileSystemProviders { // NOPMD Class will be final in 3.0.
     /**
      * Gets the {@link FileSystemProvider} for the given URI.
      *
-     * @param uri The URI to query
+     * @param uri The URI to query.
      * @return the {@link FileSystemProvider} for the given URI or null.
      */
     public FileSystemProvider getFileSystemProvider(final URI uri) {
@@ -96,7 +96,7 @@ public class FileSystemProviders { // NOPMD Class will be final in 3.0.
     /**
      * Gets the {@link FileSystemProvider} for the given URL.
      *
-     * @param url The URL to query
+     * @param url The URL to query.
      * @return the {@link FileSystemProvider} for the given URI or null.
      */
     public FileSystemProvider getFileSystemProvider(final URL url) {

@@ -37,7 +37,7 @@ final class UncheckedIOIterator<E> implements Iterator<E> {
     /**
      * Constructs a new instance.
      *
-     * @param delegate The delegate
+     * @param delegate The delegate.
      */
     UncheckedIOIterator(final IOIterator<E> delegate) {
         this.delegate = Objects.requireNonNull(delegate, "delegate");

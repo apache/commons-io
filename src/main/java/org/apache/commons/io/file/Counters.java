@@ -455,7 +455,7 @@ public class Counters {
     /**
      * Construct a new instance.
      *
-     * @deprecated Will be private in 4.0
+     * @deprecated Will be private in 3.0.
      */
     @Deprecated
     public Counters() {

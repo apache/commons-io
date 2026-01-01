@@ -29,7 +29,7 @@ public interface ConditionalFileFilter {
      * Adds the specified file filter to the list of file filters at the end of
      * the list.
      *
-     * @param ioFileFilter the filter to be added
+     * @param ioFileFilter the filter to be added.
      * @since 1.1
      */
     void addFileFilter(IOFileFilter ioFileFilter);
@@ -37,7 +37,7 @@ public interface ConditionalFileFilter {
     /**
      * Gets this conditional file filter's list of file filters.
      *
-     * @return the file filter list
+     * @return the file filter list.
      * @since 1.1
      */
     List<IOFileFilter> getFileFilters();
@@ -45,9 +45,9 @@ public interface ConditionalFileFilter {
     /**
      * Removes the specified file filter.
      *
-     * @param ioFileFilter filter to be removed
+     * @param ioFileFilter filter to be removed.
      * @return {@code true} if the filter was found in the list,
-     * {@code false} otherwise
+     * {@code false} otherwise.
      * @since 1.1
      */
     boolean removeFileFilter(IOFileFilter ioFileFilter);
@@ -56,7 +56,7 @@ public interface ConditionalFileFilter {
      * Sets the list of file filters, replacing any previously configured
      * file filters on this filter.
      *
-     * @param fileFilters the list of filters
+     * @param fileFilters the list of filters.
      * @since 1.1
      */
     void setFileFilters(List<IOFileFilter> fileFilters);

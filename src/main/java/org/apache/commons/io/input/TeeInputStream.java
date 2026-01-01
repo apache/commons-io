@@ -55,8 +55,8 @@ public class TeeInputStream extends ProxyInputStream {
      * and copies all read bytes to the given {@link OutputStream}. The given
      * output stream will not be closed when this stream gets closed.
      *
-     * @param input input stream to be proxied
-     * @param branch output stream that will receive a copy of all bytes read
+     * @param input input stream to be proxied.
+     * @param branch output stream that will receive a copy of all bytes read.
      */
     public TeeInputStream(final InputStream input, final OutputStream branch) {
         this(input, branch, false);
@@ -68,10 +68,10 @@ public class TeeInputStream extends ProxyInputStream {
      * output stream will be closed when this stream gets closed if the
      * closeBranch parameter is {@code true}.
      *
-     * @param input input stream to be proxied
-     * @param branch output stream that will receive a copy of all bytes read
+     * @param input input stream to be proxied.
+     * @param branch output stream that will receive a copy of all bytes read.
      * @param closeBranch flag for closing also the output stream when this
-     *                    stream is closed
+     *                    stream is closed.
      */
     public TeeInputStream(
             final InputStream input, final OutputStream branch, final boolean closeBranch) {
@@ -85,7 +85,7 @@ public class TeeInputStream extends ProxyInputStream {
      * output stream. An exception thrown from one stream will not prevent
      * closing of the other stream.
      *
-     * @throws IOException if either of the streams could not be closed
+     * @throws IOException if either of the streams could not be closed.
      */
     @Override
     public void close() throws IOException {
@@ -102,8 +102,8 @@ public class TeeInputStream extends ProxyInputStream {
      * Reads a single byte from the proxied input stream and writes it to
      * the associated output stream.
      *
-     * @return next byte from the stream, or -1 if the stream has ended
-     * @throws IOException if the stream could not be read (or written)
+     * @return next byte from the stream, or -1 if the stream has ended.
+     * @throws IOException if the stream could not be read (or written).
      */
     @Override
     public int read() throws IOException {
@@ -118,9 +118,9 @@ public class TeeInputStream extends ProxyInputStream {
      * Reads bytes from the proxied input stream and writes the read bytes
      * to the associated output stream.
      *
-     * @param bts byte buffer
-     * @return number of bytes read, or -1 if the stream has ended
-     * @throws IOException if the stream could not be read (or written)
+     * @param bts byte buffer.
+     * @return number of bytes read, or -1 if the stream has ended.
+     * @throws IOException if the stream could not be read (or written).
      */
     @Override
     public int read(final byte[] bts) throws IOException {
@@ -135,11 +135,11 @@ public class TeeInputStream extends ProxyInputStream {
      * Reads bytes from the proxied input stream and writes the read bytes
      * to the associated output stream.
      *
-     * @param bts byte buffer
-     * @param st start offset within the buffer
-     * @param end maximum number of bytes to read
-     * @return number of bytes read, or -1 if the stream has ended
-     * @throws IOException if the stream could not be read (or written)
+     * @param bts byte buffer.
+     * @param st start offset within the buffer.
+     * @param end maximum number of bytes to read.
+     * @return number of bytes read, or -1 if the stream has ended.
+     * @throws IOException if the stream could not be read (or written).
      */
     @Override
     public int read(final byte[] bts, final int st, final int end) throws IOException {

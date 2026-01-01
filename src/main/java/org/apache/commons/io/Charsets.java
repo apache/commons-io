@@ -210,7 +210,7 @@ public class Charsets {
      *
      * @param charset
      *            A charset or null.
-     * @return the given Charset or the default Charset if the given Charset is null
+     * @return the given Charset or the default Charset if the given Charset is null.
      * @see Charset#defaultCharset()
      */
     public static Charset toCharset(final Charset charset) {
@@ -277,7 +277,7 @@ public class Charsets {
     /**
      * Construct a new instance.
      *
-     * @deprecated Will be private in 4.0
+     * @deprecated Will be private in 3.0.
      */
     @Deprecated
     public Charsets() {

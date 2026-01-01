@@ -300,12 +300,13 @@ public class IOUtils {
     /**
      * A singleton empty byte array.
      *
-     *  @since 2.9.0
+     * @since 2.9.0
      */
     public static final byte[] EMPTY_BYTE_ARRAY = {};
 
     /**
      * Represents the end-of-file (or stream) value {@value}.
+     *
      * @since 2.5 (made public)
      */
     public static final int EOF = -1;
@@ -391,7 +392,7 @@ public class IOUtils {
      * BufferedOutputStream from the given OutputStream.
      *
      * @param outputStream the OutputStream to wrap or return (not null).
-     * @return the given OutputStream or a new {@link BufferedOutputStream} for the given OutputStream
+     * @return the given OutputStream or a new {@link BufferedOutputStream} for the given OutputStream.
      * @throws NullPointerException if the input parameter is null.
      * @since 2.5
      */
@@ -707,6 +708,7 @@ public class IOUtils {
      * <li>Removes the current thread's value for thread-local variables.</li>
      * <li>Sets static scratch arrays to 0s.</li>
      * </ul>
+     *
      * @see IO#clear()
      */
     static void clear() {
@@ -901,6 +903,7 @@ public class IOUtils {
      * <p>
      * Also consider using a try-with-resources statement where appropriate.
      * </p>
+     *
      * @param closeables the objects to close, may be null or already closed.
      * @see #closeQuietly(Closeable)
      * @since 2.5
@@ -1256,10 +1259,7 @@ public class IOUtils {
     // TODO Consider making public
     private static boolean contentEquals(final Iterator<?> iterator1, final Iterator<?> iterator2) {
         while (iterator1.hasNext()) {
-            if (!iterator2.hasNext()) {
-                return false;
-            }
-            if (!Objects.equals(iterator1.next(), iterator2.next())) {
+            if (!iterator2.hasNext() || !Objects.equals(iterator1.next(), iterator2.next())) {
                 return false;
             }
         }
@@ -1280,45 +1280,32 @@ public class IOUtils {
      * @since 1.1
      */
     public static boolean contentEquals(final Reader input1, final Reader input2) throws IOException {
+        // See IOUtilsContentEqualsReadersBenchmark_2_22_0 for performance testing.
         if (input1 == input2) {
             return true;
         }
         if (input1 == null || input2 == null) {
             return false;
         }
-
-        // reuse one
         try (ScratchChars scratch = IOUtils.ScratchChars.get()) {
             final char[] array1 = scratch.array();
-            // but allocate another
             final char[] array2 = charArray();
-            int pos1;
-            int pos2;
-            int count1;
-            int count2;
+            int read1;
+            int read2;
             while (true) {
-                pos1 = 0;
-                pos2 = 0;
-                for (int index = 0; index < DEFAULT_BUFFER_SIZE; index++) {
-                    if (pos1 == index) {
-                        do {
-                            count1 = input1.read(array1, pos1, DEFAULT_BUFFER_SIZE - pos1);
-                        } while (count1 == 0);
-                        if (count1 == EOF) {
-                            return pos2 == index && input2.read() == EOF;
-                        }
-                        pos1 += count1;
-                    }
-                    if (pos2 == index) {
-                        do {
-                            count2 = input2.read(array2, pos2, DEFAULT_BUFFER_SIZE - pos2);
-                        } while (count2 == 0);
-                        if (count2 == EOF) {
-                            return pos1 == index && input1.read() == EOF;
-                        }
-                        pos2 += count2;
-                    }
-                    if (array1[index] != array2[index]) {
+                read1 = input1.read(array1, 0, DEFAULT_BUFFER_SIZE);
+                read2 = input2.read(array2, 0, DEFAULT_BUFFER_SIZE);
+                // If both read EOF here, they're equal.
+                if (read1 == EOF && read2 == EOF) {
+                    return true;
+                }
+                // If only one read EOF or different amounts, they're not equal.
+                if (read1 != read2) {
+                    return false;
+                }
+                // Compare the buffers - bulk comparison is faster than character-by-character
+                for (int i = 0; i < read1; i++) {
+                    if (array1[i] != array2[i]) {
                         return false;
                     }
                 }
@@ -1478,8 +1465,8 @@ public class IOUtils {
      * This method uses {@link InputStreamReader}.
      * </p>
      *
-     * @param input the {@link InputStream} to read
-     * @param writer the {@link Writer} to write to
+     * @param input the {@link InputStream} to read.
+     * @param writer the {@link Writer} to write to.
      * @param inputCharsetName the name of the requested charset for the InputStream, null means platform default.
      * @throws NullPointerException                         if the input or output is null.
      * @throws IOException                                  if an I/O error occurs.
@@ -1572,7 +1559,7 @@ public class IOUtils {
     }
 
     /**
-     * Copies chars from a {@link Reader} to bytes on an {@link OutputStream} using the the virtual machine's {@linkplain Charset#defaultCharset() default
+     * Copies chars from a {@link Reader} to bytes on an {@link OutputStream} using the virtual machine's {@linkplain Charset#defaultCharset() default
      * charset}, and calling flush.
      * <p>
      * This method buffers the input internally, so there is no need to use a {@link BufferedReader}.
@@ -1589,7 +1576,7 @@ public class IOUtils {
      * @throws NullPointerException if the input or output is null.
      * @throws IOException          if an I/O error occurs.
      * @since 1.1
-     * @deprecated Use {@link #copy(Reader, OutputStream, Charset)} instead
+     * @deprecated Use {@link #copy(Reader, OutputStream, Charset)} instead.
      */
     @Deprecated
     public static void copy(final Reader reader, final OutputStream output) throws IOException {
@@ -1758,7 +1745,7 @@ public class IOUtils {
      *
      * @param inputStream the {@link InputStream} to read.
      * @param outputStream the {@link OutputStream} to write.
-     * @param buffer the buffer to use for the copy
+     * @param buffer the buffer to use for the copy.
      * @return the number of bytes copied.
      * @throws NullPointerException if the InputStream is {@code null}.
      * @throws NullPointerException if the OutputStream is {@code null}.
@@ -2428,7 +2415,7 @@ public class IOUtils {
      * @throws NullPointerException if the input is null.
      * @throws UncheckedIOException if an I/O error occurs.
      * @since 1.1
-     * @deprecated Use {@link #readLines(InputStream, Charset)} instead
+     * @deprecated Use {@link #readLines(InputStream, Charset)} instead.
      */
     @Deprecated
     public static List<String> readLines(final InputStream input) throws UncheckedIOException {
@@ -3206,7 +3193,7 @@ public class IOUtils {
      * @throws NullPointerException if the input is null.
      * @throws IOException          if an I/O error occurs.
      * @since 1.1
-     * @deprecated Use {@link #toCharArray(InputStream, Charset)} instead
+     * @deprecated Use {@link #toCharArray(InputStream, Charset)} instead.
      */
     @Deprecated
     public static char[] toCharArray(final InputStream inputStream) throws IOException {
@@ -3636,7 +3623,7 @@ public class IOUtils {
      * </p>
      *
      * @param data the byte array to write, do not modify during output,
-     * null ignored
+     * null ignored.
      * @param writer the {@link Writer} to write to.
      * @throws NullPointerException if output is null.
      * @throws IOException          if an I/O error occurs.
@@ -3656,7 +3643,7 @@ public class IOUtils {
      * </p>
      *
      * @param data the byte array to write, do not modify during output,
-     * null ignored
+     * null ignored.
      * @param writer the {@link Writer} to write to.
      * @param charset the charset to use, null means platform default.
      * @throws NullPointerException if output is null.
@@ -3854,7 +3841,7 @@ public class IOUtils {
      * @throws NullPointerException if output is null.
      * @throws IOException          if an I/O error occurs.
      * @since 1.1
-     * @deprecated Use {@link #write(String, OutputStream, Charset)} instead
+     * @deprecated Use {@link #write(String, OutputStream, Charset)} instead.
      */
     @Deprecated
     public static void write(final String data, final OutputStream output)
@@ -3936,7 +3923,7 @@ public class IOUtils {
      * @param data the {@link StringBuffer} to write, null ignored.
      * @param output the {@link OutputStream} to write to.
      * @throws NullPointerException if output is null.
-     * @throws IOException          if an I/O error occurs
+     * @throws IOException          if an I/O error occurs.
      * @since 1.1
      * @deprecated Use {@link #write(CharSequence, OutputStream)}.
      */
@@ -4051,7 +4038,7 @@ public class IOUtils {
      * @throws NullPointerException if the output is null.
      * @throws IOException          if an I/O error occurs.
      * @since 1.1
-     * @deprecated Use {@link #writeLines(Collection, String, OutputStream, Charset)} instead
+     * @deprecated Use {@link #writeLines(Collection, String, OutputStream, Charset)} instead.
      */
     @Deprecated
     public static void writeLines(final Collection<?> lines, final String lineEnding, final OutputStream output) throws IOException {

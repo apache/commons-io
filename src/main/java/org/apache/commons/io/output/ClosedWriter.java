@@ -61,7 +61,7 @@ public class ClosedWriter extends Writer {
     /**
      * Throws an {@link IOException} to indicate that the stream is closed.
      *
-     * @throws IOException always thrown
+     * @throws IOException always thrown.
      */
     @Override
     public void flush() throws IOException {

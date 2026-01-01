@@ -55,8 +55,8 @@ public class ObjectStreamClassPredicate implements Predicate<ObjectStreamClass> 
      * The reject list takes precedence over the accept list.
      * </p>
      *
-     * @param classes Classes to accept
-     * @return this object
+     * @param classes Classes to accept.
+     * @return this object.
      */
     public ObjectStreamClassPredicate accept(final Class<?>... classes) {
         Stream.of(classes).map(c -> new FullClassNameMatcher(c.getName())).forEach(acceptMatchers::add);
@@ -112,7 +112,7 @@ public class ObjectStreamClassPredicate implements Predicate<ObjectStreamClass> 
      * The reject list takes precedence over the accept list.
      * </p>
      *
-     * @param classes Classes to reject
+     * @param classes Classes to reject.
      * @return {@code this} instance.
      */
     public ObjectStreamClassPredicate reject(final Class<?>... classes) {
@@ -126,7 +126,7 @@ public class ObjectStreamClassPredicate implements Predicate<ObjectStreamClass> 
      * The reject list takes precedence over the accept list.
      * </p>
      *
-     * @param m the matcher to use
+     * @param m the matcher to use.
      * @return {@code this} instance.
      */
     public ObjectStreamClassPredicate reject(final ClassNameMatcher m) {
@@ -140,7 +140,7 @@ public class ObjectStreamClassPredicate implements Predicate<ObjectStreamClass> 
      * The reject list takes precedence over the accept list.
      * </p>
      *
-     * @param pattern standard Java regexp
+     * @param pattern standard Java regexp.
      * @return {@code this} instance.
      */
     public ObjectStreamClassPredicate reject(final Pattern pattern) {

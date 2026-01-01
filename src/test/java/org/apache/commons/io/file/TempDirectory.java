@@ -36,7 +36,7 @@ public class TempDirectory extends DeletablePath {
      * @param dir See {@link Files#createTempDirectory(String, FileAttribute...)}.
      * @param prefix See {@link Files#createTempDirectory(String, FileAttribute...)}.
      * @param attrs See {@link Files#createTempDirectory(String, FileAttribute...)}.
-     * @return a new instance for a new temporary directory
+     * @return a new instance for a new temporary directory.
      * @throws IOException See {@link Files#createTempDirectory(String, FileAttribute...)}.
      */
     public static TempDirectory create(final Path dir, final String prefix, final FileAttribute<?>... attrs) throws IOException {
@@ -49,7 +49,7 @@ public class TempDirectory extends DeletablePath {
      *
      * @param prefix See {@link Files#createTempDirectory(String, FileAttribute...)}.
      * @param attrs See {@link Files#createTempDirectory(String, FileAttribute...)}.
-     * @return a new instance for a new temporary directory
+     * @return a new instance for a new temporary directory.
      * @throws IOException See {@link Files#createTempDirectory(String, FileAttribute...)}.
      */
     public static TempDirectory create(final String prefix, final FileAttribute<?>... attrs) throws IOException {

@@ -76,6 +76,7 @@ public class OrFileFilter extends AbstractFileFilter implements ConditionalFileF
 
     /**
      * Constructs a new instance for the give filters.
+     *
      * @param fileFilters filters to OR.
      * @since 2.9.0
      */
@@ -87,9 +88,9 @@ public class OrFileFilter extends AbstractFileFilter implements ConditionalFileF
     /**
      * Constructs a new file filter that ORs the result of other filters.
      *
-     * @param filter1 the first filter, must not be null
-     * @param filter2 the second filter, must not be null
-     * @throws IllegalArgumentException if either filter is null
+     * @param filter1 the first filter, must not be null.
+     * @param filter2 the second filter, must not be null.
+     * @throws IllegalArgumentException if either filter is null.
      */
     public OrFileFilter(final IOFileFilter filter1, final IOFileFilter filter2) {
         this(2);
@@ -177,7 +178,7 @@ public class OrFileFilter extends AbstractFileFilter implements ConditionalFileF
     /**
      * Provide a String representation of this file filter.
      *
-     * @return a String representation
+     * @return a String representation.
      */
     @Override
     public String toString() {

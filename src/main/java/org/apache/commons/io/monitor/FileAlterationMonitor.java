@@ -98,7 +98,7 @@ public final class FileAlterationMonitor implements Runnable {
     /**
      * Adds a file system observer to this monitor.
      *
-     * @param observer The file system observer to add
+     * @param observer The file system observer to add.
      */
     public void addObserver(final FileAlterationObserver observer) {
         if (observer != null) {
@@ -109,7 +109,7 @@ public final class FileAlterationMonitor implements Runnable {
     /**
      * Returns the interval.
      *
-     * @return the interval
+     * @return the interval.
      */
     public long getInterval() {
         return intervalMillis;
@@ -128,7 +128,7 @@ public final class FileAlterationMonitor implements Runnable {
     /**
      * Removes a file system observer from this monitor.
      *
-     * @param observer The file system observer to remove
+     * @param observer The file system observer to remove.
      */
     public void removeObserver(final FileAlterationObserver observer) {
         if (observer != null) {
@@ -157,7 +157,7 @@ public final class FileAlterationMonitor implements Runnable {
     /**
      * Sets the thread factory.
      *
-     * @param threadFactory the thread factory
+     * @param threadFactory the thread factory.
      */
     public synchronized void setThreadFactory(final ThreadFactory threadFactory) {
         this.threadFactory = threadFactory;
@@ -166,7 +166,7 @@ public final class FileAlterationMonitor implements Runnable {
     /**
      * Starts monitoring.
      *
-     * @throws Exception if an error occurs initializing the observer
+     * @throws Exception if an error occurs initializing the observer.
      */
     public synchronized void start() throws Exception {
         if (running) {
@@ -187,7 +187,7 @@ public final class FileAlterationMonitor implements Runnable {
     /**
      * Stops monitoring.
      *
-     * @throws Exception if an error occurs initializing the observer
+     * @throws Exception if an error occurs initializing the observer.
      */
     public synchronized void stop() throws Exception {
         stop(intervalMillis);
@@ -198,7 +198,7 @@ public final class FileAlterationMonitor implements Runnable {
      *
      * @param stopInterval the amount of time in milliseconds to wait for the thread to finish.
      * A value of zero will wait until the thread is finished (see {@link Thread#join(long)}).
-     * @throws Exception if an error occurs initializing the observer
+     * @throws Exception if an error occurs initializing the observer.
      * @since 2.1
      */
     public synchronized void stop(final long stopInterval) throws Exception {

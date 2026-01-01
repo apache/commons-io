@@ -20,7 +20,6 @@ package org.apache.commons.io.jmh;
 import static org.apache.commons.io.IOUtils.DEFAULT_BUFFER_SIZE;
 import static org.apache.commons.io.IOUtils.EOF;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
@@ -45,12 +44,16 @@ import org.openjdk.jmh.infra.Blackhole;
  * Test different implementations of {@link IOUtils#contentEquals(Reader, Reader)}.
  *
  * <pre>
- * IOUtilsContentEqualsReadersBenchmark.testFileCurrent               avgt    5      1670968.050 ▒     67526.308  ns/op
- * IOUtilsContentEqualsReadersBenchmark.testFilePr118                 avgt    5      1660143.543 ▒    733178.893  ns/op
- * IOUtilsContentEqualsReadersBenchmark.testFileRelease_2_8_0         avgt    5      1785283.975 ▒    214177.764  ns/op
- * IOUtilsContentEqualsReadersBenchmark.testStringCurrent             avgt    5   1144495273.333 ▒  50706166.907  ns/op
- * IOUtilsContentEqualsReadersBenchmark.testStringPr118               avgt    5   1075059231.455 ▒ 275364676.487  ns/op
- * IOUtilsContentEqualsReadersBenchmark.testStringRelease_2_8_0       avgt    5   4767157193.333 ▒ 139567775.251  ns/op
+ * RESULTS:
+ * Benchmark                                                            Mode  Cnt          Score         Error  Units
+ * IOUtilsContentEqualsReadersBenchmark_2_22_0.testFileCurrent          avgt    5     105274.452 ±    1466.048  ns/op
+ * IOUtilsContentEqualsReadersBenchmark_2_22_0.testFileRelease2_22_0    avgt    5     107500.847 ±    1752.422  ns/op
+ * IOUtilsContentEqualsReadersBenchmark_2_22_0.testFile_2_21_0          avgt    5     115720.416 ±    1209.652  ns/op
+ * IOUtilsContentEqualsReadersBenchmark_2_22_0.testStringCurrent        avgt    5  113330719.330 ± 1187191.151  ns/op
+ * IOUtilsContentEqualsReadersBenchmark_2_22_0.testStringRelease2_22_0  avgt    5  110389392.582 ±  785367.455  ns/op
+ * IOUtilsContentEqualsReadersBenchmark_2_22_0.testString_2_21_0        avgt    5  284939866.619 ± 9969793.485  ns/op
+ *
+ * Run: mvn clean test -P benchmark -Dbenchmark=IOUtilsContentEqualsReadersBenchmark_2_22_0
  * </pre>
  */
 @BenchmarkMode(Mode.AverageTime)
@@ -59,7 +62,7 @@ import org.openjdk.jmh.infra.Blackhole;
 @Warmup(iterations = 5, time = 10, timeUnit = TimeUnit.SECONDS)
 @Measurement(iterations = 5, time = 10, timeUnit = TimeUnit.SECONDS)
 @Fork(value = 1, jvmArgs = {"-server"})
-public class IOUtilsContentEqualsReadersBenchmark {
+public class IOUtilsContentEqualsReadersBenchmark_2_22_0 {
 
     private static final int STRING_LEN = 1 << 24;
     private static final String TEST_PATH_A = "/org/apache/commons/io/testfileBOM.xml";
@@ -80,37 +83,13 @@ public class IOUtilsContentEqualsReadersBenchmark {
     static String SPECIAL_CASE_STRING_0 = StringUtils.repeat(StringUtils.repeat("ab", STRING_LEN) + '\n', 2);
     static String SPECIAL_CASE_STRING_1 = StringUtils.repeat(StringUtils.repeat("cd", STRING_LEN) + '\n', 2);
 
-    @SuppressWarnings("resource")
-    public static boolean contentEquals_release_2_8_0(final Reader input1, final Reader input2) throws IOException {
-        if (input1 == input2) {
-            return true;
-        }
-        if (input1 == null ^ input2 == null) {
-            return false;
-        }
-        final BufferedReader bufferedInput1 = IOUtils.toBufferedReader(input1);
-        final BufferedReader bufferedInput2 = IOUtils.toBufferedReader(input2);
-
-        int ch = bufferedInput1.read();
-        while (EOF != ch) {
-            final int ch2 = bufferedInput2.read();
-            if (ch != ch2) {
-                return false;
-            }
-            ch = bufferedInput1.read();
-        }
-
-        return bufferedInput2.read() == EOF;
-    }
-
-    public static boolean contentEqualsPr118(final Reader input1, final Reader input2) throws IOException {
+    public static boolean contentEquals_2_21_0(final Reader input1, final Reader input2) throws IOException {
         if (input1 == input2) {
             return true;
         }
         if (input1 == null || input2 == null) {
             return false;
         }
-
         final char[] array1 = new char[DEFAULT_BUFFER_SIZE];
         final char[] array2 = new char[DEFAULT_BUFFER_SIZE];
         int pos1;
@@ -146,6 +125,58 @@ public class IOUtilsContentEqualsReadersBenchmark {
         }
     }
 
+    /**
+     * Version 2.22.0 (December 2025).
+     */
+    public static boolean contentEqualsRelease2_22_0(final Reader input1, final Reader input2) throws IOException {
+        if (input1 == input2) {
+            return true;
+        }
+        if (input1 == null || input2 == null) {
+            return false;
+        }
+        final char[] array1 = new char[DEFAULT_BUFFER_SIZE];
+        final char[] array2 = new char[DEFAULT_BUFFER_SIZE];
+        int read1;
+        int read2;
+        while (true) {
+            read1 = input1.read(array1, 0, DEFAULT_BUFFER_SIZE);
+            read2 = input2.read(array2, 0, DEFAULT_BUFFER_SIZE);
+            // If both read EOF here, they're equal.
+            if (read1 == EOF && read2 == EOF) {
+                return true;
+            }
+            // If only one read EOF or different amounts, they're not equal.
+            if (read1 != read2) {
+                return false;
+            }
+            // Compare the buffers - bulk comparison is faster than character-by-character
+            for (int i = 0; i < read1; i++) {
+                if (array1[i] != array2[i]) {
+                    return false;
+                }
+            }
+        }
+    }
+
+    @Benchmark
+    public boolean[] testFile_2_21_0() throws IOException {
+        final boolean[] res = new boolean[3];
+        try (Reader input1 = new InputStreamReader(getClass().getResourceAsStream(TEST_PATH_A), DEFAULT_CHARSET);
+            Reader input2 = new InputStreamReader(getClass().getResourceAsStream(TEST_PATH_B), DEFAULT_CHARSET)) {
+            res[0] = contentEquals_2_21_0(input1, input1);
+        }
+        try (Reader input1 = new InputStreamReader(getClass().getResourceAsStream(TEST_PATH_A), DEFAULT_CHARSET);
+            Reader input2 = new InputStreamReader(getClass().getResourceAsStream(TEST_PATH_A), DEFAULT_CHARSET)) {
+            res[1] = contentEquals_2_21_0(input1, input2);
+        }
+        try (Reader input1 = new InputStreamReader(getClass().getResourceAsStream(TEST_PATH_16K_A));
+            Reader input2 = new InputStreamReader(getClass().getResourceAsStream(TEST_PATH_16K_A_COPY))) {
+            res[2] = contentEquals_2_21_0(input1, input2);
+        }
+        return res;
+    }
+
     @Benchmark
     public boolean[] testFileCurrent() throws IOException {
         final boolean[] res = new boolean[3];
@@ -166,40 +197,34 @@ public class IOUtilsContentEqualsReadersBenchmark {
     }
 
     @Benchmark
-    public boolean[] testFilePr118() throws IOException {
+    public boolean[] testFileRelease2_22_0() throws IOException {
         final boolean[] res = new boolean[3];
         try (Reader input1 = new InputStreamReader(getClass().getResourceAsStream(TEST_PATH_A), DEFAULT_CHARSET);
             Reader input2 = new InputStreamReader(getClass().getResourceAsStream(TEST_PATH_B), DEFAULT_CHARSET)) {
-            res[0] = contentEqualsPr118(input1, input1);
+            res[0] = contentEqualsRelease2_22_0(input1, input1);
         }
         try (Reader input1 = new InputStreamReader(getClass().getResourceAsStream(TEST_PATH_A), DEFAULT_CHARSET);
             Reader input2 = new InputStreamReader(getClass().getResourceAsStream(TEST_PATH_A), DEFAULT_CHARSET)) {
-            res[1] = contentEqualsPr118(input1, input2);
+            res[1] = contentEqualsRelease2_22_0(input1, input2);
         }
-        try (Reader input1 = new InputStreamReader(getClass().getResourceAsStream(TEST_PATH_16K_A));
-            Reader input2 = new InputStreamReader(getClass().getResourceAsStream(TEST_PATH_16K_A_COPY))) {
-            res[2] = contentEqualsPr118(input1, input2);
+        try (Reader input1 = new InputStreamReader(getClass().getResourceAsStream(TEST_PATH_16K_A), DEFAULT_CHARSET);
+            Reader input2 = new InputStreamReader(getClass().getResourceAsStream(TEST_PATH_16K_A_COPY),
+                DEFAULT_CHARSET)) {
+            res[2] = contentEqualsRelease2_22_0(input1, input2);
         }
         return res;
     }
 
     @Benchmark
-    public boolean[] testFileRelease_2_8_0() throws IOException {
-        final boolean[] res = new boolean[3];
-        try (Reader input1 = new InputStreamReader(getClass().getResourceAsStream(TEST_PATH_A), DEFAULT_CHARSET);
-            Reader input2 = new InputStreamReader(getClass().getResourceAsStream(TEST_PATH_B), DEFAULT_CHARSET)) {
-            res[0] = contentEquals_release_2_8_0(input1, input1);
+    public void testString_2_21_0(final Blackhole blackhole) throws IOException {
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 5; j++) {
+                try (StringReader input1 = new StringReader(STRINGS[i]);
+                    StringReader input2 = new StringReader(STRINGS[j])) {
+                    blackhole.consume(contentEquals_2_21_0(input1, input2));
+                }
+            }
         }
-        try (Reader input1 = new InputStreamReader(getClass().getResourceAsStream(TEST_PATH_A), DEFAULT_CHARSET);
-            Reader input2 = new InputStreamReader(getClass().getResourceAsStream(TEST_PATH_A), DEFAULT_CHARSET)) {
-            res[1] = contentEquals_release_2_8_0(input1, input2);
-        }
-        try (Reader input1 = new InputStreamReader(getClass().getResourceAsStream(TEST_PATH_16K_A), DEFAULT_CHARSET);
-            Reader input2 = new InputStreamReader(getClass().getResourceAsStream(TEST_PATH_16K_A_COPY),
-                DEFAULT_CHARSET)) {
-            res[2] = contentEquals_release_2_8_0(input1, input2);
-        }
-        return res;
     }
 
     @Benchmark
@@ -215,24 +240,12 @@ public class IOUtilsContentEqualsReadersBenchmark {
     }
 
     @Benchmark
-    public void testStringPr118(final Blackhole blackhole) throws IOException {
+    public void testStringRelease2_22_0(final Blackhole blackhole) throws IOException {
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
                 try (StringReader input1 = new StringReader(STRINGS[i]);
                     StringReader input2 = new StringReader(STRINGS[j])) {
-                    blackhole.consume(contentEqualsPr118(input1, input2));
-                }
-            }
-        }
-    }
-
-    @Benchmark
-    public void testStringRelease_2_8_0(final Blackhole blackhole) throws IOException {
-        for (int i = 0; i < 5; i++) {
-            for (int j = 0; j < 5; j++) {
-                try (StringReader input1 = new StringReader(STRINGS[i]);
-                    StringReader input2 = new StringReader(STRINGS[j])) {
-                    blackhole.consume(contentEquals_release_2_8_0(input1, input2));
+                    blackhole.consume(contentEqualsRelease2_22_0(input1, input2));
                 }
             }
         }

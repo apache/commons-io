@@ -66,7 +66,7 @@ public interface IOStream<T> extends IOBaseStream<T, IOStream<T>, Stream<T>> {
     /**
      * This class' version of {@link Stream#empty()}.
      *
-     * @param <T> the type of the stream elements
+     * @param <T> the type of the stream elements.
      * @return an empty sequential {@code IOStreamImpl}.
      * @see Stream#empty()
      */
@@ -135,9 +135,9 @@ public interface IOStream<T> extends IOBaseStream<T, IOStream<T>, Stream<T>> {
     /**
      * Returns a sequential {@code IOStreamImpl} containing a single element.
      *
-     * @param t the single element
-     * @param <T> the type of stream elements
-     * @return a singleton sequential stream
+     * @param t the single element.
+     * @param <T> the type of stream elements.
+     * @return a singleton sequential stream.
      */
     static <T> IOStream<T> of(final T t) {
         return adapt(Stream.of(t));

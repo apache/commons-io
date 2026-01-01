@@ -56,7 +56,7 @@ import org.apache.commons.io.input.ClosedInputStream;
  * ignored.
  * </p>
  *
- * @param <T> The AbstractByteArrayOutputStream subclass
+ * @param <T> The AbstractByteArrayOutputStream subclass.
  * @since 2.7
  */
 public abstract class AbstractByteArrayOutputStream<T extends AbstractByteArrayOutputStream<T>> extends OutputStream {
@@ -110,7 +110,7 @@ public abstract class AbstractByteArrayOutputStream<T extends AbstractByteArrayO
     /**
      * Returns this instance typed to {@code T}.
      *
-     * @return {@code this} instance
+     * @return {@code this} instance.
      */
     @SuppressWarnings("unchecked")
     protected T asThis() {
@@ -246,7 +246,7 @@ public abstract class AbstractByteArrayOutputStream<T extends AbstractByteArrayO
      * returned stream is backed by buffers of {@code this} stream,
      * avoiding memory allocation and copy, thus saving space and time.<br>
      *
-     * @param <T> the type of the InputStream which makes up
+     * @param <S> the type of the InputStream which makes up
      *            the {@link SequenceInputStream}.
      * @param isConstructor A constructor for an InputStream which makes
      *                     up the {@link SequenceInputStream}.
@@ -257,12 +257,12 @@ public abstract class AbstractByteArrayOutputStream<T extends AbstractByteArrayO
      * @since 2.7
      */
     @SuppressWarnings("resource") // The result InputStream MUST be managed by the call site.
-    protected <T extends InputStream> InputStream toInputStream(final InputStreamConstructor<T> isConstructor) {
+    protected <S extends InputStream> InputStream toInputStream(final InputStreamConstructor<S> isConstructor) {
         int remaining = count;
         if (remaining == 0) {
             return ClosedInputStream.INSTANCE;
         }
-        final List<T> list = new ArrayList<>(buffers.size());
+        final List<S> list = new ArrayList<>(buffers.size());
         for (final byte[] buf : buffers) {
             final int c = Math.min(buf.length, remaining);
             list.add(isConstructor.construct(buf, 0, c));
@@ -349,7 +349,7 @@ public abstract class AbstractByteArrayOutputStream<T extends AbstractByteArrayO
      * this stream.
      *
      * @param in the input stream to read from.
-     * @return total number of bytes read from the input stream (and written to this stream)
+     * @return total number of bytes read from the input stream (and written to this stream).
      * @throws IOException if an I/O error occurs while reading the input stream.
      * @since 1.4
      */

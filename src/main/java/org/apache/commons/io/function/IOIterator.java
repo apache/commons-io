@@ -36,8 +36,8 @@ public interface IOIterator<E> {
      * Adapts the given Iterable as an IOIterator.
      *
      * @param <E> the type of the stream elements.
-     * @param iterable The iterable to adapt
-     * @return A new IOIterator
+     * @param iterable The iterable to adapt.
+     * @return A new IOIterator.
      * @since 2.17.0
      */
     static <E> IOIterator<E> adapt(final Iterable<E> iterable) {
@@ -48,8 +48,8 @@ public interface IOIterator<E> {
      * Adapts the given Iterator as an IOIterator.
      *
      * @param <E> the type of the stream elements.
-     * @param iterator The iterator to adapt
-     * @return A new IOIterator
+     * @param iterator The iterator to adapt.
+     * @return A new IOIterator.
      */
     static <E> IOIterator<E> adapt(final Iterator<E> iterator) {
         return IOIteratorAdapter.adapt(iterator);
@@ -91,7 +91,7 @@ public interface IOIterator<E> {
      *
      * @return See delegate.
      * @throws IOException if an I/O error occurs.
-     * @throws NoSuchElementException if the iteration has no more elements
+     * @throws NoSuchElementException if the iteration has no more elements.
      */
     E next() throws IOException;
 
@@ -110,6 +110,7 @@ public interface IOIterator<E> {
      * <p>
      * Implementations may not have anything to unwrap and that behavior is undefined for now.
      * </p>
+     *
      * @return the underlying Iterator.
      */
     Iterator<E> unwrap();

@@ -39,7 +39,7 @@ public class AppendableOutputStream <T extends Appendable> extends OutputStream 
     /**
      * Constructs a new instance with the specified appendable.
      *
-     * @param appendable the appendable to write to
+     * @param appendable the appendable to write to.
      */
     public AppendableOutputStream(final T appendable) {
         this.appendable = appendable;
@@ -48,7 +48,7 @@ public class AppendableOutputStream <T extends Appendable> extends OutputStream 
     /**
      * Gets the target appendable.
      *
-     * @return the target appendable
+     * @return the target appendable.
      */
     public T getAppendable() {
         return appendable;
@@ -57,7 +57,7 @@ public class AppendableOutputStream <T extends Appendable> extends OutputStream 
     /**
      * Writes a character to the underlying appendable.
      *
-     * @param b the character to write
+     * @param b the character to write.
      * @throws IOException If an I/O error occurs.
      */
     @Override

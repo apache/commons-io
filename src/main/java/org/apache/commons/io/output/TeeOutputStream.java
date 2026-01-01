@@ -35,8 +35,8 @@ public class TeeOutputStream extends ProxyOutputStream {
     /**
      * Constructs a TeeOutputStream.
      *
-     * @param out    the main OutputStream
-     * @param branch the second OutputStream
+     * @param out    the main OutputStream.
+     * @param branch the second OutputStream.
      */
     public TeeOutputStream(final OutputStream out, final OutputStream branch) {
         super(out);

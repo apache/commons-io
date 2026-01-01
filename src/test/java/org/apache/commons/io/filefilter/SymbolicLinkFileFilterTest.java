@@ -100,7 +100,7 @@ class SymbolicLinkFileFilterTest {
      * Unit test teardown deletes all four of these files.
      * </p>
      *
-     * @throws IOException If it fails to create the temporary files
+     * @throws IOException If it fails to create the temporary files.
      */
     @BeforeAll
     static void testSetup() throws IOException {

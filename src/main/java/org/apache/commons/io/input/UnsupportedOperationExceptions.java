@@ -31,7 +31,7 @@ final class UnsupportedOperationExceptions {
     /**
      * Constructs a new instance of UnsupportedOperationException for a {@code mark} method.
      *
-     * @return a new instance of UnsupportedOperationException
+     * @return a new instance of UnsupportedOperationException.
      */
     static UnsupportedOperationException mark() {
         // Use the same message as in java.io.InputStream.reset() in OpenJDK 8.0.275-1.
@@ -41,8 +41,8 @@ final class UnsupportedOperationExceptions {
     /**
      * Constructs a new instance of UnsupportedOperationException for the given unsupported a {@code method} name.
      *
-     * @param method A method name
-     * @return a new instance of UnsupportedOperationException
+     * @param method A method name.
+     * @return a new instance of UnsupportedOperationException.
      */
     static UnsupportedOperationException method(final String method) {
         return new UnsupportedOperationException(method + " not supported");
@@ -51,7 +51,7 @@ final class UnsupportedOperationExceptions {
     /**
      * Constructs a new instance of UnsupportedOperationException for a {@code reset} method.
      *
-     * @return a new instance of UnsupportedOperationException
+     * @return a new instance of UnsupportedOperationException.
      */
     static UnsupportedOperationException reset() {
         // Use the same message as in java.io.InputStream.reset() in OpenJDK 8.0.275-1.

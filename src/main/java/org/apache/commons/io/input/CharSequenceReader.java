@@ -99,8 +99,8 @@ public class CharSequenceReader extends Reader implements Serializable {
      * </p>
      *
      * @param charSequence The character sequence, may be {@code null}
-     * @param start The start index in the character sequence, inclusive
-     * @throws IllegalArgumentException if the start index is negative
+     * @param start The start index in the character sequence, inclusive.
+     * @throws IllegalArgumentException if the start index is negative.
      * @since 2.7
      */
     public CharSequenceReader(final CharSequence charSequence, final int start) {
@@ -120,9 +120,9 @@ public class CharSequenceReader extends Reader implements Serializable {
      * </p>
      *
      * @param charSequence The character sequence, may be {@code null}
-     * @param start The start index in the character sequence, inclusive
-     * @param end The end index in the character sequence, exclusive
-     * @throws IllegalArgumentException if the start index is negative, or if the end index is smaller than the start index
+     * @param start The start index in the character sequence, inclusive.
+     * @param end The end index in the character sequence, exclusive.
+     * @throws IllegalArgumentException if the start index is negative, or if the end index is smaller than the start index.
      * @since 2.7
      */
     public CharSequenceReader(final CharSequence charSequence, final int start, final int end) {
@@ -168,7 +168,7 @@ public class CharSequenceReader extends Reader implements Serializable {
     /**
      * Mark the current position.
      *
-     * @param readAheadLimit ignored
+     * @param readAheadLimit ignored.
      */
     @Override
     public void mark(final int readAheadLimit) {
@@ -202,10 +202,10 @@ public class CharSequenceReader extends Reader implements Serializable {
     /**
      * Reads the specified number of characters into the array.
      *
-     * @param array The array to store the characters in
-     * @param offset The starting position in the array to store
-     * @param length The maximum number of characters to read
-     * @return The number of characters read or -1 if there are no more
+     * @param array The array to store the characters in.
+     * @param offset The starting position in the array to store.
+     * @param length The maximum number of characters to read.
+     * @return The number of characters read or -1 if there are no more.
      * @throws NullPointerException if the array is {@code null}.
      * @throws IndexOutOfBoundsException if {@code offset} or {@code length} are negative, or if {@code offset + length} is greater than {@code array.length}.
      */
@@ -272,8 +272,8 @@ public class CharSequenceReader extends Reader implements Serializable {
     /**
      * Skip the specified number of characters.
      *
-     * @param n The number of characters to skip
-     * @return The actual number of characters skipped
+     * @param n The number of characters to skip.
+     * @return The actual number of characters skipped.
      */
     @Override
     public long skip(final long n) {
@@ -302,7 +302,7 @@ public class CharSequenceReader extends Reader implements Serializable {
      * Gets a String representation of the underlying
      * character sequence.
      *
-     * @return The contents of the character sequence
+     * @return The contents of the character sequence.
      */
     @Override
     public String toString() {

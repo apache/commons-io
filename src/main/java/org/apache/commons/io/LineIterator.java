@@ -56,9 +56,9 @@ public class LineIterator implements Iterator<String>, Closeable {
      * Closes a {@link LineIterator} quietly.
      *
      * @param iterator The iterator to close, or {@code null}.
+     * @see Throwable#addSuppressed(Throwable)
      * @deprecated As of 2.6 deprecated without replacement. Please use the try-with-resources statement or handle
      * suppressed exceptions manually.
-     * @see Throwable#addSuppressed(Throwable)
      */
     @Deprecated
     public static void closeQuietly(final LineIterator iterator) {
@@ -77,8 +77,8 @@ public class LineIterator implements Iterator<String>, Closeable {
     /**
      * Constructs an iterator of the lines for a {@link Reader}.
      *
-     * @param reader the {@link Reader} to read from, not null
-     * @throws NullPointerException if the reader is null
+     * @param reader the {@link Reader} to read from, not null.
+     * @throws NullPointerException if the reader is null.
      */
     @SuppressWarnings("resource") // Caller closes Reader
     public LineIterator(final Reader reader) {
@@ -111,8 +111,8 @@ public class LineIterator implements Iterator<String>, Closeable {
      * If there is an {@link IOException} then {@link #close()} will
      * be called on this instance.
      *
-     * @return {@code true} if the Reader has more lines
-     * @throws IllegalStateException if an IO exception occurs
+     * @return {@code true} if the Reader has more lines.
+     * @throws IllegalStateException if an IO exception occurs.
      */
     @Override
     public boolean hasNext() {
@@ -142,8 +142,9 @@ public class LineIterator implements Iterator<String>, Closeable {
     /**
      * Overridable method to validate each line that is returned.
      * This implementation always returns true.
-     * @param line  the line that is to be validated
-     * @return true if valid, false to remove from the iterator
+     *
+     * @param line  the line that is to be validated.
+     * @return true if valid, false to remove from the iterator.
      */
     protected boolean isValidLine(final String line) {
         return true;
@@ -152,8 +153,8 @@ public class LineIterator implements Iterator<String>, Closeable {
     /**
      * Returns the next line in the wrapped {@link Reader}.
      *
-     * @return the next line from the input
-     * @throws NoSuchElementException if there is no line to return
+     * @return the next line from the input.
+     * @throws NoSuchElementException if there is no line to return.
      */
     @Override
     public String next() {
@@ -163,8 +164,8 @@ public class LineIterator implements Iterator<String>, Closeable {
     /**
      * Returns the next line in the wrapped {@link Reader}.
      *
-     * @return the next line from the input
-     * @throws NoSuchElementException if there is no line to return
+     * @return the next line from the input.
+     * @throws NoSuchElementException if there is no line to return.
      * @deprecated Use {@link #next()}.
      */
     @Deprecated
@@ -180,7 +181,7 @@ public class LineIterator implements Iterator<String>, Closeable {
     /**
      * Unsupported.
      *
-     * @throws UnsupportedOperationException always
+     * @throws UnsupportedOperationException always.
      */
     @Override
     public void remove() {

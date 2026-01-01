@@ -148,7 +148,8 @@ class DeferredFileOutputStreamTest extends AbstractTempDirTest {
 
     /**
      * Tests the case where the amount of data falls below the threshold, and is therefore confined to memory.
-     * @throws IOException
+     *
+     * @throws IOException Thrown on a test failure.
      */
     @ParameterizedTest(name = "initialBufferSize = {0}")
     @MethodSource("data")
@@ -237,7 +238,8 @@ class DeferredFileOutputStreamTest extends AbstractTempDirTest {
 
     /**
      * Tests specifying a temporary file and the threshold is reached.
-     * @throws IOException
+     *
+     * @throws IOException Thrown on a test failure.
      */
     @ParameterizedTest(name = "initialBufferSize = {0}")
     @MethodSource("data")
@@ -278,7 +280,8 @@ class DeferredFileOutputStreamTest extends AbstractTempDirTest {
 
     /**
      * Tests specifying a temporary file and the threshold not reached.
-     * @throws IOException
+     *
+     * @throws IOException Thrown on a test failure.
      */
     @ParameterizedTest(name = "initialBufferSize = {0}")
     @MethodSource("data")
@@ -302,7 +305,7 @@ class DeferredFileOutputStreamTest extends AbstractTempDirTest {
     /**
      * Tests specifying a temporary file and the threshold is reached.
      *
-     * @throws Exception
+     * @throws IOException Thrown on a test failure.
      */
     @Test
     void testTempFileError() throws Exception {
@@ -338,7 +341,8 @@ class DeferredFileOutputStreamTest extends AbstractTempDirTest {
     /**
      * Tests the case where there are multiple writes beyond the threshold, to ensure that the
      * {@code thresholdReached()} method is only called once, as the threshold is crossed for the first time.
-     * @throws IOException
+     *
+     * @throws IOException Thrown on a test failure.
      */
     @ParameterizedTest(name = "initialBufferSize = {0}")
     @MethodSource("data")
@@ -418,7 +422,8 @@ class DeferredFileOutputStreamTest extends AbstractTempDirTest {
 
     /**
      * Tests whether writeTo() properly writes small content.
-     * @throws IOException
+     *
+     * @throws IOException Thrown on a test failure.
      */
     @ParameterizedTest(name = "initialBufferSize = {0}")
     @MethodSource("data")

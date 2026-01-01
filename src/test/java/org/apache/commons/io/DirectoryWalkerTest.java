@@ -172,7 +172,7 @@ class DirectoryWalkerTest {
     static class TestMultiThreadCancelWalker extends DirectoryWalker<File> {
         private final String cancelFileName;
         private final boolean suppressCancel;
-        private boolean cancelled;
+        private boolean canceled;
         public List<File> results;
 
         TestMultiThreadCancelWalker(final String cancelFileName, final boolean suppressCancel) {
@@ -199,9 +199,9 @@ class DirectoryWalkerTest {
         @Override
         protected void handleDirectoryEnd(final File directory, final int depth, final Collection<File> results) throws IOException {
             results.add(directory);
-            assertFalse(cancelled);
+            assertFalse(canceled);
             if (cancelFileName.equals(directory.getName())) {
-                cancelled = true;
+                canceled = true;
             }
         }
 
@@ -209,16 +209,16 @@ class DirectoryWalkerTest {
         @Override
         protected void handleFile(final File file, final int depth, final Collection<File> results) throws IOException {
             results.add(file);
-            assertFalse(cancelled);
+            assertFalse(canceled);
             if (cancelFileName.equals(file.getName())) {
-                cancelled = true;
+                canceled = true;
             }
         }
 
         /** Handles Cancelled. */
         @Override
         protected boolean handleIsCancelled(final File file, final int depth, final Collection<File> results) throws IOException {
-            return cancelled;
+            return canceled;
         }
     }
     // Directories
