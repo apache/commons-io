@@ -209,6 +209,7 @@ public class ReaderInputStream extends AbstractInputStream {
      * CharBuffer used as input for the decoder. It should be reasonably large as we read data from the underlying Reader into this buffer.
      */
     private final CharBuffer encoderIn;
+
     /**
      * ByteBuffer used as output for the decoder. This buffer can be small as it is only used to transfer data from the decoder to the buffer provided by the
      * caller.

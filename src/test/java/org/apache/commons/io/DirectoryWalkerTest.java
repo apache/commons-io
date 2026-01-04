@@ -85,6 +85,7 @@ class DirectoryWalkerTest {
             }
         }
     }
+
     /**
      * Test DirectoryWalker implementation that always returns false
      * from handleDirectoryStart()
@@ -101,6 +102,7 @@ class DirectoryWalkerTest {
             return false;
         }
     }
+
     /**
      * Test DirectoryWalker implementation that finds files in a directory hierarchy
      * applying a file filter.
@@ -138,6 +140,7 @@ class DirectoryWalkerTest {
             results.add(file);
         }
     }
+
     /**
      * Test DirectoryWalker implementation that finds files in a directory hierarchy
      * applying a file filter.
@@ -165,6 +168,7 @@ class DirectoryWalkerTest {
             results.add(file.toString());
         }
     }
+
     /**
      * Test DirectoryWalker implementation that finds files in a directory hierarchy
      * applying a file filter.

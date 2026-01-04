@@ -200,32 +200,38 @@ public final class PathUtils {
 
     private static final OpenOption[] OPEN_OPTIONS_TRUNCATE = { StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING };
     private static final OpenOption[] OPEN_OPTIONS_APPEND = { StandardOpenOption.CREATE, StandardOpenOption.APPEND };
+
     /**
      * Empty {@link CopyOption} array.
      *
      * @since 2.8.0
      */
     public static final CopyOption[] EMPTY_COPY_OPTIONS = {};
+
     /**
      * Empty {@link DeleteOption} array.
      *
      * @since 2.8.0
      */
     public static final DeleteOption[] EMPTY_DELETE_OPTION_ARRAY = {};
+
     /**
      * Empty {@link FileAttribute} array.
      *
      * @since 2.13.0
      */
     public static final FileAttribute<?>[] EMPTY_FILE_ATTRIBUTE_ARRAY = {};
+
     /**
      * Empty {@link FileVisitOption} array.
      */
     public static final FileVisitOption[] EMPTY_FILE_VISIT_OPTION_ARRAY = {};
+
     /**
      * Empty {@link LinkOption} array.
      */
     public static final LinkOption[] EMPTY_LINK_OPTION_ARRAY = {};
+
     /**
      * {@link LinkOption} array for {@link LinkOption#NOFOLLOW_LINKS}.
      *
@@ -234,16 +240,19 @@ public final class PathUtils {
      */
     @Deprecated
     public static final LinkOption[] NOFOLLOW_LINK_OPTION_ARRAY = { LinkOption.NOFOLLOW_LINKS };
+
     /**
      * A LinkOption used to follow link in this class, the inverse of {@link LinkOption#NOFOLLOW_LINKS}.
      *
      * @since 2.12.0
      */
     static final LinkOption NULL_LINK_OPTION = null;
+
     /**
      * Empty {@link OpenOption} array.
      */
     public static final OpenOption[] EMPTY_OPEN_OPTION_ARRAY = {};
+
     /**
      * Empty {@link Path} array.
      *

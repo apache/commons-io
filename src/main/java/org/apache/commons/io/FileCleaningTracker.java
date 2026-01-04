@@ -51,6 +51,7 @@ public class FileCleaningTracker {
      * The reaper thread.
      */
     private final class Reaper extends Thread {
+
         /** Constructs a new Reaper */
         Reaper() {
             super("File Reaper");

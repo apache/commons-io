@@ -118,6 +118,7 @@ public enum FileSystem {
      * Implementations measure length and can truncate to a specified limit.
      */
     enum NameLengthStrategy {
+
         /** Length measured as encoded bytes. */
         BYTES {
             @Override
