@@ -349,15 +349,12 @@ class FilenameUtilsTest {
      */
     @Test
     void testGetFullPathNoEndSeparator_IO_248() {
-
         // Test single separator
         assertEquals("/", FilenameUtils.getFullPathNoEndSeparator("/"));
         assertEquals("\\", FilenameUtils.getFullPathNoEndSeparator("\\"));
-
         // Test one level directory
         assertEquals("/", FilenameUtils.getFullPathNoEndSeparator("/abc"));
         assertEquals("\\", FilenameUtils.getFullPathNoEndSeparator("\\abc"));
-
         // Test one level directory
         assertEquals("/abc", FilenameUtils.getFullPathNoEndSeparator("/abc/xyz"));
         assertEquals("\\abc", FilenameUtils.getFullPathNoEndSeparator("\\abc\\xyz"));
