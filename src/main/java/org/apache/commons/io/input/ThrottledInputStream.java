@@ -185,7 +185,7 @@ public final class ThrottledInputStream extends CountingInputStream {
          */
         public void setMaxBytesPerSecond(final long maxBytesPerSecond) {
             setMaxBytesPerSecond((double) maxBytesPerSecond);
-            // TODO 4.0
+            // TODO 3.0
             // return asThis();
         }
 
