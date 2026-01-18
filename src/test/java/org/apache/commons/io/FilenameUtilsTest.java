@@ -371,8 +371,15 @@ class FilenameUtilsTest {
         // On macOS while in the target folder in jshell:
         // new java.io.File("X:\\path\\subfolder").getAbsolutePath()
         // ==> "/Users/garygregory/git/commons/commons-lang/target/X:\\path\\subfolder"
+        assertEquals("/Users/garygregory/git/commons/commons-lang/target/X:\\path",
+                FilenameUtils.getFullPathNoEndSeparator("/Users/garygregory/git/commons/commons-lang/target/X:\\path\\subfolder"));
+        assertEquals("X:\\path", FilenameUtils.getFullPathNoEndSeparator("X:\\path\\subfolder"));
         assertEquals("/Users/garygregory/git/commons/commons-lang/target/X:\\\\path",
                 FilenameUtils.getFullPathNoEndSeparator("/Users/garygregory/git/commons/commons-lang/target/X:\\\\path\\\\subfolder"));
+        assertEquals("/Users/garygregory/git/commons/commons-lang/target/X:\\\\\\path",
+                FilenameUtils.getFullPathNoEndSeparator("/Users/garygregory/git/commons/commons-lang/target/X:\\\\path\\\\\\subfolder\\\\"));
+        assertEquals("/Users/garygregory/git/commons/commons-lang/target/X:\\\\\\path",
+                FilenameUtils.getFullPathNoEndSeparator("/Users/garygregory/git/commons/commons-lang/target/X:\\\\path\\\\\\subfolder"));
     }
 
     @Test
