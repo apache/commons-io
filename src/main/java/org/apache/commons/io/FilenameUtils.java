@@ -327,10 +327,10 @@ public class FilenameUtils {
             end++;
         }
         final String path = fileName.substring(0, end);
-        if(!includeEndSeparator && path.length() > prefix) {
-            final char lastChar = path.charAt(path.length() -1);
-            if(lastChar == '/' || lastChar == '\\') {
-                return path.substring(0, path.length() -1);
+        if (!includeEndSeparator && path.length() > prefix) {
+            final char lastChar = path.charAt(path.length() - 1);
+            if (lastChar == '/' || lastChar == '\\') {
+                return path.substring(0, path.length() - 1);
             }
         }
         return path;
