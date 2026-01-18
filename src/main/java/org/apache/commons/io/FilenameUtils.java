@@ -300,11 +300,11 @@ public class FilenameUtils {
      * Does the work of getting the path.
      *
      * @param fileName  the file name.
-     * @param includeSeparator  true to include the end separator.
+     * @param includeEndSeparator  true to include the end separator.
      * @return the path.
      * @throws IllegalArgumentException if the result path contains the null character ({@code U+0000}).
      */
-    private static String doGetFullPath(final String fileName, final boolean includeSeparator) {
+    private static String doGetFullPath(final String fileName, final boolean includeEndSeparator) {
         if (fileName == null) {
             return null;
         }
@@ -313,7 +313,7 @@ public class FilenameUtils {
             return null;
         }
         if (prefix >= fileName.length()) {
-            if (includeSeparator) {
+            if (includeEndSeparator) {
                 return getPrefix(fileName);  // add end slash if necessary
             }
             return fileName;
@@ -322,7 +322,7 @@ public class FilenameUtils {
         if (index < 0) {
             return fileName.substring(0, prefix);
         }
-        int end = index + (includeSeparator ?  1 : 0);
+        int end = index + (includeEndSeparator ?  1 : 0);
         if (end == 0) {
             end++;
         }
