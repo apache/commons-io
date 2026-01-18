@@ -183,10 +183,9 @@ public final class ThrottledInputStream extends CountingInputStream {
          * @param maxBytesPerSecond the maximum bytes per second.
          * @throws IllegalArgumentException Thrown if maxBytesPerSecond &lt;= 0.
          */
-        public void setMaxBytesPerSecond(final long maxBytesPerSecond) {
+        public Builder setMaxBytesPerSecond(final long maxBytesPerSecond) {
             setMaxBytesPerSecond((double) maxBytesPerSecond);
-            // TODO 3.0
-            // return asThis();
+            return this;
         }
 
     }
