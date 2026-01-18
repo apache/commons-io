@@ -16,6 +16,7 @@
  */
 package org.apache.commons.io.input;
 
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.apache.commons.io.input.ReversedLinesFileReaderParamBlockSizeTest.assertEqualsAndNoLineBreaks;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -25,7 +26,10 @@ import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.charset.StandardCharsets;
+
 import java.util.List;
 
 import org.apache.commons.io.IOUtils;
@@ -108,4 +112,23 @@ class ReversedLinesFileReaderSimpleTest {
         assertThrows(UnsupportedEncodingException.class,
             () -> new ReversedLinesFileReader(testFileEmpty, IOUtils.DEFAULT_BUFFER_SIZE, StandardCharsets.UTF_16.name()).close());
     }
+    @Test
+    public void testEmptyFirstLineIsRead() throws Exception {
+    Path file = Files.createTempFile("reversed", ".txt");
+
+    // Write a file that contains ONLY a newline
+    Files.write(file, "\n".getBytes(StandardCharsets.UTF_8));
+
+    try (ReversedLinesFileReader reader =
+                 new ReversedLinesFileReader(file.toFile(), StandardCharsets.UTF_8)) {
+
+        // BUG: this currently returns null, but should return ""
+        String firstLine = reader.readLine();
+
+        assertEquals("", firstLine, "Empty first line should be returned as empty string");
+
+        // After that, there should be no more lines
+        assertNull(reader.readLine());
+    }
+}
 }
