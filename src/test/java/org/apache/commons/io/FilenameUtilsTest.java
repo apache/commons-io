@@ -1189,4 +1189,11 @@ class FilenameUtilsTest {
         assertEquals("\\a\\b\\c", FilenameUtils.separatorsToWindows("/a/b/c"));
         assertEquals("D:\\a\\b\\c", FilenameUtils.separatorsToWindows("D:/a/b/c"));
     }
+    @Test
+    void testGetFullPathNoEndSeparatorDirectoryConsistency() {
+        String path = new File("X:\\path\\subfolder").getAbsolutePath();
+        String result = FilenameUtils.getFullPathNoEndSeparator(path);
+        assertEquals("subfolder", FilenameUtils.getBaseName(result));
+    }
+
 }
