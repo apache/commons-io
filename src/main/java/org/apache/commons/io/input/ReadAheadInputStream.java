@@ -63,6 +63,9 @@ public class ReadAheadInputStream extends FilterInputStream {
      *   .setExecutorService(Executors.newSingleThreadExecutor(ReadAheadInputStream::newThread))
      *   .get();}
      * </pre>
+     * <p>
+     * If an {@link ExecutorService} is not set, then a single-threaded daemon executor service is used.
+     * </p>
      *
      * @see #get()
      * @since 2.12.0
@@ -90,7 +93,7 @@ public class ReadAheadInputStream extends FilterInputStream {
          * <ul>
          * <li>{@link #getInputStream()} gets the target aspect.</li>
          * <li>{@link #getBufferSize()}</li>
-         * <li>{@link ExecutorService}</li>
+         * <li>{@link ExecutorService}, if not set, a single-threaded daemon executor service is used.</li>
          * </ul>
          *
          * @return a new instance.
@@ -108,8 +111,11 @@ public class ReadAheadInputStream extends FilterInputStream {
 
         /**
          * Sets the executor service for the read-ahead thread.
+         * <p>
+         * If not set, a single-threaded daemon executor service is used.
+         * </p>
          *
-         * @param executorService the executor service for the read-ahead thread.
+         * @param executorService the executor service for the read-ahead thread, may be {@code null}.
          * @return {@code this} instance.
          */
         public Builder setExecutorService(final ExecutorService executorService) {
