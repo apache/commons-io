@@ -50,6 +50,7 @@ The <action> type attribute can be add,update,fix,remove.
       <action type="fix" dev="ggregory" due-to="Gary Gregory">Fix Apache RAT plugin console warnings.</action>
       <action type="fix" dev="ggregory" due-to="Gary Gregory, Piotr P. Karwasz">ByteArraySeekableByteChannel.position(long) and truncate(long) shouldn't throw an IllegalArgumentException for a new positive position that's too large #817.</action>
       <action type="fix" dev="ggregory" due-to="Gary Gregory">Fix malformed Javadoc comments.</action>
+      <action type="fix" dev="ggregory" due-to="Stanislav Fort, Gary Gregory">ReadAheadInputStream.close() doesn't always close its filtered input stream.</action>
       <!-- ADD -->
       <action type="add" dev="ggregory" due-to="Gary Gregory">Add and use IOUtils.closeQuietly(Closeable, Throwable) #818.</action>
       <!-- UPDATE -->

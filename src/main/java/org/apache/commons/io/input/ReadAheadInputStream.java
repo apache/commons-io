@@ -209,7 +209,7 @@ public class ReadAheadInputStream extends FilterInputStream {
     }
 
     /**
-     * Constructs an instance with the specified buffer size and read-ahead threshold
+     * Constructs an instance with the specified buffer size and read-ahead threshold.
      *
      * @param inputStream       The underlying input stream.
      * @param bufferSizeInBytes The buffer size.
@@ -221,7 +221,7 @@ public class ReadAheadInputStream extends FilterInputStream {
     }
 
     /**
-     * Constructs an instance with the specified buffer size and read-ahead threshold
+     * Constructs an instance with the specified buffer size and read-ahead threshold.
      *
      * @param inputStream       The underlying input stream.
      * @param bufferSizeInBytes The buffer size.
@@ -234,7 +234,7 @@ public class ReadAheadInputStream extends FilterInputStream {
     }
 
     /**
-     * Constructs an instance with the specified buffer size and read-ahead threshold
+     * Constructs an instance with the specified buffer size and read-ahead threshold.
      *
      * @param inputStream             The underlying input stream.
      * @param bufferSizeInBytes       The buffer size.
@@ -293,7 +293,6 @@ public class ReadAheadInputStream extends FilterInputStream {
         } finally {
             stateChangeLock.unlock();
         }
-
         if (shutdownExecutorService) {
             try {
                 executorService.shutdownNow();
@@ -307,6 +306,9 @@ public class ReadAheadInputStream extends FilterInputStream {
                     super.close();
                 }
             }
+        }
+        if (isSafeToCloseUnderlyingInputStream) {
+            super.close();
         }
     }
 
@@ -352,7 +354,6 @@ public class ReadAheadInputStream extends FilterInputStream {
         if (len == 0) {
             return 0;
         }
-
         if (!activeBuffer.hasRemaining()) {
             // No remaining in active buffer - lock and switch to write ahead buffer.
             stateChangeLock.lock();
@@ -538,7 +539,7 @@ public class ReadAheadInputStream extends FilterInputStream {
     }
 
     /**
-     * Flips the active and read ahead buffer
+     * Flips the active and read ahead buffers.
      */
     private void swapBuffers() {
         final ByteBuffer temp = activeBuffer;
