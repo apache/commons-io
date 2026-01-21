@@ -16,6 +16,7 @@
  */
 package org.apache.commons.io;
 
+import java.io.Console;
 import java.io.File;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -930,15 +931,27 @@ public class FilenameUtils {
         if (!isSeparator(ch0) || !isSeparator(ch1)) {
             return isSeparator(ch0) ? 1 : 0;
         }
+
+        // UNC path: //hostname or //hostname/...
         int posUnix = fileName.indexOf(UNIX_NAME_SEPARATOR, 2);
         int posWin = fileName.indexOf(WINDOWS_NAME_SEPARATOR, 2);
-        if (posUnix == NOT_FOUND && posWin == NOT_FOUND || posUnix == 2 || posWin == 2) {
+
+        if (posUnix == 2 || posWin == 2) {
             return NOT_FOUND;
         }
-        posUnix = posUnix == NOT_FOUND ? posWin : posUnix;
-        posWin = posWin == NOT_FOUND ? posUnix : posWin;
-        final int pos = Math.min(posUnix, posWin) + 1;
-        final String hostnamePart = fileName.substring(2, pos - 1);
+        int pos;
+        String hostnamePart;
+        if(posUnix == NOT_FOUND && posWin == NOT_FOUND){
+            pos = fileName.length();
+            hostnamePart = fileName.substring(2);
+        }
+        else{
+            posUnix = posUnix == NOT_FOUND ? posWin : posUnix;
+            posWin = posWin == NOT_FOUND ? posUnix : posWin;
+            pos = Math.min(posUnix, posWin) + 1;
+            hostnamePart = fileName.substring(2, pos - 1);
+        }
+
         return isValidHostName(hostnamePart) ? pos : NOT_FOUND;
     }
 
