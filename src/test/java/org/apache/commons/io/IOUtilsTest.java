@@ -14,6 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.apache.commons.io;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
@@ -76,6 +77,7 @@ import java.util.stream.Stream;
 import org.apache.commons.io.function.IOConsumer;
 import org.apache.commons.io.input.BrokenInputStream;
 import org.apache.commons.io.input.CharSequenceInputStream;
+import org.apache.commons.io.input.ChunkedReader;
 import org.apache.commons.io.input.CircularInputStream;
 import org.apache.commons.io.input.NullInputStream;
 import org.apache.commons.io.input.NullReader;
@@ -540,18 +542,6 @@ class IOUtilsTest {
         assertDoesNotThrow(() -> IOUtils.closeQuietly((Iterable<Closeable>) null));
     }
 
-    @SuppressWarnings("resource")
-    @Test
-    void testCloseQuietly_CloseableIOExceptionAddSuppressed() {
-        final Throwable e = new Exception("test").fillInStackTrace();
-        assertEquals(0, e.getSuppressed().length);
-        assertSame(e, IOUtils.closeQuietly(new BrokenInputStream(new EOFException("Suppressed").fillInStackTrace()), e));
-        assertEquals(1, e.getSuppressed().length);
-        final Throwable suppressed0 = e.getSuppressed()[0];
-        assertInstanceOf(EOFException.class, suppressed0);
-        assertEquals("Suppressed", suppressed0.getMessage());
-    }
-
     @Test
     void testCloseQuietly_CloseableException() {
         // IOException
@@ -587,6 +577,18 @@ class IOUtilsTest {
         // RuntimeException subclass
         assertDoesNotThrow(() -> IOUtils.closeQuietly(new BrokenOutputStream(new UnsupportedOperationException()), consumer));
         assertTrue(b.get());
+    }
+
+    @SuppressWarnings("resource")
+    @Test
+    void testCloseQuietly_CloseableIOExceptionAddSuppressed() {
+        final Throwable e = new Exception("test").fillInStackTrace();
+        assertEquals(0, e.getSuppressed().length);
+        assertSame(e, IOUtils.closeQuietly(new BrokenInputStream(new EOFException("Suppressed").fillInStackTrace()), e));
+        assertEquals(1, e.getSuppressed().length);
+        final Throwable suppressed0 = e.getSuppressed()[0];
+        assertInstanceOf(EOFException.class, suppressed0);
+        assertEquals("Suppressed", suppressed0.getMessage());
     }
 
     @SuppressWarnings("squid:S2699") // Suppress "Add at least one assertion to this test case"
@@ -781,9 +783,7 @@ class IOUtilsTest {
 
     @Test
     void testContentEquals_Reader_Reader() throws Exception {
-        {
-            assertTrue(IOUtils.contentEquals((Reader) null, null));
-        }
+        assertTrue(IOUtils.contentEquals((Reader) null, null));
         {
             final StringReader input1 = new StringReader("");
             assertFalse(IOUtils.contentEquals(null, input1));
@@ -801,12 +801,21 @@ class IOUtilsTest {
             assertTrue(IOUtils.contentEquals(input1, input1));
         }
         assertTrue(IOUtils.contentEquals(new StringReader(""), new StringReader("")));
-        assertTrue(
-            IOUtils.contentEquals(new BufferedReader(new StringReader("")), new BufferedReader(new StringReader(""))));
+        assertTrue(IOUtils.contentEquals(new BufferedReader(new StringReader("")), new BufferedReader(new StringReader(""))));
         assertTrue(IOUtils.contentEquals(new StringReader("ABC"), new StringReader("ABC")));
         assertFalse(IOUtils.contentEquals(new StringReader("ABCD"), new StringReader("ABC")));
         assertFalse(IOUtils.contentEquals(new StringReader("ABC"), new StringReader("ABCD")));
         assertFalse(IOUtils.contentEquals(new StringReader("apache"), new StringReader("apacha")));
+    }
+
+    @Test
+    void testContentEquals_Reader_Reader_unevenReads() throws Exception {
+        // sanity test, same chunk size
+        assertFalse(IOUtils.contentEquals(new ChunkedReader(new StringReader("apache"), 1000), new ChunkedReader(new StringReader("apacha"), 1000)));
+        assertTrue(IOUtils.contentEquals(new ChunkedReader(new StringReader("ABC"), 1000), new ChunkedReader(new StringReader("ABC"), 1000)));
+        // test with uneven chunk sizes
+        assertTrue(IOUtils.contentEquals(new ChunkedReader(new StringReader("ABC"), 1), new ChunkedReader(new StringReader("ABC"), 2)));
+        assertFalse(IOUtils.contentEquals(new ChunkedReader(new StringReader("apache"), 1), new ChunkedReader(new StringReader("apacha"), 2)));
     }
 
     @Test
