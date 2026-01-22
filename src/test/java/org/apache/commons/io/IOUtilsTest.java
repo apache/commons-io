@@ -75,12 +75,14 @@ import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import org.apache.commons.io.function.IOConsumer;
+import org.apache.commons.io.input.BoundedInputStream;
 import org.apache.commons.io.input.BrokenInputStream;
 import org.apache.commons.io.input.CharSequenceInputStream;
 import org.apache.commons.io.input.ChunkedReader;
 import org.apache.commons.io.input.CircularInputStream;
 import org.apache.commons.io.input.NullInputStream;
 import org.apache.commons.io.input.NullReader;
+import org.apache.commons.io.input.UnsynchronizedByteArrayInputStream;
 import org.apache.commons.io.output.AppendableWriter;
 import org.apache.commons.io.output.BrokenOutputStream;
 import org.apache.commons.io.output.CountingOutputStream;
@@ -90,6 +92,7 @@ import org.apache.commons.io.output.StringBuilderWriter;
 import org.apache.commons.io.output.UnsynchronizedByteArrayOutputStream;
 import org.apache.commons.io.test.TestUtils;
 import org.apache.commons.io.test.ThrowOnCloseReader;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.JavaVersion;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.SystemUtils;
@@ -1741,6 +1744,22 @@ class IOUtilsTest {
             assertEquals(FILE_SIZE, out.length, "Wrong output size");
             TestUtils.assertEqualContent(out, testFile);
         }
+    }
+
+    @Test
+    void testToByteArray_InputStream_Empty() throws Exception {
+        assertArrayEquals(ArrayUtils.EMPTY_BYTE_ARRAY, IOUtils.toByteArray(new ByteArrayInputStream(ArrayUtils.EMPTY_BYTE_ARRAY)));
+        assertArrayEquals(ArrayUtils.EMPTY_BYTE_ARRAY,
+                IOUtils.toByteArray(BoundedInputStream.builder().setInputStream(new ByteArrayInputStream(ArrayUtils.EMPTY_BYTE_ARRAY)).get()));
+        assertArrayEquals(ArrayUtils.EMPTY_BYTE_ARRAY,
+                IOUtils.toByteArray(UnsynchronizedByteArrayInputStream.builder().setInputStream(new ByteArrayInputStream(ArrayUtils.EMPTY_BYTE_ARRAY)).get()));
+        assertArrayEquals(ArrayUtils.EMPTY_BYTE_ARRAY,
+                IOUtils.toByteArray(BoundedInputStream.builder().setInputStream(new ByteArrayInputStream(ArrayUtils.EMPTY_BYTE_ARRAY)).setMaxCount(1).get()));
+        assertArrayEquals(ArrayUtils.EMPTY_BYTE_ARRAY, IOUtils.toByteArray(new ByteArrayInputStream(ArrayUtils.EMPTY_BYTE_ARRAY)));
+        assertArrayEquals(ArrayUtils.EMPTY_BYTE_ARRAY,
+                IOUtils.toByteArray(BoundedInputStream.builder().setInputStream(new ByteArrayInputStream(ArrayUtils.EMPTY_BYTE_ARRAY)).get()));
+        assertArrayEquals(ArrayUtils.EMPTY_BYTE_ARRAY,
+                IOUtils.toByteArray(BoundedInputStream.builder().setInputStream(new ByteArrayInputStream(ArrayUtils.EMPTY_BYTE_ARRAY)).setMaxCount(0).get()));
     }
 
     @Test
