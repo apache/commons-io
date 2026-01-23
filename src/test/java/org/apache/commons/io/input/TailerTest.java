@@ -231,17 +231,18 @@ class TailerTest {
     }
 
     @Test
-    @SuppressWarnings("squid:S2699") // Suppress "Add at least one assertion to this test case"
     void testBufferBreak() throws Exception {
         final long delay = 50;
         final File file = new File(temporaryFolder, "testBufferBreak.txt");
         createFile(file, 0);
-        writeStrings(file, "SBTOURIST\n");
+        final String data = "SBTOURIST\n";
+        writeStrings(file, data);
         final TestTailerListener listener = new TestTailerListener();
         try (Tailer tailer = new Tailer(file, listener, delay, false, 1)) {
             final Thread thread = new Thread(tailer);
             thread.start();
             List<String> lines = listener.getLines();
+            assertEquals(data.length(), tailer.getTailable().size());
             while (lines.isEmpty() || !lines.get(lines.size() - 1).equals("SBTOURIST")) {
                 lines = listener.getLines();
             }
@@ -386,7 +387,6 @@ class TailerTest {
     }
 
     @Test
-    @SuppressWarnings("squid:S2699") // Suppress "Add at least one assertion to this test case"
     void testLongFile() throws Exception {
         final long delay = 50;
         final File file = new File(temporaryFolder, "testLongFile.txt");
@@ -407,6 +407,7 @@ class TailerTest {
                 lines = listener.getLines();
             }
             // System.out.println("Elapsed: " + (System.currentTimeMillis() - start));
+            assertFalse(lines.isEmpty());
             listener.clear();
         }
     }

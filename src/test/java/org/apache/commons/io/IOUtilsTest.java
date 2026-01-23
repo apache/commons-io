@@ -580,6 +580,9 @@ class IOUtilsTest {
         // RuntimeException subclass
         assertDoesNotThrow(() -> IOUtils.closeQuietly(new BrokenOutputStream(new UnsupportedOperationException()), consumer));
         assertTrue(b.get());
+        // in-line
+        assertDoesNotThrow(() -> IOUtils.closeQuietly(new BrokenOutputStream(new UnsupportedOperationException()), (Consumer<Exception>) e -> b.set(true)));
+        assertTrue(b.get());
     }
 
     @SuppressWarnings("resource")
@@ -594,7 +597,6 @@ class IOUtilsTest {
         assertEquals("Suppressed", suppressed0.getMessage());
     }
 
-    @SuppressWarnings("squid:S2699") // Suppress "Add at least one assertion to this test case"
     @Test
     void testCloseQuietly_Selector() {
         Selector selector = null;
@@ -604,9 +606,9 @@ class IOUtilsTest {
         } finally {
             IOUtils.closeQuietly(selector);
         }
+        assertFalse(selector.isOpen());
     }
 
-    @SuppressWarnings("squid:S2699") // Suppress "Add at least one assertion to this test case"
     @Test
     void testCloseQuietly_SelectorIOException() {
         final Selector selector = new SelectorAdapter() {
@@ -616,7 +618,8 @@ class IOUtilsTest {
             }
         };
         IOUtils.closeQuietly(selector);
-    }
+        assertFalse(selector.isOpen());
+}
 
     @SuppressWarnings("squid:S2699") // Suppress "Add at least one assertion to this test case"
     @Test
@@ -625,7 +628,6 @@ class IOUtilsTest {
         IOUtils.closeQuietly(selector);
     }
 
-    @SuppressWarnings("squid:S2699") // Suppress "Add at least one assertion to this test case"
     @Test
     void testCloseQuietly_SelectorTwice() {
         Selector selector = null;
@@ -636,12 +638,15 @@ class IOUtilsTest {
             IOUtils.closeQuietly(selector);
             IOUtils.closeQuietly(selector);
         }
+        assertFalse(selector.isOpen());
     }
 
     @Test
-    void testCloseQuietly_ServerSocket() {
+    void testCloseQuietly_ServerSocket() throws IOException {
         assertDoesNotThrow(() -> IOUtils.closeQuietly((ServerSocket) null));
-        assertDoesNotThrow(() -> IOUtils.closeQuietly(new ServerSocket()));
+        final ServerSocket serverSocket = new ServerSocket();
+        IOUtils.closeQuietly(serverSocket);
+        assertTrue(serverSocket.isClosed());
     }
 
     @Test
@@ -659,7 +664,9 @@ class IOUtilsTest {
     @Test
     void testCloseQuietly_Socket() {
         assertDoesNotThrow(() -> IOUtils.closeQuietly((Socket) null));
-        assertDoesNotThrow(() -> IOUtils.closeQuietly(new Socket()));
+        final Socket socket = new Socket();
+        IOUtils.closeQuietly(socket);
+        assertTrue(socket.isClosed());
     }
 
     @Test
@@ -704,13 +711,10 @@ class IOUtilsTest {
         final long size = (long) Integer.MAX_VALUE + (long) 1;
         final NullInputStream in = new NullInputStream(size);
         final OutputStream out = NullOutputStream.INSTANCE;
-
         // Test copy() method
         assertEquals(-1, IOUtils.copy(in, out));
-
         // reset the input
         in.init();
-
         // Test consume() method
         assertEquals(size, IOUtils.consume(in), "consume()");
     }
@@ -1491,16 +1495,14 @@ class IOUtilsTest {
             ClassLoader.getSystemClassLoader()));
     }
 
-    @SuppressWarnings("squid:S2699") // Suppress "Add at least one assertion to this test case"
     @Test
     void testResourceToString_NullCharset() throws Exception {
-        IOUtils.resourceToString("/org/apache/commons/io//test-file-utf8.bin", null);
+        assertNotNull(IOUtils.resourceToString("/org/apache/commons/io//test-file-utf8.bin", null));
     }
 
-    @SuppressWarnings("squid:S2699") // Suppress "Add at least one assertion to this test case"
     @Test
     void testResourceToString_NullCharset_WithClassLoader() throws Exception {
-        IOUtils.resourceToString("org/apache/commons/io/test-file-utf8.bin", null, ClassLoader.getSystemClassLoader());
+        assertNotNull(IOUtils.resourceToString("org/apache/commons/io/test-file-utf8.bin", null, ClassLoader.getSystemClassLoader()));
     }
 
     @Test
