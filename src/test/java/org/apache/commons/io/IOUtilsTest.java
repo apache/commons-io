@@ -581,7 +581,7 @@ class IOUtilsTest {
         assertDoesNotThrow(() -> IOUtils.closeQuietly(new BrokenOutputStream(new UnsupportedOperationException()), consumer));
         assertTrue(b.get());
         // in-line
-        assertDoesNotThrow(() -> IOUtils.closeQuietly(new BrokenOutputStream(new UnsupportedOperationException()), (Consumer<Exception>) e -> b.set(true)));
+        assertDoesNotThrow(() -> IOUtils.closeQuietly(new BrokenOutputStream(new UnsupportedOperationException()), e -> b.set(true)));
         assertTrue(b.get());
     }
 
@@ -590,7 +590,7 @@ class IOUtilsTest {
     void testCloseQuietly_CloseableIOExceptionAddSuppressed() {
         final Throwable e = new Exception("test").fillInStackTrace();
         assertEquals(0, e.getSuppressed().length);
-        assertSame(e, IOUtils.closeQuietly(new BrokenInputStream(new EOFException("Suppressed").fillInStackTrace()), e));
+        assertSame(e, IOUtils.closeQuietlyAdd(new BrokenInputStream(new EOFException("Suppressed").fillInStackTrace()), e));
         assertEquals(1, e.getSuppressed().length);
         final Throwable suppressed0 = e.getSuppressed()[0];
         assertInstanceOf(EOFException.class, suppressed0);

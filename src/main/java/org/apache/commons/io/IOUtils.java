@@ -824,38 +824,6 @@ public class IOUtils {
     }
 
     /**
-     * Closes a {@link Closeable} unconditionally and adds any exception thrown by the {@code close()} to the given Throwable.
-     * <p>
-     * For example:
-     * </p>
-     *
-     * <pre>
-     * Closeable closeable = ...;
-     * try {
-     *     // process closeable
-     *     closeable.close();
-     * } catch (Exception e) {
-     *     // error handling
-     *     throw IOUtils.closeQuietly(closeable, e);
-     * }
-     * </pre>
-     * <p>
-     * Also consider using a try-with-resources statement where appropriate.
-     * </p>
-     *
-     * @param <T>       The Throwable type.
-     * @param closeable The object to close, may be null or already closed.
-     * @param throwable Add the exception throw by the closeable to the given Throwable.
-     * @return The given Throwable.
-     * @since 2.22.0
-     * @see Throwable#addSuppressed(Throwable)
-     */
-    public static <T extends Throwable> T closeQuietly(final Closeable closeable, final T throwable) {
-        closeQuietly(closeable, (Consumer<Exception>) throwable::addSuppressed);
-        return throwable;
-    }
-
-    /**
      * Closes a {@link Closeable} unconditionally.
      * <p>
      * Equivalent to {@link Closeable#close()}, except any exceptions will be ignored.
@@ -1183,6 +1151,38 @@ public class IOUtils {
      */
     public static void closeQuietly(final Writer writer) {
         closeQ(writer);
+    }
+
+    /**
+     * Closes a {@link Closeable} unconditionally and adds any exception thrown by the {@code close()} to the given Throwable.
+     * <p>
+     * For example:
+     * </p>
+     *
+     * <pre>
+     * Closeable closeable = ...;
+     * try {
+     *     // process closeable
+     *     closeable.close();
+     * } catch (Exception e) {
+     *     // error handling
+     *     throw IOUtils.closeQuietly(closeable, e);
+     * }
+     * </pre>
+     * <p>
+     * Also consider using a try-with-resources statement where appropriate.
+     * </p>
+     *
+     * @param <T>       The Throwable type.
+     * @param closeable The object to close, may be null or already closed.
+     * @param throwable Add the exception throw by the closeable to the given Throwable.
+     * @return The given Throwable.
+     * @since 2.22.0
+     * @see Throwable#addSuppressed(Throwable)
+     */
+    public static <T extends Throwable> T closeQuietlyAdd(final Closeable closeable, final T throwable) {
+        closeQuietly(closeable, (Consumer<Exception>) throwable::addSuppressed);
+        return throwable;
     }
 
     /**
