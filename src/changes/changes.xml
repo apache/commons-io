@@ -45,14 +45,14 @@ The <action> type attribute can be add,update,fix,remove.
     <title>Apache Commons IO Release Notes</title>
   </properties>
   <body>
-    <release version="2.22.0" date="2026-01-19" description="This is a feature and maintenance release. Java 8 or later is required.">
+    <release version="2.22.0" date="2026-01-25" description="This is a feature and maintenance release. Java 8 or later is required.">
       <!-- FIX -->
       <action type="fix" dev="ggregory" due-to="Gary Gregory">Fix Apache RAT plugin console warnings.</action>
       <action type="fix" dev="ggregory" due-to="Gary Gregory, Piotr P. Karwasz">ByteArraySeekableByteChannel.position(long) and truncate(long) shouldn't throw an IllegalArgumentException for a new positive position that's too large #817.</action>
       <action type="fix" dev="ggregory" due-to="Gary Gregory">Fix malformed Javadoc comments.</action>
       <action type="fix" dev="ggregory" due-to="Stanislav Fort, Gary Gregory">ReadAheadInputStream.close() doesn't always close its filtered input stream.</action>
       <!-- ADD -->
-      <action type="add" dev="ggregory" due-to="Gary Gregory">Add and use IOUtils.closeQuietly(Closeable, Throwable) #818.</action>
+      <action type="add" dev="ggregory" due-to="Gary Gregory">Add and use IOUtils.closeQuietlyAdd(Closeable, Throwable) #818.</action>
       <!-- UPDATE -->
       <action type="update" dev="ggregory"             due-to="Gary Gregory, Dependabot">Bump org.apache.commons:commons-parent from 91 to 96 #816.</action>
       <action type="update" dev="ggregory"             due-to="Gary Gregory, Dependabot">Bump commons-codec:commons-codec from 1.19.0 to 1.20.0 #812.</action>
