@@ -162,43 +162,6 @@ class ByteArraySeekableByteChannelCompressTest {
     }
 
     @Test
-    void testThrowWhenSettingIncorrectPosition() throws IOException {
-        try (ByteArraySeekableByteChannel c = new ByteArraySeekableByteChannel()) {
-            final ByteBuffer buffer = ByteBuffer.allocate(1);
-            // write
-            c.write(buffer);
-            assertEquals(1, c.position());
-            // bad pos A
-            c.position(c.size() + 1);
-            assertEquals(c.size() + 1, c.position());
-            assertEquals(-1, c.read(buffer));
-            // bad pos B
-            c.position(Integer.MAX_VALUE + 1L);
-            assertEquals(Integer.MAX_VALUE + 1L, c.position());
-            assertEquals(-1, c.read(buffer));
-            assertThrows(IOException.class, () -> c.write(buffer));
-            // negative input is the only illegal input
-            assertThrows(IllegalArgumentException.class, () -> c.position(-1));
-            assertThrows(IllegalArgumentException.class, () -> c.position(Integer.MIN_VALUE));
-            assertThrows(IllegalArgumentException.class, () -> c.position(Long.MIN_VALUE));
-        }
-    }
-
-    @Test
-    void testThrowWhenTruncatingToIncorrectSize() throws IOException {
-        try (ByteArraySeekableByteChannel c = new ByteArraySeekableByteChannel()) {
-            final ByteBuffer buffer = ByteBuffer.allocate(1);
-            c.truncate(c.size() + 1);
-            assertEquals(-1, c.read(buffer));
-            c.truncate(Integer.MAX_VALUE + 1L);
-            assertEquals(-1, c.read(buffer));
-            assertThrows(IllegalArgumentException.class, () -> c.truncate(-1));
-            assertThrows(IllegalArgumentException.class, () -> c.truncate(Integer.MIN_VALUE));
-            assertThrows(IllegalArgumentException.class, () -> c.truncate(Long.MIN_VALUE));
-        }
-    }
-
-    @Test
     void testShouldTruncateContentsProperly() throws ClosedChannelException {
         try (ByteArraySeekableByteChannel c = ByteArraySeekableByteChannel.wrap(testData)) {
             c.truncate(4);
@@ -264,6 +227,43 @@ class ByteArraySeekableByteChannelCompressTest {
     void testThrowsIOExceptionWhenPositionIsSetToANegativeValue() throws Exception {
         try (SeekableByteChannel c = new ByteArraySeekableByteChannel()) {
             assertThrows(IllegalArgumentException.class, () -> c.position(-1));
+        }
+    }
+
+    @Test
+    void testThrowWhenSettingIncorrectPosition() throws IOException {
+        try (ByteArraySeekableByteChannel c = new ByteArraySeekableByteChannel()) {
+            final ByteBuffer buffer = ByteBuffer.allocate(1);
+            // write
+            c.write(buffer);
+            assertEquals(1, c.position());
+            // bad pos A
+            c.position(c.size() + 1);
+            assertEquals(c.size() + 1, c.position());
+            assertEquals(-1, c.read(buffer));
+            // bad pos B
+            c.position(Integer.MAX_VALUE + 1L);
+            assertEquals(Integer.MAX_VALUE + 1L, c.position());
+            assertEquals(-1, c.read(buffer));
+            assertThrows(IOException.class, () -> c.write(buffer));
+            // negative input is the only illegal input
+            assertThrows(IllegalArgumentException.class, () -> c.position(-1));
+            assertThrows(IllegalArgumentException.class, () -> c.position(Integer.MIN_VALUE));
+            assertThrows(IllegalArgumentException.class, () -> c.position(Long.MIN_VALUE));
+        }
+    }
+
+    @Test
+    void testThrowWhenTruncatingToIncorrectSize() throws IOException {
+        try (ByteArraySeekableByteChannel c = new ByteArraySeekableByteChannel()) {
+            final ByteBuffer buffer = ByteBuffer.allocate(1);
+            c.truncate(c.size() + 1);
+            assertEquals(-1, c.read(buffer));
+            c.truncate(Integer.MAX_VALUE + 1L);
+            assertEquals(-1, c.read(buffer));
+            assertThrows(IllegalArgumentException.class, () -> c.truncate(-1));
+            assertThrows(IllegalArgumentException.class, () -> c.truncate(Integer.MIN_VALUE));
+            assertThrows(IllegalArgumentException.class, () -> c.truncate(Long.MIN_VALUE));
         }
     }
 
