@@ -198,10 +198,7 @@ public final class BufferedFileChannelInputStream extends InputStream {
 
     @Override
     public synchronized int available() throws IOException {
-        if (!fileChannel.isOpen()) {
-            return 0;
-        }
-        if (!refill()) {
+        if (!fileChannel.isOpen() || !refill()) {
             return 0;
         }
         return byteBuffer.remaining();

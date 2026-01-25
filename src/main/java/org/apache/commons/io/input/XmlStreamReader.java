@@ -795,11 +795,7 @@ public class XmlStreamReader extends Reader {
 
         // BOM is UTF-8
         if (bomEnc.equals(UTF_8)) {
-            if (xmlGuessEnc != null && !xmlGuessEnc.equals(UTF_8)) {
-                final String msg = MessageFormat.format(RAW_EX_1, bomEnc, xmlGuessEnc, xmlEnc);
-                throw new XmlStreamReaderException(msg, bomEnc, xmlGuessEnc, xmlEnc);
-            }
-            if (xmlEnc != null && !xmlEnc.equals(UTF_8)) {
+            if (xmlGuessEnc != null && !xmlGuessEnc.equals(UTF_8) || xmlEnc != null && !xmlEnc.equals(UTF_8)) {
                 final String msg = MessageFormat.format(RAW_EX_1, bomEnc, xmlGuessEnc, xmlEnc);
                 throw new XmlStreamReaderException(msg, bomEnc, xmlGuessEnc, xmlEnc);
             }

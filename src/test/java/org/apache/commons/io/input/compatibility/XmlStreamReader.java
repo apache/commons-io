@@ -612,12 +612,7 @@ public class XmlStreamReader extends Reader {
                 encoding = xmlEnc;
             }
         } else if (bomEnc.equals(UTF_8)) {
-            if (xmlGuessEnc != null && !xmlGuessEnc.equals(UTF_8)) {
-                throw new XmlStreamReaderException(RAW_EX_1
-                        .format(new Object[] { bomEnc, xmlGuessEnc, xmlEnc }),
-                        bomEnc, xmlGuessEnc, xmlEnc, is);
-            }
-            if (xmlEnc != null && !xmlEnc.equals(UTF_8)) {
+            if (xmlGuessEnc != null && !xmlGuessEnc.equals(UTF_8) || xmlEnc != null && !xmlEnc.equals(UTF_8)) {
                 throw new XmlStreamReaderException(RAW_EX_1
                         .format(new Object[] { bomEnc, xmlGuessEnc, xmlEnc }),
                         bomEnc, xmlGuessEnc, xmlEnc, is);
