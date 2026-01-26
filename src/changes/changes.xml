@@ -52,7 +52,7 @@ The <action> type attribute can be add,update,fix,remove.
       <action type="fix" dev="ggregory" due-to="Gary Gregory">Fix malformed Javadoc comments.</action>
       <action type="fix" dev="ggregory" due-to="Stanislav Fort, Gary Gregory">ReadAheadInputStream.close() doesn't always close its filtered input stream.</action>
       <!-- ADD -->
-      <action type="add" dev="ggregory" due-to="Gary Gregory">Add and use IOUtils.closeQuietlyAdd(Closeable, Throwable) #818.</action>
+      <action type="add" dev="ggregory" due-to="Gary Gregory, Piotr P. Karwasz">Add and use IOUtils.closeQuietlySuppress(Closeable, Throwable) #818.</action>
       <!-- UPDATE -->
       <action type="update" dev="ggregory"             due-to="Gary Gregory, Dependabot">Bump org.apache.commons:commons-parent from 91 to 96 #816.</action>
       <action type="update" dev="ggregory"             due-to="Gary Gregory, Dependabot">Bump commons-codec:commons-codec from 1.19.0 to 1.20.0 #812.</action>

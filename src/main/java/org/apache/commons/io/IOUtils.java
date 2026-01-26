@@ -1180,7 +1180,7 @@ public class IOUtils {
      * @since 2.22.0
      * @see Throwable#addSuppressed(Throwable)
      */
-    public static <T extends Throwable> T closeQuietlyAdd(final Closeable closeable, final T throwable) {
+    public static <T extends Throwable> T closeQuietlySuppress(final Closeable closeable, final T throwable) {
         closeQuietly(closeable, (Consumer<Exception>) throwable::addSuppressed);
         return throwable;
     }
