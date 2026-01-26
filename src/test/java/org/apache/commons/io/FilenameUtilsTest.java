@@ -70,7 +70,7 @@ class FilenameUtilsTest {
                     + " as the parent directory does not exist");
         }
         try (BufferedOutputStream output3 =
-                     new BufferedOutputStream(Files.newOutputStream(testFile1))) {
+                new BufferedOutputStream(Files.newOutputStream(testFile1))) {
             TestUtils.generateTestData(output3, testFile1Size);
         }
         if (!Files.exists(testFile2.getParent())) {
@@ -78,7 +78,7 @@ class FilenameUtilsTest {
                     + " as the parent directory does not exist");
         }
         try (BufferedOutputStream output2 =
-                     new BufferedOutputStream(Files.newOutputStream(testFile2))) {
+                new BufferedOutputStream(Files.newOutputStream(testFile2))) {
             TestUtils.generateTestData(output2, testFile2Size);
         }
         if (!Files.exists(testFile1.getParent())) {
@@ -86,7 +86,7 @@ class FilenameUtilsTest {
                     + " as the parent directory does not exist");
         }
         try (BufferedOutputStream output1 =
-                     new BufferedOutputStream(Files.newOutputStream(testFile1))) {
+                new BufferedOutputStream(Files.newOutputStream(testFile1))) {
             TestUtils.generateTestData(output1, testFile1Size);
         }
         if (!Files.exists(testFile2.getParent())) {
@@ -94,7 +94,7 @@ class FilenameUtilsTest {
                     + " as the parent directory does not exist");
         }
         try (BufferedOutputStream output =
-                     new BufferedOutputStream(Files.newOutputStream(testFile2))) {
+                new BufferedOutputStream(Files.newOutputStream(testFile2))) {
             TestUtils.generateTestData(output, testFile2Size);
         }
     }
@@ -274,6 +274,7 @@ class FilenameUtilsTest {
         assertNull(FilenameUtils.getFullPath("1:"));
         assertNull(FilenameUtils.getFullPath("1:a"));
         assertNull(FilenameUtils.getFullPath("///a/b/c.txt"));
+        assertEquals("//a", FilenameUtils.getFullPath("//a"));
 
         assertEquals("", FilenameUtils.getFullPath(""));
 
@@ -286,7 +287,6 @@ class FilenameUtilsTest {
 
         assertEquals("C:/", FilenameUtils.getFullPath("C:/"));
         assertEquals("//server/", FilenameUtils.getFullPath("//server/"));
-        assertEquals("//server", FilenameUtils.getFullPath("//server"));
         assertEquals("~/", FilenameUtils.getFullPath("~"));
         assertEquals("~/", FilenameUtils.getFullPath("~/"));
         assertEquals("~user/", FilenameUtils.getFullPath("~user"));
@@ -407,12 +407,12 @@ class FilenameUtilsTest {
         assertNull(FilenameUtils.getPath("1:"));
         assertNull(FilenameUtils.getPath("1:a"));
         assertNull(FilenameUtils.getPath("///a/b/c.txt"));
+        assertEquals("",FilenameUtils.getPath("//a"));
 
         assertEquals("", FilenameUtils.getPath(""));
         assertEquals("", FilenameUtils.getPath(DRIVE_C));
         assertEquals("", FilenameUtils.getPath("C:/"));
         assertEquals("", FilenameUtils.getPath("//server/"));
-        assertEquals("",FilenameUtils.getPath("//server"));
         assertEquals("", FilenameUtils.getPath("~"));
         assertEquals("", FilenameUtils.getPath("~/"));
         assertEquals("", FilenameUtils.getPath("~user"));
@@ -923,7 +923,7 @@ class FilenameUtilsTest {
         assertEquals(SEP + SEP + "1::" + SEP + "a" + SEP + "b" + SEP + "c.txt", FilenameUtils.normalize("\\\\1::\\a\\b\\c.txt"));
         assertEquals(SEP + SEP + "server.example.org" + SEP + "a" + SEP + "b" + SEP + "c.txt", FilenameUtils.normalize("\\\\server.example.org\\a\\b\\c.txt"));
         assertEquals(SEP + SEP + "server.sub.example.org" + SEP + "a" + SEP + "b" + SEP + "c.txt",
-                FilenameUtils.normalize("\\\\server.sub.example.org\\a\\b\\c.txt"));
+            FilenameUtils.normalize("\\\\server.sub.example.org\\a\\b\\c.txt"));
         assertEquals(SEP + SEP + "server." + SEP + "a" + SEP + "b" + SEP + "c.txt", FilenameUtils.normalize("\\\\server.\\a\\b\\c.txt"));
         assertEquals(SEP + SEP + "1::127.0.0.1" + SEP + "a" + SEP + "b" + SEP + "c.txt", FilenameUtils.normalize("\\\\1::127.0.0.1\\a\\b\\c.txt"));
 
@@ -1211,4 +1211,5 @@ class FilenameUtilsTest {
         assertEquals("\\a\\b\\c", FilenameUtils.separatorsToWindows("/a/b/c"));
         assertEquals("D:\\a\\b\\c", FilenameUtils.separatorsToWindows("D:/a/b/c"));
     }
+
 }

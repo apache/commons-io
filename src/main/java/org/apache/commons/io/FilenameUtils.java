@@ -16,7 +16,6 @@
  */
 package org.apache.commons.io;
 
-import java.io.Console;
 import java.io.File;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -931,7 +930,6 @@ public class FilenameUtils {
         if (!isSeparator(ch0) || !isSeparator(ch1)) {
             return isSeparator(ch0) ? 1 : 0;
         }
-
         // UNC path: //hostname or //hostname/...
         int posUnix = fileName.indexOf(UNIX_NAME_SEPARATOR, 2);
         int posWin = fileName.indexOf(WINDOWS_NAME_SEPARATOR, 2);
@@ -1696,3 +1694,4 @@ public class FilenameUtils {
         // empty
     }
 }
+
