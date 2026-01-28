@@ -78,7 +78,7 @@ class FileFilterTest extends AbstractFilterTest {
             try {
                 TestUtils.sleep(1000);
             } catch (final InterruptedException ie) {
-                // ignore
+                Thread.currentThread().interrupt();
             }
             if (!reference.getParentFile().exists()) {
                 fail("Cannot create file " + reference + " as the parent directory does not exist");
