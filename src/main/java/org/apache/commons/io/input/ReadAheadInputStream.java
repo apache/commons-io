@@ -298,6 +298,7 @@ public class ReadAheadInputStream extends FilterInputStream {
                 executorService.shutdownNow();
                 executorService.awaitTermination(Long.MAX_VALUE, TimeUnit.SECONDS);
             } catch (final InterruptedException e) {
+                Thread.currentThread().interrupt();
                 final InterruptedIOException iio = new InterruptedIOException(e.getMessage());
                 iio.initCause(e);
                 throw iio;
@@ -557,6 +558,7 @@ public class ReadAheadInputStream extends FilterInputStream {
                 asyncReadComplete.await();
             }
         } catch (final InterruptedException e) {
+            Thread.currentThread().interrupt();
             final InterruptedIOException iio = new InterruptedIOException(e.getMessage());
             iio.initCause(e);
             throw iio;
