@@ -76,6 +76,7 @@ public class FileCleaningTracker {
                     }
                     tracker.clear();
                 } catch (final InterruptedException e) {
+                    interrupt();
                     continue;
                 }
             }

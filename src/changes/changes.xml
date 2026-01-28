@@ -53,6 +53,7 @@ The <action> type attribute can be add,update,fix,remove.
       <action type="fix" dev="ggregory" due-to="Stanislav Fort, Gary Gregory">ReadAheadInputStream.close() doesn't always close its filtered input stream.</action>
       <action type="fix" dev="ggregory" due-to="Gary Gregory">ReadAheadInputStream now restores the current thread's interrupt flag when catching InterruptedException.</action>
       <action type="fix" dev="ggregory" due-to="Gary Gregory">FileAlterationMonitor.stop(long) now restores the current thread's interrupt flag when catching InterruptedException.</action>
+      <action type="fix" dev="ggregory" due-to="Gary Gregory">FileCleaningTracker now restores the current thread's interrupt flag when catching InterruptedException.</action>
       <!-- ADD -->
       <action type="add" dev="ggregory" due-to="Gary Gregory, Piotr P. Karwasz">Add and use IOUtils.closeQuietlySuppress(Closeable, Throwable) #818.</action>
       <!-- UPDATE -->
