@@ -149,7 +149,7 @@ public final class FileAlterationMonitor implements Runnable {
             try {
                 ThreadUtils.sleep(Duration.ofMillis(intervalMillis));
             } catch (final InterruptedException ignored) {
-                // ignore
+                Thread.currentThread().interrupt();
             }
         }
     }
