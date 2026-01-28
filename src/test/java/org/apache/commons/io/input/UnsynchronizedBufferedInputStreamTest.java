@@ -134,7 +134,7 @@ class UnsynchronizedBufferedInputStreamTest {
                     try {
                         lock.wait(3000);
                     } catch (final InterruptedException e) {
-                        // Ignore
+                        Thread.currentThread().interrupt();
                     }
                 }
                 return 1;
