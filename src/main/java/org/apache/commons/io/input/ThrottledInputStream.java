@@ -271,6 +271,7 @@ public final class ThrottledInputStream extends CountingInputStream {
             try {
                 TimeUnit.MILLISECONDS.sleep(sleepMillis);
             } catch (final InterruptedException e) {
+                Thread.currentThread().interrupt();
                 throw new InterruptedIOException("Thread aborted");
             }
         }
