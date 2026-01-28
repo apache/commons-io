@@ -40,6 +40,7 @@ class ThreadMonitorTest {
             TestUtils.sleep(1);
             ThreadMonitor.stop(monitor);
         } catch (final InterruptedException e) {
+            Thread.currentThread().interrupt();
             fail("Timed Out", e);
         }
     }
