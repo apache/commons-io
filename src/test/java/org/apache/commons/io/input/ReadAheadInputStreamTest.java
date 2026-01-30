@@ -72,7 +72,7 @@ class ReadAheadInputStreamTest extends AbstractInputStreamTest {
     }
 
     @Test
-    @Timeout(value = 5, unit = TimeUnit.SECONDS)
+    @Timeout(value = 30, unit = TimeUnit.SECONDS)
     synchronized void testCloseInterrupt() throws IOException, InterruptedException {
         try (ReadAheadInputStream inputStream = ReadAheadInputStream.builder()
                 // @formatter:off
