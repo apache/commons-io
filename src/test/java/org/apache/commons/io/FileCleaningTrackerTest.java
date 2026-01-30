@@ -100,7 +100,7 @@ class FileCleaningTrackerTest extends AbstractTempDirTest {
          */
         {
             if (fileCleaningTracker != null) {
-                fileCleaningTracker.q = new ReferenceQueue<>();
+                fileCleaningTracker.refQueue = new ReferenceQueue<>();
                 fileCleaningTracker.trackers.clear();
                 fileCleaningTracker.deleteFailures.clear();
                 fileCleaningTracker.exitWhenFinished = false;

@@ -69,7 +69,7 @@ public class FileCleaningTracker {
             while (!exitWhenFinished || !trackers.isEmpty()) {
                 try {
                     // Wait for a tracker to remove.
-                    final Tracker tracker = (Tracker) q.remove(); // cannot return null
+                    final Tracker tracker = (Tracker) refQueue.remove(); // cannot return null
                     trackers.remove(tracker);
                     if (!tracker.delete()) {
                         deleteFailures.add(tracker.getPath());
@@ -136,7 +136,7 @@ public class FileCleaningTracker {
     /**
      * Queue of {@link Tracker} instances being watched.
      */
-    ReferenceQueue<Object> q = new ReferenceQueue<>();
+    ReferenceQueue<Object> refQueue = new ReferenceQueue<>();
 
     /**
      * Collection of {@link Tracker} instances in existence.
@@ -182,7 +182,7 @@ public class FileCleaningTracker {
             reaper = new Reaper();
             reaper.start();
         }
-        trackers.add(new Tracker(path, deleteStrategy, marker, q));
+        trackers.add(new Tracker(path, deleteStrategy, marker, refQueue));
     }
 
     /**
