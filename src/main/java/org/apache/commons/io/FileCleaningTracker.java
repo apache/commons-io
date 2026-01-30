@@ -28,7 +28,7 @@ import java.util.Objects;
 import java.util.Set;
 
 /**
- * Keeps track of files awaiting deletion, and deletes them when an associated
+ * Tracks files awaiting deletion, and deletes them when an associated
  * marker object is reclaimed by the garbage collector.
  * <p>
  * This utility creates a background thread to handle file deletion.
@@ -76,6 +76,7 @@ public class FileCleaningTracker {
                     }
                     tracker.clear();
                 } catch (final InterruptedException e) {
+                    // interrupted removing from the queue.
                     interrupt();
                     continue;
                 }
@@ -172,9 +173,8 @@ public class FileCleaningTracker {
      * @param deleteStrategy  the strategy to delete the file, null means normal.
      * @throws NullPointerException Thrown if the path is null.
      */
-    private synchronized void addTracker(final String path, final Object marker, final FileDeleteStrategy
-            deleteStrategy) {
-        // synchronized block protects reaper
+    private synchronized void addTracker(final String path, final Object marker, final FileDeleteStrategy deleteStrategy) {
+        // synchronized method guards reaper
         if (exitWhenFinished) {
             throw new IllegalStateException("No new trackers can be added once exitWhenFinished() is called");
         }
@@ -194,6 +194,7 @@ public class FileCleaningTracker {
      * with multiple class loaders (such as an application server), you should be
      * aware that the file cleaner thread will continue running even if the class
      * loader it was started from terminates. This can constitute a memory leak.
+     * </p>
      * <p>
      * For example, suppose that you have developed a web application, which
      * contains the commons-io jar file in your WEB-INF/lib directory. In other
@@ -201,14 +202,16 @@ public class FileCleaningTracker {
      * web application. If the web application is terminated, but the servlet
      * container is still running, then the file cleaner thread will still exist,
      * posing a memory leak.
+     * </p>
      * <p>
      * This method allows the thread to be terminated. Simply call this method
      * in the resource cleanup code, such as
      * {@code javax.servlet.ServletContextListener.contextDestroyed(javax.servlet.ServletContextEvent)}.
      * Once called, no new objects can be tracked by the file cleaner.
+     * </p>
      */
     public synchronized void exitWhenFinished() {
-        // synchronized block protects reaper
+        // synchronized method guards reaper
         exitWhenFinished = true;
         if (reaper != null) {
             synchronized (reaper) {
