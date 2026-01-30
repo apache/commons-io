@@ -106,10 +106,9 @@ public class FileCleaningTracker {
          * @param marker  the marker object used to track the file, not null.
          * @param queue  the queue on to which the tracker will be pushed, not null.
          */
-        Tracker(final String path, final FileDeleteStrategy deleteStrategy, final Object marker,
-                final ReferenceQueue<? super Object> queue) {
+        Tracker(final String path, final FileDeleteStrategy deleteStrategy, final Object marker, final ReferenceQueue<? super Object> queue) {
             super(marker, queue);
-            this.path = path;
+            this.path = Objects.requireNonNull(path, "path");
             this.deleteStrategy = deleteStrategy == null ? FileDeleteStrategy.NORMAL : deleteStrategy;
         }
 
@@ -171,6 +170,7 @@ public class FileCleaningTracker {
      * @param path  the full path to the file to be tracked, not null.
      * @param marker  the marker object used to track the file, not null.
      * @param deleteStrategy  the strategy to delete the file, null means normal.
+     * @throws NullPointerException Thrown if the path is null.
      */
     private synchronized void addTracker(final String path, final Object marker, final FileDeleteStrategy
             deleteStrategy) {
@@ -316,10 +316,9 @@ public class FileCleaningTracker {
      * @param path  the full path to the file to be tracked, not null.
      * @param marker  the marker object used to track the file, not null.
      * @param deleteStrategy  the strategy to delete the file, null means normal.
-     * @throws NullPointerException if the path is null.
+     * @throws NullPointerException Thrown if the path is null.
      */
     public void track(final String path, final Object marker, final FileDeleteStrategy deleteStrategy) {
-        Objects.requireNonNull(path, "path");
         addTracker(path, marker, deleteStrategy);
     }
 
