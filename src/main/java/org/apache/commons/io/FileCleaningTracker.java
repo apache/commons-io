@@ -21,11 +21,11 @@ import java.lang.ref.PhantomReference;
 import java.lang.ref.ReferenceQueue;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * Keeps track of files awaiting deletion, and deletes them when an associated
@@ -140,7 +140,7 @@ public class FileCleaningTracker {
     /**
      * Collection of {@link Tracker} instances in existence.
      */
-    final Collection<Tracker> trackers = Collections.synchronizedSet(new HashSet<>()); // synchronized
+    final Set<Tracker> trackers = Collections.synchronizedSet(new HashSet<>()); // synchronized
 
     /**
      * Collection of File paths that failed to delete.
