@@ -53,7 +53,7 @@ public class FileCleaner {
      * loader it was started from terminates. This can constitute a memory leak.
      * <p>
      * For example, suppose that you have developed a web application, which
-     * contains the commons-io jar file in your WEB-INF/lib directory. In other
+     * contains the Commons IO jar file in your WEB-INF/lib directory. In other
      * words, the FileCleaner class is loaded through the class loader of your
      * web application. If the web application is terminated, but the servlet
      * container is still running, then the file cleaner thread will still exist,
