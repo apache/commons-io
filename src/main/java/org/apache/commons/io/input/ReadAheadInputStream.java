@@ -294,8 +294,7 @@ public class ReadAheadInputStream extends FilterInputStream {
         }
         if (shutdownExecutorService) {
             try {
-                executorService.shutdownNow();
-                executorService.awaitTermination(Long.MAX_VALUE, TimeUnit.SECONDS);
+                shutdownAwait();
             } catch (final InterruptedException e) {
                 Thread.currentThread().interrupt();
                 throw Input.toInterruptedIOException(e);
@@ -462,6 +461,11 @@ public class ReadAheadInputStream extends FilterInputStream {
                 closeUnderlyingInputStreamIfNecessary();
             }
         });
+    }
+
+    boolean shutdownAwait() throws InterruptedException {
+        executorService.shutdownNow();
+        return executorService.awaitTermination(Long.MAX_VALUE, TimeUnit.SECONDS);
     }
 
     private void signalAsyncReadComplete() {

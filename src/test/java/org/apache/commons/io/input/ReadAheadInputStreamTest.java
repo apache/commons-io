@@ -18,17 +18,24 @@
 package org.apache.commons.io.input;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.when;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InterruptedIOException;
 import java.nio.file.StandardOpenOption;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Timeout;
 
 /**
  * Tests {@link ReadAheadInputStream}. This class was ported and adapted from Apache Spark commit 933dc6cb7b3de1d8ccaf73d124d6eb95b947ed19 where it was called
@@ -65,6 +72,22 @@ class ReadAheadInputStreamTest extends AbstractInputStreamTest {
     }
 
     @Test
+    @Timeout(value = 5, unit = TimeUnit.SECONDS)
+    synchronized void testCloseInterrupt() throws IOException, InterruptedException {
+        try (ReadAheadInputStream inputStream = ReadAheadInputStream.builder()
+                // @formatter:off
+                .setPath(InputPath)
+                .get()) {
+                // @formatter:on
+            final ReadAheadInputStream spy = spy(inputStream);
+            when(spy.shutdownAwait()).thenThrow(InterruptedException.class);
+            Thread.currentThread().interrupt();
+            assertInstanceOf(InterruptedException.class, assertThrows(InterruptedIOException.class, spy::close).getCause());
+            assertTrue(Thread.interrupted());
+        }
+    }
+
+    @Test
     void testClosePlusExecutorService() throws IOException {
         final ExecutorService externalExecutor = Executors.newSingleThreadExecutor();
         // We use an outer try-with-resources for only the test fixture instead of combining it with the ReadAheadInputStream allocation.
@@ -82,4 +105,5 @@ class ReadAheadInputStreamTest extends AbstractInputStreamTest {
             }
         }
     }
+
 }
