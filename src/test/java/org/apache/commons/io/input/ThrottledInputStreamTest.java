@@ -18,12 +18,16 @@
 package org.apache.commons.io.input;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InterruptedIOException;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -185,6 +189,22 @@ class ThrottledInputStreamTest extends ProxyInputStreamTest<ThrottledInputStream
         try (ThrottledInputStream inputStream = createFixture()) {
             inputStream.read();
             assertEquals(Duration.ZERO, inputStream.getTotalSleepDuration());
+        }
+    }
+
+    @Test
+    synchronized void testReadInterrupt() throws IOException {
+        try (ThrottledInputStream inputStream = ThrottledInputStream.builder()
+                // @formatter:off
+                .setInputStream(createOriginInputStream())
+                .setMaxBytes(1, ChronoUnit.HOURS)
+                .get()) {
+                // @formatter:on
+            final ThrottledInputStream spy = spy(inputStream);
+            when(spy.getSleepMillis()).thenReturn(1L);
+            Thread.currentThread().interrupt();
+            assertInstanceOf(InterruptedException.class, assertThrows(InterruptedIOException.class, spy::read).getCause());
+            assertTrue(Thread.interrupted());
         }
     }
 

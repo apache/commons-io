@@ -245,21 +245,38 @@ public final class ThrottledInputStream extends CountingInputStream {
         return getByteCount() / elapsedSeconds;
     }
 
-    // package private for testing.
+    /**
+     * Gets the maximum bytes per second.
+     * <p>
+     * Package private for testing.
+     * </p>
+     *
+     * @return The maximum bytes per second.
+     */
     double getMaxBytesPerSecond() {
         return maxBytesPerSecond;
     }
 
-    private long getSleepMillis() {
+    /**
+     * Gets the number of milliseconds to sleep to match to the maximum bytes per second.
+     * <p>
+     * Package private for testing.
+     * </p>
+     *
+     * @return the number of milliseconds to sleep to match to the maximum bytes per second.
+     */
+    long getSleepMillis() {
         return toSleepMillis(getByteCount(), System.currentTimeMillis() - startTime, maxBytesPerSecond);
     }
 
     /**
      * Gets the total duration spent in sleep.
+     * <p>
+     * Package private for testing
+     * </p>
      *
      * @return Duration spent in sleep.
      */
-    // package private for testing
     Duration getTotalSleepDuration() {
         return totalSleepDuration;
     }
@@ -272,7 +289,7 @@ public final class ThrottledInputStream extends CountingInputStream {
                 TimeUnit.MILLISECONDS.sleep(sleepMillis);
             } catch (final InterruptedException e) {
                 Thread.currentThread().interrupt();
-                throw new InterruptedIOException("Thread aborted");
+                throw Input.toInterruptedIOException(e);
             }
         }
     }
