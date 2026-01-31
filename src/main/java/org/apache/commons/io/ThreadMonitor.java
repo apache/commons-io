@@ -60,7 +60,7 @@ final class ThreadMonitor implements Runnable {
         if (timeout.isZero() || timeout.isNegative()) {
             return null;
         }
-        final Thread monitor = new Thread(new ThreadMonitor(thread, timeout), ThreadMonitor.class.getSimpleName());
+        final Thread monitor = new Thread(new ThreadMonitor(thread, timeout), "commons-io-ThreadMonitor");
         monitor.setDaemon(true);
         monitor.start();
         return monitor;
