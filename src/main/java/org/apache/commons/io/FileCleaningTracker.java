@@ -54,7 +54,7 @@ public class FileCleaningTracker {
 
         /** Constructs a new Reaper */
         Reaper() {
-            super("File Reaper");
+            super("commons-io-FileCleaningTracker-Reaper");
             setPriority(MAX_PRIORITY);
             setDaemon(true);
         }
