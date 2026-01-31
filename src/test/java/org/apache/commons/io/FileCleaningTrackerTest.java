@@ -54,6 +54,11 @@ class FileCleaningTrackerTest extends AbstractTempDirTest {
         return RandomAccessFileMode.READ_WRITE.create(testFile);
     }
 
+    private void gcFinalize() {
+        System.gc();
+        System.runFinalization();
+    }
+
     protected FileCleaningTracker newInstance() {
         return new FileCleaningTracker();
     }
@@ -278,18 +283,18 @@ class FileCleaningTrackerTest extends AbstractTempDirTest {
         final String path = testFile.getPath();
 
         assertFalse(testFile.exists());
-        RandomAccessFile r = createRandomAccessFile();
+        RandomAccessFile raf = createRandomAccessFile();
         assertTrue(testFile.exists());
 
         assertEquals(0, fileCleaningTracker.getTrackCount());
-        fileCleaningTracker.track(path, r);
+        fileCleaningTracker.track(path, raf);
         assertEquals(1, fileCleaningTracker.getTrackCount());
         assertFalse(fileCleaningTracker.exitWhenFinished);
         assertTrue(fileCleaningTracker.reaper.isAlive());
 
-        r.close();
+        raf.close();
         testFile = null;
-        r = null;
+        raf = null;
 
         waitUntilTrackCount0();
         pauseForDeleteToComplete(new File(path));
@@ -306,6 +311,7 @@ class FileCleaningTrackerTest extends AbstractTempDirTest {
         }
         assertTrue(fileCleaningTracker.exitWhenFinished);
         assertFalse(fileCleaningTracker.reaper.isAlive());
+        assertFalse(Files.exists(Paths.get(path)));
     }
 
     @Test
@@ -344,6 +350,7 @@ class FileCleaningTrackerTest extends AbstractTempDirTest {
         assertEquals(0, fileCleaningTracker.getTrackCount());
         assertFalse(new File(path).exists(), showFailures());
     }
+
     @Test
     void testFileCleanerNull() {
         assertThrows(NullPointerException.class, () -> fileCleaningTracker.track((File) null, new Object()));
@@ -351,6 +358,7 @@ class FileCleaningTrackerTest extends AbstractTempDirTest {
         assertThrows(NullPointerException.class, () -> fileCleaningTracker.track((String) null, new Object()));
         assertThrows(NullPointerException.class, () -> fileCleaningTracker.track((String) null, new Object(), FileDeleteStrategy.NORMAL));
     }
+
 
     private void waitUntilTrackCount0() throws Exception {
         System.gc();
@@ -368,11 +376,11 @@ class FileCleaningTrackerTest extends AbstractTempDirTest {
             } catch (final Throwable ignored) {
             }
             list = null;
-            System.gc();
+            gcFinalize();
             TestUtils.sleep(1000);
         }
         if (fileCleaningTracker.getTrackCount() != 0) {
             throw new IllegalStateException("Your JVM is not releasing References, try running the test with less memory (-Xmx)");
         }
     }
-}
+    }
