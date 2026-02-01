@@ -2773,7 +2773,9 @@ public class IOUtils {
      * <li>It has network timeout associated.</li>
      * </ul>
      * <p>
-     * It can be used in favor of {@link #toByteArray(InputStream)}, since it avoids unnecessary allocation and copy of byte[].<br>
+     * It can be used in favor of {@link #toByteArray(InputStream)}, since it avoids unnecessary allocation and copy of byte[].
+     * </p>
+     * <p>
      * This method buffers the input internally, so there is no need to use a {@link BufferedInputStream}.
      * </p>
      *
@@ -2797,7 +2799,9 @@ public class IOUtils {
      * <li>It has network timeout associated.</li>
      * </ul>
      * <p>
-     * It can be used in favor of {@link #toByteArray(InputStream)}, since it avoids unnecessary allocation and copy of byte[].<br>
+     * It can be used in favor of {@link #toByteArray(InputStream)}, since it avoids unnecessary allocation and copy of byte[].
+     * </p>
+     * <p>
      * This method buffers the input internally, so there is no need to use a {@link BufferedInputStream}.
      * </p>
      *

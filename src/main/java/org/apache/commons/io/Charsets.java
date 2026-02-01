@@ -34,21 +34,38 @@ import java.util.TreeMap;
  * documentation for your implementation to see if any other encodings are supported. </cite>
  * </p>
  *
- * <ul>
- * <li>{@code US-ASCII}<br>
- * Seven-bit ASCII, a.k.a. ISO646-US, a.k.a. the Basic Latin block of the Unicode character set.</li>
- * <li>{@code ISO-8859-1}<br>
- * ISO Latin Alphabet No. 1, a.k.a. ISO-LATIN-1.</li>
- * <li>{@code UTF-8}<br>
- * Eight-bit Unicode Transformation Format.</li>
- * <li>{@code UTF-16BE}<br>
- * Sixteen-bit Unicode Transformation Format, big-endian byte order.</li>
- * <li>{@code UTF-16LE}<br>
- * Sixteen-bit Unicode Transformation Format, little-endian byte order.</li>
- * <li>{@code UTF-16}<br>
- * Sixteen-bit Unicode Transformation Format, byte order specified by a mandatory initial byte-order mark (either order
- * accepted on input, big-endian used on output.)</li>
- * </ul>
+ * <table>
+ * <caption>Standard Charsets</caption>
+ * <tr>
+ * <th>Charset</th>
+ * <th>Description</th>
+ * </tr>
+ * <tr>
+ * <td style="white-space: nowrap">{@code US-ASCII}</td>
+ * <td>Seven-bit ASCII, a.k.a. ISO646-US, a.k.a. the Basic Latin block of the Unicode character set.</td>
+ * </tr>
+ * <tr>
+ * <td style="white-space: nowrap">{@code ISO-8859-1}</td>
+ * <td>ISO Latin Alphabet No. 1, a.k.a. ISO-LATIN-1.</td>
+ * </tr>
+ * <tr>
+ * <td style="white-space: nowrap">{@code UTF-8}</td>
+ * <td>Eight-bit Unicode Transformation Format.</td>
+ * </tr>
+ * <tr>
+ * <td style="white-space: nowrap">{@code UTF-16BE}</td>
+ * <td>Sixteen-bit Unicode Transformation Format, big-endian byte order.</td>
+ * </tr>
+ * <tr>
+ * <td style="white-space: nowrap">{@code UTF-16LE}</td>
+ * <td>Sixteen-bit Unicode Transformation Format, little-endian byte order.</td>
+ * </tr>
+ * <tr>
+ * <td style="white-space: nowrap">{@code UTF-16}</td>
+ * <td>Sixteen-bit Unicode Transformation Format, byte order specified by a mandatory initial byte-order mark (either order
+ * accepted on input, big-endian used on output.)</td>
+ * </tr>
+ * </table>
  *
  * @see <a href="https://docs.oracle.com/javase/8/docs/api/java/nio/charset/Charset.html">Standard charsets</a>
  * @since 2.3
@@ -80,7 +97,7 @@ public class Charsets {
      * </p>
      *
      * @see <a href="https://docs.oracle.com/javase/8/docs/api/java/nio/charset/Charset.html">Standard charsets</a>
-     * @deprecated Use Java 7's {@link java.nio.charset.StandardCharsets}
+     * @deprecated Use {@link java.nio.charset.StandardCharsets#ISO_8859_1}.
      */
     @Deprecated
     public static final Charset ISO_8859_1 = StandardCharsets.ISO_8859_1;
@@ -94,7 +111,7 @@ public class Charsets {
      * </p>
      *
      * @see <a href="https://docs.oracle.com/javase/8/docs/api/java/nio/charset/Charset.html">Standard charsets</a>
-     * @deprecated Use Java 7's {@link java.nio.charset.StandardCharsets}
+     * @deprecated Use {@link java.nio.charset.StandardCharsets#US_ASCII}.
      */
     @Deprecated
     public static final Charset US_ASCII = StandardCharsets.US_ASCII;
@@ -109,7 +126,7 @@ public class Charsets {
      * </p>
      *
      * @see <a href="https://docs.oracle.com/javase/8/docs/api/java/nio/charset/Charset.html">Standard charsets</a>
-     * @deprecated Use Java 7's {@link java.nio.charset.StandardCharsets}
+     * @deprecated Use {@link java.nio.charset.StandardCharsets#UTF_16}.
      */
     @Deprecated
     public static final Charset UTF_16 = StandardCharsets.UTF_16;
@@ -123,7 +140,7 @@ public class Charsets {
      * </p>
      *
      * @see <a href="https://docs.oracle.com/javase/8/docs/api/java/nio/charset/Charset.html">Standard charsets</a>
-     * @deprecated Use Java 7's {@link java.nio.charset.StandardCharsets}
+     * @deprecated Use {@link java.nio.charset.StandardCharsets#UTF_16BE}.
      */
     @Deprecated
     public static final Charset UTF_16BE = StandardCharsets.UTF_16BE;
@@ -137,7 +154,7 @@ public class Charsets {
      * </p>
      *
      * @see <a href="https://docs.oracle.com/javase/8/docs/api/java/nio/charset/Charset.html">Standard charsets</a>
-     * @deprecated Use Java 7's {@link java.nio.charset.StandardCharsets}
+     * @deprecated Use {@link java.nio.charset.StandardCharsets#UTF_16LE}.
      */
     @Deprecated
     public static final Charset UTF_16LE = StandardCharsets.UTF_16LE;
@@ -151,7 +168,7 @@ public class Charsets {
      * </p>
      *
      * @see <a href="https://docs.oracle.com/javase/8/docs/api/java/nio/charset/Charset.html">Standard charsets</a>
-     * @deprecated Use Java 7's {@link java.nio.charset.StandardCharsets}
+     * @deprecated Use {@link java.nio.charset.StandardCharsets#UTF_8}.
      */
     @Deprecated
     public static final Charset UTF_8 = StandardCharsets.UTF_8;
