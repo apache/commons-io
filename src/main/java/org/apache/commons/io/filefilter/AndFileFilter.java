@@ -29,7 +29,7 @@ import java.util.Objects;
 import java.util.stream.Stream;
 
 /**
- * A {@link FileFilter} providing conditional AND logic across a list of
+ * A {@link ConditionalFileFilter} providing conditional AND logic across a list of
  * file filters. This filter returns {@code true} if all filters in the
  * list return {@code true}. Otherwise, it returns {@code false}.
  * Checking of the file filter list stops when the first filter returns
