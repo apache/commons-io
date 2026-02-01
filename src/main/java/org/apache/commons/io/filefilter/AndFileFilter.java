@@ -17,7 +17,6 @@
 package org.apache.commons.io.filefilter;
 
 import java.io.File;
-import java.io.FileFilter;
 import java.io.Serializable;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Path;
