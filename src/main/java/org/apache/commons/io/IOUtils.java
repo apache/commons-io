@@ -1162,11 +1162,10 @@ public class IOUtils {
      * <pre>
      * Closeable closeable = ...;
      * try {
-     *     // process closeable
-     *     closeable.close();
+     *     // process closeable.
      * } catch (Exception e) {
-     *     // error handling
-     *     throw IOUtils.closeQuietly(closeable, e);
+     *     // Handle exception.
+     *     throw IOUtils.closeQuietlySuppress(closeable, e);
      * }
      * </pre>
      * <p>
