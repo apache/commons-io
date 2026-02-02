@@ -937,13 +937,12 @@ public class FilenameUtils {
         if (posUnix == 2 || posWin == 2) {
             return NOT_FOUND;
         }
-        int pos;
-        String hostnamePart;
-        if(posUnix == NOT_FOUND && posWin == NOT_FOUND){
+        final int pos;
+        final String hostnamePart;
+        if (posUnix == NOT_FOUND && posWin == NOT_FOUND) {
             pos = fileName.length();
             hostnamePart = fileName.substring(2);
-        }
-        else{
+        } else {
             posUnix = posUnix == NOT_FOUND ? posWin : posUnix;
             posWin = posWin == NOT_FOUND ? posUnix : posWin;
             pos = Math.min(posUnix, posWin) + 1;
