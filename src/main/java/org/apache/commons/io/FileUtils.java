@@ -2290,7 +2290,7 @@ public class FileUtils {
             inputStream = Files.newInputStream(file.toPath());
             return IOUtils.lineIterator(inputStream, charsetName);
         } catch (final IOException | RuntimeException ex) {
-            IOUtils.closeQuietlyAdd(inputStream, ex);
+            IOUtils.closeQuietlySuppress(inputStream, ex);
             throw ex;
         }
     }

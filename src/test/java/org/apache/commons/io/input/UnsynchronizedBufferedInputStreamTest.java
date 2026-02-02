@@ -134,7 +134,7 @@ class UnsynchronizedBufferedInputStreamTest {
                     try {
                         lock.wait(3000);
                     } catch (final InterruptedException e) {
-                        // Ignore
+                        Thread.currentThread().interrupt();
                     }
                 }
                 return 1;
@@ -148,7 +148,7 @@ class UnsynchronizedBufferedInputStreamTest {
                 } catch (final Exception e) {
                     // Ignored
                 }
-            });
+            }, "commons-io-UnsynchronizedBufferedInputStream-close");
             thread.start();
             assertThrows(IOException.class, () -> bufin.read(new byte[100], 0, 99), "Should throw IOException");
         }

@@ -260,7 +260,7 @@ public abstract class TestUtils {
         try {
             sleep(millis);
         } catch (final InterruptedException ignored) {
-            // ignore InterruptedException.
+            Thread.currentThread().interrupt();
         }
     }
 

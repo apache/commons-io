@@ -326,7 +326,7 @@ public class QueueInputStreamTest {
                 assertTrue(Thread.currentThread().isInterrupted());
                 result.set(true);
                 latch.countDown();
-            });
+            }, "commons-io-QueueInputStreamTest-testTimeoutInterrupted");
             thread.setDaemon(true);
             thread.start();
 

@@ -207,6 +207,7 @@ class AccumulatorPathVisitorTest {
                 try {
                     ThreadUtils.sleep(Duration.ofMillis(10));
                 } catch (final InterruptedException ignore) {
+                    Thread.currentThread().interrupt();
                     // e.printStackTrace();
                 }
                 return super.visitFile(path, attributes);

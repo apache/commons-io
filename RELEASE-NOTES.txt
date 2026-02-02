@@ -14,7 +14,7 @@ This is a feature and maintenance release. Java 8 or later is required.
 New features
 ------------
 
-o          Add and use IOUtils.closeQuietlyAdd(Closeable, Throwable) #818. Thanks to Gary Gregory. 
+o          Add and use IOUtils.closeQuietlySuppress(Closeable, Throwable) #818. Thanks to Gary Gregory, Piotr P. Karwasz. 
 
 Fixed Bugs
 ----------

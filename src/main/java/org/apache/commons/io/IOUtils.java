@@ -829,8 +829,11 @@ public class IOUtils {
      * Equivalent to {@link Closeable#close()}, except any exceptions will be ignored.
      * <p>
      * This is typically used in finally blocks to ensure that the closeable is closed even if an Exception was thrown before the normal close statement was
-     * reached. <br>
-     * <b>It should not be used to replace the close statement(s) which should be present for the non-exceptional case.</b> <br>
+     * reached.
+     * </p>
+     * <p>
+     * <strong>It should not be used to replace the close statement(s) which should be present for the non-exceptional case.</strong>
+     * </p>
      * It is only intended to simplify tidying up where normal processing has already failed and reporting close failure as well is not necessary or useful.
      * <p>
      * Example code:
@@ -849,7 +852,8 @@ public class IOUtils {
      * }
      * </pre>
      * <p>
-     * Closing all streams: <br>
+     * Closing all streams:
+     * </p>
      *
      * <pre>
      * try {
@@ -1162,11 +1166,10 @@ public class IOUtils {
      * <pre>
      * Closeable closeable = ...;
      * try {
-     *     // process closeable
-     *     closeable.close();
+     *     // process closeable.
      * } catch (Exception e) {
-     *     // error handling
-     *     throw IOUtils.closeQuietly(closeable, e);
+     *     // Handle exception.
+     *     throw IOUtils.closeQuietlySuppress(closeable, e);
      * }
      * </pre>
      * <p>
@@ -1180,8 +1183,8 @@ public class IOUtils {
      * @since 2.22.0
      * @see Throwable#addSuppressed(Throwable)
      */
-    public static <T extends Throwable> T closeQuietlyAdd(final Closeable closeable, final T throwable) {
-        closeQuietly(closeable, (Consumer<Exception>) throwable::addSuppressed);
+    public static <T extends Throwable> T closeQuietlySuppress(final Closeable closeable, final T throwable) {
+        closeQuietly(closeable, throwable::addSuppressed);
         return throwable;
     }
 
@@ -2770,7 +2773,9 @@ public class IOUtils {
      * <li>It has network timeout associated.</li>
      * </ul>
      * <p>
-     * It can be used in favor of {@link #toByteArray(InputStream)}, since it avoids unnecessary allocation and copy of byte[].<br>
+     * It can be used in favor of {@link #toByteArray(InputStream)}, since it avoids unnecessary allocation and copy of byte[].
+     * </p>
+     * <p>
      * This method buffers the input internally, so there is no need to use a {@link BufferedInputStream}.
      * </p>
      *
@@ -2794,7 +2799,9 @@ public class IOUtils {
      * <li>It has network timeout associated.</li>
      * </ul>
      * <p>
-     * It can be used in favor of {@link #toByteArray(InputStream)}, since it avoids unnecessary allocation and copy of byte[].<br>
+     * It can be used in favor of {@link #toByteArray(InputStream)}, since it avoids unnecessary allocation and copy of byte[].
+     * </p>
+     * <p>
      * This method buffers the input internally, so there is no need to use a {@link BufferedInputStream}.
      * </p>
      *

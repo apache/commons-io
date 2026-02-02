@@ -54,6 +54,11 @@ class FileCleaningTrackerTest extends AbstractTempDirTest {
         return RandomAccessFileMode.READ_WRITE.create(testFile);
     }
 
+    private void gcFinalize() {
+        System.gc();
+        System.runFinalization();
+    }
+
     protected FileCleaningTracker newInstance() {
         return new FileCleaningTracker();
     }
@@ -90,32 +95,30 @@ class FileCleaningTrackerTest extends AbstractTempDirTest {
 
     @AfterEach
     public void tearDown() {
-
         // reset file cleaner class, so as not to break other tests
-
         /**
-         * The following block of code can possibly be removed when the deprecated {@link FileCleaner} is gone. The
-         * question is, whether we want to support reuse of {@link FileCleaningTracker} instances, which we should, IMO,
-         * not.
+         * The following block of code can possibly be removed when the deprecated {@link FileCleaner} is gone. The question is, whether we want to support
+         * reuse of {@link FileCleaningTracker} instances, which we should, IMO, not.
          */
         {
             if (fileCleaningTracker != null) {
-                fileCleaningTracker.q = new ReferenceQueue<>();
+                if (fileCleaningTracker.reaper != null) {
+                    fileCleaningTracker.reaper.interrupt();
+                }
+                fileCleaningTracker.refQueue = new ReferenceQueue<>();
                 fileCleaningTracker.trackers.clear();
                 fileCleaningTracker.deleteFailures.clear();
                 fileCleaningTracker.exitWhenFinished = false;
                 fileCleaningTracker.reaper = null;
             }
         }
-
         fileCleaningTracker = null;
     }
 
     @Test
     void testFileCleanerDirectory_ForceStrategy_FileSource() throws Exception {
         if (!testFile.getParentFile().exists()) {
-            throw new IOException("Cannot create file " + testFile
-                    + " as the parent directory does not exist");
+            throw new IOException("Cannot create file " + testFile + " as the parent directory does not exist");
         }
         try (BufferedOutputStream output =
                 new BufferedOutputStream(Files.newOutputStream(testFile.toPath()))) {
@@ -131,7 +134,7 @@ class FileCleaningTrackerTest extends AbstractTempDirTest {
 
         obj = null;
 
-        waitUntilTrackCount();
+        waitUntilTrackCount0();
         pauseForDeleteToComplete(testFile.getParentFile());
 
         assertEquals(0, fileCleaningTracker.getTrackCount());
@@ -142,8 +145,7 @@ class FileCleaningTrackerTest extends AbstractTempDirTest {
     @Test
     void testFileCleanerDirectory_ForceStrategy_PathSource() throws Exception {
         if (!Files.exists(testPath.getParent())) {
-            throw new IOException("Cannot create file " + testPath
-                    + " as the parent directory does not exist");
+            throw new IOException("Cannot create file " + testPath + " as the parent directory does not exist");
         }
         try (BufferedOutputStream output =
                 new BufferedOutputStream(Files.newOutputStream(testPath))) {
@@ -159,7 +161,7 @@ class FileCleaningTrackerTest extends AbstractTempDirTest {
 
         obj = null;
 
-        waitUntilTrackCount();
+        waitUntilTrackCount0();
         pauseForDeleteToComplete(testPath.getParent());
 
         assertEquals(0, fileCleaningTracker.getTrackCount());
@@ -180,7 +182,7 @@ class FileCleaningTrackerTest extends AbstractTempDirTest {
 
         obj = null;
 
-        waitUntilTrackCount();
+        waitUntilTrackCount0();
 
         assertEquals(0, fileCleaningTracker.getTrackCount());
         assertTrue(testFile.exists());  // not deleted, as dir not empty
@@ -200,7 +202,7 @@ class FileCleaningTrackerTest extends AbstractTempDirTest {
 
         obj = null;
 
-        waitUntilTrackCount();
+        waitUntilTrackCount0();
 
         assertEquals(0, fileCleaningTracker.getTrackCount());
         assertTrue(testFile.exists());  // not deleted, as dir not empty
@@ -220,7 +222,7 @@ class FileCleaningTrackerTest extends AbstractTempDirTest {
 
         obj = null;
 
-        waitUntilTrackCount();
+        waitUntilTrackCount0();
 
         assertEquals(0, fileCleaningTracker.getTrackCount());
         assertTrue(Files.exists(testPath));  // not deleted, as dir not empty
@@ -267,7 +269,7 @@ class FileCleaningTrackerTest extends AbstractTempDirTest {
         testFile = null;
         raf = null;
 
-        waitUntilTrackCount();
+        waitUntilTrackCount0();
         pauseForDeleteToComplete(new File(path));
 
         assertEquals(0, fileCleaningTracker.getTrackCount(), "10-Track Count");
@@ -281,20 +283,20 @@ class FileCleaningTrackerTest extends AbstractTempDirTest {
         final String path = testFile.getPath();
 
         assertFalse(testFile.exists());
-        RandomAccessFile r = createRandomAccessFile();
+        RandomAccessFile raf = createRandomAccessFile();
         assertTrue(testFile.exists());
 
         assertEquals(0, fileCleaningTracker.getTrackCount());
-        fileCleaningTracker.track(path, r);
+        fileCleaningTracker.track(path, raf);
         assertEquals(1, fileCleaningTracker.getTrackCount());
         assertFalse(fileCleaningTracker.exitWhenFinished);
         assertTrue(fileCleaningTracker.reaper.isAlive());
 
-        r.close();
+        raf.close();
         testFile = null;
-        r = null;
+        raf = null;
 
-        waitUntilTrackCount();
+        waitUntilTrackCount0();
         pauseForDeleteToComplete(new File(path));
 
         assertEquals(0, fileCleaningTracker.getTrackCount());
@@ -309,6 +311,7 @@ class FileCleaningTrackerTest extends AbstractTempDirTest {
         }
         assertTrue(fileCleaningTracker.exitWhenFinished);
         assertFalse(fileCleaningTracker.reaper.isAlive());
+        assertFalse(Files.exists(Paths.get(path)));
     }
 
     @Test
@@ -318,7 +321,7 @@ class FileCleaningTrackerTest extends AbstractTempDirTest {
         assertTrue(fileCleaningTracker.exitWhenFinished);
         assertNull(fileCleaningTracker.reaper);
 
-        waitUntilTrackCount();
+        waitUntilTrackCount0();
 
         assertEquals(0, fileCleaningTracker.getTrackCount());
         assertTrue(fileCleaningTracker.exitWhenFinished);
@@ -341,12 +344,13 @@ class FileCleaningTrackerTest extends AbstractTempDirTest {
         testFile = null;
         raf = null;
 
-        waitUntilTrackCount();
+        waitUntilTrackCount0();
         pauseForDeleteToComplete(new File(path));
 
         assertEquals(0, fileCleaningTracker.getTrackCount());
         assertFalse(new File(path).exists(), showFailures());
     }
+
     @Test
     void testFileCleanerNull() {
         assertThrows(NullPointerException.class, () -> fileCleaningTracker.track((File) null, new Object()));
@@ -355,7 +359,8 @@ class FileCleaningTrackerTest extends AbstractTempDirTest {
         assertThrows(NullPointerException.class, () -> fileCleaningTracker.track((String) null, new Object(), FileDeleteStrategy.NORMAL));
     }
 
-    private void waitUntilTrackCount() throws Exception {
+
+    private void waitUntilTrackCount0() throws Exception {
         System.gc();
         TestUtils.sleep(500);
         int count = 0;
@@ -365,18 +370,17 @@ class FileCleaningTrackerTest extends AbstractTempDirTest {
                 long i = 0;
                 while (fileCleaningTracker.getTrackCount() != 0) {
                     list.add(
-                        "A Big String A Big String A Big String A Big String A Big String A Big String A Big String A Big String A Big String A Big String "
-                            + i++);
+                            "A Big String A Big String A Big String A Big String A Big String A Big String A Big String A Big String A Big String A Big String "
+                                    + i++);
                 }
             } catch (final Throwable ignored) {
             }
             list = null;
-            System.gc();
+            gcFinalize();
             TestUtils.sleep(1000);
         }
         if (fileCleaningTracker.getTrackCount() != 0) {
             throw new IllegalStateException("Your JVM is not releasing References, try running the test with less memory (-Xmx)");
         }
-
     }
-}
+    }

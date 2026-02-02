@@ -18,11 +18,12 @@
 package org.apache.commons.io.input;
 
 import java.io.IOException;
+import java.io.InterruptedIOException;
 
 /**
  * Package-wide internals for input.
  */
-class Input {
+final class Input {
 
     /**
      * Throws an IOException on false input.
@@ -36,4 +37,21 @@ class Input {
         }
     }
 
+    /**
+     * Converts an InterruptedException to an InterruptedIOException.
+     * <p>
+     * The cause of the returned InterruptedIOException is set to the original.
+     * </p>
+     *
+     * @param e The InterruptedException to convert.
+     * @return The converted InterruptedIOException.
+     * @see InterruptedIOException
+     * @see Throwable#initCause(Throwable)
+     * @see Throwable#getCause()
+     */
+    static InterruptedIOException toInterruptedIOException(final InterruptedException e) {
+        final InterruptedIOException iio = new InterruptedIOException(e.getMessage());
+        iio.initCause(e);
+        return iio;
+    }
 }

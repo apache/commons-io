@@ -585,18 +585,6 @@ class IOUtilsTest {
         assertTrue(b.get());
     }
 
-    @SuppressWarnings("resource")
-    @Test
-    void testCloseQuietly_CloseableIOExceptionAddSuppressed() {
-        final Throwable e = new Exception("test").fillInStackTrace();
-        assertEquals(0, e.getSuppressed().length);
-        assertSame(e, IOUtils.closeQuietlyAdd(new BrokenInputStream(new EOFException("Suppressed").fillInStackTrace()), e));
-        assertEquals(1, e.getSuppressed().length);
-        final Throwable suppressed0 = e.getSuppressed()[0];
-        assertInstanceOf(EOFException.class, suppressed0);
-        assertEquals("Suppressed", suppressed0.getMessage());
-    }
-
     @Test
     void testCloseQuietly_Selector() {
         Selector selector = null;
@@ -679,6 +667,18 @@ class IOUtilsTest {
                 }
             });
         });
+    }
+
+    @SuppressWarnings("resource")
+    @Test
+    void testCloseQuietlySuppress_CloseableIOExceptionAddSuppressed() {
+        final Throwable e = new Exception("test").fillInStackTrace();
+        assertEquals(0, e.getSuppressed().length);
+        assertSame(e, IOUtils.closeQuietlySuppress(new BrokenInputStream(new EOFException("Suppressed").fillInStackTrace()), e));
+        assertEquals(1, e.getSuppressed().length);
+        final Throwable suppressed0 = e.getSuppressed()[0];
+        assertInstanceOf(EOFException.class, suppressed0);
+        assertEquals("Suppressed", suppressed0.getMessage());
     }
 
     @Test

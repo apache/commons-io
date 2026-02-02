@@ -24,7 +24,7 @@ import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
 
 /**
- * This filter accepts {@link File}s that can be written to.
+ * This filter accepts {@link File}s that are writable.
  * <p>
  * Example, showing how to print out a list of the current directory's <em>writable</em> files:
  * </p>
@@ -54,6 +54,7 @@ import java.nio.file.attribute.BasicFileAttributes;
  * <em>Serialization is deprecated and will be removed in 3.0.</em>
  * </p>
  *
+ * @see Files#isWritable(Path)
  * @since 1.3
  */
 public class CanWriteFileFilter extends AbstractFileFilter implements Serializable {

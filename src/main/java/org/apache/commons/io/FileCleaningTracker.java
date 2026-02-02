@@ -21,14 +21,14 @@ import java.lang.ref.PhantomReference;
 import java.lang.ref.ReferenceQueue;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 /**
- * Keeps track of files awaiting deletion, and deletes them when an associated
+ * Tracks files awaiting deletion, and deletes them when an associated
  * marker object is reclaimed by the garbage collector.
  * <p>
  * This utility creates a background thread to handle file deletion.
@@ -54,7 +54,7 @@ public class FileCleaningTracker {
 
         /** Constructs a new Reaper */
         Reaper() {
-            super("File Reaper");
+            super("commons-io-FileCleaningTracker-Reaper");
             setPriority(MAX_PRIORITY);
             setDaemon(true);
         }
@@ -66,16 +66,18 @@ public class FileCleaningTracker {
         @Override
         public void run() {
             // thread exits when exitWhenFinished is true and there are no more tracked objects
-            while (!exitWhenFinished || !trackers.isEmpty()) {
+            while (!(exitWhenFinished && trackers.isEmpty())) {
                 try {
                     // Wait for a tracker to remove.
-                    final Tracker tracker = (Tracker) q.remove(); // cannot return null
+                    final Tracker tracker = (Tracker) refQueue.remove(); // cannot return null
                     trackers.remove(tracker);
                     if (!tracker.delete()) {
                         deleteFailures.add(tracker.getPath());
                     }
                     tracker.clear();
                 } catch (final InterruptedException e) {
+                    // interrupted removing from the queue.
+                    interrupt();
                     continue;
                 }
             }
@@ -105,10 +107,9 @@ public class FileCleaningTracker {
          * @param marker  the marker object used to track the file, not null.
          * @param queue  the queue on to which the tracker will be pushed, not null.
          */
-        Tracker(final String path, final FileDeleteStrategy deleteStrategy, final Object marker,
-                final ReferenceQueue<? super Object> queue) {
+        Tracker(final String path, final FileDeleteStrategy deleteStrategy, final Object marker, final ReferenceQueue<? super Object> queue) {
             super(marker, queue);
-            this.path = path;
+            this.path = Objects.requireNonNull(path, "path");
             this.deleteStrategy = deleteStrategy == null ? FileDeleteStrategy.NORMAL : deleteStrategy;
         }
 
@@ -135,12 +136,12 @@ public class FileCleaningTracker {
     /**
      * Queue of {@link Tracker} instances being watched.
      */
-    ReferenceQueue<Object> q = new ReferenceQueue<>();
+    ReferenceQueue<Object> refQueue = new ReferenceQueue<>();
 
     /**
      * Collection of {@link Tracker} instances in existence.
      */
-    final Collection<Tracker> trackers = Collections.synchronizedSet(new HashSet<>()); // synchronized
+    final Set<Tracker> trackers = Collections.synchronizedSet(new HashSet<>()); // synchronized
 
     /**
      * Collection of File paths that failed to delete.
@@ -170,10 +171,10 @@ public class FileCleaningTracker {
      * @param path  the full path to the file to be tracked, not null.
      * @param marker  the marker object used to track the file, not null.
      * @param deleteStrategy  the strategy to delete the file, null means normal.
+     * @throws NullPointerException Thrown if the path is null.
      */
-    private synchronized void addTracker(final String path, final Object marker, final FileDeleteStrategy
-            deleteStrategy) {
-        // synchronized block protects reaper
+    private synchronized void addTracker(final String path, final Object marker, final FileDeleteStrategy deleteStrategy) {
+        // synchronized method guards reaper
         if (exitWhenFinished) {
             throw new IllegalStateException("No new trackers can be added once exitWhenFinished() is called");
         }
@@ -181,7 +182,7 @@ public class FileCleaningTracker {
             reaper = new Reaper();
             reaper.start();
         }
-        trackers.add(new Tracker(path, deleteStrategy, marker, q));
+        trackers.add(new Tracker(path, deleteStrategy, marker, refQueue));
     }
 
     /**
@@ -193,21 +194,24 @@ public class FileCleaningTracker {
      * with multiple class loaders (such as an application server), you should be
      * aware that the file cleaner thread will continue running even if the class
      * loader it was started from terminates. This can constitute a memory leak.
+     * </p>
      * <p>
      * For example, suppose that you have developed a web application, which
-     * contains the commons-io jar file in your WEB-INF/lib directory. In other
+     * contains the Commons IO JAR file in your WEB-INF/lib directory. In other
      * words, the FileCleaner class is loaded through the class loader of your
      * web application. If the web application is terminated, but the servlet
      * container is still running, then the file cleaner thread will still exist,
      * posing a memory leak.
+     * </p>
      * <p>
      * This method allows the thread to be terminated. Simply call this method
      * in the resource cleanup code, such as
      * {@code javax.servlet.ServletContextListener.contextDestroyed(javax.servlet.ServletContextEvent)}.
      * Once called, no new objects can be tracked by the file cleaner.
+     * </p>
      */
     public synchronized void exitWhenFinished() {
-        // synchronized block protects reaper
+        // synchronized method guards reaper
         exitWhenFinished = true;
         if (reaper != null) {
             synchronized (reaper) {
@@ -315,10 +319,9 @@ public class FileCleaningTracker {
      * @param path  the full path to the file to be tracked, not null.
      * @param marker  the marker object used to track the file, not null.
      * @param deleteStrategy  the strategy to delete the file, null means normal.
-     * @throws NullPointerException if the path is null.
+     * @throws NullPointerException Thrown if the path is null.
      */
     public void track(final String path, final Object marker, final FileDeleteStrategy deleteStrategy) {
-        Objects.requireNonNull(path, "path");
         addTracker(path, marker, deleteStrategy);
     }
 

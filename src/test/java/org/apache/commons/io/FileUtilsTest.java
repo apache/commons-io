@@ -1671,7 +1671,7 @@ class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testForceDeleteBrokenSymlink() throws Exception {
+    void testForceDeleteBrokenSymlink() throws Exception {
         final ImmutablePair<Path, Path> pair = createTempSymbolicLinkedRelativeDir();
         final Path symlinkedDir = pair.getLeft();
         final Path targetDir = pair.getRight();
@@ -1765,7 +1765,7 @@ class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testForceDeleteSymlink() throws Exception {
+    void testForceDeleteSymlink() throws Exception {
         final ImmutablePair<Path, Path> pair = createTempSymbolicLinkedRelativeDir();
         final Path symlinkedDir = pair.getLeft();
         final Path targetDir = pair.getRight();
