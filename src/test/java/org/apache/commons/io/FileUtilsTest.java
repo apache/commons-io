@@ -213,9 +213,11 @@ class FileUtilsTest extends AbstractTempDirTest {
 
     /**
      * May throw java.nio.file.FileSystemException: C:\Users\...\FileUtilsTestCase\cycle: A required privilege is not held
-     * by the client. On Windows, you are fine if you run a terminal with admin karma.
+     * by the client. On Windows, you are fine if you run a terminal with aadministrator permissions.
+     *
+     * @return The link path.
      */
-    private void createCircularSymbolicLink(final File file) throws IOException {
+    private Path createCircularSymbolicLink(final File file) throws IOException {
         assertTrue(file.exists());
         final String linkName = file + "/cycle";
         final String targetName = file + "/..";
@@ -226,13 +228,14 @@ class FileUtilsTest extends AbstractTempDirTest {
         assertTrue(Files.exists(targetPath));
         try {
             // May throw java.nio.file.FileSystemException: C:\Users\...\FileUtilsTestCase\cycle: A required privilege is not held by the client.
-            // On Windows, you are fine if you run a terminal with admin karma.
+            // On Windows, you are fine if you run a terminal with administrator permissions.
             Files.createSymbolicLink(linkPath, targetPath);
         } catch (final UnsupportedOperationException e) {
             createCircularOsSymbolicLink(linkName, targetName);
         }
         // Sanity check:
         assertTrue(Files.isSymbolicLink(linkPath), () -> "Expected a symbolic link here: " + linkName);
+        return linkPath;
     }
 
     private void createFilesForTestCopyDirectory(final File grandParentDir, final File parentDir, final File childDir) throws IOException {
@@ -1534,6 +1537,7 @@ class FileUtilsTest extends AbstractTempDirTest {
     void testDeleteDirectorySymbolicLinkAbsentDeepTarget() throws IOException {
         final ImmutablePair<Path, Path> pair = createTempSymbolicLinkedRelativeDir();
         final Path symLinkedDir = pair.getLeft();
+        assertNotNull(symLinkedDir);
         final Path targetDir = pair.getRight();
         // more setup
         final Path targetDir2 = targetDir.resolve("subdir2");
@@ -2979,8 +2983,13 @@ class FileUtilsTest extends AbstractTempDirTest {
         assertDelete(true, file);
         assertMkdir(true, file);
         // Create a cyclic symlink
-        createCircularSymbolicLink(file);
-        assertEquals(TEST_DIRECTORY_SIZE, FileUtils.sizeOfDirectory(file), "Unexpected directory size");
+        final Path linkPath = createCircularSymbolicLink(file);
+        try {
+            assertEquals(TEST_DIRECTORY_SIZE, FileUtils.sizeOfDirectory(file), "Unexpected directory size");
+        } finally {
+            Files.deleteIfExists(linkPath);
+            assertDelete(true, file);
+        }
     }
 
     /**
@@ -3002,21 +3011,26 @@ class FileUtilsTest extends AbstractTempDirTest {
         assertThrows(IllegalArgumentException.class, () -> FileUtils.sizeOfDirectoryAsBigInteger(file));
         assertDelete(true, file);
         assertMkdir(true, file);
-        createCircularSymbolicLink(file);
-        assertEquals(TEST_DIRECTORY_SIZE_BI, FileUtils.sizeOfDirectoryAsBigInteger(file), "Unexpected directory size");
-        assertDelete(false, file);
-        assertMkdir(false, file);
-        final File nonEmptyFile = new File(file, "non-emptyFile" + System.nanoTime());
-        assertTrue(nonEmptyFile.getParentFile().exists(), () -> "Cannot create file " + nonEmptyFile + " as the parent directory does not exist");
-        final OutputStream output = new BufferedOutputStream(Files.newOutputStream(nonEmptyFile.toPath()));
+        final Path linkPath = createCircularSymbolicLink(file);
         try {
-            TestUtils.generateTestData(output, TEST_DIRECTORY_SIZE_GT_ZERO_BI.longValue());
+            assertEquals(TEST_DIRECTORY_SIZE_BI, FileUtils.sizeOfDirectoryAsBigInteger(file), "Unexpected directory size");
+            assertDelete(false, file);
+            assertMkdir(false, file);
+            final File nonEmptyFile = new File(file, "non-emptyFile" + System.nanoTime());
+            assertTrue(nonEmptyFile.getParentFile().exists(), () -> "Cannot create file " + nonEmptyFile + " as the parent directory does not exist");
+            final OutputStream output = new BufferedOutputStream(Files.newOutputStream(nonEmptyFile.toPath()));
+            try {
+                TestUtils.generateTestData(output, TEST_DIRECTORY_SIZE_GT_ZERO_BI.longValue());
+            } finally {
+                IOUtils.closeQuietly(output);
+            }
+            assertEquals(TEST_DIRECTORY_SIZE_GT_ZERO_BI, FileUtils.sizeOfDirectoryAsBigInteger(file), "Unexpected directory size");
+            assertDelete(true, nonEmptyFile);
+            assertDelete(false, file);
         } finally {
-            IOUtils.closeQuietly(output);
+            Files.deleteIfExists(linkPath);
+            assertDelete(true, file);
         }
-        assertEquals(TEST_DIRECTORY_SIZE_GT_ZERO_BI, FileUtils.sizeOfDirectoryAsBigInteger(file), "Unexpected directory size");
-        assertDelete(true, nonEmptyFile);
-        assertDelete(false, file);
     }
 
     @Test
