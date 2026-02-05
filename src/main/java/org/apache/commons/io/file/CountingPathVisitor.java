@@ -311,7 +311,14 @@ public class CountingPathVisitor extends SimplePathVisitor {
      */
     protected void updateFileCounters(final Path file, final BasicFileAttributes attributes) {
         pathCounters.getFileCounter().increment();
-        pathCounters.getByteCounter().add(attributes.size());
+        // According to the JavaDoc, BasicFileAttributes.size() is only well-defined for regular files.
+        // For symbolic links on Linux for example, it counts the # (charset dependent?) bytes in the inode name, which is NOT what we want to count here.
+        // Intuitively, the appropriate check would be Files.isRegularFile.
+        // However, for symbolic links, isRegularFile returns true under a "follow links" regime.
+        // That would still not give us what we want, so instead we settle for a !Files.isSymbolicLink check.
+        if (!Files.isSymbolicLink(file)) {
+            pathCounters.getByteCounter().add(attributes.size());
+        }
     }
 
     @Override
