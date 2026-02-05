@@ -84,9 +84,7 @@ public class BoundedReader extends Reader {
     @Override
     public void mark(final int readAheadLimit) throws IOException {
         this.readAheadLimit = readAheadLimit - charsRead;
-
         markedAt = charsRead;
-
         target.mark(readAheadLimit);
     }
 
@@ -99,12 +97,7 @@ public class BoundedReader extends Reader {
      */
     @Override
     public int read() throws IOException {
-
-        if (charsRead >= maxCharsFromTargetReader) {
-            return EOF;
-        }
-
-        if (markedAt >= 0 && charsRead - markedAt >= readAheadLimit) {
+        if (charsRead >= maxCharsFromTargetReader || markedAt >= 0 && charsRead - markedAt >= readAheadLimit) {
             return EOF;
         }
         charsRead++;

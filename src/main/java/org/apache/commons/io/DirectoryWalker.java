@@ -265,6 +265,7 @@ public abstract class DirectoryWalker<T> {
 
         /** The file being processed when the exception was thrown. */
         private final File file;
+
         /** The file depth when the exception was thrown. */
         private final int depth;
 
@@ -312,6 +313,7 @@ public abstract class DirectoryWalker<T> {
             return file;
         }
     }
+
     /**
      * The file filter to use to filter files and directories.
      */

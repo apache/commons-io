@@ -91,10 +91,7 @@ public final class FileChannels {
                 Thread.yield();
                 continue;
             }
-            if (c1NumRead != c2NumRead) {
-                return false;
-            }
-            if (!c1Buffer.equals(c2Buffer)) {
+            if (c1NumRead != c2NumRead || !c1Buffer.equals(c2Buffer)) {
                 return false;
             }
         }

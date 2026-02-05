@@ -135,7 +135,7 @@ public class LineIterator implements Iterator<String>, Closeable {
                 }
             }
         } catch (final IOException ioe) {
-            throw new IllegalStateException(IOUtils.closeQuietly(this, ioe));
+            throw new IllegalStateException(IOUtils.closeQuietlySuppress(this, ioe));
         }
     }
 

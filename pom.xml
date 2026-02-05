@@ -19,7 +19,7 @@
   <parent>
     <groupId>org.apache.commons</groupId>
     <artifactId>commons-parent</artifactId>
-    <version>93</version>
+    <version>96</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>commons-io</groupId>
@@ -85,7 +85,7 @@ file comparators, endian transformation classes, and much more.
     <dependency>
       <groupId>commons-codec</groupId>
       <artifactId>commons-codec</artifactId>
-      <version>1.20.0</version>
+      <version>1.21.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -100,7 +100,7 @@ file comparators, endian transformation classes, and much more.
     <maven.compiler.target>1.8</maven.compiler.target>
     <commons.componentid>io</commons.componentid>
     <commons.module.name>org.apache.commons.io</commons.module.name>
-    <commons.rc.version>RC1</commons.rc.version>
+    <commons.rc.version>RC2</commons.rc.version>
     <commons.bc.version>2.21.0</commons.bc.version>
     <commons.release.version>2.22.0</commons.release.version>
     <commons.release.next>2.22.1</commons.release.next>
@@ -132,7 +132,7 @@ file comparators, endian transformation classes, and much more.
     </commons.osgi.import>
     <commons.scmPubUrl>https://svn.apache.org/repos/infra/websites/production/commons/content/proper/commons-io/</commons.scmPubUrl>
     <commons.scmPubCheckoutDirectory>site-content</commons.scmPubCheckoutDirectory>
-    <commons.bytebuddy.version>1.18.3</commons.bytebuddy.version>
+    <commons.bytebuddy.version>1.18.4</commons.bytebuddy.version>
     <japicmp.skip>false</japicmp.skip>
     <commons.release.isDistModule>true</commons.release.isDistModule>
     <!-- JaCoCo: Don't make code coverage worse than: -->

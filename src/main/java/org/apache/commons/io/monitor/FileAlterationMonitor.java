@@ -148,8 +148,8 @@ public final class FileAlterationMonitor implements Runnable {
             }
             try {
                 ThreadUtils.sleep(Duration.ofMillis(intervalMillis));
-            } catch (final InterruptedException ignored) {
-                // ignore
+            } catch (final InterruptedException e) {
+                Thread.currentThread().interrupt();
             }
         }
     }
@@ -179,7 +179,7 @@ public final class FileAlterationMonitor implements Runnable {
         if (threadFactory != null) {
             thread = threadFactory.newThread(this);
         } else {
-            thread = new Thread(this);
+            thread = new Thread(this, "commons-io-FileAlterationMonitor");
         }
         thread.start();
     }

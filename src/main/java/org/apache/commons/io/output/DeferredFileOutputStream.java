@@ -451,8 +451,10 @@ public class DeferredFileOutputStream extends ThresholdingOutputStream {
 
     /**
      * Converts the current contents of this byte stream to an {@link InputStream}. If the data for this output stream has been retained in memory, the returned
-     * stream is backed by buffers of {@code this} stream, avoiding memory allocation and copy, thus saving space and time.<br>
+     * stream is backed by buffers of {@code this} stream, avoiding memory allocation and copy, thus saving space and time.
+     * <p>
      * Otherwise, the returned stream will be one that is created from the data that has been committed to disk.
+     * </p>
      *
      * @return the current contents of this output stream.
      * @throws IOException if this stream is not yet closed or an error occurs.

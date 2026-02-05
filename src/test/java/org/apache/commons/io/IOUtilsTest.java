@@ -14,6 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.apache.commons.io;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
@@ -74,11 +75,14 @@ import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import org.apache.commons.io.function.IOConsumer;
+import org.apache.commons.io.input.BoundedInputStream;
 import org.apache.commons.io.input.BrokenInputStream;
 import org.apache.commons.io.input.CharSequenceInputStream;
+import org.apache.commons.io.input.ChunkedReader;
 import org.apache.commons.io.input.CircularInputStream;
 import org.apache.commons.io.input.NullInputStream;
 import org.apache.commons.io.input.NullReader;
+import org.apache.commons.io.input.UnsynchronizedByteArrayInputStream;
 import org.apache.commons.io.output.AppendableWriter;
 import org.apache.commons.io.output.BrokenOutputStream;
 import org.apache.commons.io.output.CountingOutputStream;
@@ -88,6 +92,7 @@ import org.apache.commons.io.output.StringBuilderWriter;
 import org.apache.commons.io.output.UnsynchronizedByteArrayOutputStream;
 import org.apache.commons.io.test.TestUtils;
 import org.apache.commons.io.test.ThrowOnCloseReader;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.JavaVersion;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.SystemUtils;
@@ -540,18 +545,6 @@ class IOUtilsTest {
         assertDoesNotThrow(() -> IOUtils.closeQuietly((Iterable<Closeable>) null));
     }
 
-    @SuppressWarnings("resource")
-    @Test
-    void testCloseQuietly_CloseableIOExceptionAddSuppressed() {
-        final Throwable e = new Exception("test").fillInStackTrace();
-        assertEquals(0, e.getSuppressed().length);
-        assertSame(e, IOUtils.closeQuietly(new BrokenInputStream(new EOFException("Suppressed").fillInStackTrace()), e));
-        assertEquals(1, e.getSuppressed().length);
-        final Throwable suppressed0 = e.getSuppressed()[0];
-        assertInstanceOf(EOFException.class, suppressed0);
-        assertEquals("Suppressed", suppressed0.getMessage());
-    }
-
     @Test
     void testCloseQuietly_CloseableException() {
         // IOException
@@ -587,9 +580,11 @@ class IOUtilsTest {
         // RuntimeException subclass
         assertDoesNotThrow(() -> IOUtils.closeQuietly(new BrokenOutputStream(new UnsupportedOperationException()), consumer));
         assertTrue(b.get());
+        // in-line
+        assertDoesNotThrow(() -> IOUtils.closeQuietly(new BrokenOutputStream(new UnsupportedOperationException()), e -> b.set(true)));
+        assertTrue(b.get());
     }
 
-    @SuppressWarnings("squid:S2699") // Suppress "Add at least one assertion to this test case"
     @Test
     void testCloseQuietly_Selector() {
         Selector selector = null;
@@ -599,9 +594,9 @@ class IOUtilsTest {
         } finally {
             IOUtils.closeQuietly(selector);
         }
+        assertFalse(selector.isOpen());
     }
 
-    @SuppressWarnings("squid:S2699") // Suppress "Add at least one assertion to this test case"
     @Test
     void testCloseQuietly_SelectorIOException() {
         final Selector selector = new SelectorAdapter() {
@@ -611,7 +606,8 @@ class IOUtilsTest {
             }
         };
         IOUtils.closeQuietly(selector);
-    }
+        assertFalse(selector.isOpen());
+}
 
     @SuppressWarnings("squid:S2699") // Suppress "Add at least one assertion to this test case"
     @Test
@@ -620,7 +616,6 @@ class IOUtilsTest {
         IOUtils.closeQuietly(selector);
     }
 
-    @SuppressWarnings("squid:S2699") // Suppress "Add at least one assertion to this test case"
     @Test
     void testCloseQuietly_SelectorTwice() {
         Selector selector = null;
@@ -631,12 +626,15 @@ class IOUtilsTest {
             IOUtils.closeQuietly(selector);
             IOUtils.closeQuietly(selector);
         }
+        assertFalse(selector.isOpen());
     }
 
     @Test
-    void testCloseQuietly_ServerSocket() {
+    void testCloseQuietly_ServerSocket() throws IOException {
         assertDoesNotThrow(() -> IOUtils.closeQuietly((ServerSocket) null));
-        assertDoesNotThrow(() -> IOUtils.closeQuietly(new ServerSocket()));
+        final ServerSocket serverSocket = new ServerSocket();
+        IOUtils.closeQuietly(serverSocket);
+        assertTrue(serverSocket.isClosed());
     }
 
     @Test
@@ -654,7 +652,9 @@ class IOUtilsTest {
     @Test
     void testCloseQuietly_Socket() {
         assertDoesNotThrow(() -> IOUtils.closeQuietly((Socket) null));
-        assertDoesNotThrow(() -> IOUtils.closeQuietly(new Socket()));
+        final Socket socket = new Socket();
+        IOUtils.closeQuietly(socket);
+        assertTrue(socket.isClosed());
     }
 
     @Test
@@ -667,6 +667,18 @@ class IOUtilsTest {
                 }
             });
         });
+    }
+
+    @SuppressWarnings("resource")
+    @Test
+    void testCloseQuietlySuppress_CloseableIOExceptionAddSuppressed() {
+        final Throwable e = new Exception("test").fillInStackTrace();
+        assertEquals(0, e.getSuppressed().length);
+        assertSame(e, IOUtils.closeQuietlySuppress(new BrokenInputStream(new EOFException("Suppressed").fillInStackTrace()), e));
+        assertEquals(1, e.getSuppressed().length);
+        final Throwable suppressed0 = e.getSuppressed()[0];
+        assertInstanceOf(EOFException.class, suppressed0);
+        assertEquals("Suppressed", suppressed0.getMessage());
     }
 
     @Test
@@ -699,13 +711,10 @@ class IOUtilsTest {
         final long size = (long) Integer.MAX_VALUE + (long) 1;
         final NullInputStream in = new NullInputStream(size);
         final OutputStream out = NullOutputStream.INSTANCE;
-
         // Test copy() method
         assertEquals(-1, IOUtils.copy(in, out));
-
         // reset the input
         in.init();
-
         // Test consume() method
         assertEquals(size, IOUtils.consume(in), "consume()");
     }
@@ -781,9 +790,7 @@ class IOUtilsTest {
 
     @Test
     void testContentEquals_Reader_Reader() throws Exception {
-        {
-            assertTrue(IOUtils.contentEquals((Reader) null, null));
-        }
+        assertTrue(IOUtils.contentEquals((Reader) null, null));
         {
             final StringReader input1 = new StringReader("");
             assertFalse(IOUtils.contentEquals(null, input1));
@@ -801,12 +808,21 @@ class IOUtilsTest {
             assertTrue(IOUtils.contentEquals(input1, input1));
         }
         assertTrue(IOUtils.contentEquals(new StringReader(""), new StringReader("")));
-        assertTrue(
-            IOUtils.contentEquals(new BufferedReader(new StringReader("")), new BufferedReader(new StringReader(""))));
+        assertTrue(IOUtils.contentEquals(new BufferedReader(new StringReader("")), new BufferedReader(new StringReader(""))));
         assertTrue(IOUtils.contentEquals(new StringReader("ABC"), new StringReader("ABC")));
         assertFalse(IOUtils.contentEquals(new StringReader("ABCD"), new StringReader("ABC")));
         assertFalse(IOUtils.contentEquals(new StringReader("ABC"), new StringReader("ABCD")));
         assertFalse(IOUtils.contentEquals(new StringReader("apache"), new StringReader("apacha")));
+    }
+
+    @Test
+    void testContentEquals_Reader_Reader_unevenReads() throws Exception {
+        // sanity test, same chunk size
+        assertFalse(IOUtils.contentEquals(new ChunkedReader(new StringReader("apache"), 1000), new ChunkedReader(new StringReader("apacha"), 1000)));
+        assertTrue(IOUtils.contentEquals(new ChunkedReader(new StringReader("ABC"), 1000), new ChunkedReader(new StringReader("ABC"), 1000)));
+        // test with uneven chunk sizes
+        assertTrue(IOUtils.contentEquals(new ChunkedReader(new StringReader("ABC"), 1), new ChunkedReader(new StringReader("ABC"), 2)));
+        assertFalse(IOUtils.contentEquals(new ChunkedReader(new StringReader("apache"), 1), new ChunkedReader(new StringReader("apacha"), 2)));
     }
 
     @Test
@@ -1479,16 +1495,14 @@ class IOUtilsTest {
             ClassLoader.getSystemClassLoader()));
     }
 
-    @SuppressWarnings("squid:S2699") // Suppress "Add at least one assertion to this test case"
     @Test
     void testResourceToString_NullCharset() throws Exception {
-        IOUtils.resourceToString("/org/apache/commons/io//test-file-utf8.bin", null);
+        assertNotNull(IOUtils.resourceToString("/org/apache/commons/io//test-file-utf8.bin", null));
     }
 
-    @SuppressWarnings("squid:S2699") // Suppress "Add at least one assertion to this test case"
     @Test
     void testResourceToString_NullCharset_WithClassLoader() throws Exception {
-        IOUtils.resourceToString("org/apache/commons/io/test-file-utf8.bin", null, ClassLoader.getSystemClassLoader());
+        assertNotNull(IOUtils.resourceToString("org/apache/commons/io/test-file-utf8.bin", null, ClassLoader.getSystemClassLoader()));
     }
 
     @Test
@@ -1732,6 +1746,22 @@ class IOUtilsTest {
             assertEquals(FILE_SIZE, out.length, "Wrong output size");
             TestUtils.assertEqualContent(out, testFile);
         }
+    }
+
+    @Test
+    void testToByteArray_InputStream_Empty() throws Exception {
+        assertArrayEquals(ArrayUtils.EMPTY_BYTE_ARRAY, IOUtils.toByteArray(new ByteArrayInputStream(ArrayUtils.EMPTY_BYTE_ARRAY)));
+        assertArrayEquals(ArrayUtils.EMPTY_BYTE_ARRAY,
+                IOUtils.toByteArray(BoundedInputStream.builder().setInputStream(new ByteArrayInputStream(ArrayUtils.EMPTY_BYTE_ARRAY)).get()));
+        assertArrayEquals(ArrayUtils.EMPTY_BYTE_ARRAY,
+                IOUtils.toByteArray(UnsynchronizedByteArrayInputStream.builder().setInputStream(new ByteArrayInputStream(ArrayUtils.EMPTY_BYTE_ARRAY)).get()));
+        assertArrayEquals(ArrayUtils.EMPTY_BYTE_ARRAY,
+                IOUtils.toByteArray(BoundedInputStream.builder().setInputStream(new ByteArrayInputStream(ArrayUtils.EMPTY_BYTE_ARRAY)).setMaxCount(1).get()));
+        assertArrayEquals(ArrayUtils.EMPTY_BYTE_ARRAY, IOUtils.toByteArray(new ByteArrayInputStream(ArrayUtils.EMPTY_BYTE_ARRAY)));
+        assertArrayEquals(ArrayUtils.EMPTY_BYTE_ARRAY,
+                IOUtils.toByteArray(BoundedInputStream.builder().setInputStream(new ByteArrayInputStream(ArrayUtils.EMPTY_BYTE_ARRAY)).get()));
+        assertArrayEquals(ArrayUtils.EMPTY_BYTE_ARRAY,
+                IOUtils.toByteArray(BoundedInputStream.builder().setInputStream(new ByteArrayInputStream(ArrayUtils.EMPTY_BYTE_ARRAY)).setMaxCount(0).get()));
     }
 
     @Test

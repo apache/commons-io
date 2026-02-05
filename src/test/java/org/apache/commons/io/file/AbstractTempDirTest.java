@@ -17,12 +17,16 @@
 
 package org.apache.commons.io.file;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -33,6 +37,18 @@ public abstract class AbstractTempDirTest {
 
     protected static final String SUB_DIR = "subdir";
     protected static final String SYMLINKED_DIR = "symlinked-dir";
+
+    public static void assertCreateNewFile(final File file) throws IOException {
+        assertTrue(file.createNewFile(), file::toString);
+    }
+
+    public static void assertDelete(boolean expected, final File file) {
+        assertEquals(expected, file.delete(), file::toString);
+    }
+
+    public static void assertMkdir(boolean expected, final File subDir) {
+        assertEquals(expected, subDir.mkdir(), subDir::toString);
+    }
 
     /**
      * Creates directory test fixtures in the given directory {@code rootDir}.
@@ -66,6 +82,13 @@ public abstract class AbstractTempDirTest {
      * A temporary directory managed by each test so we can optionally fiddle with its permissions independently.
      */
     public Path tempDirPath;
+
+    @AfterEach
+    void afterEachDeleteTempDir() throws IOException {
+        if (Files.exists(tempDirPath)) {
+            PathUtils.deleteDirectory(tempDirPath);
+        }
+    }
 
     @BeforeEach
     public void beforeEachCreateTempDirs() throws IOException {

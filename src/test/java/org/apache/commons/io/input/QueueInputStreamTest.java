@@ -311,6 +311,7 @@ public class QueueInputStreamTest {
     }
 
     @Test
+
     /** If read is interrupted while waiting, then exception is thrown */
     void testTimeoutInterrupted() throws Exception {
         try (QueueInputStream inputStream = QueueInputStream.builder().setTimeout(Duration.ofMinutes(2)).get();
@@ -325,7 +326,7 @@ public class QueueInputStreamTest {
                 assertTrue(Thread.currentThread().isInterrupted());
                 result.set(true);
                 latch.countDown();
-            });
+            }, "commons-io-QueueInputStreamTest-testTimeoutInterrupted");
             thread.setDaemon(true);
             thread.start();
 
@@ -337,6 +338,7 @@ public class QueueInputStreamTest {
     }
 
     @Test
+
     /** If data is not available in queue, then read will wait until wait time elapses */
     void testTimeoutUnavailableData() throws IOException {
         try (QueueInputStream inputStream = QueueInputStream.builder().setTimeout(Duration.ofMillis(500)).get();

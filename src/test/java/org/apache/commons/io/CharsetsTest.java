@@ -46,6 +46,7 @@ public class CharsetsTest {
      * For parameterized tests.
      */
     public static final String AVAIL_CHARSETS = "org.apache.commons.io.CharsetsTest#availableCharsetsKeySet";
+
     /**
      * For parameterized tests.
      */

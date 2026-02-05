@@ -39,6 +39,7 @@ public class DelegateFileFilter extends AbstractFileFilter implements Serializab
 
     /** The File filter */
     private final transient FileFilter fileFilter;
+
     /** The Filename filter */
     private final transient FilenameFilter fileNameFilter;
 

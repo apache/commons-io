@@ -27,6 +27,7 @@ import java.io.IOException;
 public class IOIndexedException extends IOException {
 
     private static final long serialVersionUID = 1L;
+
     /**
      * Converts input to a suitable String for exception message.
      *

@@ -48,7 +48,7 @@ class FileUtilsWaitForTest {
             // This will wait (assuming the file is not found)
             assertFalse(FileUtils.waitFor(NOSUCHFILE, seconds), "Should not find file");
             wasInterrupted.set(Thread.currentThread().isInterrupted());
-        });
+        }, "commos-io-Test-IO-488-Thread");
         thread1.start();
         Thread.sleep(500); // This should be enough to ensure the waitFor loop has been entered
         thread1.interrupt(); // Try to interrupt waitFor

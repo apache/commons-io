@@ -232,7 +232,7 @@ public abstract class AbstractByteArrayOutputStream<T extends AbstractByteArrayO
     /**
      * Gets the current contents of this byte stream as an Input Stream. The
      * returned stream is backed by buffers of {@code this} stream,
-     * avoiding memory allocation and copy, thus saving space and time.<br>
+     * avoiding memory allocation and copy, thus saving space and time.
      *
      * @return the current contents of this output stream.
      * @see java.io.ByteArrayOutputStream#toByteArray()
@@ -244,7 +244,7 @@ public abstract class AbstractByteArrayOutputStream<T extends AbstractByteArrayO
     /**
      * Gets the current contents of this byte stream as an Input Stream. The
      * returned stream is backed by buffers of {@code this} stream,
-     * avoiding memory allocation and copy, thus saving space and time.<br>
+     * avoiding memory allocation and copy, thus saving space and time.
      *
      * @param <S> the type of the InputStream which makes up
      *            the {@link SequenceInputStream}.

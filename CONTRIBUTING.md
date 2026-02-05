@@ -110,7 +110,6 @@ Additional Resources
 + [Contributor License Agreement][cla]
 + [General GitHub documentation](https://help.github.com/)
 + [GitHub pull request documentation](https://help.github.com/articles/creating-a-pull-request/)
-+ [Apache Commons Twitter Account](https://twitter.com/ApacheCommons)
 
 [cla]:https://www.apache.org/licenses/#clas
 [jira]:https://issues.apache.org/jira/browse/IO

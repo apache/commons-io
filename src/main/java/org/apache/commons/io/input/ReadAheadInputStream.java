@@ -20,7 +20,6 @@ import java.io.EOFException;
 import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InterruptedIOException;
 import java.nio.ByteBuffer;
 import java.util.Objects;
 import java.util.concurrent.ExecutorService;
@@ -63,6 +62,9 @@ public class ReadAheadInputStream extends FilterInputStream {
      *   .setExecutorService(Executors.newSingleThreadExecutor(ReadAheadInputStream::newThread))
      *   .get();}
      * </pre>
+     * <p>
+     * If an {@link ExecutorService} is not set, then a single-threaded daemon executor service is used.
+     * </p>
      *
      * @see #get()
      * @since 2.12.0
@@ -90,7 +92,7 @@ public class ReadAheadInputStream extends FilterInputStream {
          * <ul>
          * <li>{@link #getInputStream()} gets the target aspect.</li>
          * <li>{@link #getBufferSize()}</li>
-         * <li>{@link ExecutorService}</li>
+         * <li>{@link ExecutorService}, if not set, a single-threaded daemon executor service is used.</li>
          * </ul>
          *
          * @return a new instance.
@@ -108,8 +110,11 @@ public class ReadAheadInputStream extends FilterInputStream {
 
         /**
          * Sets the executor service for the read-ahead thread.
+         * <p>
+         * If not set, a single-threaded daemon executor service is used.
+         * </p>
          *
-         * @param executorService the executor service for the read-ahead thread.
+         * @param executorService the executor service for the read-ahead thread, may be {@code null}.
          * @return {@code this} instance.
          */
         public Builder setExecutorService(final ExecutorService executorService) {
@@ -203,7 +208,7 @@ public class ReadAheadInputStream extends FilterInputStream {
     }
 
     /**
-     * Constructs an instance with the specified buffer size and read-ahead threshold
+     * Constructs an instance with the specified buffer size and read-ahead threshold.
      *
      * @param inputStream       The underlying input stream.
      * @param bufferSizeInBytes The buffer size.
@@ -215,7 +220,7 @@ public class ReadAheadInputStream extends FilterInputStream {
     }
 
     /**
-     * Constructs an instance with the specified buffer size and read-ahead threshold
+     * Constructs an instance with the specified buffer size and read-ahead threshold.
      *
      * @param inputStream       The underlying input stream.
      * @param bufferSizeInBytes The buffer size.
@@ -228,7 +233,7 @@ public class ReadAheadInputStream extends FilterInputStream {
     }
 
     /**
-     * Constructs an instance with the specified buffer size and read-ahead threshold
+     * Constructs an instance with the specified buffer size and read-ahead threshold.
      *
      * @param inputStream             The underlying input stream.
      * @param bufferSizeInBytes       The buffer size.
@@ -287,20 +292,20 @@ public class ReadAheadInputStream extends FilterInputStream {
         } finally {
             stateChangeLock.unlock();
         }
-
         if (shutdownExecutorService) {
             try {
-                executorService.shutdownNow();
-                executorService.awaitTermination(Long.MAX_VALUE, TimeUnit.SECONDS);
+                shutdownAwait();
             } catch (final InterruptedException e) {
-                final InterruptedIOException iio = new InterruptedIOException(e.getMessage());
-                iio.initCause(e);
-                throw iio;
+                Thread.currentThread().interrupt();
+                throw Input.toInterruptedIOException(e);
             } finally {
                 if (isSafeToCloseUnderlyingInputStream) {
                     super.close();
                 }
             }
+        }
+        if (isSafeToCloseUnderlyingInputStream) {
+            super.close();
         }
     }
 
@@ -346,7 +351,6 @@ public class ReadAheadInputStream extends FilterInputStream {
         if (len == 0) {
             return 0;
         }
-
         if (!activeBuffer.hasRemaining()) {
             // No remaining in active buffer - lock and switch to write ahead buffer.
             stateChangeLock.lock();
@@ -459,6 +463,11 @@ public class ReadAheadInputStream extends FilterInputStream {
         });
     }
 
+    boolean shutdownAwait() throws InterruptedException {
+        executorService.shutdownNow();
+        return executorService.awaitTermination(Long.MAX_VALUE, TimeUnit.SECONDS);
+    }
+
     private void signalAsyncReadComplete() {
         stateChangeLock.lock();
         try {
@@ -532,7 +541,7 @@ public class ReadAheadInputStream extends FilterInputStream {
     }
 
     /**
-     * Flips the active and read ahead buffer
+     * Flips the active and read ahead buffers.
      */
     private void swapBuffers() {
         final ByteBuffer temp = activeBuffer;
@@ -550,9 +559,8 @@ public class ReadAheadInputStream extends FilterInputStream {
                 asyncReadComplete.await();
             }
         } catch (final InterruptedException e) {
-            final InterruptedIOException iio = new InterruptedIOException(e.getMessage());
-            iio.initCause(e);
-            throw iio;
+            Thread.currentThread().interrupt();
+            throw Input.toInterruptedIOException(e);
         } finally {
             try {
                 isWaiting.set(false);

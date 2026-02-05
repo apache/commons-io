@@ -34,6 +34,7 @@ import java.util.Collection;
 import org.apache.commons.io.test.TestUtils;
 import org.apache.commons.lang3.SystemUtils;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -349,18 +350,36 @@ class FilenameUtilsTest {
      */
     @Test
     void testGetFullPathNoEndSeparator_IO_248() {
-
         // Test single separator
         assertEquals("/", FilenameUtils.getFullPathNoEndSeparator("/"));
         assertEquals("\\", FilenameUtils.getFullPathNoEndSeparator("\\"));
-
         // Test one level directory
         assertEquals("/", FilenameUtils.getFullPathNoEndSeparator("/abc"));
         assertEquals("\\", FilenameUtils.getFullPathNoEndSeparator("\\abc"));
-
         // Test one level directory
         assertEquals("/abc", FilenameUtils.getFullPathNoEndSeparator("/abc/xyz"));
         assertEquals("\\abc", FilenameUtils.getFullPathNoEndSeparator("\\abc\\xyz"));
+    }
+
+    /**
+     * Test for https://issues.apache.org/jira/browse/IO-771
+     */
+    @Test
+    @Disabled
+    void testGetFullPathNoEndSeparator_IO_771() {
+        // IO-771
+        // On macOS while in the target folder in jshell:
+        // new java.io.File("X:\\path\\subfolder").getAbsolutePath()
+        // ==> "/Users/garygregory/git/commons/commons-lang/target/X:\\path\\subfolder"
+        assertEquals("/Users/garygregory/git/commons/commons-lang/target/X:\\path",
+                FilenameUtils.getFullPathNoEndSeparator("/Users/garygregory/git/commons/commons-lang/target/X:\\path\\subfolder"));
+        assertEquals("X:\\path", FilenameUtils.getFullPathNoEndSeparator("X:\\path\\subfolder"));
+        assertEquals("/Users/garygregory/git/commons/commons-lang/target/X:\\\\path",
+                FilenameUtils.getFullPathNoEndSeparator("/Users/garygregory/git/commons/commons-lang/target/X:\\\\path\\\\subfolder"));
+        assertEquals("/Users/garygregory/git/commons/commons-lang/target/X:\\\\\\path",
+                FilenameUtils.getFullPathNoEndSeparator("/Users/garygregory/git/commons/commons-lang/target/X:\\\\path\\\\\\subfolder\\\\"));
+        assertEquals("/Users/garygregory/git/commons/commons-lang/target/X:\\\\\\path",
+                FilenameUtils.getFullPathNoEndSeparator("/Users/garygregory/git/commons/commons-lang/target/X:\\\\path\\\\\\subfolder"));
     }
 
     @Test

@@ -14,6 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 /**
  * Provides classes to implement the builder pattern for IO classes.
  *
@@ -49,5 +50,4 @@
  *
  * @since 2.12.0
  */
-
 package org.apache.commons.io.build;

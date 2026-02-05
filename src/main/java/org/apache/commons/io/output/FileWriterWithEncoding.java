@@ -188,7 +188,7 @@ public class FileWriterWithEncoding extends ProxyWriter {
             }
             return new OutputStreamWriter(outputStream, (String) encoding);
         } catch (final IOException | RuntimeException ex) {
-            IOUtils.closeQuietly(outputStream, ex);
+            IOUtils.closeQuietlySuppress(outputStream, ex);
             if (!fileExistedAlready) {
                 FileUtils.deleteQuietly(file);
             }

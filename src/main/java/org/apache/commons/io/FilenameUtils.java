@@ -282,17 +282,11 @@ public class FilenameUtils {
      * @see FileUtils#directoryContains(File, File)
      */
     public static boolean directoryContains(final String canonicalParent, final String canonicalChild) {
-        if (isEmpty(canonicalParent) || isEmpty(canonicalChild)) {
+        if (isEmpty(canonicalParent) || isEmpty(canonicalChild) || IOCase.SYSTEM.checkEquals(canonicalParent, canonicalChild)) {
             return false;
         }
-
-        if (IOCase.SYSTEM.checkEquals(canonicalParent, canonicalChild)) {
-            return false;
-        }
-
         final char separator = toSeparator(canonicalParent.charAt(0) == UNIX_NAME_SEPARATOR);
         final String parentWithEndSeparator = canonicalParent.charAt(canonicalParent.length() - 1) == separator ? canonicalParent : canonicalParent + separator;
-
         return IOCase.SYSTEM.checkStartsWith(canonicalChild, parentWithEndSeparator);
     }
 
@@ -300,11 +294,11 @@ public class FilenameUtils {
      * Does the work of getting the path.
      *
      * @param fileName  the file name.
-     * @param includeSeparator  true to include the end separator.
+     * @param includeEndSeparator  true to include the end separator.
      * @return the path.
      * @throws IllegalArgumentException if the result path contains the null character ({@code U+0000}).
      */
-    private static String doGetFullPath(final String fileName, final boolean includeSeparator) {
+    private static String doGetFullPath(final String fileName, final boolean includeEndSeparator) {
         if (fileName == null) {
             return null;
         }
@@ -313,7 +307,7 @@ public class FilenameUtils {
             return null;
         }
         if (prefix >= fileName.length()) {
-            if (includeSeparator) {
+            if (includeEndSeparator) {
                 return getPrefix(fileName);  // add end slash if necessary
             }
             return fileName;
@@ -322,7 +316,7 @@ public class FilenameUtils {
         if (index < 0) {
             return fileName.substring(0, prefix);
         }
-        int end = index + (includeSeparator ?  1 : 0);
+        int end = index + (includeEndSeparator ?  1 : 0);
         if (end == 0) {
             end++;
         }
@@ -366,9 +360,7 @@ public class FilenameUtils {
         if (fileName == null) {
             return null;
         }
-
         requireNonNullChars(fileName);
-
         int size = fileName.length();
         if (size == 0) {
             return fileName;
@@ -377,10 +369,8 @@ public class FilenameUtils {
         if (prefix < 0) {
             return null;
         }
-
-        final char[] array = new char[size + 2];  // +1 for possible extra slash, +2 for arraycopy
+        final char[] array = new char[size + 2]; // +1 for possible extra slash, +2 for arraycopy
         fileName.getChars(0, fileName.length(), array, 0);
-
         // fix separators throughout
         final char otherSeparator = flipSeparator(separator);
         for (int i = 0; i < array.length; i++) {
@@ -388,14 +378,12 @@ public class FilenameUtils {
                 array[i] = separator;
             }
         }
-
         // add extra separator on the end to simplify code below
         boolean lastIsDirectory = true;
         if (array[size - 1] != separator) {
             array[size++] = separator;
             lastIsDirectory = false;
         }
-
         // adjoining slashes
         // If we get here, prefix can only be 0 or greater, size 1 or greater
         // If prefix is 0, set loop start to 1 to prevent index errors
@@ -406,11 +394,9 @@ public class FilenameUtils {
                 i--;
             }
         }
-
         // period slash
         for (int i = prefix + 1; i < size; i++) {
-            if (array[i] == separator && array[i - 1] == '.' &&
-                    (i == prefix + 1 || array[i - 2] == separator)) {
+            if (array[i] == separator && array[i - 1] == '.' && (i == prefix + 1 || array[i - 2] == separator)) {
                 if (i == size - 1) {
                     lastIsDirectory = true;
                 }
@@ -419,12 +405,9 @@ public class FilenameUtils {
                 i--;
             }
         }
-
         // double period slash
-        outer:
-        for (int i = prefix + 2; i < size; i++) {
-            if (array[i] == separator && array[i - 1] == '.' && array[i - 2] == '.' &&
-                    (i == prefix + 2 || array[i - 3] == separator)) {
+        outer: for (int i = prefix + 2; i < size; i++) {
+            if (array[i] == separator && array[i - 1] == '.' && array[i - 2] == '.' && (i == prefix + 2 || array[i - 3] == separator)) {
                 if (i == prefix + 2) {
                     return null;
                 }
@@ -432,7 +415,7 @@ public class FilenameUtils {
                     lastIsDirectory = true;
                 }
                 int j;
-                for (j = i - 4 ; j >= prefix; j--) {
+                for (j = i - 4; j >= prefix; j--) {
                     if (array[j] == separator) {
                         // remove b/../ from a/b/../c
                         System.arraycopy(array, i + 1, array, j + 1, size - i);
@@ -447,17 +430,13 @@ public class FilenameUtils {
                 i = prefix + 1;
             }
         }
-
-        if (size <= 0) {  // should never be less than 0
+        if (size <= 0) { // should never be less than 0
             return EMPTY_STRING;
         }
-        if (size <= prefix) {  // should never be less than prefix
-            return new String(array, 0, size);
+        if (size <= prefix || lastIsDirectory && keepSeparator) {
+            return new String(array, 0, size); // keep trailing separator
         }
-        if (lastIsDirectory && keepSeparator) {
-            return new String(array, 0, size);  // keep trailing separator
-        }
-        return new String(array, 0, size - 1);  // lose trailing separator
+        return new String(array, 0, size - 1); // lose trailing separator
     }
 
     /**
@@ -488,7 +467,6 @@ public class FilenameUtils {
      * @since 1.3
      */
     public static boolean equals(String fileName1, String fileName2, final boolean normalize, final IOCase ioCase) {
-
         if (fileName1 == null || fileName2 == null) {
             return fileName1 == null && fileName2 == null;
         }
@@ -1044,7 +1022,6 @@ public class FilenameUtils {
             return false;
         }
         requireNonNullChars(fileName);
-
         if (extensions == null || extensions.isEmpty()) {
             return indexOfExtension(fileName) == NOT_FOUND;
         }
@@ -1068,7 +1045,6 @@ public class FilenameUtils {
             return false;
         }
         requireNonNullChars(fileName);
-
         if (isEmpty(extension)) {
             return indexOfExtension(fileName) == NOT_FOUND;
         }
@@ -1112,21 +1088,14 @@ public class FilenameUtils {
         if (!m.matches() || m.groupCount() != 4) {
             return false;
         }
-
         // verify that address subgroups are legal
         for (int i = 1; i <= 4; i++) {
             final String ipSegment = m.group(i);
             final int iIpSegment = Integer.parseInt(ipSegment);
-            if (iIpSegment > IPV4_MAX_OCTET_VALUE) {
+            if (iIpSegment > IPV4_MAX_OCTET_VALUE || ipSegment.length() > 1 && ipSegment.startsWith("0")) {
                 return false;
             }
-
-            if (ipSegment.length() > 1 && ipSegment.startsWith("0")) {
-                return false;
-            }
-
         }
-
         return true;
     }
 
@@ -1466,7 +1435,6 @@ public class FilenameUtils {
             return null;
         }
         requireNonNullChars(fileName);
-
         final int index = indexOfExtension(fileName);
         if (index == NOT_FOUND) {
             return fileName;
@@ -1532,11 +1500,9 @@ public class FilenameUtils {
     static String[] splitOnTokens(final String text) {
         // used by wildcardMatch
         // package level so a unit test may run on this
-
         if (text.indexOf('?') == NOT_FOUND && text.indexOf('*') == NOT_FOUND) {
             return new String[] { text };
         }
-
         final char[] array = text.toCharArray();
         final ArrayList<String> list = new ArrayList<>();
         final StringBuilder buffer = new StringBuilder();
@@ -1560,7 +1526,6 @@ public class FilenameUtils {
         if (buffer.length() != 0) {
             list.add(buffer.toString());
         }
-
         return list.toArray(EMPTY_STRING_ARRAY);
     }
 
@@ -1627,7 +1592,6 @@ public class FilenameUtils {
         int textIdx = 0;
         int wcsIdx = 0;
         final Deque<int[]> backtrack = new ArrayDeque<>(wcs.length);
-
         // loop around a backtrack stack, to handle complex * matching
         do {
             if (!backtrack.isEmpty()) {
@@ -1636,10 +1600,8 @@ public class FilenameUtils {
                 textIdx = array[1];
                 anyChars = true;
             }
-
             // loop whilst tokens and text left to process
             while (wcsIdx < wcs.length) {
-
                 if (wcs[wcsIdx].equals("?")) {
                     // ? so move to next text char
                     textIdx++;
@@ -1647,14 +1609,12 @@ public class FilenameUtils {
                         break;
                     }
                     anyChars = false;
-
                 } else if (wcs[wcsIdx].equals("*")) {
                     // set any chars status
                     anyChars = true;
                     if (wcsIdx == wcs.length - 1) {
                         textIdx = fileName.length();
                     }
-
                 } else {
                     // matching text token
                     if (anyChars) {
@@ -1666,29 +1626,24 @@ public class FilenameUtils {
                         }
                         final int repeat = ioCase.checkIndexOf(fileName, textIdx + 1, wcs[wcsIdx]);
                         if (repeat >= 0) {
-                            backtrack.push(new int[] {wcsIdx, repeat});
+                            backtrack.push(new int[] { wcsIdx, repeat });
                         }
                     } else if (!ioCase.checkRegionMatches(fileName, textIdx, wcs[wcsIdx])) {
                         // matching from current position
                         // couldn't match token
                         break;
                     }
-
                     // matched text token, move text index to end of matched token
                     textIdx += wcs[wcsIdx].length();
                     anyChars = false;
                 }
-
                 wcsIdx++;
             }
-
             // full match
             if (wcsIdx == wcs.length && textIdx == fileName.length()) {
                 return true;
             }
-
         } while (!backtrack.isEmpty());
-
         return false;
     }
 

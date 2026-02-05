@@ -231,17 +231,18 @@ class TailerTest {
     }
 
     @Test
-    @SuppressWarnings("squid:S2699") // Suppress "Add at least one assertion to this test case"
     void testBufferBreak() throws Exception {
         final long delay = 50;
         final File file = new File(temporaryFolder, "testBufferBreak.txt");
         createFile(file, 0);
-        writeStrings(file, "SBTOURIST\n");
+        final String data = "SBTOURIST\n";
+        writeStrings(file, data);
         final TestTailerListener listener = new TestTailerListener();
         try (Tailer tailer = new Tailer(file, listener, delay, false, 1)) {
-            final Thread thread = new Thread(tailer);
+            final Thread thread = new Thread(tailer, "commons-io-tailer-testBufferBreak");
             thread.start();
             List<String> lines = listener.getLines();
+            assertEquals(data.length(), tailer.getTailable().size());
             while (lines.isEmpty() || !lines.get(lines.size() - 1).equals("SBTOURIST")) {
                 lines = listener.getLines();
             }
@@ -346,7 +347,7 @@ class TailerTest {
         final int delay = 1000;
         final int idle = 50; // allow time for thread to work
         try (Tailer tailer = new Tailer(file, listener, delay, false, IOUtils.DEFAULT_BUFFER_SIZE)) {
-            final Thread thread = new Thread(tailer);
+            final Thread thread = new Thread(tailer, "commons-io-tailer-testInterrupt");
             thread.setDaemon(true);
             thread.start();
             TestUtils.sleep(idle);
@@ -369,7 +370,7 @@ class TailerTest {
         createFile(file, 0);
         final TestTailerListener listener = new TestTailerListener();
         try (Tailer tailer = new Tailer(file, listener, delayMillis, false)) {
-            final Thread thread = new Thread(tailer);
+            final Thread thread = new Thread(tailer, "commons-io-tailer-testIO335");
             thread.start();
 
             // Write some lines to the file
@@ -386,7 +387,6 @@ class TailerTest {
     }
 
     @Test
-    @SuppressWarnings("squid:S2699") // Suppress "Add at least one assertion to this test case"
     void testLongFile() throws Exception {
         final long delay = 50;
         final File file = new File(temporaryFolder, "testLongFile.txt");
@@ -400,13 +400,14 @@ class TailerTest {
         final TestTailerListener listener = new TestTailerListener();
         try (Tailer tailer = new Tailer(file, listener, delay, false)) {
             // final long start = System.currentTimeMillis();
-            final Thread thread = new Thread(tailer);
+            final Thread thread = new Thread(tailer, "commons-io-tailer-testLongFile");
             thread.start();
             List<String> lines = listener.getLines();
             while (lines.isEmpty() || !lines.get(lines.size() - 1).equals("SBTOURIST")) {
                 lines = listener.getLines();
             }
             // System.out.println("Elapsed: " + (System.currentTimeMillis() - start));
+            assertFalse(lines.isEmpty());
             listener.clear();
         }
     }
@@ -424,7 +425,7 @@ class TailerTest {
         // Need to use UTF-8 to read & write the file otherwise it can be corrupted (depending on the default charset)
         final Charset charsetUTF8 = StandardCharsets.UTF_8;
         try (Tailer tailer = new Tailer(file, charsetUTF8, listener, delay, false, isWindows, IOUtils.DEFAULT_BUFFER_SIZE)) {
-            final Thread thread = new Thread(tailer);
+            final Thread thread = new Thread(tailer, "commons-io-tailer-testMultiByteBreak");
             thread.start();
             try (Writer out = new OutputStreamWriter(Files.newOutputStream(file.toPath()), charsetUTF8);
                     BufferedReader reader = new BufferedReader(new InputStreamReader(Files.newInputStream(origin.toPath()), charsetUTF8))) {
@@ -457,7 +458,7 @@ class TailerTest {
         createFile(file, 0);
         final TestTailerListener listener = new TestTailerListener(1);
         try (Tailer tailer = new Tailer(file, listener)) {
-            final Thread thread = new Thread(tailer);
+            final Thread thread = new Thread(tailer, "commons-io-tailer-testSimpleConstructor");
             thread.start();
             validateTailer(listener, file);
         }
@@ -469,7 +470,7 @@ class TailerTest {
         createFile(file, 0);
         final TestTailerListener listener = new TestTailerListener(1);
         try (Tailer tailer = new Tailer(file, listener, TEST_DELAY_MILLIS)) {
-            final Thread thread = new Thread(tailer);
+            final Thread thread = new Thread(tailer, "commons-io-tailer-testSimpleConstructorWithDelay");
             thread.start();
             validateTailer(listener, file);
         }
@@ -481,7 +482,7 @@ class TailerTest {
         createFile(file, 0);
         final TestTailerListener listener = new TestTailerListener(1);
         try (Tailer tailer = new Tailer(file, listener, TEST_DELAY_MILLIS, false)) {
-            final Thread thread = new Thread(tailer);
+            final Thread thread = new Thread(tailer, "commons-io-tailer-testSimpleConstructorWithDelayAndFromStart");
             thread.start();
             validateTailer(listener, file);
         }
@@ -493,7 +494,7 @@ class TailerTest {
         createFile(file, 0);
         final TestTailerListener listener = new TestTailerListener(1);
         try (Tailer tailer = new Tailer(file, listener, TEST_DELAY_MILLIS, false, TEST_BUFFER_SIZE)) {
-            final Thread thread = new Thread(tailer);
+            final Thread thread = new Thread(tailer, "commons-io-tailer-testSimpleConstructorWithDelayAndFromStartWithBufferSize");
             thread.start();
             validateTailer(listener, file);
         }
@@ -505,7 +506,7 @@ class TailerTest {
         createFile(file, 0);
         final TestTailerListener listener = new TestTailerListener(1);
         try (Tailer tailer = new Tailer(file, listener, TEST_DELAY_MILLIS, false, false)) {
-            final Thread thread = new Thread(tailer);
+            final Thread thread = new Thread(tailer, "commons-io-tailer-testSimpleConstructorWithDelayAndFromStartWithReopen");
             thread.start();
             validateTailer(listener, file);
         }
@@ -517,7 +518,7 @@ class TailerTest {
         createFile(file, 0);
         final TestTailerListener listener = new TestTailerListener(1);
         try (Tailer tailer = new Tailer(file, listener, TEST_DELAY_MILLIS, false, true, TEST_BUFFER_SIZE)) {
-            final Thread thread = new Thread(tailer);
+            final Thread thread = new Thread(tailer, "commons-io-tailer-testSimpleConstructorWithDelayAndFromStartWithReopenAndBufferSize");
             thread.start();
             validateTailer(listener, file);
         }
@@ -529,7 +530,7 @@ class TailerTest {
         createFile(file, 0);
         final TestTailerListener listener = new TestTailerListener(1);
         try (Tailer tailer = new Tailer(file, StandardCharsets.UTF_8, listener, TEST_DELAY_MILLIS, false, true, TEST_BUFFER_SIZE)) {
-            final Thread thread = new Thread(tailer);
+            final Thread thread = new Thread(tailer, "commons-io-tailer-testSimpleConstructorWithDelayAndFromStartWithReopenAndBufferSizeAndCharset");
             thread.start();
             validateTailer(listener, file);
         }
@@ -586,7 +587,7 @@ class TailerTest {
         final String osname = SystemProperties.getOsName();
         final boolean isWindows = osname.startsWith("Windows");
         try (Tailer tailer = new Tailer(file, listener, delayMillis, false, isWindows)) {
-            final Thread thread = new Thread(tailer);
+            final Thread thread = new Thread(tailer, "commons-io-tailer-testTailer");
             thread.start();
             // Write some lines to the file
             writeLines(file, "Line one", "Line two");
@@ -648,7 +649,7 @@ class TailerTest {
         final String osname = SystemProperties.getOsName();
         final boolean isWindows = osname.startsWith("Windows");
         try (Tailer tailer = new Tailer(file, listener, delayMillis, false, isWindows)) {
-            final Thread thread = new Thread(tailer);
+            final Thread thread = new Thread(tailer, "commons-io-tailer-testTailerEndOfFileReached");
             thread.start();
             // write a few lines
             writeLines(file, "line1", "line2", "line3");
@@ -672,7 +673,7 @@ class TailerTest {
         createFile(file, 0);
         final TestTailerListener listener = new TestTailerListener();
         try (Tailer tailer = new Tailer(file, listener, delayMillis, false)) {
-            final Thread thread = new Thread(tailer);
+            final Thread thread = new Thread(tailer, "commons-io-tailer-testTailerEof");
             thread.start();
             // Write some lines to the file
             writeStrings(file, "Line");
@@ -697,7 +698,7 @@ class TailerTest {
         final TestTailerListener listener = new TestTailerListener();
         try (Tailer tailer = Tailer.builder().setFile(file).setTailerListener(listener).setDelayDuration(Duration.ofMillis(delayMillis)).setStartThread(false)
                 .setIgnoreTouch(true).get()) {
-            final Thread thread = new Thread(tailer);
+            final Thread thread = new Thread(tailer, "commons-io-tailer-testTailerIgnoreTouch");
             thread.start();
             // Write some lines to the file
             writeLines(file, "Line one");
@@ -723,7 +724,7 @@ class TailerTest {
         final TestTailerListener listener = new TestTailerListener();
         try (Tailer tailer = Tailer.builder().setFile(file).setTailerListener(listener).setDelayDuration(Duration.ofMillis(delayMillis)).setStartThread(false)
                 .setIgnoreTouch(false).get()) {
-            final Thread thread = new Thread(tailer);
+            final Thread thread = new Thread(tailer, "commons-io-tailer-testTailerReissueOnTouch");
             thread.start();
             // Write some lines to the file
             writeLines(file, "Line one");

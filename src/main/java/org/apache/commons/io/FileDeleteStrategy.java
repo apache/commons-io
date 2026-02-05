@@ -37,7 +37,7 @@ public class FileDeleteStrategy {
     /**
      * Force file deletion strategy.
      */
-    static class ForceFileDeleteStrategy extends FileDeleteStrategy {
+    static final class ForceFileDeleteStrategy extends FileDeleteStrategy {
 
         /** Default Constructor */
         ForceFileDeleteStrategy() {

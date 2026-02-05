@@ -89,30 +89,37 @@ class IOUtilsConcurrentTest {
      * Test data for InputStream tests.
      */
     private static final byte[][] BYTE_DATA;
+
     /**
      * Checksum values for {@link #BYTE_DATA}.
      */
     private static final long[] BYTE_DATA_CHECKSUM;
+
     /**
      * Number of runs per thread (to increase the chance of collisions).
      */
     private static final int RUNS_PER_THREAD = 16;
+
     /**
      * Size of test data.
      */
     private static final int SIZE = IOUtils.DEFAULT_BUFFER_SIZE;
+
     /**
      * Test data for Reader tests.
      */
     private static final String[] STRING_DATA;
+
     /**
      * Checksum values for {@link #STRING_DATA}.
      */
     private static final long[] STRING_DATA_CHECKSUM;
+
     /**
      * Number of threads to use.
      */
     private static final int THREAD_COUNT = 16;
+
     /**
      * Number of data variants (to increase the chance of collisions).
      */

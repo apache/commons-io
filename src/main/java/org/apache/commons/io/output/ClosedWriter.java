@@ -38,6 +38,7 @@ public class ClosedWriter extends Writer {
      * @since 2.12.0
      */
     public static final ClosedWriter INSTANCE = new ClosedWriter();
+
     /**
      * The singleton instance.
      *

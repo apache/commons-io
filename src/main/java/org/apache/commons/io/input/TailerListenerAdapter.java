@@ -35,7 +35,7 @@ public class TailerListenerAdapter implements TailerListener {
      *
      * <strong>Note:</strong> this is called from the tailer thread.
      *
-     * Note: a future version of commons-io will pull this method up to the TailerListener interface,
+     * Note: a future version of Commons IO will pull this method up to the TailerListener interface,
      * for now clients must subclass this class to use this feature.
      *
      * @since 2.5

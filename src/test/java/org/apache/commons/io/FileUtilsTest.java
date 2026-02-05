@@ -175,17 +175,18 @@ class FileUtilsTest extends AbstractTempDirTest {
             Files.setAttribute(p, "dos:readonly", readOnly, LinkOption.NOFOLLOW_LINKS);
         }
     }
+
     private File testFile1;
+
     private File testFile2;
+
     private long testFile1Size;
 
     private long testFile2Size;
 
     private void assertContentMatchesAfterCopyURLToFileFor(final String resourceName, final File destination) throws IOException {
         FileUtils.copyURLToFile(getClass().getResource(resourceName), destination);
-
-        try (InputStream fis = Files.newInputStream(destination.toPath());
-             InputStream expected = getClass().getResourceAsStream(resourceName)) {
+        try (InputStream fis = Files.newInputStream(destination.toPath()); InputStream expected = getClass().getResourceAsStream(resourceName)) {
             assertTrue(IOUtils.contentEquals(expected, fis), "Content is not equal.");
         }
     }
@@ -212,9 +213,11 @@ class FileUtilsTest extends AbstractTempDirTest {
 
     /**
      * May throw java.nio.file.FileSystemException: C:\Users\...\FileUtilsTestCase\cycle: A required privilege is not held
-     * by the client. On Windows, you are fine if you run a terminal with admin karma.
+     * by the client. On Windows, you are fine if you run a terminal with aadministrator permissions.
+     *
+     * @return The link path.
      */
-    private void createCircularSymbolicLink(final File file) throws IOException {
+    private Path createCircularSymbolicLink(final File file) throws IOException {
         assertTrue(file.exists());
         final String linkName = file + "/cycle";
         final String targetName = file + "/..";
@@ -225,13 +228,14 @@ class FileUtilsTest extends AbstractTempDirTest {
         assertTrue(Files.exists(targetPath));
         try {
             // May throw java.nio.file.FileSystemException: C:\Users\...\FileUtilsTestCase\cycle: A required privilege is not held by the client.
-            // On Windows, you are fine if you run a terminal with admin karma.
+            // On Windows, you are fine if you run a terminal with administrator permissions.
             Files.createSymbolicLink(linkPath, targetPath);
         } catch (final UnsupportedOperationException e) {
             createCircularOsSymbolicLink(linkName, targetName);
         }
         // Sanity check:
         assertTrue(Files.isSymbolicLink(linkPath), () -> "Expected a symbolic link here: " + linkName);
+        return linkPath;
     }
 
     private void createFilesForTestCopyDirectory(final File grandParentDir, final File parentDir, final File childDir) throws IOException {
@@ -623,9 +627,8 @@ class FileUtilsTest extends AbstractTempDirTest {
         assertTrue(FileUtils.contentEquals(objFile1, objFile1));
         assertTrue(FileUtils.contentEquals(objFile1b, objFile1b));
         assertTrue(FileUtils.contentEquals(objFile2, objFile2));
-        // Equal files
-        file.createNewFile();
-        file2.createNewFile();
+        assertCreateNewFile(file);
+        assertCreateNewFile(file2);
         assertTrue(FileUtils.contentEquals(file, file));
         assertTrue(FileUtils.contentEquals(file, file2));
     }
@@ -698,9 +701,8 @@ class FileUtilsTest extends AbstractTempDirTest {
         assertFalse(FileUtils.contentEquals(cr, lf));
         assertFalse(FileUtils.contentEquals(crlf, lf));
 
-        // Equal files
-        file1.createNewFile();
-        file2.createNewFile();
+        assertCreateNewFile(file1);
+        assertCreateNewFile(file2);
         assertTrue(FileUtils.contentEqualsIgnoreEOL(file1, file1, null));
         assertTrue(FileUtils.contentEqualsIgnoreEOL(file1, file2, null));
     }
@@ -716,7 +718,7 @@ class FileUtilsTest extends AbstractTempDirTest {
     void testCopyDir_SymbolicLink() throws Exception {
         // Make a directory
         final File realDirectory = new File(tempDirFile, "real_directory");
-        realDirectory.mkdir();
+        assertMkdir(true, realDirectory);
         final File content = new File(realDirectory, "hello.txt");
         FileUtils.writeStringToFile(content, "HELLO WORLD", "UTF8");
 
@@ -744,11 +746,11 @@ class FileUtilsTest extends AbstractTempDirTest {
     void testCopyDir_SymbolicLinkCycle() throws Exception {
         // Make a directory
         final File topDirectory = new File(tempDirFile, "topDirectory");
-        topDirectory.mkdir();
+        assertMkdir(true, topDirectory);
         final File content = new File(topDirectory, "hello.txt");
         FileUtils.writeStringToFile(content, "HELLO WORLD", "UTF8");
         final File childDirectory = new File(topDirectory, "child_directory");
-        childDirectory.mkdir();
+        assertMkdir(true, childDirectory);
 
         // Make a symlink to the top directory
         final Path linkPath = childDirectory.toPath().resolve("link_to_top");
@@ -778,7 +780,7 @@ class FileUtilsTest extends AbstractTempDirTest {
     void testCopyDirectory_brokenSymbolicLink() throws IOException {
         // Make a file
         final File sourceDirectory = new File(tempDirFile, "source_directory");
-        sourceDirectory.mkdir();
+        assertMkdir(true, sourceDirectory);
         final File targetFile = new File(sourceDirectory, "hello.txt");
         FileUtils.writeStringToFile(targetFile, "HELLO WORLD", "UTF8");
 
@@ -813,7 +815,7 @@ class FileUtilsTest extends AbstractTempDirTest {
     void testCopyDirectory_SymbolicLink() throws IOException {
         // Make a file
         final File sourceDirectory = new File(tempDirFile, "source_directory");
-        sourceDirectory.mkdir();
+        assertMkdir(true, sourceDirectory);
         final File targetFile = new File(sourceDirectory, "hello.txt");
         FileUtils.writeStringToFile(targetFile, "HELLO WORLD", "UTF8");
 
@@ -848,7 +850,7 @@ class FileUtilsTest extends AbstractTempDirTest {
 
         // Make a directory
         final File realDirectory = new File(tempDirFile, "real_directory");
-        realDirectory.mkdir();
+        assertMkdir(true, realDirectory);
 
         // Make a symlink to the file
         final Path linkPath = realDirectory.toPath().resolve("link_to_file");
@@ -912,8 +914,8 @@ class FileUtilsTest extends AbstractTempDirTest {
         final File sourceFile = new File(sourceDirectory, "hello.txt");
 
         // Prepare source data
-        source.mkdirs();
-        sourceDirectory.mkdir();
+        assertMkdir(true, source);
+        assertMkdir(true, sourceDirectory);
         FileUtils.writeStringToFile(sourceFile, "HELLO WORLD", "UTF8");
         // Set dates in reverse order to avoid overwriting previous values
         // Also, use full seconds (arguments are in ms) close to today
@@ -1007,7 +1009,7 @@ class FileUtilsTest extends AbstractTempDirTest {
         }
         final File srcDir = tempDirFile;
         final File subDir = new File(srcDir, "sub");
-        subDir.mkdir();
+        assertMkdir(true, subDir);
         final File subFile = new File(subDir, "A.txt");
         FileUtils.writeStringToFile(subFile, "HELLO WORLD", "UTF8");
         final File destDir = new File(FileUtils.getTempDirectoryPath(), "tmp-FileUtilsTestCase");
@@ -1043,7 +1045,7 @@ class FileUtilsTest extends AbstractTempDirTest {
         }
         final File srcDir = tempDirFile;
         final File subDir = new File(srcDir, "sub");
-        subDir.mkdir();
+        assertMkdir(true, subDir);
         final File subFile = new File(subDir, "A.txt");
         FileUtils.writeStringToFile(subFile, "HELLO WORLD", "UTF8");
         final File destDir = new File(SystemProperties.getJavaIoTmpdir(), "tmp-FileUtilsTestCase");
@@ -1101,7 +1103,7 @@ class FileUtilsTest extends AbstractTempDirTest {
         }
         final File srcDir = tempDirFile;
         final File subDir = new File(srcDir, "sub");
-        subDir.mkdir();
+        assertMkdir(true, subDir);
         final File subFile = new File(subDir, "A.txt");
         FileUtils.writeStringToFile(subFile, "HELLO WORLD", "UTF8");
         final File destDir = new File(FileUtils.getTempDirectoryPath(), "tmp-FileUtilsTestCase");
@@ -1149,7 +1151,7 @@ class FileUtilsTest extends AbstractTempDirTest {
     void testCopyFile_SymbolicLink() throws Exception {
         // Make a file
         final File sourceDirectory = new File(tempDirFile, "source_directory");
-        sourceDirectory.mkdir();
+        assertMkdir(true, sourceDirectory);
         final File targetFile = new File(sourceDirectory, "hello.txt");
         FileUtils.writeStringToFile(targetFile, "HELLO WORLD", "UTF8");
 
@@ -1535,6 +1537,7 @@ class FileUtilsTest extends AbstractTempDirTest {
     void testDeleteDirectorySymbolicLinkAbsentDeepTarget() throws IOException {
         final ImmutablePair<Path, Path> pair = createTempSymbolicLinkedRelativeDir();
         final Path symLinkedDir = pair.getLeft();
+        assertNotNull(symLinkedDir);
         final Path targetDir = pair.getRight();
         // more setup
         final Path targetDir2 = targetDir.resolve("subdir2");
@@ -1647,7 +1650,7 @@ class FileUtilsTest extends AbstractTempDirTest {
     @Test
     void testForceDeleteAFile1() throws Exception {
         final File destination = new File(tempDirFile, "copy1.txt");
-        destination.createNewFile();
+        assertCreateNewFile(destination);
         assertTrue(destination.exists(), "Copy1.txt doesn't exist to delete");
         FileUtils.forceDelete(destination);
         assertFalse(destination.exists(), "Check No Exist");
@@ -1656,7 +1659,7 @@ class FileUtilsTest extends AbstractTempDirTest {
     @Test
     void testForceDeleteAFile2() throws Exception {
         final File destination = new File(tempDirFile, "copy2.txt");
-        destination.createNewFile();
+        assertCreateNewFile(destination);
         assertTrue(destination.exists(), "Copy2.txt doesn't exist to delete");
         FileUtils.forceDelete(destination);
         assertFalse(destination.exists(), "Check No Exist");
@@ -1671,7 +1674,7 @@ class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testForceDeleteBrokenSymlink() throws Exception {
+    void testForceDeleteBrokenSymlink() throws Exception {
         final ImmutablePair<Path, Path> pair = createTempSymbolicLinkedRelativeDir();
         final Path symlinkedDir = pair.getLeft();
         final Path targetDir = pair.getRight();
@@ -1765,7 +1768,7 @@ class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testForceDeleteSymlink() throws Exception {
+    void testForceDeleteSymlink() throws Exception {
         final ImmutablePair<Path, Path> pair = createTempSymbolicLinkedRelativeDir();
         final Path symlinkedDir = pair.getLeft();
         final Path targetDir = pair.getRight();
@@ -1865,13 +1868,13 @@ class FileUtilsTest extends AbstractTempDirTest {
 
         // Creates test file
         final File testFile = new File(tempDirFile, getName());
-        testFile.createNewFile();
+        assertCreateNewFile(testFile);
         assertTrue(testFile.exists(), "Test file does not exist.");
 
         // Tests with existing file
         assertThrows(IOException.class, () -> FileUtils.forceMkdir(testFile));
 
-        testFile.delete();
+        assertDelete(true, testFile);
 
         // Tests with non-existent directory
         FileUtils.forceMkdir(testFile);
@@ -1886,7 +1889,7 @@ class FileUtilsTest extends AbstractTempDirTest {
         // Tests with existing directory
         assertTrue(tempDirFile.exists());
         final File testParentDir = new File(tempDirFile, "testForceMkdirParent");
-        testParentDir.delete();
+        assertDelete(false, testParentDir);
         assertFalse(testParentDir.exists());
         final File testFile = new File(testParentDir, "test.txt");
         assertFalse(testParentDir.exists());
@@ -2173,9 +2176,9 @@ class FileUtilsTest extends AbstractTempDirTest {
         final File subDir = new File(srcDir, "list_test");
         final File subSubDir = new File(subDir, "subSubDir");
         final File notSubSubDir = new File(subDir, "notSubSubDir");
-        assertTrue(subDir.mkdir());
-        assertTrue(subSubDir.mkdir());
-        assertTrue(notSubSubDir.mkdir());
+        assertMkdir(true, subDir);
+        assertMkdir(true, subSubDir);
+        assertMkdir(true, notSubSubDir);
         Iterator<File> iterator = null;
         try {
             // Need list to be appendable
@@ -2221,9 +2224,9 @@ class FileUtilsTest extends AbstractTempDirTest {
             assertEquals(expectedFileNames, actualFileNames);
         } finally {
             consumeRemaining(iterator);
-            notSubSubDir.delete();
-            subSubDir.delete();
-            subDir.delete();
+            assertDelete(false, notSubSubDir);
+            assertDelete(false, subSubDir);
+            assertDelete(false, subDir);
         }
     }
 
@@ -2240,10 +2243,10 @@ class FileUtilsTest extends AbstractTempDirTest {
         final File subDir2 = new File(subDir1, "subdir2");
         final File subDir3 = new File(subDir2, "subdir3");
         final File subDir4 = new File(subDir2, "subdir4");
-        assertTrue(subDir1.mkdir());
-        assertTrue(subDir2.mkdir());
-        assertTrue(subDir3.mkdir());
-        assertTrue(subDir4.mkdir());
+        assertMkdir(true, subDir1);
+        assertMkdir(true, subDir2);
+        assertMkdir(true, subDir3);
+        assertMkdir(true, subDir4);
         final File someFile = new File(subDir2, "a.txt");
         final WildcardFileFilter fileFilterAllFiles = WildcardFileFilter.builder().setWildcards("*.*").get();
         final WildcardFileFilter fileFilterAllDirs = WildcardFileFilter.builder().setWildcards("*").get();
@@ -2272,7 +2275,7 @@ class FileUtilsTest extends AbstractTempDirTest {
     @Test
     void testIterateFilesOnlyNoDirs() throws IOException {
         final File directory = tempDirFile;
-        assertTrue(new File(directory, "TEST").mkdir());
+        assertMkdir(true, new File(directory, "TEST"));
         assertTrue(new File(directory, "test.txt").createNewFile());
 
         final IOFileFilter filter = WildcardFileFilter.builder().setWildcards("*").setIoCase(IOCase.INSENSITIVE).get();
@@ -2284,8 +2287,8 @@ class FileUtilsTest extends AbstractTempDirTest {
         final File srcDir = tempDirFile;
         final File subDir = new File(srcDir, "list_test");
         final File subDir2 = new File(subDir, "subdir");
-        subDir.mkdir();
-        subDir2.mkdir();
+        assertMkdir(true, subDir);
+        assertMkdir(true, subDir2);
         final String[] expectedFileNames = { "a.txt", "b.txt", "c.txt", "d.txt", "e.txt", "f.txt" };
         final int[] fileSizes = { 123, 234, 345, 456, 678, 789 };
         for (int i = 0; i < expectedFileNames.length; ++i) {
@@ -2321,7 +2324,7 @@ class FileUtilsTest extends AbstractTempDirTest {
     @Test
     void testListFilesOnlyNoDirs() throws IOException {
         final File directory = tempDirFile;
-        assertTrue(new File(directory, "TEST").mkdir());
+        assertMkdir(true, new File(directory, "TEST"));
         assertTrue(new File(directory, "test.txt").createNewFile());
 
         final IOFileFilter filter = WildcardFileFilter.builder().setWildcards("*").setIoCase(IOCase.INSENSITIVE).get();
@@ -2335,8 +2338,8 @@ class FileUtilsTest extends AbstractTempDirTest {
         final File srcDir = tempDirFile;
         final File subDir1 = new File(srcDir, "subdir");
         final File subDir2 = new File(subDir1, "subdir2");
-        subDir1.mkdir();
-        subDir2.mkdir();
+        assertMkdir(true, subDir1);
+        assertMkdir(true, subDir2);
         final File someFile = new File(subDir2, "a.txt");
         if (!someFile.getParentFile().exists()) {
             fail("Cannot create file " + someFile + " as the parent directory does not exist");
@@ -2345,7 +2348,7 @@ class FileUtilsTest extends AbstractTempDirTest {
             TestUtils.generateTestData(output, 100);
         }
         final File subDir3 = new File(subDir2, "subdir3");
-        subDir3.mkdir();
+        assertMkdir(true, subDir3);
         // @formatter:off
             final Collection<File> files = FileUtils.listFilesAndDirs(subDir1,
                     WildcardFileFilter.builder().setWildcards("*.*").get(),
@@ -2412,8 +2415,8 @@ class FileUtilsTest extends AbstractTempDirTest {
         assertThrows(IllegalArgumentException.class, () -> FileUtils.moveDirectory(testFile, new File("foo")));
         final File testSrcFile = new File(tempDirFile, "testMoveDirectorySource");
         final File testDestFile = new File(tempDirFile, "testMoveDirectoryDest");
-        testSrcFile.mkdir();
-        testDestFile.mkdir();
+        assertMkdir(true, testSrcFile);
+        assertMkdir(true, testDestFile);
         assertThrows(FileExistsException.class, () -> FileUtils.moveDirectory(testSrcFile, testDestFile),
             "Expected FileExistsException when dest already exists");
 
@@ -2932,11 +2935,10 @@ class FileUtilsTest extends AbstractTempDirTest {
         assertThrows(NullPointerException.class, () -> FileUtils.sizeOf(null));
         // Non-existent file
         assertThrows(IllegalArgumentException.class, () -> FileUtils.sizeOf(file));
-        // Creates file
-        file.createNewFile();
+        assertCreateNewFile(file);
         // New file
         assertEquals(0, FileUtils.sizeOf(file));
-        file.delete();
+        assertDelete(true, file);
         // Existing file
         assertEquals(testFile1Size, FileUtils.sizeOf(testFile1), "Unexpected files size");
         // Existing directory
@@ -2950,11 +2952,10 @@ class FileUtilsTest extends AbstractTempDirTest {
         assertThrows(NullPointerException.class, () -> FileUtils.sizeOfAsBigInteger(null));
         // Non-existent file
         assertThrows(IllegalArgumentException.class, () -> FileUtils.sizeOfAsBigInteger(file));
-        // Creates file
-        file.createNewFile();
+        assertCreateNewFile(file);
         // New file
         assertEquals(BigInteger.ZERO, FileUtils.sizeOfAsBigInteger(file));
-        file.delete();
+        assertDelete(true, file);
         // Existing file
         assertEquals(BigInteger.valueOf(testFile1Size), FileUtils.sizeOfAsBigInteger(testFile1), "Unexpected files size");
         // Existing directory
@@ -2976,15 +2977,19 @@ class FileUtilsTest extends AbstractTempDirTest {
         // Non-existent file
         assertThrows(IllegalArgumentException.class, () -> FileUtils.sizeOfAsBigInteger(file));
         // Creates file
-        file.createNewFile();
+        assertCreateNewFile(file);
         // Existing file
         assertThrows(IllegalArgumentException.class, () -> FileUtils.sizeOfDirectory(file));
-        // Existing directory
-        file.delete();
-        file.mkdir();
+        assertDelete(true, file);
+        assertMkdir(true, file);
         // Create a cyclic symlink
-        createCircularSymbolicLink(file);
-        assertEquals(TEST_DIRECTORY_SIZE, FileUtils.sizeOfDirectory(file), "Unexpected directory size");
+        final Path linkPath = createCircularSymbolicLink(file);
+        try {
+            assertEquals(TEST_DIRECTORY_SIZE, FileUtils.sizeOfDirectory(file), "Unexpected directory size");
+        } finally {
+            Files.deleteIfExists(linkPath);
+            assertDelete(true, file);
+        }
     }
 
     /**
@@ -3001,29 +3006,31 @@ class FileUtilsTest extends AbstractTempDirTest {
         assertThrows(NullPointerException.class, () -> FileUtils.sizeOfDirectoryAsBigInteger(null));
         // Non-existent file
         assertThrows(UncheckedIOException.class, () -> FileUtils.sizeOfDirectoryAsBigInteger(file));
-        // Creates file
-        file.createNewFile();
+        assertCreateNewFile(file);
         // Existing file
         assertThrows(IllegalArgumentException.class, () -> FileUtils.sizeOfDirectoryAsBigInteger(file));
-        // Existing directory
-        file.delete();
-        file.mkdir();
-        createCircularSymbolicLink(file);
-        assertEquals(TEST_DIRECTORY_SIZE_BI, FileUtils.sizeOfDirectoryAsBigInteger(file), "Unexpected directory size");
-        // Existing directory which size is greater than zero
-        file.delete();
-        file.mkdir();
-        final File nonEmptyFile = new File(file, "non-emptyFile" + System.nanoTime());
-        assertTrue(nonEmptyFile.getParentFile().exists(), () -> "Cannot create file " + nonEmptyFile + " as the parent directory does not exist");
-        final OutputStream output = new BufferedOutputStream(Files.newOutputStream(nonEmptyFile.toPath()));
+        assertDelete(true, file);
+        assertMkdir(true, file);
+        final Path linkPath = createCircularSymbolicLink(file);
         try {
-            TestUtils.generateTestData(output, TEST_DIRECTORY_SIZE_GT_ZERO_BI.longValue());
+            assertEquals(TEST_DIRECTORY_SIZE_BI, FileUtils.sizeOfDirectoryAsBigInteger(file), "Unexpected directory size");
+            assertDelete(false, file);
+            assertMkdir(false, file);
+            final File nonEmptyFile = new File(file, "non-emptyFile" + System.nanoTime());
+            assertTrue(nonEmptyFile.getParentFile().exists(), () -> "Cannot create file " + nonEmptyFile + " as the parent directory does not exist");
+            final OutputStream output = new BufferedOutputStream(Files.newOutputStream(nonEmptyFile.toPath()));
+            try {
+                TestUtils.generateTestData(output, TEST_DIRECTORY_SIZE_GT_ZERO_BI.longValue());
+            } finally {
+                IOUtils.closeQuietly(output);
+            }
+            assertEquals(TEST_DIRECTORY_SIZE_GT_ZERO_BI, FileUtils.sizeOfDirectoryAsBigInteger(file), "Unexpected directory size");
+            assertDelete(true, nonEmptyFile);
+            assertDelete(false, file);
         } finally {
-            IOUtils.closeQuietly(output);
+            Files.deleteIfExists(linkPath);
+            assertDelete(true, file);
         }
-        assertEquals(TEST_DIRECTORY_SIZE_GT_ZERO_BI, FileUtils.sizeOfDirectoryAsBigInteger(file), "Unexpected directory size");
-        nonEmptyFile.delete();
-        file.delete();
     }
 
     @Test
@@ -3124,7 +3131,7 @@ class FileUtilsTest extends AbstractTempDirTest {
         assertThrows(NullPointerException.class, () -> FileUtils.touch(null));
         final File file = new File(tempDirFile, "touch.txt");
         if (file.exists()) {
-            file.delete();
+            assertDelete(true, file);
         }
         assertFalse(file.exists(), "Bad test: test file still exists");
         FileUtils.touch(file);
@@ -3149,10 +3156,10 @@ class FileUtilsTest extends AbstractTempDirTest {
 
     @Test
     void testTouchDirDoesNotExist() throws Exception {
-        final File file = new File("target/does-not-exist", "touchme.txt");
+        final File file = new File(new File(tempDirFile, "dir-touch"), "touchme.txt");
         final File parentDir = file.getParentFile();
-        file.delete();
-        parentDir.delete();
+        assertDelete(false, file);
+        assertDelete(false, parentDir);
         assertFalse(parentDir.exists());
         assertFalse(file.exists());
         FileUtils.touch(file);
