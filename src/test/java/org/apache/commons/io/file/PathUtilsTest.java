@@ -18,7 +18,6 @@
 package org.apache.commons.io.file;
 
 import static java.nio.file.LinkOption.NOFOLLOW_LINKS;
-
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -730,8 +729,8 @@ class PathUtilsTest extends AbstractTempDirTest {
     @ArgumentsSource(CopyOptionsArgumentsProvider.class)
     void testCopyDirectoryIgnoresBrokenSymbolicLink(CopyOption... copyOptions) throws Exception {
         final Path sourceDir = Files.createDirectory(tempDirPath.resolve("source"));
-		final Path dir = Files.createDirectory(sourceDir.resolve("dir"));
-		Files.createSymbolicLink(dir.resolve("broken-symlink"), dir.relativize(sourceDir.resolve("file")));
+        final Path dir = Files.createDirectory(sourceDir.resolve("dir"));
+        Files.createSymbolicLink(dir.resolve("broken-symlink"), dir.relativize(sourceDir.resolve("file")));
         final Path targetDir = tempDirPath.resolve("target");
 
         PathUtils.copyDirectory(sourceDir, targetDir, copyOptions);
