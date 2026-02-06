@@ -28,6 +28,7 @@ import java.util.Arrays;
 import java.util.Objects;
 
 import org.apache.commons.io.file.Counters.PathCounters;
+import org.apache.commons.io.filefilter.TrueFileFilter;
 
 /**
  * Copies a source directory to a target directory.
@@ -53,7 +54,7 @@ public class CopyDirectoryVisitor extends CountingPathVisitor {
      * @param copyOptions Specifies how the copying should be done.
      */
     public CopyDirectoryVisitor(final PathCounters pathCounter, final Path sourceDirectory, final Path targetDirectory, final CopyOption... copyOptions) {
-        super(pathCounter);
+        super(pathCounter, TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE);
         this.sourceDirectory = sourceDirectory;
         this.targetDirectory = targetDirectory;
         this.copyOptions = toCopyOption(copyOptions);
