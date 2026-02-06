@@ -26,13 +26,16 @@ import java.net.URL;
 import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
+import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.io.FilenameUtils;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 /**
  * Tests {@link PathUtils}.
@@ -62,7 +65,6 @@ class PathUtilsCopyTest extends AbstractTempDirTest {
             Path sourceDir = archive.getPath("dir1");
             PathUtils.copyDirectory(sourceDir, tempDirPath);
             assertTrue(Files.exists(tempDirPath.resolve("f1")));
-
             // absolute jar -> absolute dir
             sourceDir = archive.getPath("/next");
             PathUtils.copyDirectory(sourceDir, tempDirPath);
@@ -79,7 +81,6 @@ class PathUtilsCopyTest extends AbstractTempDirTest {
             final Path sourceDir = Paths.get("src/test/resources/org/apache/commons/io/dirs-2-file-size-2").toAbsolutePath();
             PathUtils.copyDirectory(sourceDir, targetDir);
             assertTrue(Files.exists(targetDir.resolve("dirs-a-file-size-1")));
-
             // absolute dir -> absolute jar
             targetDir = archive.getPath("/");
             PathUtils.copyDirectory(sourceDir, targetDir);
@@ -90,15 +91,13 @@ class PathUtilsCopyTest extends AbstractTempDirTest {
     @Test
     void testCopyDirectoryForDifferentFilesystemsWithRelativePath() throws IOException {
         final Path archivePath = Paths.get(TEST_JAR_PATH);
-        try (FileSystem archive = openArchive(archivePath, false);
-                FileSystem targetArchive = openArchive(tempDirPath.resolve(TEST_JAR_NAME), true)) {
+        try (FileSystem archive = openArchive(archivePath, false); FileSystem targetArchive = openArchive(tempDirPath.resolve(TEST_JAR_NAME), true)) {
             final Path targetDir = targetArchive.getPath("targetDir");
             Files.createDirectory(targetDir);
             // relative jar -> relative dir
             Path sourceDir = archive.getPath("next");
             PathUtils.copyDirectory(sourceDir, targetDir);
             assertTrue(Files.exists(targetDir.resolve("dir")));
-
             // absolute jar -> relative dir
             sourceDir = archive.getPath("/dir1");
             PathUtils.copyDirectory(sourceDir, targetDir);
@@ -115,12 +114,44 @@ class PathUtilsCopyTest extends AbstractTempDirTest {
             final Path sourceDir = Paths.get("src/test/resources/org/apache/commons/io/dirs-2-file-size-2");
             PathUtils.copyDirectory(sourceDir, targetDir);
             assertTrue(Files.exists(targetDir.resolve("dirs-a-file-size-1")));
-
             // relative dir -> absolute jar
             targetDir = archive.getPath("/");
             PathUtils.copyDirectory(sourceDir, targetDir);
             assertTrue(Files.exists(targetDir.resolve("dirs-a-file-size-1")));
         }
+    }
+
+    /**
+     * Source tree:
+     * <pre>
+     *
+     * source/
+     *   dir/
+     *     file
+     *     symlink-to-file
+     *   symlink-to-dir
+     * </pre>
+     */
+    @Disabled
+    @Test
+    void testCopyDirectoryPreservesSymlinks(@TempDir final Path tempDir) throws Exception {
+        final Path sourceDir = Files.createDirectory(tempDir.resolve("source"));
+        final Path dir = Files.createDirectory(sourceDir.resolve("dir"));
+        final Path dirLink = Files.createSymbolicLink(sourceDir.resolve("link-to-dir"), dir);
+        assertTrue(Files.exists(dirLink));
+        final Path file = Files.createFile(dir.resolve("file"));
+        final Path fileLink = Files.createSymbolicLink(dir.resolve("link-to-file"), file);
+        assertTrue(Files.exists(fileLink));
+        final Path targetDir = tempDir.resolve("target");
+        PathUtils.copyDirectory(sourceDir, targetDir, LinkOption.NOFOLLOW_LINKS);
+        final Path copyOfDir = targetDir.resolve("dir");
+        assertTrue(Files.exists(copyOfDir));
+        final Path copyOfDirLink = targetDir.resolve("link-to-dir");
+        assertTrue(Files.exists(copyOfDirLink));
+        assertTrue(Files.isSymbolicLink(copyOfDirLink));
+        final Path copyOfFileLink = copyOfDir.resolve("link-to-file");
+        assertTrue(Files.exists(copyOfFileLink));
+        assertTrue(Files.isSymbolicLink(copyOfFileLink));
     }
 
     @Test
@@ -149,5 +180,4 @@ class PathUtilsCopyTest extends AbstractTempDirTest {
         assertTrue(Files.exists(targetFile));
         assertEquals(Files.size(sourceFile), Files.size(targetFile));
     }
-
 }
