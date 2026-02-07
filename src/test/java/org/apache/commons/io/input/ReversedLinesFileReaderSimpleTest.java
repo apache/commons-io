@@ -30,7 +30,6 @@ import java.util.List;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.TestResources;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -42,10 +41,10 @@ class ReversedLinesFileReaderSimpleTest {
      */
     @ParameterizedTest
     @MethodSource("org.apache.commons.io.input.ReversedLinesFileReaderParamBlockSizeTest#blockSizes")
-    @Disabled
     void testEmptyFirstLine(final int blockSize) throws Exception {
         final File testFileEmptyFirstLine = TestResources.getFile("/empty-first-line.bin");
-        try (ReversedLinesFileReader reversedLinesFileReader = new ReversedLinesFileReader(testFileEmptyFirstLine, 10, StandardCharsets.US_ASCII.name())) {
+        try (ReversedLinesFileReader reversedLinesFileReader = new ReversedLinesFileReader(testFileEmptyFirstLine,
+                blockSize, StandardCharsets.US_ASCII.name())) {
             assertEqualsAndNoLineBreaks("test2", reversedLinesFileReader.readLine());
             assertEqualsAndNoLineBreaks("", reversedLinesFileReader.readLine());
             assertEqualsAndNoLineBreaks("test1", reversedLinesFileReader.readLine());

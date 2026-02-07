@@ -212,6 +212,13 @@ public class ReversedLinesFileReader implements Closeable, IOIterable<String> {
             final boolean isLastFilePart = partNumber == 1;
 
             int i = currentLastBytePos;
+
+            if (i == -1 && isLastFilePart && leftOver != null) {
+                line = new String(leftOver, charset);
+                leftOver = null;
+                return line;
+            }
+
             while (i > -1) {
 
                 if (!isLastFilePart && i < avoidNewlineSplitBufferSize) {
@@ -234,6 +241,10 @@ public class ReversedLinesFileReader implements Closeable, IOIterable<String> {
                     line = new String(lineData, charset);
 
                     currentLastBytePos = i - newLineMatchByteCount;
+
+                    if (isLastFilePart && currentLastBytePos == -1 && i == 0) {
+                        leftOver = new byte[0];
+                    }
                     break; // found line
                 }
 
@@ -242,14 +253,22 @@ public class ReversedLinesFileReader implements Closeable, IOIterable<String> {
 
                 // end of file part handling
                 if (i < 0) {
-                    createLeftOver();
+                    if (isLastFilePart) {
+                        final int lineLengthBytes = currentLastBytePos + 1;
+                        if (lineLengthBytes > 0) {
+                            final byte[] lineData = Arrays.copyOf(data, lineLengthBytes);
+                            line = new String(lineData, charset);
+                        }
+                        currentLastBytePos = -1;
+                    } else {
+                        createLeftOver();
+                    }
                     break; // end of file part
                 }
             }
 
-            // last file part handling
-            if (isLastFilePart && leftOver != null) {
-                // there will be partNumber line break anymore, this is the first line of the file
+            // there will be partNumber line break anymore, this is the first line of the file
+            if (line == null && isLastFilePart && leftOver != null) {
                 line = new String(leftOver, charset);
                 leftOver = null;
             }
