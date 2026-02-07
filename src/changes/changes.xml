@@ -58,6 +58,7 @@ The <action> type attribute can be add,update,fix,remove.
       <action type="fix" dev="ggregory" due-to="Gary Gregory">ThrottledInputStream.throttle() now restores the current thread's interrupt flag when catching InterruptedException.</action>
       <action type="fix" dev="ggregory" due-to="Gary Gregory">ThrottledInputStream.throttle() doesn't preserve the original InterruptedException as the cause of its InterruptedIOException.</action>
       <action type="fix" dev="ggregory" due-to="Gary Gregory">All thread names are now prefixed with "commons-io-".</action>
+      <action type="fix" dev="ggregory" due-to="Kishor, Mashrur Mia" issue="IO-639">ReversedLinesFileReader does not read first line if its empty #829.</action>
       <!-- ADD -->
       <action type="add" dev="ggregory" due-to="Gary Gregory, Piotr P. Karwasz">Add and use IOUtils.closeQuietlySuppress(Closeable, Throwable) #818.</action>
       <!-- UPDATE -->
