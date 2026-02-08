@@ -139,7 +139,7 @@ public final class PathUtils {
 
         static String extractKey(final String separator, final String string) {
             // Replace the file separator in a path string with a string that is not legal in a path on Windows, Linux, and macOS.
-            return string.replaceAll("\\" + separator, ">");
+            return string.replace(separator, ">");
         }
 
         final boolean equals;
