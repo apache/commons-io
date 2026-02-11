@@ -82,6 +82,7 @@ import org.apache.commons.io.ThreadUtils;
 import org.apache.commons.io.file.Counters.PathCounters;
 import org.apache.commons.io.file.attribute.FileTimes;
 import org.apache.commons.io.filefilter.IOFileFilter;
+import org.apache.commons.io.filefilter.TrueFileFilter;
 import org.apache.commons.io.function.IOFunction;
 import org.apache.commons.io.function.IOSupplier;
 
@@ -408,13 +409,13 @@ public final class PathUtils {
         Set<FileVisitOption> fileVisitOptions = FOLLOW_LINKS_FILE_VISIT_OPTIONS;
         if (copyOptions != null) {
             for (CopyOption copyOption : copyOptions) {
-                if (LinkOption.NOFOLLOW_LINKS.equals(copyOption)) {
+                if (copyOption == LinkOption.NOFOLLOW_LINKS) {
                     fileVisitOptions = Collections.emptySet();
                     break;
                 }
             }
         }
-        return visitFileTree(new CopyDirectoryVisitor(Counters.longPathCounters(), absoluteSource, targetDirectory, copyOptions), absoluteSource,
+        return visitFileTree(new CopyDirectoryVisitor(Counters.longPathCounters(), TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE, absoluteSource, targetDirectory, copyOptions), absoluteSource,
                 fileVisitOptions, Integer.MAX_VALUE)
                 .getPathCounters();
     }
