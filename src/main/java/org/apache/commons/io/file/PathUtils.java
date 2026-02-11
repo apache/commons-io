@@ -401,7 +401,7 @@ public final class PathUtils {
      */
     public static PathCounters copyDirectory(final Path sourceDirectory, final Path targetDirectory, final CopyOption... copyOptions) throws IOException {
         final Path absoluteSource = sourceDirectory.toAbsolutePath();
-        // CopyOption.NOFOLLOW_LINKS is the explicit option, "follow symlinks" the implicit default.
+        // LinkOption.NOFOLLOW_LINKS is the explicit option, "follow symlinks" the implicit default.
         // For FileVisitOption it's the other way around: FileVisitOption.FOLLOW_LINKS is the explicit option, and "do not follow symlinks" is the implicit
         // default.
         // If they're not in sync, the behavior is inconsistent, so we have to make sure they're in sync.
