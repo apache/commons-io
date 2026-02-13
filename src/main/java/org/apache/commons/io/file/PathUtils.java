@@ -415,8 +415,8 @@ public final class PathUtils {
                 }
             }
         }
-        return visitFileTree(new CopyDirectoryVisitor(Counters.longPathCounters(), TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE, absoluteSource, targetDirectory, copyOptions), absoluteSource,
-                fileVisitOptions, Integer.MAX_VALUE)
+        return visitFileTree(new CopyDirectoryVisitor(Counters.longPathCounters(), TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE, absoluteSource,
+                targetDirectory, copyOptions), absoluteSource, fileVisitOptions, Integer.MAX_VALUE)
                 .getPathCounters();
     }
 
