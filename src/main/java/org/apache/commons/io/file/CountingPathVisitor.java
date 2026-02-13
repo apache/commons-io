@@ -305,13 +305,14 @@ public class CountingPathVisitor extends SimplePathVisitor {
 
     /**
      * Updates the counters for visiting the given file, ignoring symbolic links.
-     * <p/>
+     * <p>
      * According to the JavaDoc, {@link BasicFileAttributes#size} is only well-defined for regular files.
      * For symbolic links on Linux for example, it counts the # (charset dependent?) bytes in the inode name,
-     * which is <i>not</i>> what we want to count here.
+     * which is <em>not</em> what we want to count here.
      * Intuitively, the appropriate check would be {@link Files#isRegularFile}.
      * However, for symbolic links, {@code isRegularFile} returns {@code true} under a "follow links" regime.
      * That would still not give us what we want, so instead we settle for a {@code !Files.isSymbolicLink} check.
+     * </p>
      *
      * @param file       the visited file.
      * @param attributes the visited file attributes.
