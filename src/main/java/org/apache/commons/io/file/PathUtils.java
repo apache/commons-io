@@ -137,8 +137,14 @@ public final class PathUtils {
             return extractKey(separator1, string1).equals(extractKey(separator2, string2));
         }
 
+        /**
+         * Replaces the file separator in a path string with a string that is not legal in a path on Windows, Linux, and macOS.
+         *
+         * @param separator the file separator.
+         * @param string a path.
+         * @return a key.
+         */
         static String extractKey(final String separator, final String string) {
-            // Replace the file separator in a path string with a string that is not legal in a path on Windows, Linux, and macOS.
             return string.replace(separator, ">");
         }
 
