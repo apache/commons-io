@@ -1367,7 +1367,7 @@ The <action> type attribute can be add,update,fix,remove.
         Fixed error of copying directories between different file systems #203.
       </action>
       <action dev="ggregory" type="fix" due-to="Felix Rilling">
-        Fix Typos in JavaDoc, Comments and Tests #201.
+        Fix Typos in Javadoc, Comments and Tests #201.
       </action>
       <action issue="IO-718" dev="ggregory" type="fix" due-to="Robert Cooper, Gary Gregory">
         FileUtils.checksumCRC32 and FileUtils.checksum are not thread safe.
