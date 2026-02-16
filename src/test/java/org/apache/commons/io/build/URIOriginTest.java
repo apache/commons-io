@@ -21,16 +21,22 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
+import java.nio.ByteBuffer;
+import java.nio.channels.Channel;
+import java.nio.channels.ReadableByteChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.time.Duration;
+import java.util.function.Supplier;
 
 import org.apache.commons.io.build.AbstractOrigin.URIOrigin;
+import org.apache.commons.io.build.AbstractOrigin.URIOrigin.URIOpenOption;
 import org.apache.commons.lang3.ArrayUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
+import org.junit.jupiter.params.provider.MethodSource;
 
 /**
  * Tests {@link URIOrigin}.
@@ -40,6 +46,31 @@ import org.junit.jupiter.params.provider.ValueSource;
  * @see URI
  */
 class URIOriginTest extends AbstractOriginTest<URI, URIOrigin> {
+
+    // @formatter:off
+    private static final URIOpenOption URI_OPEN_OPTION = URIOpenOption.builder()
+            .setConnectTimeout(Duration.ofSeconds(60))
+            .setReadTimeout(Duration.ofSeconds(60))
+            .get();
+    // @formatter:on
+
+    static String[] fixtures() {
+        return new String[] { "http://1.1.1.1", // IP
+                "http://google.com", // HTTP
+                "https://apache.org" // HTTPS
+        };
+    }
+
+    private void checkRead(final InputStream in) throws IOException {
+        assertNotEquals(-1, in.read());
+    }
+
+    private void checkRead(final Channel in, final Supplier<String> message) throws IOException {
+        if (in instanceof ReadableByteChannel) {
+            final ReadableByteChannel rbc = (ReadableByteChannel) in;
+            assertNotEquals(-1, rbc.read(ByteBuffer.allocate(1)), message);
+        }
+    }
 
     @Override
     protected URIOrigin newOriginRo() {
@@ -58,23 +89,36 @@ class URIOriginTest extends AbstractOriginTest<URI, URIOrigin> {
         Files.write(rwPath, ArrayUtils.EMPTY_BYTE_ARRAY, StandardOpenOption.CREATE);
     }
 
-    @ParameterizedTest
-    @ValueSource(strings = {
-            "http://apache.com",
-            "https://apache.com"
-    })
-    void testGetInputStream(final String uri) throws Exception {
-        final AbstractOrigin.URIOrigin origin = new AbstractOrigin.URIOrigin(new URI(uri));
-        try (InputStream in = origin.getInputStream()) {
-            assertNotEquals(-1, in.read());
+    @Test
+    void testGetChannelFileURI() throws Exception {
+        final AbstractOrigin.URIOrigin origin = getOriginRo().asThis();
+        try (Channel in = origin.getChannel()) {
+            checkRead(in, origin::toString);
         }
     }
 
+    @ParameterizedTest
+    @MethodSource("fixtures")
+    void testGetInputStrea(final String uri) throws Exception {
+        final AbstractOrigin.URIOrigin origin = new AbstractOrigin.URIOrigin(new URI(uri));
+        try (Channel in = origin.getChannel(URI_OPEN_OPTION)) {
+            checkRead(in, uri::toString);
+        }
+    }
+
+    @ParameterizedTest
+    @MethodSource("fixtures")
+    void testGetInputStream(final String uri) throws Exception {
+        final AbstractOrigin.URIOrigin origin = new AbstractOrigin.URIOrigin(new URI(uri));
+        try (InputStream in = origin.getInputStream(URI_OPEN_OPTION)) {
+            checkRead(in);
+        }
+    }
     @Test
     void testGetInputStreamFileURI() throws Exception {
         final AbstractOrigin.URIOrigin origin = getOriginRo().asThis();
         try (InputStream in = origin.getInputStream()) {
-            assertNotEquals(-1, in.read());
+            checkRead(in);
         }
     }
 }
