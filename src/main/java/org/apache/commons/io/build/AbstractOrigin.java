@@ -31,6 +31,7 @@ import java.io.RandomAccessFile;
 import java.io.Reader;
 import java.io.Writer;
 import java.net.URI;
+import java.net.URLConnection;
 import java.nio.channels.Channel;
 import java.nio.channels.Channels;
 import java.nio.channels.FileChannel;
@@ -43,8 +44,10 @@ import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.time.Duration;
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.stream.Stream;
 
 import org.apache.commons.io.Charsets;
 import org.apache.commons.io.IORandomAccessFile;
@@ -961,6 +964,80 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
      */
     public static class URIOrigin extends AbstractOrigin<URI, URIOrigin> {
 
+        /**
+         * Options for connect and read from a URI.
+         *
+         * @since 2.22.0
+         */
+        public static final class URIOpenOption implements OpenOption {
+
+            /**
+             * Builds URIOpenOption.
+             */
+            public static class Builder extends AbstractSupplier<URIOpenOption, Builder> {
+
+                private Duration connectTimeout;
+                private Duration readTimeout;
+
+                /**
+                 * Constructs a new instance.
+                 */
+                public Builder() {
+                    // empty
+                }
+
+                @Override
+                public URIOpenOption get() {
+                    return new URIOpenOption(this);
+                }
+
+                /**
+                 * Sets the connect timeout duration.
+                 *
+                 * @param connectTimeout the connect timeout duration.
+                 * @return {@code this instance}.
+                 */
+                public Builder setConnectTimeout(final Duration connectTimeout) {
+                    this.connectTimeout = connectTimeout;
+                    return asThis();
+                }
+
+                /**
+                 * Sets the read timeout duration.
+                 *
+                 * @param readTimeout the read timeout duration.
+                 * @return {@code this instance}.
+                 */
+                public Builder setReadTimeout(final Duration readTimeout) {
+                    this.readTimeout = readTimeout;
+                    return asThis();
+                }
+            }
+
+            /**
+             * Creates a new builder.
+             *
+             * @return a new builder.
+             */
+            public static Builder builder() {
+                return new Builder();
+            }
+
+            private final Duration connectTimeout;
+
+            private final Duration readTimeout;
+
+            private URIOpenOption(final Builder builder) {
+                connectTimeout = builder.connectTimeout;
+                readTimeout = builder.readTimeout;
+            }
+
+            @Override
+            public String toString() {
+                return "URIOpenOption [connectTimeout=" + connectTimeout + ", readTimeout=" + readTimeout + "]";
+            }
+        }
+
         private static final String SCHEME_HTTPS = "https";
         private static final String SCHEME_HTTP = "http";
 
@@ -974,12 +1051,17 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
             super(origin);
         }
 
+        /**
+         * {@inheritDoc}
+         *
+         * @see URIOpenOption
+         */
         @Override
         protected Channel getChannel(final OpenOption... options) throws IOException {
             final URI uri = get();
             final String scheme = uri.getScheme();
             if (SCHEME_HTTP.equalsIgnoreCase(scheme) || SCHEME_HTTPS.equalsIgnoreCase(scheme)) {
-                return Channels.newChannel(uri.toURL().openStream());
+                return Channels.newChannel(getInputStream(uri, options));
             }
             return Files.newByteChannel(getPath(), options);
         }
@@ -989,19 +1071,51 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
             return getPath().toFile();
         }
 
+        /**
+         * {@inheritDoc}
+         * <p>
+         * Set timeouts with a {@link URIOpenOption}.
+         * </p>
+         *
+         * @see URIOpenOption
+         * @see URLConnection#setConnectTimeout(int)
+         * @see URLConnection#setReadTimeout(int)
+         */
         @Override
         public InputStream getInputStream(final OpenOption... options) throws IOException {
             final URI uri = get();
             final String scheme = uri.getScheme();
             if (SCHEME_HTTP.equalsIgnoreCase(scheme) || SCHEME_HTTPS.equalsIgnoreCase(scheme)) {
-                return uri.toURL().openStream();
+                return getInputStream(uri, options);
             }
             return Files.newInputStream(getPath(), options);
+        }
+
+        private InputStream getInputStream(final URI uri, final OpenOption... options) throws IOException {
+            final URLConnection connection = uri.toURL().openConnection();
+            if (options != null) {
+                Stream.of(options).forEach(option -> {
+                    if (option instanceof URIOpenOption) {
+                        final URIOpenOption connOption = (URIOpenOption) option;
+                        if (connOption.connectTimeout != null) {
+                            connection.setConnectTimeout(toMillis(connOption.connectTimeout));
+                        }
+                        if (connOption.readTimeout != null) {
+                            connection.setReadTimeout(toMillis(connOption.readTimeout));
+                        }
+                    }
+                });
+            }
+            return connection.getInputStream();
         }
 
         @Override
         public Path getPath() {
             return Paths.get(get());
+        }
+
+        private int toMillis(final Duration duration) {
+            return Math.toIntExact(duration.toMillis());
         }
     }
 
