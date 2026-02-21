@@ -136,7 +136,7 @@ class FilesUncheckTest {
 
     @Test
     void testCreateLink() {
-        assertEquals(NEW_FILE_PATH_LINK, FilesUncheck.createLink(NEW_FILE_PATH_LINK, FILE_PATH_EMPTY));
+        assertEquals(NEW_FILE_PATH_LINK, FilesUncheck.createLink(NEW_FILE_PATH_LINK, FILE_PATH_EMPTY.toAbsolutePath()));
     }
 
     @Test
