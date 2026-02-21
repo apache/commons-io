@@ -100,6 +100,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIf;
 import org.junit.jupiter.api.condition.EnabledOnOs;
 import org.junit.jupiter.api.condition.OS;
+import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
@@ -1952,8 +1953,8 @@ class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    void testIO276() throws Exception {
-        final File dir = new File("target", "IO276");
+    void testIO276(@TempDir File dest) throws Exception {
+        final File dir = new File(dest, "IO276");
         Files.deleteIfExists(dir.toPath());
         assertTrue(dir.mkdirs(), dir + " should not be present");
         final File file = new File(dir, "IO276.txt");
