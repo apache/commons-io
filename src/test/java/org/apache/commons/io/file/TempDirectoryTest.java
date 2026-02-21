@@ -22,16 +22,20 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.nio.file.Path;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 /**
  * Tests {@link TempDirectory}.
  */
 class TempDirectoryTest {
 
+    @TempDir
+    Path tempDirPath;
+    
     @SuppressWarnings("resource")
     @Test
     void testCreatePath() throws IOException {
@@ -51,7 +55,7 @@ class TempDirectoryTest {
     @Test
     void testCreateString() throws IOException {
         final TempDirectory ref;
-        try (TempDirectory tempDir = TempDirectory.create(Paths.get("target"), getClass().getCanonicalName())) {
+        try (TempDirectory tempDir = TempDirectory.create(tempDirPath, getClass().getCanonicalName())) {
             ref = tempDir;
             assertTrue(FileUtils.isEmptyDirectory(tempDir.toFile()));
         }
