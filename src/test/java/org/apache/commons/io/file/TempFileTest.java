@@ -22,20 +22,24 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.nio.file.Path;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 /**
  * Tests {@link TempFile}.
  */
 class TempFileTest {
 
+    @TempDir
+    Path tempDirPath;
+
     @SuppressWarnings("resource")
     @Test
     void testCreatePath() throws IOException {
         final TempFile ref;
-        try (TempFile tempDir = TempFile.create(Paths.get("target"), "prefix", ".suffix")) {
+        try (TempFile tempDir = TempFile.create(tempDirPath, "prefix", ".suffix")) {
             ref = tempDir;
             assertTrue(Files.exists(ref.get()));
         }

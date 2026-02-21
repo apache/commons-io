@@ -954,7 +954,7 @@ class FilenameUtilsTest {
     }
 
     @Test
-    void testNormalizeFromJavaDoc() {
+    void testNormalizeFromJavadoc() {
         // Examples from Javadoc
         assertEquals(SEP + "foo" + SEP, FilenameUtils.normalize("/foo//"));
         assertEquals(SEP + "foo" + SEP, FilenameUtils.normalize(SEP + "foo" + SEP + "." + SEP));
