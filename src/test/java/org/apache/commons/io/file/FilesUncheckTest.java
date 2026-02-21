@@ -58,8 +58,10 @@ import org.apache.commons.io.input.NullInputStream;
 import org.apache.commons.io.output.NullOutputStream;
 import org.apache.commons.lang3.ArrayUtils;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 /**
  * Tests {@link FilesUncheck}.
@@ -72,19 +74,35 @@ class FilesUncheckTest {
 
     private static final Path FILE_PATH_A = Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-1/file-size-1.bin");
 
-    private static final Path FILE_PATH_EMPTY = Paths.get("src/test/resources/org/apache/commons/io/test-file-empty.bin");
+    private static final Path FILE_PATH_EMPTY_SRC = Paths.get("src/test/resources/org/apache/commons/io/test-file-empty.bin");
 
-    private static final Path NEW_DIR_PATH = Paths.get("target/newdir");
+    private static Path FILE_PATH_EMPTY;
 
-    private static final Path NEW_FILE_PATH = Paths.get("target/file.txt");
+    private static Path NEW_DIR_PATH;
 
-    private static final Path NEW_FILE_PATH_LINK = Paths.get("target/to_another_file.txt");
+    private static Path NEW_FILE_PATH;
+
+    private static Path NEW_FILE_PATH_LINK;
 
     private static final String PREFIX = "prefix";
 
     private static final String SUFFIX = "suffix";
 
-    private static final Path TARGET_PATH = Paths.get("target");
+    @TempDir
+    static Path DEST_PATH;
+
+    @BeforeAll
+    public static void beforeAll() throws IOException {
+        NEW_DIR_PATH = DEST_PATH.resolve("newdir");
+        NEW_FILE_PATH = DEST_PATH.resolve("file.txt");
+        NEW_FILE_PATH_LINK = DEST_PATH.resolve("to_another_file.txt");
+        // Allowance for Java 25, GitHub CI on Windows, when cloned repository is on a different volume than the Java temporary directory.
+        // Details:
+        // On GitHub CI on Windows, the cloned repository is on a different volume than the Java temporary directory.
+        // This means we cannot use the source file directly as the target of a link.
+        // Copy the text fixture to the destination directory to make sure it is on the same volume as the Java temporary directory.
+        FILE_PATH_EMPTY = Files.copy(FILE_PATH_EMPTY_SRC, DEST_PATH.resolve(FILE_PATH_EMPTY_SRC.getFileName()));
+    }
 
     @BeforeEach
     @AfterEach
@@ -111,7 +129,7 @@ class FilesUncheckTest {
 
     @Test
     void testCreateDirectories() {
-        assertEquals(TARGET_PATH, FilesUncheck.createDirectories(TARGET_PATH, EMPTY_FILE_ATTRIBUTES_ARRAY));
+        assertEquals(DEST_PATH, FilesUncheck.createDirectories(DEST_PATH, EMPTY_FILE_ATTRIBUTES_ARRAY));
     }
 
     @Test
@@ -126,7 +144,7 @@ class FilesUncheckTest {
 
     @Test
     void testCreateLink() {
-        assertEquals(NEW_FILE_PATH_LINK, FilesUncheck.createLink(NEW_FILE_PATH_LINK, FILE_PATH_EMPTY));
+        assertEquals(NEW_FILE_PATH_LINK, FilesUncheck.createLink(NEW_FILE_PATH_LINK, FILE_PATH_EMPTY.toAbsolutePath()));
     }
 
     @Test
@@ -137,7 +155,7 @@ class FilesUncheckTest {
 
     @Test
     void testCreateTempDirectoryPathStringFileAttributeOfQArray() {
-        assertEquals(TARGET_PATH, FilesUncheck.createTempDirectory(TARGET_PATH, PREFIX, EMPTY_FILE_ATTRIBUTES_ARRAY).getParent());
+        assertEquals(DEST_PATH, FilesUncheck.createTempDirectory(DEST_PATH, PREFIX, EMPTY_FILE_ATTRIBUTES_ARRAY).getParent());
     }
 
     @Test
@@ -147,7 +165,7 @@ class FilesUncheckTest {
 
     @Test
     void testCreateTempFilePathStringStringFileAttributeOfQArray() {
-        assertEquals(TARGET_PATH, FilesUncheck.createTempFile(TARGET_PATH, PREFIX, SUFFIX, EMPTY_FILE_ATTRIBUTES_ARRAY).getParent());
+        assertEquals(DEST_PATH, FilesUncheck.createTempFile(DEST_PATH, PREFIX, SUFFIX, EMPTY_FILE_ATTRIBUTES_ARRAY).getParent());
     }
 
     @Test
@@ -300,8 +318,8 @@ class FilesUncheckTest {
     @Test
     void testNewDirectoryStreamPath() {
         Uncheck.run(() -> {
-            try (DirectoryStream<Path> directoryStream = FilesUncheck.newDirectoryStream(TARGET_PATH)) {
-                directoryStream.forEach(e -> assertEquals(TARGET_PATH, e.getParent()));
+            try (DirectoryStream<Path> directoryStream = FilesUncheck.newDirectoryStream(DEST_PATH)) {
+                directoryStream.forEach(e -> assertEquals(DEST_PATH, e.getParent()));
             }
         });
     }
@@ -309,8 +327,8 @@ class FilesUncheckTest {
     @Test
     void testNewDirectoryStreamPathFilterOfQsuperPath() {
         Uncheck.run(() -> {
-            try (DirectoryStream<Path> directoryStream = FilesUncheck.newDirectoryStream(TARGET_PATH, e -> true)) {
-                directoryStream.forEach(e -> assertEquals(TARGET_PATH, e.getParent()));
+            try (DirectoryStream<Path> directoryStream = FilesUncheck.newDirectoryStream(DEST_PATH, e -> true)) {
+                directoryStream.forEach(e -> assertEquals(DEST_PATH, e.getParent()));
             }
         });
     }
@@ -318,8 +336,8 @@ class FilesUncheckTest {
     @Test
     void testNewDirectoryStreamPathString() {
         Uncheck.run(() -> {
-            try (DirectoryStream<Path> directoryStream = FilesUncheck.newDirectoryStream(TARGET_PATH, "*.xml")) {
-                directoryStream.forEach(e -> assertEquals(TARGET_PATH, e.getParent()));
+            try (DirectoryStream<Path> directoryStream = FilesUncheck.newDirectoryStream(DEST_PATH, "*.xml")) {
+                directoryStream.forEach(e -> assertEquals(DEST_PATH, e.getParent()));
             }
         });
     }
@@ -425,24 +443,24 @@ class FilesUncheckTest {
 
     @Test
     void testWalkFileTreePathFileVisitorOfQsuperPath() {
-        assertEquals(TARGET_PATH, FilesUncheck.walkFileTree(TARGET_PATH, NoopPathVisitor.INSTANCE));
+        assertEquals(DEST_PATH, FilesUncheck.walkFileTree(DEST_PATH, NoopPathVisitor.INSTANCE));
     }
 
     @Test
     void testWalkFileTreePathSetOfFileVisitOptionIntFileVisitorOfQsuperPath() {
-        assertEquals(TARGET_PATH, FilesUncheck.walkFileTree(TARGET_PATH, new HashSet<>(), 1, NoopPathVisitor.INSTANCE));
+        assertEquals(DEST_PATH, FilesUncheck.walkFileTree(DEST_PATH, new HashSet<>(), 1, NoopPathVisitor.INSTANCE));
     }
 
     @Test
     void testWalkPathFileVisitOptionArray() {
-        try (Stream<Path> stream = FilesUncheck.walk(TARGET_PATH, FileVisitOption.FOLLOW_LINKS)) {
+        try (Stream<Path> stream = FilesUncheck.walk(DEST_PATH, FileVisitOption.FOLLOW_LINKS)) {
             assertTrue(0 < stream.count());
         }
     }
 
     @Test
     void testWalkPathIntFileVisitOptionArray() {
-        try (Stream<Path> stream = FilesUncheck.walk(TARGET_PATH, 0, FileVisitOption.FOLLOW_LINKS)) {
+        try (Stream<Path> stream = FilesUncheck.walk(DEST_PATH, 0, FileVisitOption.FOLLOW_LINKS)) {
             assertEquals(1, stream.count());
         }
     }
