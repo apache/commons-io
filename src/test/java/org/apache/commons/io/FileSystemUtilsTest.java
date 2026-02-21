@@ -29,6 +29,8 @@ import org.junit.jupiter.params.provider.MethodSource;
 @SuppressWarnings("deprecation") // testing deprecated class
 class FileSystemUtilsTest {
 
+    private static final String NON_EMPTY_DIR = "src/test/resources/dir-equals-tests";
+
     static char[] getIllegalFileNameChars() {
         return FileSystem.getCurrent().getIllegalFileNameChars();
     }
@@ -50,7 +52,7 @@ class FileSystemUtilsTest {
         assertThrows(IllegalArgumentException.class, () -> FileSystemUtils.freeSpace("this directory does not exist, at all."));
         // "" means current dir.
         assertTrue(FileSystemUtils.freeSpace("") > 0);
-        assertTrue(FileSystemUtils.freeSpace("target") > 0);
+        assertTrue(FileSystemUtils.freeSpace(NON_EMPTY_DIR) > 0);
         // files worked as well in previous versions.
         assertTrue(FileSystemUtils.freeSpace("pom.xml") > 0);
     }
@@ -71,7 +73,7 @@ class FileSystemUtilsTest {
         assertThrows(IllegalArgumentException.class, () -> FileSystemUtils.freeSpaceKb("this directory does not exist, at all."));
         // "" means current dir.
         assertTrue(FileSystemUtils.freeSpaceKb("") > 0);
-        assertTrue(FileSystemUtils.freeSpaceKb("target") > 0);
+        assertTrue(FileSystemUtils.freeSpaceKb(NON_EMPTY_DIR) > 0);
         // files worked as well in previous versions.
         assertTrue(FileSystemUtils.freeSpaceKb("pom.xml") > 0);
     }
@@ -82,7 +84,7 @@ class FileSystemUtilsTest {
         assertThrows(IllegalArgumentException.class, () -> FileSystemUtils.freeSpaceKb("this directory does not exist, at all.", 0));
         // "" means current dir.
         assertTrue(FileSystemUtils.freeSpaceKb("", 0) > 0);
-        assertTrue(FileSystemUtils.freeSpaceKb("target", 0) > 0);
+        assertTrue(FileSystemUtils.freeSpaceKb(NON_EMPTY_DIR, 0) > 0);
         // files worked as well in previous versions.
         assertTrue(FileSystemUtils.freeSpaceKb("pom.xml", 0) > 0);
     }
