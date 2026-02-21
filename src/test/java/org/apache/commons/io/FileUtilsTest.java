@@ -925,7 +925,7 @@ class FileUtilsTest extends AbstractTempDirTest {
         assertTrue(setLastModifiedMillis(sourceDirectory, DATE2));
         assertTrue(setLastModifiedMillis(source, DATE1));
 
-        final File target = new File(tempDirFile, "target");
+        final File target = new File(tempDirFile, "dest");
         final File targetDirectory = new File(target, "directory");
         final File targetFile = new File(targetDirectory, "hello.txt");
 
