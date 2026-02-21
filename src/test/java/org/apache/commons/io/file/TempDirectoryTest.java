@@ -35,7 +35,7 @@ class TempDirectoryTest {
 
     @TempDir
     Path tempDirPath;
-    
+
     @SuppressWarnings("resource")
     @Test
     void testCreatePath() throws IOException {
