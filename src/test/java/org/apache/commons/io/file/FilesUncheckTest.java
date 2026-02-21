@@ -96,9 +96,11 @@ class FilesUncheckTest {
         NEW_DIR_PATH = DEST_PATH.resolve("newdir");
         NEW_FILE_PATH = DEST_PATH.resolve("file.txt");
         NEW_FILE_PATH_LINK = DEST_PATH.resolve("to_another_file.txt");
+        // Allowance for Java 25, GitHub CI on Windows, when cloned repository is on a different volume than the Java temporary directory.
+        // Details:
         // On GitHub CI on Windows, the cloned repository is on a different volume than the Java temporary directory.
-        // This means  we cannot use the source file directly as the target of a link.
-        // Copy the text fixture to the destination directory to make sure it is on the same volume.
+        // This means we cannot use the source file directly as the target of a link.
+        // Copy the text fixture to the destination directory to make sure it is on the same volume as the Java temporary directory.
         FILE_PATH_EMPTY = Files.copy(FILE_PATH_EMPTY_SRC, DEST_PATH.resolve(FILE_PATH_EMPTY_SRC.getFileName()));
     }
 
