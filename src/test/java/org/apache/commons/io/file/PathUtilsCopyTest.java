@@ -191,7 +191,6 @@ class PathUtilsCopyTest extends AbstractTempDirTest {
         assertEquals(Files.size(sourceFile), Files.size(targetFile));
     }
 
-
     /**
      * Illustrates how copy with {@link LinkOption#NOFOLLOW_LINKS} preserves relative symlinks to directories.
      * This simulates to the behavior of Linux {@code cp -r}.
