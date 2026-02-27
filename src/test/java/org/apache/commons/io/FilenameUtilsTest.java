@@ -192,7 +192,7 @@ class FilenameUtilsTest {
     void testEqualsNormalizedError_IO_128() {
         assertFalse(FilenameUtils.equalsNormalizedOnSystem("//file.txt", "file.txt"));
         assertFalse(FilenameUtils.equalsNormalizedOnSystem("file.txt", "//file.txt"));
-        assertFalse(FilenameUtils.equalsNormalizedOnSystem("//file.txt", "//file.txt"));
+        assertTrue(FilenameUtils.equalsNormalizedOnSystem("//file.txt", "//file.txt"));
     }
 
     @Test
@@ -275,7 +275,7 @@ class FilenameUtilsTest {
         assertNull(FilenameUtils.getFullPath("1:"));
         assertNull(FilenameUtils.getFullPath("1:a"));
         assertNull(FilenameUtils.getFullPath("///a/b/c.txt"));
-        assertNull(FilenameUtils.getFullPath("//a"));
+        assertEquals("//a", FilenameUtils.getFullPath("//a"));
 
         assertEquals("", FilenameUtils.getFullPath(""));
 
@@ -317,7 +317,7 @@ class FilenameUtilsTest {
         assertNull(FilenameUtils.getFullPathNoEndSeparator("1:"));
         assertNull(FilenameUtils.getFullPathNoEndSeparator("1:a"));
         assertNull(FilenameUtils.getFullPathNoEndSeparator("///a/b/c.txt"));
-        assertNull(FilenameUtils.getFullPathNoEndSeparator("//a"));
+        assertEquals("//a", FilenameUtils.getFullPathNoEndSeparator("//a"));
 
         assertEquals("", FilenameUtils.getFullPathNoEndSeparator(""));
 
@@ -330,6 +330,7 @@ class FilenameUtilsTest {
 
         assertEquals("C:/", FilenameUtils.getFullPathNoEndSeparator("C:/"));
         assertEquals("//server/", FilenameUtils.getFullPathNoEndSeparator("//server/"));
+        assertEquals("//server", FilenameUtils.getFullPathNoEndSeparator("//server"));
         assertEquals("~", FilenameUtils.getFullPathNoEndSeparator("~"));
         assertEquals("~/", FilenameUtils.getFullPathNoEndSeparator("~/"));
         assertEquals("~user", FilenameUtils.getFullPathNoEndSeparator("~user"));
@@ -408,7 +409,7 @@ class FilenameUtilsTest {
         assertNull(FilenameUtils.getPath("1:"));
         assertNull(FilenameUtils.getPath("1:a"));
         assertNull(FilenameUtils.getPath("///a/b/c.txt"));
-        assertNull(FilenameUtils.getPath("//a"));
+        assertEquals("", FilenameUtils.getPath("//a"));
 
         assertEquals("", FilenameUtils.getPath(""));
         assertEquals("", FilenameUtils.getPath(DRIVE_C));
@@ -450,12 +451,13 @@ class FilenameUtilsTest {
         assertNull(FilenameUtils.getPathNoEndSeparator("1:"));
         assertNull(FilenameUtils.getPathNoEndSeparator("1:a"));
         assertNull(FilenameUtils.getPathNoEndSeparator("///a/b/c.txt"));
-        assertNull(FilenameUtils.getPathNoEndSeparator("//a"));
+        assertEquals("", FilenameUtils.getPathNoEndSeparator("//a"));
 
         assertEquals("", FilenameUtils.getPathNoEndSeparator(""));
         assertEquals("", FilenameUtils.getPathNoEndSeparator(DRIVE_C));
         assertEquals("", FilenameUtils.getPathNoEndSeparator("C:/"));
         assertEquals("", FilenameUtils.getPathNoEndSeparator("//server/"));
+        assertEquals("", FilenameUtils.getPathNoEndSeparator("//server"));
         assertEquals("", FilenameUtils.getPathNoEndSeparator("~"));
         assertEquals("", FilenameUtils.getPathNoEndSeparator("~/"));
         assertEquals("", FilenameUtils.getPathNoEndSeparator("~user"));
@@ -484,7 +486,7 @@ class FilenameUtilsTest {
         assertNull(FilenameUtils.getPrefix("1:"));
         assertNull(FilenameUtils.getPrefix("1:a"));
         assertNull(FilenameUtils.getPrefix("\\\\\\a\\b\\c.txt"));
-        assertNull(FilenameUtils.getPrefix("\\\\a"));
+        assertEquals("\\\\a", FilenameUtils.getPrefix("\\\\a"));
 
         assertEquals("", FilenameUtils.getPrefix(""));
         assertEquals("\\", FilenameUtils.getPrefix("\\"));
@@ -498,6 +500,7 @@ class FilenameUtilsTest {
 
         assertEquals("C:\\", FilenameUtils.getPrefix("C:\\"));
         assertEquals("//server/", FilenameUtils.getPrefix("//server/"));
+        assertEquals("//server", FilenameUtils.getPrefix("//server"));
         assertEquals("~/", FilenameUtils.getPrefix("~"));
         assertEquals("~/", FilenameUtils.getPrefix("~/"));
         assertEquals("~user/", FilenameUtils.getPrefix("~user"));
@@ -534,7 +537,7 @@ class FilenameUtilsTest {
         assertEquals(-1, FilenameUtils.getPrefixLength("1:"));
         assertEquals(-1, FilenameUtils.getPrefixLength("1:a"));
         assertEquals(-1, FilenameUtils.getPrefixLength("\\\\\\a\\b\\c.txt"));
-        assertEquals(-1, FilenameUtils.getPrefixLength("\\\\a"));
+        assertEquals(3, FilenameUtils.getPrefixLength("\\\\a"));
 
         assertEquals(0, FilenameUtils.getPrefixLength(""));
         assertEquals(1, FilenameUtils.getPrefixLength("\\"));
@@ -548,6 +551,7 @@ class FilenameUtilsTest {
 
         assertEquals(3, FilenameUtils.getPrefixLength("C:\\"));
         assertEquals(9, FilenameUtils.getPrefixLength("//server/"));
+        assertEquals(8, FilenameUtils.getPrefixLength("//server"));
         assertEquals(2, FilenameUtils.getPrefixLength("~"));
         assertEquals(2, FilenameUtils.getPrefixLength("~/"));
         assertEquals(6, FilenameUtils.getPrefixLength("~user"));
@@ -775,7 +779,7 @@ class FilenameUtilsTest {
         assertNull(FilenameUtils.normalize("1:"));
         assertNull(FilenameUtils.normalize("1:a"));
         assertNull(FilenameUtils.normalize("\\\\\\a\\b\\c.txt"));
-        assertNull(FilenameUtils.normalize("\\\\a"));
+        assertEquals(SEP +  SEP + "a", FilenameUtils.normalize("\\\\a"));
 
         assertEquals("a" + SEP + "b" + SEP + "c.txt", FilenameUtils.normalize("a\\b/c.txt"));
         assertEquals("" + SEP + "a" + SEP + "b" + SEP + "c.txt", FilenameUtils.normalize("\\a\\b/c.txt"));
@@ -915,6 +919,7 @@ class FilenameUtilsTest {
         assertNull(FilenameUtils.normalize("//server/../a"));
         assertNull(FilenameUtils.normalize("//server/.."));
         assertEquals(SEP + SEP + "server" + SEP + "", FilenameUtils.normalize("//server/"));
+        assertEquals(SEP +  SEP + "server", FilenameUtils.normalize("//server"));
 
         assertEquals(SEP + SEP + "127.0.0.1" + SEP + "a" + SEP + "b" + SEP + "c.txt", FilenameUtils.normalize("\\\\127.0.0.1\\a\\b\\c.txt"));
         assertEquals(SEP + SEP + "::1" + SEP + "a" + SEP + "b" + SEP + "c.txt", FilenameUtils.normalize("\\\\::1\\a\\b\\c.txt"));
@@ -986,7 +991,7 @@ class FilenameUtilsTest {
         assertNull(FilenameUtils.normalizeNoEndSeparator("1:"));
         assertNull(FilenameUtils.normalizeNoEndSeparator("1:a"));
         assertNull(FilenameUtils.normalizeNoEndSeparator("\\\\\\a\\b\\c.txt"));
-        assertNull(FilenameUtils.normalizeNoEndSeparator("\\\\a"));
+        assertEquals(SEP + SEP + "a", FilenameUtils.normalizeNoEndSeparator("\\\\a"));
 
         assertEquals("a" + SEP + "b" + SEP + "c.txt", FilenameUtils.normalizeNoEndSeparator("a\\b/c.txt"));
         assertEquals("" + SEP + "a" + SEP + "b" + SEP + "c.txt", FilenameUtils.normalizeNoEndSeparator("\\a\\b/c.txt"));
@@ -1127,6 +1132,7 @@ class FilenameUtilsTest {
         assertNull(FilenameUtils.normalizeNoEndSeparator("//server/../a"));
         assertNull(FilenameUtils.normalizeNoEndSeparator("//server/.."));
         assertEquals(SEP + SEP + "server" + SEP + "", FilenameUtils.normalizeNoEndSeparator("//server/"));
+        assertEquals(SEP + SEP + "server", FilenameUtils.normalizeNoEndSeparator("//server"));
     }
 
     @Test
@@ -1208,4 +1214,5 @@ class FilenameUtilsTest {
         assertEquals("\\a\\b\\c", FilenameUtils.separatorsToWindows("/a/b/c"));
         assertEquals("D:\\a\\b\\c", FilenameUtils.separatorsToWindows("D:/a/b/c"));
     }
+
 }
