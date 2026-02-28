@@ -82,6 +82,7 @@ import org.apache.commons.io.ThreadUtils;
 import org.apache.commons.io.file.Counters.PathCounters;
 import org.apache.commons.io.file.attribute.FileTimes;
 import org.apache.commons.io.filefilter.IOFileFilter;
+import org.apache.commons.io.filefilter.TrueFileFilter;
 import org.apache.commons.io.function.IOFunction;
 import org.apache.commons.io.function.IOSupplier;
 
@@ -233,6 +234,8 @@ public final class PathUtils {
      */
     public static final FileVisitOption[] EMPTY_FILE_VISIT_OPTION_ARRAY = {};
 
+    private static final Set<FileVisitOption> FOLLOW_LINKS_FILE_VISIT_OPTIONS = EnumSet.of(FileVisitOption.FOLLOW_LINKS);
+
     /**
      * Empty {@link LinkOption} array.
      */
@@ -374,6 +377,33 @@ public final class PathUtils {
 
     /**
      * Copies a directory to another directory.
+     * <p>
+     * Symbolic links are either followed or copied, depending on the {@link LinkOption#NOFOLLOW_LINKS} option.
+     * Non-symbolic links, aka. hard links, are always copied, given that they appear as regular files to Java.
+     * {@code LinkOption} does not apply to hard links.
+     * Symbolic links can link to files or directories, while non-symbolic links can only link to files.
+     * Symbolic links can be (ab)used to create endlessly recursive directories.
+     * </p>
+     *
+     * <strong>Without {@link LinkOption#NOFOLLOW_LINKS} option (the default)</strong>
+     * <p>
+     * Given that Java defines {@link LinkOption#NOFOLLOW_LINKS} as an explicit option, the default is the absence of that option, which is to follow links.
+     * Symbolic links in the source directory are followed, resulting in a target directory that has no symbolic links.
+     * Cyclic symbolic links cause the copy operation to abort and throw a {@link java.nio.file.FileSystemLoopException}.
+     * Broken symbolic links are ignored; they are not copied.
+     * </p>
+     *
+     * <strong>With {@link LinkOption#NOFOLLOW_LINKS} option</strong>
+     * <p>
+     * Symbolic links in the source directory are copied to the target directory as symbolic links.
+     * Symbolic links linking inside the source directory are copied as relative links, meaning that the target symbolic
+     * link will link inside the target directory to a copied file or directory.
+     * Symbolic links linking outside the source directory are copied as absolute links, meaning that the target symbolic
+     * link will link outside the target directory to the same file or directory the link is linking to in the source directory.
+     * Cyclic symbolic links are preserved as regular symbolic links.
+     * Their cyclic nature is irrelevant to the copy operation.
+     * Broken symbolic links are ignored; they are not copied.
+     * </p>
      *
      * @param sourceDirectory The source directory.
      * @param targetDirectory The target directory.
@@ -383,7 +413,22 @@ public final class PathUtils {
      */
     public static PathCounters copyDirectory(final Path sourceDirectory, final Path targetDirectory, final CopyOption... copyOptions) throws IOException {
         final Path absoluteSource = sourceDirectory.toAbsolutePath();
-        return visitFileTree(new CopyDirectoryVisitor(Counters.longPathCounters(), absoluteSource, targetDirectory, copyOptions), absoluteSource)
+        // LinkOption.NOFOLLOW_LINKS is the explicit option, "follow symlinks" the implicit default.
+        // For FileVisitOption it's the other way around: FileVisitOption.FOLLOW_LINKS is the explicit option, and "do not follow symlinks" is the implicit
+        // default.
+        // If they're not in sync, the behavior is inconsistent, so we have to make sure they're in sync.
+        // CopyOption is given by the caller, FileVisitOption is under our control here, so we sync the latter to the former.
+        Set<FileVisitOption> fileVisitOptions = FOLLOW_LINKS_FILE_VISIT_OPTIONS;
+        if (copyOptions != null) {
+            for (CopyOption copyOption : copyOptions) {
+                if (copyOption == LinkOption.NOFOLLOW_LINKS) {
+                    fileVisitOptions = Collections.emptySet();
+                    break;
+                }
+            }
+        }
+        return visitFileTree(new CopyDirectoryVisitor(Counters.longPathCounters(), TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE, absoluteSource,
+                targetDirectory, copyOptions), absoluteSource, fileVisitOptions, Integer.MAX_VALUE)
                 .getPathCounters();
     }
 
