@@ -28,7 +28,6 @@ import java.util.function.UnaryOperator;
 
 import org.apache.commons.io.file.Counters.PathCounters;
 import org.apache.commons.io.filefilter.IOFileFilter;
-import org.apache.commons.io.filefilter.SymbolicLinkFileFilter;
 import org.apache.commons.io.filefilter.TrueFileFilter;
 import org.apache.commons.io.function.IOBiFunction;
 
@@ -152,7 +151,7 @@ public class CountingPathVisitor extends SimplePathVisitor {
     }
 
     static IOFileFilter defaultFileFilter() {
-        return new SymbolicLinkFileFilter(FileVisitResult.TERMINATE, FileVisitResult.CONTINUE);
+        return TrueFileFilter.INSTANCE;
     }
 
     static PathCounters defaultPathCounters() {
