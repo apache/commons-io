@@ -17,7 +17,7 @@
 package org.apache.commons.io;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.File;
 import java.io.IOException;
@@ -38,17 +38,12 @@ import org.junit.jupiter.api.io.TempDir;
  */
 class FileUtilsCopyDirectoryToDirectoryTest {
 
-    private static void assertExceptionTypeAndMessage(final File srcDir, final File destDir,
-        final Class<? extends Exception> expectedExceptionType, final String expectedMessage) {
-        try {
-            FileUtils.copyDirectoryToDirectory(srcDir, destDir);
-        } catch (final Exception e) {
-            final String msg = e.getMessage();
-            assertEquals(expectedExceptionType, e.getClass());
-            assertEquals(expectedMessage, msg);
-            return;
-        }
-        fail();
+    private static void assertExceptionTypeAndMessage(final File srcDir, final File destDir, final Class<? extends Exception> expectedExceptionType,
+            final String expectedMessage) {
+        final Exception e = assertThrows(Exception.class, () -> FileUtils.copyDirectoryToDirectory(srcDir, destDir));
+        final String msg = e.getMessage();
+        assertEquals(expectedExceptionType, e.getClass());
+        assertEquals(expectedMessage, msg);
     }
 
     /** Temporary folder managed by JUnit. */
