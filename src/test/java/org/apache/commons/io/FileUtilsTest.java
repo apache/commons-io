@@ -214,7 +214,7 @@ class FileUtilsTest extends AbstractTempDirTest {
 
     /**
      * May throw java.nio.file.FileSystemException: C:\Users\...\FileUtilsTestCase\cycle: A required privilege is not held
-     * by the client. On Windows, you are fine if you run a terminal with aadministrator permissions.
+     * by the client. On Windows, you are fine if you run a terminal with administrator permissions.
      *
      * @return The link path.
      */
