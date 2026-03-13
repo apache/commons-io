@@ -59,6 +59,22 @@ class WriterOutputStreamTest {
     }
 
     @Test
+    void testIO887() throws IOException {
+        final StringWriter stringWriter1 = new StringWriter();
+        final Charset charset = StandardCharsets.UTF_8;
+        try (WriterOutputStream writerOutputStream = new WriterOutputStream(stringWriter1, charset)) {
+            writerOutputStream.write("¿Cómo estás".getBytes("Cp850"));
+        }
+        final String expected = "?C?mo est?s";
+        assertEquals(expected, stringWriter1.toString());
+        final StringWriter stringWriter2 = new StringWriter();
+        try (WriterOutputStream writerOutputStream = WriterOutputStream.builder().setWriter(stringWriter2).setCharset(charset).get()) {
+            writerOutputStream.write("¿Cómo estás".getBytes("Cp850"));
+        }
+        assertEquals(expected, stringWriter2.toString());
+    }
+
+    @Test
     void testLargeUTF8CharsetWithBufferedWrite() throws IOException {
         testWithBufferedWrite(LARGE_TEST_STRING, UTF_8);
     }
