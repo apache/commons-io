@@ -38,8 +38,8 @@ class ProxyOutputStreamTest {
 
     private ProxyOutputStream proxied;
 
-    private final AtomicBoolean hitByteArray = new AtomicBoolean();
-    private final AtomicBoolean hitByteArrayAt = new AtomicBoolean();
+    private final AtomicBoolean hitArray = new AtomicBoolean();
+    private final AtomicBoolean hitArrayAt = new AtomicBoolean();
     private final AtomicBoolean hitInt = new AtomicBoolean();
 
     @BeforeEach
@@ -48,13 +48,13 @@ class ProxyOutputStreamTest {
 
             @Override
             public void write(final byte[] ba) {
-                hitByteArray.set(true);
+                hitArray.set(true);
                 super.write(ba);
             }
 
             @Override
             public void write(final byte[] b, final int off, final int len) {
-                hitByteArrayAt.set(true);
+                hitArrayAt.set(true);
                 super.write(b, off, len);
             }
 
@@ -74,28 +74,28 @@ class ProxyOutputStreamTest {
 
     @Test
     void testSetReference() throws Exception {
-        assertFalse(hitByteArray.get());
+        assertFalse(hitArray.get());
         proxied.setReference(new ByteArrayOutputStream());
         proxied.write('y');
-        assertFalse(hitByteArray.get());
+        assertFalse(hitArray.get());
         assertEquals(0, target.size());
         assertArrayEquals(ArrayUtils.EMPTY_BYTE_ARRAY, target.toByteArray());
     }
 
     @Test
     void testWriteByteArray() throws Exception {
-        assertFalse(hitByteArray.get());
+        assertFalse(hitArray.get());
         proxied.write(new byte[] { 'y', 'z' });
-        assertTrue(hitByteArray.get());
+        assertTrue(hitArray.get());
         assertEquals(2, target.size());
         assertArrayEquals(new byte[] { 'y', 'z' }, target.toByteArray());
     }
 
     @Test
     void testWriteByteArrayAt() throws Exception {
-        assertFalse(hitByteArrayAt.get());
+        assertFalse(hitArrayAt.get());
         proxied.write(new byte[] { 'y', 'z' }, 1, 1);
-        assertTrue(hitByteArrayAt.get());
+        assertTrue(hitArrayAt.get());
         assertEquals(1, target.size());
         assertArrayEquals(new byte[] { 'z' }, target.toByteArray());
     }
@@ -104,25 +104,25 @@ class ProxyOutputStreamTest {
     void testWriteByteArrayAtRepeat() throws Exception {
         // repeat -1
         proxied.writeRepeat(new byte[] { 'y', 'z' }, 1, 1, 0);
-        assertFalse(hitByteArrayAt.get());
-        hitByteArray.set(false);
+        assertFalse(hitArrayAt.get());
+        hitArray.set(false);
         assertEquals(0, target.size());
         assertArrayEquals(new byte[] {}, target.toByteArray());
         // repeat 0
         proxied.writeRepeat(new byte[] { 'y', 'z' }, 1, 1, 0);
-        assertFalse(hitByteArrayAt.get());
-        hitByteArray.set(false);
+        assertFalse(hitArrayAt.get());
+        hitArray.set(false);
         assertEquals(0, target.size());
         assertArrayEquals(new byte[] {}, target.toByteArray());
         // repeat 1
         proxied.writeRepeat(new byte[] { 'y', 'z' }, 1, 1, 1);
-        assertTrue(hitByteArrayAt.get());
-        hitByteArray.set(false);
+        assertTrue(hitArrayAt.get());
+        hitArray.set(false);
         assertEquals(1, target.size());
         assertArrayEquals(new byte[] { 'z' }, target.toByteArray());
         // repeat 2
         proxied.writeRepeat(new byte[] { 'y', 'x' }, 1, 1, 2);
-        assertTrue(hitByteArrayAt.get());
+        assertTrue(hitArrayAt.get());
         assertEquals(3, target.size());
         assertArrayEquals(new byte[] { 'z', 'x', 'x' }, target.toByteArray());
     }
@@ -131,25 +131,25 @@ class ProxyOutputStreamTest {
     void testWriteByteArrayRepeat() throws Exception {
         // repeat -1
         proxied.writeRepeat(new byte[] { 'y', 'z' }, -1);
-        assertFalse(hitByteArray.get());
-        hitByteArray.set(false);
+        assertFalse(hitArray.get());
+        hitArray.set(false);
         assertEquals(0, target.size());
         assertArrayEquals(new byte[] {}, target.toByteArray());
         // repeat 0
         proxied.writeRepeat(new byte[] { 'y', 'z' }, 0);
-        assertFalse(hitByteArray.get());
-        hitByteArray.set(false);
+        assertFalse(hitArray.get());
+        hitArray.set(false);
         assertEquals(0, target.size());
         assertArrayEquals(new byte[] {}, target.toByteArray());
         // repeat 1
         proxied.writeRepeat(new byte[] { 'y', 'z' }, 1);
-        assertTrue(hitByteArray.get());
-        hitByteArray.set(false);
+        assertTrue(hitArray.get());
+        hitArray.set(false);
         assertEquals(2, target.size());
         assertArrayEquals(new byte[] { 'y', 'z' }, target.toByteArray());
         // repeat 2
         proxied.writeRepeat(new byte[] { 'y', 'z' }, 2);
-        assertTrue(hitByteArray.get());
+        assertTrue(hitArray.get());
         assertEquals(6, target.size());
         assertArrayEquals(new byte[] { 'y', 'z', 'y', 'z' , 'y', 'z' }, target.toByteArray());
     }
@@ -195,11 +195,11 @@ class ProxyOutputStreamTest {
 
     @Test
     void testWriteNullArrayProxiesToUnderlying() throws Exception {
-        assertFalse(hitByteArray.get());
+        assertFalse(hitArray.get());
         final byte[] ba = null;
         assertThrows(NullPointerException.class, () -> target.write(ba));
-        assertTrue(hitByteArray.get());
+        assertTrue(hitArray.get());
         assertThrows(NullPointerException.class, () -> proxied.write(ba));
-        assertTrue(hitByteArray.get());
+        assertTrue(hitArray.get());
     }
 }
