@@ -18,6 +18,7 @@ package org.apache.commons.io.output;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
@@ -308,6 +309,12 @@ class ProxyWriterTest {
             assertEquals("ABC", writer.toString());
         }
     }
+
+    @Test
+    void testUnrwap() throws Exception {
+        assertSame(target, proxied.unwrap());
+    }
+
 
     @Test
     void testWriteStringPartial() throws Exception {

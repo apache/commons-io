@@ -64,6 +64,7 @@ The <action> type attribute can be add,update,fix,remove.
       <!-- ADD -->
       <action type="add" dev="ggregory" due-to="Gary Gregory, Piotr P. Karwasz">Add and use IOUtils.closeQuietlySuppress(Closeable, Throwable) #818.</action>
       <action type="add" dev="ggregory" due-to="Gary Gregory">Add ProxyWriter.setReference(Writer).</action>
+      <action type="add" dev="ggregory" due-to="Gary Gregory">Add ProxyWriter.unwrap().</action>
       <action type="add" dev="ggregory" due-to="Gary Gregory">Add ProxyReader.setReference(Reader).</action>
       <action type="add" dev="ggregory" due-to="Gary Gregory">Add ProxyReader.unrwap().</action>
       <action type="add" dev="ggregory" due-to="Gary Gregory">Make ProxyOutputStream.unrwap() public.</action>

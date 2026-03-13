@@ -194,6 +194,19 @@ public class ProxyWriter extends FilterWriter {
     }
 
     /**
+     * Unwraps this instance by returning the underlying {@link Writer}.
+     * <p>
+     * Use with caution; useful to query the underlying {@link Writer}.
+     * </p>
+     *
+     * @return the underlying {@link Writer}.
+     * @since 2.22.0
+     */
+    public Writer unwrap() {
+        return out;
+    }
+
+    /**
      * Invokes the delegate's {@code write(char[])} method.
      *
      * @param cbuf the characters to write.
