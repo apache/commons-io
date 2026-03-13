@@ -66,6 +66,7 @@ The <action> type attribute can be add,update,fix,remove.
       <action type="add" dev="ggregory" due-to="Gary Gregory">Add ProxyWriter.setReference(Writer).</action>
       <action type="add" dev="ggregory" due-to="Gary Gregory">Add ProxyReader.setReference(Reader).</action>
       <action type="add" dev="ggregory" due-to="Gary Gregory">Add ProxyReader.unrwap().</action>
+      <action type="add" dev="ggregory" due-to="Gary Gregory">Make ProxyOutputStream.unrwap() public.</action>
       <!-- UPDATE -->
       <action type="update" dev="ggregory"             due-to="Gary Gregory, Dependabot">Bump org.apache.commons:commons-parent from 91 to 97 #816.</action>
       <action type="update" dev="ggregory"             due-to="Gary Gregory, Dependabot">Bump commons-codec:commons-codec from 1.19.0 to 1.21.0 #812.</action>

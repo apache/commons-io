@@ -179,8 +179,9 @@ public class ProxyOutputStream extends FilterOutputStream {
      * </p>
      *
      * @return the underlying {@link OutputStream}.
+     * @since 2.22.0
      */
-    OutputStream unwrap() {
+    public OutputStream unwrap() {
         return out;
     }
 

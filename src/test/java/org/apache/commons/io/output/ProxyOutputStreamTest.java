@@ -83,6 +83,11 @@ class ProxyOutputStreamTest {
     }
 
     @Test
+    void testUnrwap() throws Exception {
+        assertSame(target, proxied.unwrap());
+    }
+
+    @Test
     void testWriteByteArray() throws Exception {
         assertFalse(hitArray.get());
         proxied.write(new byte[] { 'y', 'z' });
