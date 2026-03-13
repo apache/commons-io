@@ -259,6 +259,19 @@ public abstract class ProxyReader extends FilterReader {
     }
 
     /**
+     * Sets the underlying reader.
+     *
+     * @param in The input stream to set in {@code java.io.Reader#in}.
+     * @return {@code this} instance.
+     * @since 2.22.0
+     */
+    public ProxyReader setReference(final Reader in) {
+        this.in = in;
+        return this;
+    }
+
+
+    /**
      * Invokes the delegate's {@code skip(long)} method.
      *
      * @param ln the number of bytes to skip.
@@ -273,6 +286,19 @@ public abstract class ProxyReader extends FilterReader {
             handleIOException(e);
             return 0;
         }
+    }
+
+    /**
+     * Unwraps this instance by returning the underlying {@link Reader}.
+     * <p>
+     * Use with caution; useful to query the underlying {@link Reader}.
+     * </p>
+     *
+     * @return the underlying {@link Reader}.
+     * @since 2.22.0
+     */
+    public Reader unwrap() {
+        return in;
     }
 
 }

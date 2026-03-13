@@ -14,7 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.apache.commons.io.input;
+
+import static org.junit.jupiter.api.Assertions.assertSame;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -29,6 +32,7 @@ class ProxyReaderTest {
 
     /** Custom NullReader implementation. */
     private static final class CustomNullReader extends NullReader {
+
         CustomNullReader(final int len) {
             super(len);
         }
@@ -51,6 +55,7 @@ class ProxyReaderTest {
 
     /** ProxyReader implementation. */
     private static final class ProxyReaderImpl extends ProxyReader {
+
         ProxyReaderImpl(final Reader proxy) {
             super(proxy);
         }
@@ -68,6 +73,22 @@ class ProxyReaderTest {
     void testNullCharBuffer() throws Exception {
         try (ProxyReader proxy = new ProxyReaderImpl(new CustomNullReader(0))) {
             proxy.read((CharBuffer) null);
+        }
+    }
+
+    @Test
+    void testSetReference() throws Exception {
+        try (CustomNullReader wrapped = new CustomNullReader(0); ProxyReader proxy = new ProxyReaderImpl(wrapped)) {
+            assertSame(wrapped, proxy.unwrap());
+            proxy.setReference(NullReader.INSTANCE);
+            assertSame(NullReader.INSTANCE, proxy.unwrap());
+        }
+    }
+
+    @Test
+    void testUnwrap() throws Exception {
+        try (CustomNullReader wrapped = new CustomNullReader(0); ProxyReader proxy = new ProxyReaderImpl(wrapped)) {
+            assertSame(wrapped, proxy.unwrap());
         }
     }
 }
