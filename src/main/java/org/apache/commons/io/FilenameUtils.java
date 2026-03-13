@@ -689,7 +689,7 @@ public class FilenameUtils {
      * ~            --&gt; ~
      * ~/           --&gt; ~
      * ~user        --&gt; ~user
-     * ~user/       --&gt; ~user
+     * ~user/       --&gt; ~user/
      * </pre>
      * <p>
      * The output will be the same irrespective of the machine that the code is running on.
