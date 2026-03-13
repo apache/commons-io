@@ -25,8 +25,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.build.AbstractStreamBuilder;
 
 /**
- * A Proxy stream which acts as expected, that is it passes the method calls on to the proxied stream and doesn't change which methods are being called. It is
- * an alternative base class to FilterOutputStream to increase reusability.
+ * An output stream proxy which delegates to the wrapped output stream.
  * <p>
  * See the protected methods for ways in which a subclass can easily decorate a stream with custom pre-, post- or error processing functionality.
  * </p>
