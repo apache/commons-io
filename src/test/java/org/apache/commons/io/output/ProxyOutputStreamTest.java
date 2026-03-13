@@ -72,7 +72,6 @@ class ProxyOutputStreamTest {
         assertSame(target, new ProxyOutputStream.Builder().setOutputStream(target).get().unwrap());
     }
 
-    @SuppressWarnings("resource")
     @Test
     void testSetReference() throws Exception {
         assertFalse(hitByteArray.get());
