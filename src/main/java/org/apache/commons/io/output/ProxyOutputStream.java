@@ -162,6 +162,9 @@ public class ProxyOutputStream extends FilterOutputStream {
 
     /**
      * Sets the underlying output stream.
+     * <p>
+     * Use with caution.
+     * </p>
      *
      * @param out the underlying output stream.
      * @return {@code this} instance.
@@ -175,7 +178,7 @@ public class ProxyOutputStream extends FilterOutputStream {
     /**
      * Unwraps this instance by returning the underlying {@link OutputStream}.
      * <p>
-     * Use with caution; useful to query the underlying {@link OutputStream}.
+     * Use with caution.
      * </p>
      *
      * @return the underlying {@link OutputStream}.

@@ -260,6 +260,9 @@ public abstract class ProxyReader extends FilterReader {
 
     /**
      * Sets the underlying reader.
+     * <p>
+     * Use with caution.
+     * </p>
      *
      * @param in The input stream to set in {@code java.io.Reader#in}.
      * @return {@code this} instance.
@@ -291,7 +294,7 @@ public abstract class ProxyReader extends FilterReader {
     /**
      * Unwraps this instance by returning the underlying {@link Reader}.
      * <p>
-     * Use with caution; useful to query the underlying {@link Reader}.
+     * Use with caution.
      * </p>
      *
      * @return the underlying {@link Reader}.

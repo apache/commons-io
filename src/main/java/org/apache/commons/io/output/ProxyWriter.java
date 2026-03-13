@@ -183,6 +183,9 @@ public class ProxyWriter extends FilterWriter {
 
     /**
      * Sets the underlying writer.
+     * <p>
+     * Use with caution.
+     * </p>
      *
      * @param out the underlying output writer.
      * @return {@code this} instance.
@@ -196,7 +199,7 @@ public class ProxyWriter extends FilterWriter {
     /**
      * Unwraps this instance by returning the underlying {@link Writer}.
      * <p>
-     * Use with caution; useful to query the underlying {@link Writer}.
+     * Use with caution.
      * </p>
      *
      * @return the underlying {@link Writer}.
