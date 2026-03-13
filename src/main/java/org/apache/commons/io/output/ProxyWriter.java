@@ -182,6 +182,18 @@ public class ProxyWriter extends FilterWriter {
     }
 
     /**
+     * Sets the underlying writer.
+     *
+     * @param out the underlying output writer.
+     * @return {@code this} instance.
+     * @since 2.22.0
+     */
+    public ProxyWriter setReference(final Writer out) {
+        this.out = out;
+        return this;
+    }
+
+    /**
      * Invokes the delegate's {@code write(char[])} method.
      *
      * @param cbuf the characters to write.
