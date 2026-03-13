@@ -267,13 +267,7 @@ public class ReaderInputStream extends AbstractInputStream {
      */
     @Deprecated
     public ReaderInputStream(final Reader reader, final Charset charset, final int bufferSize) {
-        // @formatter:off
-        this(reader,
-            Charsets.toCharset(charset).newEncoder()
-                    .onMalformedInput(CodingErrorAction.REPLACE)
-                    .onUnmappableCharacter(CodingErrorAction.REPLACE),
-             bufferSize);
-        // @formatter:on
+        this(reader, newEncoder(charset), bufferSize);
     }
 
     /**
