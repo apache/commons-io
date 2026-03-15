@@ -53,10 +53,12 @@ public abstract class ProxyReader extends FilterReader {
      * Subclasses can override this method to add common post-processing
      * functionality without having to override all the read methods.
      * The default implementation does nothing.
+     * </p>
      * <p>
      * Note this method is <em>not</em> called from {@link #skip(long)} or
      * {@link #reset()}. You need to explicitly override those methods if
      * you want to add post-processing steps also to them.
+     * </p>
      *
      * @param n number of chars read, or -1 if the end of stream was reached.
      * @throws IOException if the post-processing fails.
@@ -76,10 +78,12 @@ public abstract class ProxyReader extends FilterReader {
      * Subclasses can override this method to add common pre-processing
      * functionality without having to override all the read methods.
      * The default implementation does nothing.
+     * </p>
      * <p>
      * Note this method is <em>not</em> called from {@link #skip(long)} or
      * {@link #reset()}. You need to explicitly override those methods if
      * you want to add pre-processing steps also to them.
+     * </p>
      *
      * @param n number of chars that the caller asked to be read.
      * @throws IOException if the pre-processing fails.
