@@ -36,11 +36,9 @@ import org.apache.commons.io.IOUtils;
  *
  * @since 2.5
  */
-public class BoundedReader extends Reader {
+public class BoundedReader extends ProxyReader {
 
     private static final int INVALID = -1;
-
-    private final Reader target;
 
     private int charsRead;
 
@@ -57,18 +55,8 @@ public class BoundedReader extends Reader {
      * @param maxCharsFromTargetReader The maximum number of characters that can be read from target.
      */
     public BoundedReader(final Reader target, final int maxCharsFromTargetReader) {
-        this.target = target;
+        super(target);
         this.maxCharsFromTargetReader = maxCharsFromTargetReader;
-    }
-
-    /**
-     * Closes the target
-     *
-     * @throws IOException If an I/O error occurs while calling the underlying reader's close method.
-     */
-    @Override
-    public void close() throws IOException {
-        target.close();
     }
 
     /**
@@ -85,7 +73,7 @@ public class BoundedReader extends Reader {
     public void mark(final int readAheadLimit) throws IOException {
         this.readAheadLimit = readAheadLimit - charsRead;
         markedAt = charsRead;
-        target.mark(readAheadLimit);
+        super.mark(readAheadLimit);
     }
 
     /**
@@ -101,7 +89,7 @@ public class BoundedReader extends Reader {
             return EOF;
         }
         charsRead++;
-        return target.read();
+        return super.read();
     }
 
     /**
@@ -130,6 +118,12 @@ public class BoundedReader extends Reader {
         return len;
     }
 
+    @Override
+    public long skip(long n) throws IOException {
+        charsRead += n;
+        return super.skip(n);
+    }
+
     /**
      * Resets the target to the latest mark,
      *
@@ -139,6 +133,6 @@ public class BoundedReader extends Reader {
     @Override
     public void reset() throws IOException {
         charsRead = markedAt;
-        target.reset();
+        super.reset();
     }
 }
