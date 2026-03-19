@@ -1556,8 +1556,8 @@ public class FilenameUtils {
      * </pre>
      * The sequence "*?" does not work properly at present in match strings.
      *
-     * @param fileName  the file name to match on.
-     * @param wildcardMatcher  the wildcard string to match against.
+     * @param fileName  the file name to match on, may be null.
+     * @param wildcardMatcher  the wildcard string to match against, may be null.
      * @return true if the file name matches the wildcard string.
      * @see IOCase#SENSITIVE
      */
@@ -1573,8 +1573,8 @@ public class FilenameUtils {
      * single or multiple (zero or more) wildcard characters.
      * The sequence "*?" does not work properly at present in match strings.
      *
-     * @param fileName  the file name to match on.
-     * @param wildcardMatcher  the wildcard string to match against.
+     * @param fileName  the file name to match on, may be null.
+     * @param wildcardMatcher  the wildcard string to match against, may be null.
      * @param ioCase  what case sensitivity rule to use, null means case-sensitive.
      * @return true if the file name matches the wildcard string.
      * @since 1.3
