@@ -260,7 +260,13 @@ class ValidatingObjectInputStreamTest extends AbstractCloseableListTest {
     @Test
     void testRejectPattern() {
         assertThrows(InvalidClassException.class,
-                () -> assertSerialization(addCloseable(newFixture()).accept(MockSerializedClass.class).reject(Pattern.compile("org.*"))));
+                () -> assertSerialization(addCloseable(newFixture()).accept(MockSerializedClass.class).reject(Pattern.compile("org\\..*"))));
+    }
+
+    @Test
+    void testRejectPatternBuilder() {
+        assertThrows(InvalidClassException.class,
+                () -> assertSerialization(addCloseable(newBuilder().accept(MockSerializedClass.class).reject(Pattern.compile("org\\..*")).get())));
     }
 
     @Test
