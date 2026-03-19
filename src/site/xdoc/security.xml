@@ -48,5 +48,10 @@
         </ul>
       </subsection>
     </section>
+    <section name="Safe Deserialization">
+      <p>
+      For information about safe deserialization, please see <a href="https://commons.apache.org/io/description.html#Safe_Deserialization">Safe Deserialization</a>.
+      </p>
+    </section>
   </body>
 </document>
