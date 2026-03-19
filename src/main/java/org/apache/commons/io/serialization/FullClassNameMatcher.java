@@ -19,7 +19,6 @@
 package org.apache.commons.io.serialization;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -39,7 +38,7 @@ final class FullClassNameMatcher implements ClassNameMatcher {
      * @param classes a list of class names.
      */
     FullClassNameMatcher(final String... classes) {
-        classesSet = Collections.unmodifiableSet(new HashSet<>(Arrays.asList(classes)));
+        classesSet = new HashSet<>(Arrays.asList(classes));
     }
 
     @Override
