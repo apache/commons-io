@@ -95,7 +95,7 @@ public enum IOCase {
     /**
      * Returns the given value if not-null, the defaultValue if null.
      *
-     * @param value the value to test.
+     * @param value the value to test, may be null.
      * @param defaultValue the default value.
      * @return the given value if not-null, the defaultValue if null.
      * @since 2.12.0
