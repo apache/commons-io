@@ -60,7 +60,7 @@ class PathUtilsTest extends AbstractTempDirTest {
 
     private static final String STRING_FIXTURE = "Hello World";
 
-    private static final byte[] BYTE_ARRAY_FIXTURE = STRING_FIXTURE.getBytes(StandardCharsets.UTF_8);
+    static final byte[] BYTE_ARRAY_FIXTURE = STRING_FIXTURE.getBytes(StandardCharsets.UTF_8);
 
     private static final String PATH_FIXTURE = "NOTICE.txt";
 
