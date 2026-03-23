@@ -21,7 +21,7 @@ import java.util.Objects;
 import java.util.stream.Stream;
 
 /**
- * Enumeration of IO case sensitivity.
+ * Enumerates IO case sensitivity types.
  * <p>
  * Different filing systems have different rules for case-sensitivity.
  * Windows is case-insensitive, Unix is case-sensitive.

@@ -32,11 +32,10 @@ import java.util.Locale;
 import java.util.Objects;
 
 /**
- * Abstracts an OS' file system details, currently supporting the single use case of converting a file name String to a
- * legal file name with {@link #toLegalFileName(String, char)}.
+ * Enumerates file system details for operating systems, currently supporting the single use case of converting a file name String to a legal file name with
+ * {@link #toLegalFileName(String, char)}.
  * <p>
- * The starting point of any operation is {@link #getCurrent()} which gets you the enum for the file system that matches
- * the OS hosting the running JVM.
+ * The starting point of any operation is {@link #getCurrent()} which gets you the enum for the file system that matches the OS hosting the running JVM.
  * </p>
  *
  * @since 2.7

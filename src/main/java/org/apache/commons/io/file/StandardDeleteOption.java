@@ -22,7 +22,7 @@ import java.util.stream.Stream;
 import org.apache.commons.io.IOUtils;
 
 /**
- * Defines the standard delete options.
+ * Enumerates the standard delete options.
  *
  * @since 2.8.0
  */
