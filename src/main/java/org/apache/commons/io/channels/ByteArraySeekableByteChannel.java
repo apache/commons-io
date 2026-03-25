@@ -86,7 +86,6 @@ public class ByteArraySeekableByteChannel implements SeekableByteChannel {
 
     private ByteArraySeekableByteChannel(final byte[] data) {
         this.data = data;
-        this.position = 0;
         this.size = data.length;
     }
 
@@ -104,8 +103,6 @@ public class ByteArraySeekableByteChannel implements SeekableByteChannel {
             throw new IllegalArgumentException("Size must be non-negative");
         }
         this.data = new byte[size];
-        this.position = 0;
-        this.size = 0;
     }
 
     /**

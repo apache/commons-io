@@ -24,6 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.io.RandomAccessFile;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -118,7 +119,7 @@ class AbstractStreamBuilderTest {
     }
 
     /**
-     * Tests various ways to obtain a {@link java.io.InputStream}.
+     * Tests various ways to obtain a {@link InputStream}.
      *
      * @param configurer Lambda to configure the builder.
      */
