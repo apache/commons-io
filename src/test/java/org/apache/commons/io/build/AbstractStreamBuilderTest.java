@@ -17,6 +17,7 @@
 
 package org.apache.commons.io.build;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -31,17 +32,21 @@ import java.net.URISyntaxException;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.SeekableByteChannel;
 import java.nio.file.Files;
+import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.stream.Stream;
 
 import org.apache.commons.io.function.IOConsumer;
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.RandomUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 /**
  * Tests {@link AbstractStreamBuilder}.
@@ -119,15 +124,70 @@ class AbstractStreamBuilderTest {
     }
 
     /**
+     * Tests various ways to obtain a byte array.
+     *
+     * @param configurer configures a builder.
+     */
+    @ParameterizedTest
+    @MethodSource("fileBasedConfigurers")
+    void testGetByteArray(final IOConsumer<Builder> configurer) throws Exception {
+        final Builder builder = builder();
+        configurer.accept(builder);
+        assertNotNull(builder.getByteArray());
+    }
+
+    /**
      * Tests various ways to obtain a {@link InputStream}.
      *
-     * @param configurer Lambda to configure the builder.
+     * @param configurer configures a builder.
      */
     @ParameterizedTest
     @MethodSource("fileBasedConfigurers")
     void testGetInputStream(final IOConsumer<Builder> configurer) throws Exception {
         final Builder builder = builder();
         configurer.accept(builder);
-        assertNotNull(builder.getInputStream());
+        try (InputStream inputStream = builder.getInputStream()) {
+            assertNotNull(inputStream);
+        }
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = { 0, 1, 2, 4 })
+    void testSetByteArrayGetByteArray(final int size) throws Exception {
+        final Builder builder = builder();
+        final byte[] randomBytes = RandomUtils.insecure().randomBytes(size);
+        builder.setByteArray(randomBytes);
+        assertArrayEquals(randomBytes, builder.getByteArray());
+    }
+
+    @Test
+    void testSetFileGetByteArray() throws Exception {
+        final Builder builder = builder();
+        final Path path = Paths.get(AbstractOriginTest.FILE_NAME_RO);
+        builder.setFile(path.toFile());
+        assertArrayEquals(Files.readAllBytes(path), builder.getByteArray());
+    }
+
+    @Test
+    void testSetOpenOptions() {
+        final Builder builder = builder();
+        assertEquals(0, builder.setOpenOptions().getOpenOptions().length);
+        assertEquals(0, builder.setOpenOptions((OpenOption[]) null).getOpenOptions().length);
+        assertEquals(1, builder.setOpenOptions(StandardOpenOption.READ).getOpenOptions().length);
+        final OpenOption[] options = { StandardOpenOption.READ, StandardOpenOption.WRITE };
+        assertArrayEquals(options, builder.setOpenOptions(options).getOpenOptions());
+        // Check that the builder makes a defensive copy of the array.
+        options[0] = null;
+        options[1] = null;
+        assertEquals(StandardOpenOption.READ, builder.getOpenOptions()[0]);
+        assertEquals(StandardOpenOption.WRITE, builder.getOpenOptions()[1]);
+    }
+
+    @Test
+    void testSetPathGetByteArray() throws Exception {
+        final Builder builder = builder();
+        final Path path = Paths.get(AbstractOriginTest.FILE_NAME_RO);
+        builder.setPath(path);
+        assertArrayEquals(Files.readAllBytes(path), builder.getByteArray());
     }
 }

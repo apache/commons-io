@@ -92,10 +92,6 @@ public class UnsynchronizedByteArrayInputStream extends InputStream {
             // empty
         }
 
-        private byte[] checkOriginByteArray() throws IOException {
-            return checkOrigin().getByteArray();
-        }
-
         /**
          * Builds a new {@link UnsynchronizedByteArrayInputStream}.
          * <p>
@@ -207,7 +203,7 @@ public class UnsynchronizedByteArrayInputStream extends InputStream {
     private int markedOffset;
 
     private UnsynchronizedByteArrayInputStream(final Builder builder) throws IOException {
-        this(builder.checkOriginByteArray(), builder.offset, builder.length);
+        this(builder.getByteArray(), builder.offset, builder.length);
     }
 
     /**
