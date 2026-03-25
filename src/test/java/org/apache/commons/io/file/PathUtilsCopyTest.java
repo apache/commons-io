@@ -37,7 +37,6 @@ import java.util.stream.Stream;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.file.Counters.PathCounters;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.io.TempDir;
@@ -142,7 +141,6 @@ class PathUtilsCopyTest extends AbstractTempDirTest {
      *   symlink-to-dir
      * </pre>
      */
-    @Disabled
     @Test
     void testCopyDirectoryPreservesSymlinks(@TempDir final Path tempDir) throws Exception {
         final Path sourceDir = Files.createDirectory(tempDir.resolve("source"));
