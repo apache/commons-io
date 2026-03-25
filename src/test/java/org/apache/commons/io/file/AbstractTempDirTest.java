@@ -85,6 +85,7 @@ public abstract class AbstractTempDirTest {
 
     @AfterEach
     void afterEachDeleteTempDir() throws IOException {
+        // For @TempDir, symbolic and other types of links, such as junctions on Windows, are not followed.
         if (Files.exists(tempDirPath)) {
             PathUtils.deleteDirectory(tempDirPath);
         }
@@ -92,7 +93,7 @@ public abstract class AbstractTempDirTest {
 
     @BeforeEach
     public void beforeEachCreateTempDirs() throws IOException {
-        tempDirPath = Files.createTempDirectory(managedTempDirPath, getClass().getSimpleName());
+        tempDirPath = Files.createDirectory(managedTempDirPath.resolve(getClass().getSimpleName()));
         tempDirFile = tempDirPath.toFile();
     }
 

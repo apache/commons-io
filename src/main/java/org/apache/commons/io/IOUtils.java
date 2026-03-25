@@ -1803,7 +1803,7 @@ public class IOUtils {
             output.write(buffer, 0, read);
             totalRead += read;
             if (length > 0) { // only adjust length if not reading to the end
-                // Note the cast must work because buffer.length is an integer
+                // Note the cast must work because bufferLength = buffer.length is an integer
                 bytesToRead = (int) Math.min(length - totalRead, bufferLength);
             }
         }

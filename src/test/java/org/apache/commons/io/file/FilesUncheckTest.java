@@ -364,16 +364,19 @@ class FilesUncheckTest {
 
     @Test
     void testProbeContentType() {
-        // Empty file:
-        String probeContentType = FilesUncheck.probeContentType(FILE_PATH_EMPTY);
-        // Empirical: probeContentType is null on Windows
-        // Empirical: probeContentType is "text/plain" on Ubuntu
-        // Empirical: probeContentType is ? on macOS
-        //
         // BOM file:
-        probeContentType = FilesUncheck.probeContentType(Paths.get("src/test/resources/org/apache/commons/io/testfileBOM.xml"));
+        FilesUncheck.probeContentType(Paths.get("src/test/resources/org/apache/commons/io/testfileBOM.xml"));
         // Empirical: probeContentType is "text/plain" on Windows
         // Empirical: probeContentType is "application/plain" on Ubuntu
+        // Empirical: probeContentType is ? on macOS
+    }
+
+    @Test
+    void testProbeContentTypeEmpty() {
+        // Empty file:
+        FilesUncheck.probeContentType(FILE_PATH_EMPTY);
+        // Empirical: probeContentType is null on Windows
+        // Empirical: probeContentType is "text/plain" on Ubuntu
         // Empirical: probeContentType is ? on macOS
     }
 

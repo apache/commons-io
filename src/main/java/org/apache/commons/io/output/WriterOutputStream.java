@@ -143,14 +143,14 @@ public class WriterOutputStream extends OutputStream {
         @Override
         public Builder setCharset(final Charset charset) {
             super.setCharset(charset);
-            this.charsetDecoder = getCharset().newDecoder();
+            this.charsetDecoder = newDecoder(getCharset());
             return this;
         }
 
         @Override
         public Builder setCharset(final String charset) {
             super.setCharset(charset);
-            this.charsetDecoder = getCharset().newDecoder();
+            this.charsetDecoder = newDecoder(getCharset());
             return this;
         }
 
@@ -204,12 +204,12 @@ public class WriterOutputStream extends OutputStream {
         if (!StandardCharsets.UTF_16.name().equals(charset.name())) {
             return;
         }
-        final String TEST_STRING_2 = "v\u00e9s";
-        final byte[] bytes = TEST_STRING_2.getBytes(charset);
+        final String testString = "v\u00e9s";
+        final byte[] bytes = testString.getBytes(charset);
 
         final CharsetDecoder charsetDecoder2 = charset.newDecoder();
         final ByteBuffer bb2 = ByteBuffer.allocate(16);
-        final CharBuffer cb2 = CharBuffer.allocate(TEST_STRING_2.length());
+        final CharBuffer cb2 = CharBuffer.allocate(testString.length());
         final int len = bytes.length;
         for (int i = 0; i < len; i++) {
             bb2.put(bytes[i]);
@@ -223,14 +223,24 @@ public class WriterOutputStream extends OutputStream {
             bb2.compact();
         }
         cb2.rewind();
-        if (!TEST_STRING_2.equals(cb2.toString())) {
+        if (!testString.equals(cb2.toString())) {
             throw new UnsupportedOperationException("UTF-16 requested when running on an IBM JDK with broken UTF-16 support. "
                     + "Please find a JDK that supports UTF-16 if you intend to use UF-16 with WriterOutputStream");
         }
 
     }
 
+    private static CharsetDecoder newDecoder(final Charset charset) {
+        // @formatter:off
+        return Charsets.toCharset(charset).newDecoder()
+            .onMalformedInput(CodingErrorAction.REPLACE)
+            .onUnmappableCharacter(CodingErrorAction.REPLACE)
+            .replaceWith("?");
+        // @formatter:on
+    }
+
     private final Writer writer;
+
     private final CharsetDecoder decoder;
 
     private final boolean writeImmediately;
@@ -289,15 +299,7 @@ public class WriterOutputStream extends OutputStream {
      */
     @Deprecated
     public WriterOutputStream(final Writer writer, final Charset charset, final int bufferSize, final boolean writeImmediately) {
-        // @formatter:off
-        this(writer,
-            Charsets.toCharset(charset).newDecoder()
-                    .onMalformedInput(CodingErrorAction.REPLACE)
-                    .onUnmappableCharacter(CodingErrorAction.REPLACE)
-                    .replaceWith("?"),
-             bufferSize,
-             writeImmediately);
-        // @formatter:on
+        this(writer, newDecoder(charset), bufferSize, writeImmediately);
     }
 
     /**

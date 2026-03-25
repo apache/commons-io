@@ -27,7 +27,7 @@ import org.apache.commons.io.build.AbstractStreamBuilder;
 import org.apache.commons.io.function.IOIntConsumer;
 
 /**
- * A proxy stream which acts as a {@link FilterInputStream}, by passing all method calls on to the proxied stream, not changing which methods are called.
+ * An input stream proxy which delegates to the wrapped input stream.
  * <p>
  * It is an alternative base class to {@link FilterInputStream} to increase reusability, because {@link FilterInputStream} changes the methods being called,
  * such as read(byte[]) to read(byte[], int, int).
@@ -359,6 +359,9 @@ public abstract class ProxyInputStream extends FilterInputStream {
 
     /**
      * Sets the underlying input stream.
+     * <p>
+     * Use with caution.
+     * </p>
      *
      * @param in The input stream to set in {@link java.io.FilterInputStream#in}.
      * @return {@code this} instance.
@@ -389,7 +392,7 @@ public abstract class ProxyInputStream extends FilterInputStream {
     /**
      * Unwraps this instance by returning the underlying {@link InputStream}.
      * <p>
-     * Use with caution; useful to query the underlying {@link InputStream}.
+     * Use with caution.
      * </p>
      *
      * @return the underlying {@link InputStream}.

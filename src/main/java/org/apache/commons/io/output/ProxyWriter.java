@@ -23,10 +23,11 @@ import java.io.Writer;
 import org.apache.commons.io.IOUtils;
 
 /**
- * A Proxy stream which acts as expected, that is it passes the method calls on to the proxied stream and doesn't
- * change which methods are being called. It is an alternative base class to FilterWriter to increase reusability,
- * because FilterWriter changes the methods being called, such as {@code write(char[]) to write(char[], int, int)}
- * and {@code write(String) to write(String, int, int)}.
+ * A writer proxy which delegates to the wrapped writer.
+ * <p>
+ * It is an alternative base class to FilterWriter to increase reusability, because FilterWriter changes the methods being called, such as
+ * {@code write(char[]) to write(char[], int, int)} and {@code write(String) to write(String, int, int)}.
+ * </p>
  */
 public class ProxyWriter extends FilterWriter {
 
@@ -179,6 +180,34 @@ public class ProxyWriter extends FilterWriter {
      */
     protected void handleIOException(final IOException e) throws IOException {
         throw e;
+    }
+
+    /**
+     * Sets the underlying writer.
+     * <p>
+     * Use with caution.
+     * </p>
+     *
+     * @param out the underlying output writer.
+     * @return {@code this} instance.
+     * @since 2.22.0
+     */
+    public ProxyWriter setReference(final Writer out) {
+        this.out = out;
+        return this;
+    }
+
+    /**
+     * Unwraps this instance by returning the underlying {@link Writer}.
+     * <p>
+     * Use with caution.
+     * </p>
+     *
+     * @return the underlying {@link Writer}.
+     * @since 2.22.0
+     */
+    public Writer unwrap() {
+        return out;
     }
 
     /**

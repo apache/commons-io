@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.Writer;
@@ -152,7 +153,7 @@ public abstract class TestUtils {
 
     public static void checkWrite(final OutputStream output) {
         try {
-            new java.io.PrintStream(output).write(0);
+            new PrintStream(output).write(0);
         } catch (final Throwable t) {
             fail("The copy() method closed the stream when it shouldn't have. " + t.getMessage());
         }
@@ -160,7 +161,7 @@ public abstract class TestUtils {
 
     public static void checkWrite(final Writer output) {
         try {
-            new java.io.PrintWriter(output).write('a');
+            new PrintWriter(output).write('a');
         } catch (final Throwable t) {
             fail("The copy() method closed the stream when it shouldn't have. " + t.getMessage());
         }

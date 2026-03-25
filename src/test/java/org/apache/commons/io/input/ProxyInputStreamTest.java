@@ -328,6 +328,17 @@ public class ProxyInputStreamTest<T extends ProxyInputStream> {
     }
 
     @Test
+    void testSetReference() throws Exception {
+        final ByteArrayInputStream first = new ByteArrayInputStream(new byte[2]);
+        try (ProxyInputStream wrapped = new ProxyInputStreamFixture(first)) {
+            assertSame(first, wrapped.unwrap());
+            final NullInputStream in = new NullInputStream();
+            wrapped.setReference(in);
+            assertSame(in, wrapped.unwrap());
+        }
+    }
+
+    @Test
     void testSubclassAfterReadConsumer() throws Exception {
         final byte[] hello = "Hello".getBytes(StandardCharsets.UTF_8);
         final AtomicBoolean boolRef = new AtomicBoolean();
@@ -353,6 +364,14 @@ public class ProxyInputStreamTest<T extends ProxyInputStream> {
             assertEquals(message, assertThrowsExactly(CustomIOException.class, () -> IOUtils.consume(bounded)).getMessage());
         }
         // @formatter:on
+    }
+
+    @Test
+    void testUnwrap() throws Exception {
+        final ByteArrayInputStream first = new ByteArrayInputStream(new byte[2]);
+        try (ProxyInputStream wrapped = new ProxyInputStreamFixture(first)) {
+            assertSame(first, wrapped.unwrap());
+        }
     }
 
 }

@@ -17,19 +17,57 @@
 package org.apache.commons.io.output;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
+import java.util.concurrent.atomic.AtomicBoolean;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 /**
  * Test {@link ProxyWriter}.
  */
 class ProxyWriterTest {
+
+    private StringWriter target;
+
+    private ProxyWriter proxied;
+
+    private final AtomicBoolean hitArray = new AtomicBoolean();
+    private final AtomicBoolean hitArrayAt = new AtomicBoolean();
+    private final AtomicBoolean hitInt = new AtomicBoolean();
+
+    @BeforeEach
+    public void setUp() {
+        target = new StringWriter() {
+
+            @Override
+            public void write(final char[] ba) throws IOException {
+                hitArray.set(true);
+                super.write(ba);
+            }
+
+            @Override
+            public void write(final char[] b, final int off, final int len) {
+                hitArrayAt.set(true);
+                super.write(b, off, len);
+            }
+
+            @Override
+            public synchronized void write(final int ba) {
+                hitInt.set(true);
+                super.write(ba);
+            }
+        };
+        proxied = new ProxyWriter(target);
+    }
 
     @Test
     void testAppendChar() throws Exception {
@@ -227,6 +265,16 @@ class ProxyWriterTest {
     }
 
     @Test
+    void testSetReference() throws Exception {
+        assertFalse(hitArray.get());
+        proxied.setReference(new StringWriter());
+        proxied.write('y');
+        assertFalse(hitArray.get());
+        assertEquals(0, target.toString().length());
+        assertEquals("", target.toString());
+    }
+
+    @Test
     void testWriteCharArray() throws Exception {
         try (StringBuilderWriter writer = new StringBuilderWriter();
                 ProxyWriter proxy = new ProxyWriter(writer)) {
@@ -261,6 +309,12 @@ class ProxyWriterTest {
             assertEquals("ABC", writer.toString());
         }
     }
+
+    @Test
+    void testUnrwap() throws Exception {
+        assertSame(target, proxied.unwrap());
+    }
+
 
     @Test
     void testWriteStringPartial() throws Exception {

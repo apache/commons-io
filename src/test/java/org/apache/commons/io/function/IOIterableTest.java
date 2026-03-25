@@ -91,7 +91,7 @@ class IOIterableTest {
     }
 
     @Test
-    void testUnrwap() {
+    void testUnwrap() {
         assertSame(fixture.list, iterable.unwrap());
         assertSame(fixture.unwrap(), iterable.unwrap());
     }

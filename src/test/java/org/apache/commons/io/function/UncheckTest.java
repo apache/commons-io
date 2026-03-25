@@ -20,7 +20,6 @@ package org.apache.commons.io.function;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -262,12 +261,8 @@ class UncheckTest {
         assertEquals(1, atomicInt.get());
         // exception
         final IOException expected = new IOException(CAUSE_MESSAGE);
-        try {
-            Uncheck.getAsInt(() -> new BrokenInputStream(expected).read(), () -> CUSTOM_MESSAGE);
-            fail();
-        } catch (final UncheckedIOException e) {
-            assertUncheckedIOException(expected, e);
-        }
+        assertUncheckedIOException(expected,
+                assertThrows(UncheckedIOException.class, () -> Uncheck.getAsInt(() -> new BrokenInputStream(expected).read(), () -> CUSTOM_MESSAGE)));
     }
 
     @Test
@@ -291,12 +286,8 @@ class UncheckTest {
         assertEquals(1L, atomicLong.get());
         // exception
         final IOException expected = new IOException(CAUSE_MESSAGE);
-        try {
-            Uncheck.getAsLong(() -> new BrokenInputStream(expected).read(), () -> CUSTOM_MESSAGE);
-            fail();
-        } catch (final UncheckedIOException e) {
-            assertUncheckedIOException(expected, e);
-        }
+        assertUncheckedIOException(expected,
+                assertThrows(UncheckedIOException.class, () -> Uncheck.getAsLong(() -> new BrokenInputStream(expected).read(), () -> CUSTOM_MESSAGE)));
     }
 
     /**
@@ -308,12 +299,8 @@ class UncheckTest {
         assertEquals('a', Uncheck.get(() -> newInputStream().read()).intValue(), () -> CUSTOM_MESSAGE);
         // Exception
         final IOException expected = new IOException(CAUSE_MESSAGE);
-        try {
-            Uncheck.get(() -> new BrokenInputStream(expected).read(), () -> CUSTOM_MESSAGE);
-            fail();
-        } catch (final UncheckedIOException e) {
-            assertUncheckedIOException(expected, e);
-        }
+        assertUncheckedIOException(expected,
+                assertThrows(UncheckedIOException.class, () -> Uncheck.get(() -> new BrokenInputStream(expected).read(), () -> CUSTOM_MESSAGE)));
     }
 
     /**
@@ -334,7 +321,7 @@ class UncheckTest {
     }
 
     /**
-     * Tests {@link Uncheck#run(IORunnable, Supplier))}.
+     * Tests {@link Uncheck#run(IORunnable, Supplier)}.
      *
      * @throws IOException Thrown on a test failure.
      */
@@ -346,12 +333,8 @@ class UncheckTest {
         assertEquals('b', Uncheck.get(stream::read).intValue());
         final IOException expected = new IOException(CAUSE_MESSAGE);
         // Exception
-        try {
-            Uncheck.run(() -> new BrokenInputStream(expected).read(), () -> CUSTOM_MESSAGE);
-            fail();
-        } catch (final UncheckedIOException e) {
-            assertUncheckedIOException(expected, e);
-        }
+        assertUncheckedIOException(expected,
+                assertThrows(UncheckedIOException.class, () -> Uncheck.run(() -> new BrokenInputStream(expected).read(), () -> CUSTOM_MESSAGE)));
     }
 
     @Test
