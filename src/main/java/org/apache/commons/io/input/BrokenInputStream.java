@@ -106,7 +106,7 @@ public class BrokenInputStream extends InputStream {
     /**
      * Gets the Throwable to throw. Package-private for testing.
      *
-     * @return  the Throwable to throw.
+     * @return the Throwable to throw.
      */
     Throwable getThrowable() {
         return exceptionSupplier.get();
