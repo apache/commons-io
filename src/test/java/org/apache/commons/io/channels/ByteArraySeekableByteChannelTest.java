@@ -25,12 +25,17 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.nio.channels.ClosedChannelException;
+import java.nio.channels.NonWritableChannelException;
 import java.nio.channels.SeekableByteChannel;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.StandardOpenOption;
 import java.util.stream.Stream;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.function.IOSupplier;
+import org.apache.commons.lang3.ArrayUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -41,7 +46,9 @@ import org.junit.jupiter.params.provider.MethodSource;
  */
 public class ByteArraySeekableByteChannelTest extends AbstractSeekableByteChannelTest {
 
-    private static final byte[] testData = "Some data".getBytes(StandardCharsets.UTF_8);
+    private static final Charset CHARSET = StandardCharsets.UTF_8;
+    private static final String STRING = "Some data";
+    private static final byte[] BYTE_ARRAY = STRING.getBytes(CHARSET);
 
     static Stream<Arguments> testConstructor() {
         return Stream.of(
@@ -49,7 +56,7 @@ public class ByteArraySeekableByteChannelTest extends AbstractSeekableByteChanne
                 Arguments.of((IOSupplier<ByteArraySeekableByteChannel>) () -> new ByteArraySeekableByteChannel(8), EMPTY_BYTE_ARRAY, 8),
                 Arguments.of((IOSupplier<ByteArraySeekableByteChannel>) () -> new ByteArraySeekableByteChannel(16), EMPTY_BYTE_ARRAY, 16),
                 Arguments.of((IOSupplier<ByteArraySeekableByteChannel>) () -> ByteArraySeekableByteChannel.wrap(EMPTY_BYTE_ARRAY), EMPTY_BYTE_ARRAY, 0),
-                Arguments.of((IOSupplier<ByteArraySeekableByteChannel>) () -> ByteArraySeekableByteChannel.wrap(testData), testData, testData.length));
+                Arguments.of((IOSupplier<ByteArraySeekableByteChannel>) () -> ByteArraySeekableByteChannel.wrap(BYTE_ARRAY), BYTE_ARRAY, BYTE_ARRAY.length));
     }
 
     static Stream<Arguments> testShouldResizeWhenWritingMoreDataThanCapacity() {
@@ -65,6 +72,102 @@ public class ByteArraySeekableByteChannelTest extends AbstractSeekableByteChanne
     @Override
     protected SeekableByteChannel createChannel() throws IOException {
         return new ByteArraySeekableByteChannel();
+    }
+
+    @Test
+    void testBuilderDefaultConstructor() throws IOException {
+        try (ByteArraySeekableByteChannel channel = new ByteArraySeekableByteChannel.Builder().get()) {
+            assertEquals(0, channel.position());
+            assertEquals(0, channel.size());
+            assertEquals(0, channel.array().length);
+        }
+    }
+
+    @Test
+    void testBuilderDefaultMethod() throws IOException {
+        try (ByteArraySeekableByteChannel channel = ByteArraySeekableByteChannel.builder().get()) {
+            assertEquals(0, channel.position());
+            assertEquals(0, channel.size());
+            assertEquals(0, channel.array().length);
+        }
+    }
+
+    @Test
+    void testBuilderReadOnly() throws IOException {
+        try (ByteArraySeekableByteChannel channel = ByteArraySeekableByteChannel.builder()
+                .setByteArray(BYTE_ARRAY)
+                .setOpenOptions(StandardOpenOption.READ)
+                .get()) {
+            assertEquals(0, channel.position());
+            assertEquals(9, channel.size());
+            assertEquals(9, channel.array().length);
+            assertThrows(NonWritableChannelException.class, () -> channel.write(ByteBuffer.wrap(BYTE_ARRAY)));
+            assertThrows(NonWritableChannelException.class, () -> channel.truncate(0));
+        }
+    }
+
+    private void testBuilderReadWrite(final ByteArraySeekableByteChannel channel) throws ClosedChannelException, IOException {
+        assertEquals(0, channel.position());
+        assertEquals(9, channel.size());
+        assertEquals(9, channel.array().length);
+        channel.truncate(0);
+        assertEquals(0, channel.position());
+        channel.write(ByteBuffer.wrap(BYTE_ARRAY));
+        assertEquals(9, channel.size());
+        assertEquals(9, channel.array().length);
+    }
+
+    @Test
+    void testBuilderReadWriteExplict() throws IOException {
+        try (ByteArraySeekableByteChannel channel = ByteArraySeekableByteChannel.builder()
+                .setByteArray(BYTE_ARRAY)
+                .setOpenOptions(StandardOpenOption.READ, StandardOpenOption.WRITE)
+                .get()) {
+            testBuilderReadWrite(channel);
+        }
+    }
+
+    @Test
+    void testBuilderReadWriteImplicit() throws IOException {
+        try (ByteArraySeekableByteChannel channel = ByteArraySeekableByteChannel.builder()
+                .setByteArray(BYTE_ARRAY)
+                .get()) {
+            testBuilderReadWrite(channel);
+        }
+    }
+
+    @Test
+    void testBuilderSetByteArray() throws IOException {
+        try (ByteArraySeekableByteChannel channel = ByteArraySeekableByteChannel.builder()
+                .setByteArray(BYTE_ARRAY)
+                .get()) {
+            assertEquals(0, channel.position());
+            assertEquals(9, channel.size());
+            assertEquals(9, channel.array().length);
+        }
+    }
+
+    @Test
+    void testBuilderSetByteArrayEmpty() throws IOException {
+        try (ByteArraySeekableByteChannel channel = ByteArraySeekableByteChannel.builder()
+                .setByteArray(ArrayUtils.EMPTY_BYTE_ARRAY)
+                .get()) {
+            assertEquals(0, channel.position());
+            assertEquals(0, channel.size());
+            assertEquals(0, channel.array().length);
+        }
+    }
+
+    @Test
+    void testBuilderSetCharSequence() throws IOException {
+        try (ByteArraySeekableByteChannel channel = ByteArraySeekableByteChannel.builder()
+                .setCharSequence(STRING)
+                .setCharset(CHARSET)
+                .get()) {
+            assertEquals(0, channel.position());
+            assertEquals(9, channel.size());
+            assertEquals(9, channel.array().length);
+        }
     }
 
     @ParameterizedTest

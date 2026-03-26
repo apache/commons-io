@@ -123,6 +123,20 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
     }
 
     /**
+     * Gets a byte array from the origin.
+     *
+     * @return A byte array.
+     * @throws IllegalStateException         if the {@code origin} is {@code null}.
+     * @throws UnsupportedOperationException if the origin cannot be converted to a byte array.
+     * @throws IOException                   if an I/O error occurs.
+     * @see AbstractOrigin#getByteArray()
+     * @since 2.22.0
+     */
+    public byte[] getByteArray() throws IOException {
+        return checkOrigin().getByteArray();
+    }
+
+    /**
      * Gets a Channel from the origin with OpenOption[].
      *
      * @param channelType The channel type, not null.
@@ -202,7 +216,7 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
     /**
      * Gets the OpenOption array.
      *
-     * @return the OpenOption array.
+     * @return the OpenOption array, this is not a defensive copy, modify at your own risk.
      */
     public OpenOption[] getOpenOptions() {
         return openOptions;
@@ -388,7 +402,7 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
     }
 
     /**
-     * Sets the OpenOption[].
+     * Sets the OpenOption array.
      * <p>
      * Normally used with InputStream, OutputStream, and Writer.
      * </p>
@@ -396,7 +410,7 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
      * Subclasses may ignore this setting.
      * </p>
      *
-     * @param openOptions the OpenOption[] name, null resets to the default.
+     * @param openOptions the OpenOption[] name, null resets to the default, a defensive copy is made.
      * @return {@code this} instance.
      * @since 2.13.0
      * @see #setInputStream(InputStream)
@@ -404,7 +418,7 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
      * @see #setWriter(Writer)
      */
     public B setOpenOptions(final OpenOption... openOptions) {
-        this.openOptions = openOptions != null ? openOptions : DEFAULT_OPEN_OPTIONS;
+        this.openOptions = openOptions != null ? openOptions.clone() : DEFAULT_OPEN_OPTIONS;
         return asThis();
     }
 
