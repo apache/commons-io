@@ -18,6 +18,7 @@ package org.apache.commons.io.input;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.ByteArrayInputStream;
@@ -77,6 +78,32 @@ class CloseShieldInputStreamTest {
         assertFalse(closed, "closed");
         assertEquals(-1, shielded.read(), "read()");
         assertEquals(data[0], byteArrayInputStream.read(), "read()");
+    }
+
+    @Test
+    void testOnClose() throws Exception {
+        try (InputStream in = CloseShieldInputStream.builder().setInputStream(byteArrayInputStream).setOnClose(is -> {
+            assertFalse(closed);
+            closed = true;
+            return ClosedInputStream.INSTANCE;
+        }).get()) {
+            assertEquals(3, in.available());
+        }
+        assertTrue(closed);
+    }
+
+    @Test
+    void testOnCloseException() throws Exception {
+        final String message = "test";
+        assertEquals("test", assertThrowsExactly(IOException.class, () -> {
+            try (InputStream in = CloseShieldInputStream.builder().setInputStream(byteArrayInputStream).setOnClose(is -> {
+                assertFalse(closed);
+                throw new IOException(message);
+            }).get()) {
+                assertEquals("test", assertThrowsExactly(IOException.class, in::close).getMessage());
+            }
+        }).getMessage());
+        assertFalse(closed);
     }
 
     @Test
