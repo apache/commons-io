@@ -82,12 +82,7 @@ public class LineIterator implements Iterator<String>, Closeable {
      */
     @SuppressWarnings("resource") // Caller closes Reader
     public LineIterator(final Reader reader) {
-        Objects.requireNonNull(reader, "reader");
-        if (reader instanceof BufferedReader) {
-            bufferedReader = (BufferedReader) reader;
-        } else {
-            bufferedReader = new BufferedReader(reader);
-        }
+        bufferedReader = IOUtils.buffer(Objects.requireNonNull(reader, "reader"));
     }
 
     /**
