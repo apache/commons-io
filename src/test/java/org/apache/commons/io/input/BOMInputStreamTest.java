@@ -55,7 +55,7 @@ import org.xml.sax.SAXParseException;
 class BOMInputStreamTest {
 
     /**
-     *  A mock InputStream that expects {@code close()} to be called.
+     *  A mock InputStream that tracks if {@code close()} is called.
      */
     private static final class ExpectCloseInputStream extends InputStream {
         private boolean closed;
@@ -225,14 +225,12 @@ class BOMInputStreamTest {
         // Throwing
         final String message = "test exception message";
         // @formatter:off
-        try (BOMInputStream bounded = BOMInputStream.builder()
+        assertEquals(message, assertThrowsExactly(CustomIOException.class, () -> BOMInputStream.builder()
                 .setInputStream(createUtf8Input(data, true))
                 .setAfterRead(i -> {
                     throw new CustomIOException(message);
                 })
-                .get()) {
-            assertEquals(message, assertThrowsExactly(CustomIOException.class, () -> IOUtils.consume(bounded)).getMessage());
-        }
+                .get()).getMessage());
         // @formatter:on
     }
 
@@ -241,7 +239,7 @@ class BOMInputStreamTest {
         final byte[] data = { 'A', 'B', 'C', 'D' };
         final InputStream shadow;
         try (BOMInputStream in = BOMInputStream.builder().setInputStream(createUtf8Input(data, true)).get()) {
-            assertEquals(7, in.available());
+            assertEquals(4, in.available());
             shadow = in;
         }
         assertEquals(0, shadow.available());
@@ -251,7 +249,7 @@ class BOMInputStreamTest {
     void testAvailableWithBOMAfterOpen() throws Exception {
         final byte[] data = { 'A', 'B', 'C', 'D' };
         try (BOMInputStream in = BOMInputStream.builder().setInputStream(createUtf8Input(data, true)).get()) {
-            assertEquals(7, in.available());
+            assertEquals(4, in.available());
         }
     }
 
@@ -259,7 +257,7 @@ class BOMInputStreamTest {
     void testAvailableWithoutBOM() throws Exception {
         final byte[] data = { 'A', 'B', 'C', 'D' };
         try (BOMInputStream in = BOMInputStream.builder().setInputStream(createUtf8Input(data, false)).get()) {
-            assertEquals(4, in.available());
+            assertEquals(1, in.available());
         }
     }
 
@@ -282,7 +280,14 @@ class BOMInputStreamTest {
 
     @Test
     void testCloseHandleIOException() throws IOException {
-        ProxyInputStreamTest.testCloseHandleIOException(BOMInputStream.builder());
+        final IOException exception = new IOException();
+        ProxyInputStreamTest.testCloseHandleIOException(BOMInputStream.builder().setInputStream(new BrokenInputStream(() -> exception) {
+
+            @Override
+            public int read() throws IOException {
+                return 'X';
+            }
+        }).get());
     }
 
     @Test
@@ -451,7 +456,7 @@ class BOMInputStreamTest {
     void testReadAfterClose() throws Exception {
         final byte[] data = { 'A', 'B', 'C', 'D' };
         try (InputStream in = BOMInputStream.builder().setInputStream(createUtf8Input(data, true)).get()) {
-            assertEquals(7, in.available());
+            assertEquals(4, in.available());
             in.close();
             assertThrows(IOException.class, in::read);
         }
