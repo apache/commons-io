@@ -24,12 +24,16 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.ClosedChannelException;
+import java.nio.channels.NonWritableChannelException;
 import java.nio.channels.SeekableByteChannel;
+import java.nio.file.OpenOption;
+import java.nio.file.StandardOpenOption;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.concurrent.locks.ReentrantLock;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.build.AbstractStreamBuilder;
 
 /**
  * A {@link SeekableByteChannel} implementation backed by a byte array.
@@ -38,12 +42,64 @@ import org.apache.commons.io.IOUtils;
  * and it's not possible to {@link #position(long) set the position} or {@link #truncate(long) truncate} to a value bigger than that. The raw internal buffer is
  * accessed via {@link ByteArraySeekableByteChannel#array()}.
  * </p>
+ * <p>
+ * Building a read-only channel from an existing byte array is supported with:
+ * </p>
+ * <pre>{@code
+ * try (ByteArraySeekableByteChannel channel = ByteArraySeekableByteChannel.builder()
+ *               .setByteArray(...)
+ *               .setOpenOptions(StandardOpenOption.READ)
+ *               .get()) {
+ *               // read from channel
+ * }
+ * }</pre>
  *
  * @since 2.21.0
  */
 public class ByteArraySeekableByteChannel implements SeekableByteChannel {
 
+    /**
+     * Builds for {@link ByteArraySeekableByteChannel}.
+     * <p>
+     * Building a read-only channel from an existing byte array is supported with:
+     * </p>
+     * <pre>{@code
+     * try (ByteArraySeekableByteChannel channel = ByteArraySeekableByteChannel.builder()
+     *               .setByteArray(...)
+     *               .setOpenOptions(StandardOpenOption.READ)
+     *               .get()) {
+     *               // read from channel
+     * }
+     * }</pre>
+     *
+     * @since 2.22.0
+     */
+    public static class Builder extends AbstractStreamBuilder<ByteArraySeekableByteChannel, Builder> {
+
+        /**
+         * Constructs a new builder for {@link ByteArraySeekableByteChannel}.
+         */
+        public Builder() {
+            setByteArray(IOUtils.EMPTY_BYTE_ARRAY);
+        }
+
+        @Override
+        public ByteArraySeekableByteChannel get() throws IOException {
+            return new ByteArraySeekableByteChannel(this);
+        }
+    }
+
     private static final int RESIZE_LIMIT = Integer.MAX_VALUE >> 1;
+
+    /**
+     * Constructs a new builder for {@link ByteArraySeekableByteChannel}.
+     *
+     * @return a new builder for {@link ByteArraySeekableByteChannel}.
+     * @since 2.22.0
+     */
+    public static Builder builder() {
+        return new Builder();
+    }
 
     /**
      * Constructs a new channel backed directly by the given byte array.
@@ -65,11 +121,11 @@ public class ByteArraySeekableByteChannel implements SeekableByteChannel {
         Objects.requireNonNull(bytes, "bytes");
         return new ByteArraySeekableByteChannel(bytes);
     }
-
     private byte[] data;
     private volatile boolean closed;
     private long position;
     private int size;
+    private final boolean isWritable;
     private final ReentrantLock lock = new ReentrantLock();
 
     /**
@@ -84,9 +140,19 @@ public class ByteArraySeekableByteChannel implements SeekableByteChannel {
         this(IOUtils.DEFAULT_BUFFER_SIZE);
     }
 
+    private ByteArraySeekableByteChannel(final Builder builder) throws IOException {
+        this.data = builder.getByteArray();
+        this.size = data.length;
+        final OpenOption[] openOptions = builder.getOpenOptions();
+        Arrays.sort(openOptions);
+        this.isWritable = openOptions.length == 0 || Arrays.binarySearch(openOptions, StandardOpenOption.WRITE) >= 0
+                || Arrays.binarySearch(openOptions, StandardOpenOption.APPEND) >= 0;
+    }
+
     private ByteArraySeekableByteChannel(final byte[] data) {
         this.data = data;
         this.size = data.length;
+        this.isWritable = true;
     }
 
     /**
@@ -103,6 +169,7 @@ public class ByteArraySeekableByteChannel implements SeekableByteChannel {
             throw new IllegalArgumentException("Size must be non-negative");
         }
         this.data = new byte[size];
+        this.isWritable = true;
     }
 
     /**
@@ -126,6 +193,12 @@ public class ByteArraySeekableByteChannel implements SeekableByteChannel {
     private void checkRange(final long newSize, final String method) {
         if (newSize < 0L) {
             throw new IllegalArgumentException(String.format("%s must be positive: %,d", method, newSize));
+        }
+    }
+
+    private void checkWritable() {
+        if (!isWritable) {
+            throw new NonWritableChannelException();
         }
     }
 
@@ -237,6 +310,7 @@ public class ByteArraySeekableByteChannel implements SeekableByteChannel {
     @Override
     public SeekableByteChannel truncate(final long newSize) throws ClosedChannelException {
         checkOpen();
+        checkWritable();
         checkRange(newSize, "truncate()");
         lock.lock();
         try {
@@ -255,6 +329,8 @@ public class ByteArraySeekableByteChannel implements SeekableByteChannel {
     @Override
     public int write(final ByteBuffer b) throws IOException {
         checkOpen();
+        checkWritable();
+        //
         if (position > Integer.MAX_VALUE) {
             throw new IOException("position > Integer.MAX_VALUE");
         }
