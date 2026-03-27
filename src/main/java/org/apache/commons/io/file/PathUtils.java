@@ -281,7 +281,10 @@ public final class PathUtils {
     }
 
     /**
-     * Cleans a directory by only deleting files, including in subdirectories, but without deleting the directories.
+     * Cleans a directory by only deleting files, including in subdirectories, without deleting directories.
+     * <p>
+     * This leaves a directory empty of files but the directory and any subdirectories remain.
+     * </p>
      *
      * @param directory directory to clean.
      * @return The visitation path counters.
@@ -292,7 +295,10 @@ public final class PathUtils {
     }
 
     /**
-     * Cleans a directory by only deleting files, including in subdirectories, but without deleting the directories.
+     * Cleans a directory by only deleting files, including in subdirectories, without deleting directories.
+     * <p>
+     * This leaves a directory empty of files but the directory and any subdirectories remain.
+     * </p>
      *
      * @param directory     directory to clean.
      * @param deleteOptions How to handle deletion.
