@@ -28,17 +28,7 @@ import java.io.InputStream;
  *
  * @since 2.5
  */
-public class UnixLineEndingInputStream extends InputStream {
-
-    private boolean atEos;
-
-    private boolean atSlashCr;
-
-    private boolean atSlashLf;
-
-    private final InputStream in;
-
-    private final boolean lineFeedAtEos;
+public class UnixLineEndingInputStream extends AbstractLineEndingInputStream {
 
     /**
      * Constructs an input stream that filters another stream
@@ -47,19 +37,7 @@ public class UnixLineEndingInputStream extends InputStream {
      * @param lineFeedAtEos true to ensure that the file ends with LF.
      */
     public UnixLineEndingInputStream(final InputStream inputStream, final boolean lineFeedAtEos) {
-        this.in = inputStream;
-        this.lineFeedAtEos = lineFeedAtEos;
-    }
-
-    /**
-     * Closes the stream. Also closes the underlying stream.
-     *
-     * @throws IOException If an I/O error occurs.
-     */
-    @Override
-    public void close() throws IOException {
-        super.close();
-        in.close();
+        super(inputStream, lineFeedAtEos);
     }
 
     /**
@@ -83,20 +61,12 @@ public class UnixLineEndingInputStream extends InputStream {
      * {@inheritDoc}
      */
     @Override
-    public synchronized void mark(final int readLimit) {
-        throw UnsupportedOperationExceptions.mark();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public synchronized int read() throws IOException {
         final boolean previousWasSlashR = atSlashCr;
         if (atEos) {
             return handleEos(previousWasSlashR);
         }
-        final int target = readWithUpdate();
+        final int target = readUpdate();
         if (atEos) {
             return handleEos(previousWasSlashR);
         }
@@ -117,7 +87,7 @@ public class UnixLineEndingInputStream extends InputStream {
      * @return the next int read from the target stream.
      * @throws IOException If an I/O error occurs.
      */
-    private int readWithUpdate() throws IOException {
+    private int readUpdate() throws IOException {
         final int target = this.in.read();
         atEos = target == EOF;
         if (atEos) {
