@@ -68,37 +68,31 @@ class FileUtilsCleanDirectoryTest extends AbstractTempDirTest {
     void testCleanDirectoryToForceDelete() throws Exception {
         final File file = new File(tempDirFile, "restricted");
         FileUtils.touch(file);
-
         // 300 = owner: WE.
         // 500 = owner: RE.
         // 700 = owner: RWE.
         assumeTrue(chmod(tempDirFile, 700, false));
-
         // cleanDirectory calls forceDelete
         FileUtils.cleanDirectory(tempDirFile);
+        assertTrue(tempDirFile.exists());
     }
 
     @Test
     void testCleanEmpty() throws Exception {
         assertEquals(0, tempDirFile.list().length);
-
         FileUtils.cleanDirectory(tempDirFile);
-
+        assertTrue(tempDirFile.exists());
         assertEquals(0, tempDirFile.list().length);
     }
 
     @Test
     void testDeletesNested() throws Exception {
         final File nested = new File(tempDirFile, "nested");
-
         assertTrue(nested.mkdirs());
-
         FileUtils.touch(new File(nested, "file"));
-
         assertEquals(1, tempDirFile.list().length);
-
         FileUtils.cleanDirectory(tempDirFile);
-
+        assertTrue(tempDirFile.exists());
         assertEquals(0, tempDirFile.list().length);
     }
 
@@ -106,21 +100,17 @@ class FileUtilsCleanDirectoryTest extends AbstractTempDirTest {
     void testDeletesRegular() throws Exception {
         FileUtils.touch(new File(tempDirFile, "regular"));
         FileUtils.touch(new File(tempDirFile, ".hidden"));
-
         assertEquals(2, tempDirFile.list().length);
-
         FileUtils.cleanDirectory(tempDirFile);
-
+        assertTrue(tempDirFile.exists());
         assertEquals(0, tempDirFile.list().length);
     }
 
     @DisabledOnOs(OS.WINDOWS)
     @Test
     void testThrowsOnNullList() throws Exception {
-        // test won't work if we can't restrict permissions on the
-        // directory, so skip it.
+        // test won't work if we can't restrict permissions on the directory, so skip it.
         assumeTrue(chmod(tempDirFile, 0, false));
-
         try {
             // cleanDirectory calls forceDelete
             final IOException e = assertThrows(IOException.class, () -> FileUtils.cleanDirectory(tempDirFile));
@@ -128,6 +118,7 @@ class FileUtilsCleanDirectoryTest extends AbstractTempDirTest {
         } finally {
             chmod(tempDirFile, 755, false);
         }
+        assertTrue(tempDirFile.exists());
     }
 
 }
