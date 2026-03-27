@@ -38,17 +38,17 @@ public class UnixLineEndingInputStream extends InputStream {
 
     private final InputStream in;
 
-    private final boolean lineFeedAtEndOfFile;
+    private final boolean lineFeedAtEos;
 
     /**
      * Constructs an input stream that filters another stream
      *
      * @param inputStream                        The input stream to wrap.
-     * @param ensureLineFeedAtEndOfFile true to ensure that the file ends with LF.
+     * @param lineFeedAtEos true to ensure that the file ends with LF.
      */
-    public UnixLineEndingInputStream(final InputStream inputStream, final boolean ensureLineFeedAtEndOfFile) {
+    public UnixLineEndingInputStream(final InputStream inputStream, final boolean lineFeedAtEos) {
         this.in = inputStream;
-        this.lineFeedAtEndOfFile = ensureLineFeedAtEndOfFile;
+        this.lineFeedAtEos = lineFeedAtEos;
     }
 
     /**
@@ -69,7 +69,7 @@ public class UnixLineEndingInputStream extends InputStream {
      * @return The next char to output to the stream.
      */
     private int handleEos(final boolean previousWasSlashCr) {
-        if (previousWasSlashCr || !lineFeedAtEndOfFile) {
+        if (previousWasSlashCr || !lineFeedAtEos) {
             return EOF;
         }
         if (!atSlashLf) {
