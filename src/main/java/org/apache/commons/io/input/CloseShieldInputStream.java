@@ -16,7 +16,10 @@
  */
 package org.apache.commons.io.input;
 
+import java.io.IOException;
 import java.io.InputStream;
+
+import org.apache.commons.io.function.IOUnaryOperator;
 
 /**
  * Proxy stream that prevents the underlying input stream from being closed.
@@ -29,6 +32,50 @@ import java.io.InputStream;
  * @since 1.4
  */
 public class CloseShieldInputStream extends ProxyInputStream {
+
+    /**
+     * Constructs a new builder for {@link CloseShieldInputStream}.
+     *
+     * @since 2.22.0
+     */
+    public static class Builder extends AbstractBuilder<CloseShieldInputStream, Builder> {
+
+        private IOUnaryOperator<InputStream> onClose = is -> ClosedInputStream.INSTANCE;
+
+        /**
+         * Constructs a new instance.
+         */
+        public Builder() {
+            // empty
+        }
+
+        @Override
+        public CloseShieldInputStream get() throws IOException {
+            return new CloseShieldInputStream(this);
+        }
+
+        /**
+         * Sets the {@code onClose} function. By default, replaces the underlying input stream when {@link #close()} is called.
+         *
+         * @param onClose the onClose function.
+         * @return {@code this} instance.
+         */
+        public Builder setOnClose(final IOUnaryOperator<InputStream> onClose) {
+            this.onClose = onClose;
+            return asThis();
+        }
+
+    }
+
+    /**
+     * Constructs a new builder for {@link CloseShieldInputStream}.
+     *
+     * @return the new builder.
+     * @since 2.22.0
+     */
+    public static Builder builder() {
+        return new Builder();
+    }
 
     /**
      * Constructs a proxy that only shields {@link System#in} from closing.
@@ -52,6 +99,13 @@ public class CloseShieldInputStream extends ProxyInputStream {
         return new CloseShieldInputStream(inputStream);
     }
 
+    private final IOUnaryOperator<InputStream> onClose;
+
+    private CloseShieldInputStream(final Builder builder) throws IOException {
+        super(builder.getInputStream());
+        this.onClose = builder.onClose;
+    }
+
     /**
      * Constructs a proxy that shields the given input stream from being closed.
      *
@@ -63,16 +117,21 @@ public class CloseShieldInputStream extends ProxyInputStream {
     @Deprecated
     public CloseShieldInputStream(final InputStream inputStream) {
         super(inputStream);
+        this.onClose = builder().onClose;
     }
 
     /**
-     * Replaces the underlying input stream with a {@link ClosedInputStream}
-     * sentinel. The original input stream will remain open, but this proxy will
-     * appear closed.
+     * Applies the {@code onClose} function to the underlying input stream, replacing it with the result.
+     * <p>
+     * By default, replaces the underlying input stream with a {@link ClosedInputStream} sentinel. The original input stream will remain open, but this proxy
+     * will appear closed.
+     * </p>
+     *
+     * @throws IOException Thrown by the {@code onClose} function.
      */
     @Override
-    public void close() {
-        in = ClosedInputStream.INSTANCE;
+    public void close() throws IOException {
+        in = onClose.apply(in);
     }
 
 }
