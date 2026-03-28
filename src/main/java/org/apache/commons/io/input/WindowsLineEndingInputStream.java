@@ -28,19 +28,9 @@ import java.io.InputStream;
  *
  * @since 2.5
  */
-public class WindowsLineEndingInputStream extends InputStream {
-
-    private boolean atEos;
-
-    private boolean atSlashCr;
-
-    private boolean atSlashLf;
-
-    private final InputStream in;
+public class WindowsLineEndingInputStream extends AbstractLineEndingInputStream {
 
     private boolean injectSlashLf;
-
-    private final boolean lineFeedAtEos;
 
     /**
      * Constructs an input stream that filters another stream.
@@ -49,19 +39,7 @@ public class WindowsLineEndingInputStream extends InputStream {
      * @param lineFeedAtEos true to ensure that the stream ends with CRLF.
      */
     public WindowsLineEndingInputStream(final InputStream in, final boolean lineFeedAtEos) {
-        this.in = in;
-        this.lineFeedAtEos = lineFeedAtEos;
-    }
-
-    /**
-     * Closes the stream. Also closes the underlying stream.
-     *
-     * @throws IOException If an I/O error occurs.
-     */
-    @Override
-    public void close() throws IOException {
-        super.close();
-        in.close();
+        super(in, lineFeedAtEos);
     }
 
     /**
@@ -83,14 +61,6 @@ public class WindowsLineEndingInputStream extends InputStream {
             return LF;
         }
         return EOF;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public synchronized void mark(final int readLimit) {
-        throw UnsupportedOperationExceptions.mark();
     }
 
     /**

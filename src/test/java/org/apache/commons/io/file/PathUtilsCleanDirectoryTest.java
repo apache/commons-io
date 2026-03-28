@@ -18,8 +18,10 @@
 package org.apache.commons.io.file;
 
 import static org.apache.commons.io.file.CounterAssertions.assertCounts;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -41,6 +43,7 @@ class PathUtilsCleanDirectoryTest {
     void testCleanDirectory1FileSize0() throws IOException {
         PathUtils.copyDirectory(Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-0"), tempDir);
         assertCounts(1, 1, 0, PathUtils.cleanDirectory(tempDir));
+        assertTrue(Files.exists(tempDir));
     }
 
     /**
@@ -50,6 +53,7 @@ class PathUtilsCleanDirectoryTest {
     void testCleanDirectory1FileSize1() throws IOException {
         PathUtils.copyDirectory(Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-1"), tempDir);
         assertCounts(1, 1, 1, PathUtils.cleanDirectory(tempDir));
+        assertTrue(Files.exists(tempDir));
     }
 
     /**
@@ -59,6 +63,7 @@ class PathUtilsCleanDirectoryTest {
     void testCleanDirectory2FileSize2() throws IOException {
         PathUtils.copyDirectory(Paths.get("src/test/resources/org/apache/commons/io/dirs-2-file-size-2"), tempDir);
         assertCounts(3, 2, 2, PathUtils.cleanDirectory(tempDir));
+        assertTrue(Files.exists(tempDir));
     }
 
     /**
@@ -67,5 +72,6 @@ class PathUtilsCleanDirectoryTest {
     @Test
     void testCleanEmptyDirectory() throws IOException {
         assertCounts(1, 0, 0, PathUtils.cleanDirectory(tempDir));
+        assertTrue(Files.exists(tempDir));
     }
 }

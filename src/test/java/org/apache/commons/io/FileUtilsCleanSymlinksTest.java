@@ -82,6 +82,7 @@ class FileUtilsCleanSymlinksTest {
 
         // assert contents of the real directory were removed including the symlink
         FileUtils.cleanDirectory(realOuter);
+        assertTrue(realOuter.exists());
         assertEquals(0, realOuter.list().length);
 
         // ensure that the contents of the symlink were NOT removed.
@@ -121,6 +122,7 @@ class FileUtilsCleanSymlinksTest {
         // assert contents of the real directory were removed including the symlink
         // should clean the contents of this but not recurse into other links
         FileUtils.cleanDirectory(symlinkParentDirectory);
+        assertTrue(symlinkParentDirectory.exists());
         assertEquals(0, symlinkParentDirectory.list().length);
         assertEquals(0, realParent.list().length);
 
@@ -155,6 +157,7 @@ class FileUtilsCleanSymlinksTest {
 
         // assert contents of the real directory were removed including the symlink
         FileUtils.cleanDirectory(realOuter);
+        assertTrue(realOuter.exists());
         assertEquals(0, realOuter.list().length);
 
         // ensure that the contents of the symlink were NOT removed.
@@ -256,6 +259,7 @@ class FileUtilsCleanSymlinksTest {
         assertTrue(setupSymlink(randomDirectory, symlinkDirectory));
 
         FileUtils.cleanDirectory(symlinkDirectory);
+        assertTrue(symlinkDirectory.exists());
         assertEquals(0, symlinkDirectory.list().length);
         assertEquals(0, randomDirectory.list().length);
     }

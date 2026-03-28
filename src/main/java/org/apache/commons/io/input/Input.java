@@ -26,7 +26,7 @@ import java.io.InterruptedIOException;
 final class Input {
 
     /**
-     * Throws an IOException on false input.
+     * Throws an {@link IOException} on false input.
      *
      * @param isOpen whether an input is open or not.
      * @throws IOException if {@code isOpen} is false indicating an input is closed.
@@ -38,7 +38,7 @@ final class Input {
     }
 
     /**
-     * Converts an InterruptedException to an InterruptedIOException.
+     * Converts an {@link InterruptedException} to an {@link InterruptedIOException}.
      * <p>
      * The cause of the returned InterruptedIOException is set to the original.
      * </p>
