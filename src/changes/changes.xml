@@ -77,6 +77,7 @@ The <action> type attribute can be add,update,fix,remove.
       <action type="add" dev="ggregory" due-to="Konrad Windszus, Gary Gregory, Makarand Hinge" issue="IO-883">ByteArraySeekableByteChannel should optionally configure a read-only channel.</action>
       <action type="add" dev="ggregory" due-to="Gary Gregory" issue="IO-883">Add ByteArraySeekableByteChannel.Builder and builder().</action>
       <action type="add" dev="ggregory" due-to="Gary Gregory" issue="IO-883">Add AbstractStreamBuilder.getByteArray().</action>
+      <action type="add" dev="ggregory" due-to="Gary Gregory">CloseShieldInputStream now supports a custom close shield as a function #836.</action>
       <!-- UPDATE -->
       <action type="update" dev="ggregory"             due-to="Gary Gregory, Dependabot">Bump org.apache.commons:commons-parent from 91 to 97 #816.</action>
       <action type="update" dev="ggregory"             due-to="Gary Gregory, Dependabot">Bump commons-codec:commons-codec from 1.19.0 to 1.21.0 #812.</action>
