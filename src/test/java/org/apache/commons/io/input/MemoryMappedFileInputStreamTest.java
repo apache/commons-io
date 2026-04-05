@@ -30,7 +30,6 @@ import java.util.Arrays;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.RandomUtils;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -143,7 +142,7 @@ class MemoryMappedFileInputStreamTest {
         try (InputStream inputStream = newInputStream(file, 1024)) {
             inputStream.close();
             // verify
-            Assertions.assertThrows(IOException.class, () -> IOUtils.toByteArray(inputStream));
+            assertThrows(IOException.class, () -> IOUtils.toByteArray(inputStream));
         }
     }
 

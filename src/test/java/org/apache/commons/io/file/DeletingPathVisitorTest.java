@@ -30,7 +30,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import org.apache.commons.io.file.Counters.PathCounters;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -104,7 +103,7 @@ class DeletingPathVisitorTest extends AbstractTempDirTest {
         final CountingPathVisitor visitor = new DeletingPathVisitor(pathCounters, skipFileName);
         assertCounts(1, 1, 1, PathUtils.visitFileTree(visitor, tempDirPath));
         final Path skippedFile = tempDirPath.resolve(skipFileName);
-        Assertions.assertTrue(Files.exists(skippedFile));
+        assertTrue(Files.exists(skippedFile));
         Files.delete(skippedFile);
     }
 
