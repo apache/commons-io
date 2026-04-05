@@ -96,7 +96,9 @@ class ReadAheadInputStreamTest extends AbstractInputStreamTest {
                 try (ReadAheadInputStream rais = ReadAheadInputStream.builder().setInputStream(inputStream).setExecutorService(externalExecutor).get()) {
                     assertEquals('1', rais.read());
                 }
+                Thread.yield();
                 // The underlying FileInputStream should be closed since ReadAheadInputStream is a FilterInputStream.
+                assertThrows(IOException.class, inputStream::available);
                 assertThrows(IOException.class, inputStream::read);
                 // The caller remains responsible for shutting down the executor.
             } finally {

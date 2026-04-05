@@ -37,7 +37,7 @@ public class ChunkedOutputStream extends FilterOutputStream {
 
     // @formatter:off
     /**
-     * Builds a new {@link UnsynchronizedByteArrayOutputStream}.
+     * Builds a new {@link ChunkedOutputStream}.
      *
      * <p>
      * Using File IO:

@@ -21,6 +21,7 @@ import static org.apache.commons.io.file.CounterAssertions.assertCounts;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -28,7 +29,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import org.apache.commons.io.file.Counters.PathCounters;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -112,7 +112,7 @@ class CleaningPathVisitorTest extends TestArguments {
         assertCounts(1, 1, 1, visitFileTree);
         assertSame(visitor, visitFileTree);
         final Path skippedFile = tempDir.resolve(skipFileName);
-        Assertions.assertTrue(Files.exists(skippedFile));
+        assertTrue(Files.exists(skippedFile));
         Files.delete(skippedFile);
         //
         assertNotEquals(visitFileTree, CleaningPathVisitor.withLongCounters());

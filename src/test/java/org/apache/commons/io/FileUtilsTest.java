@@ -93,7 +93,6 @@ import org.apache.commons.io.test.TestUtils;
 import org.apache.commons.lang3.SystemProperties;
 import org.apache.commons.lang3.SystemUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -2015,9 +2014,9 @@ class FileUtilsTest extends AbstractTempDirTest {
     void testIsEmptyDirectory() throws IOException {
         try (TempDirectory tempDir = TempDirectory.create(getClass().getCanonicalName())) {
             final File tempDirAsFile = tempDir.toFile();
-            Assertions.assertTrue(FileUtils.isEmptyDirectory(tempDirAsFile));
+            assertTrue(FileUtils.isEmptyDirectory(tempDirAsFile));
         }
-        Assertions.assertFalse(FileUtils.isEmptyDirectory(DIR_SIZE_1.toFile()));
+        assertFalse(FileUtils.isEmptyDirectory(DIR_SIZE_1.toFile()));
     }
 
     @ParameterizedTest

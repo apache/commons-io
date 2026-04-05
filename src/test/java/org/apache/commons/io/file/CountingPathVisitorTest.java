@@ -18,10 +18,10 @@
 package org.apache.commons.io.file;
 
 import static org.apache.commons.io.file.CounterAssertions.assertCounts;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.IOException;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
@@ -31,8 +31,8 @@ import org.junit.jupiter.params.provider.MethodSource;
 class CountingPathVisitorTest extends TestArguments {
 
     private void checkZeroCounts(final CountingPathVisitor visitor) {
-        Assertions.assertEquals(CountingPathVisitor.withLongCounters(), visitor);
-        Assertions.assertEquals(CountingPathVisitor.withBigIntegerCounters(), visitor);
+        assertEquals(CountingPathVisitor.withLongCounters(), visitor);
+        assertEquals(CountingPathVisitor.withBigIntegerCounters(), visitor);
     }
 
     /**

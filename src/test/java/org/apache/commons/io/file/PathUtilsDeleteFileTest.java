@@ -32,7 +32,6 @@ import java.nio.file.Paths;
 
 import org.apache.commons.io.file.Counters.PathCounters;
 import org.apache.commons.lang3.SystemUtils;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -95,7 +94,7 @@ class PathUtilsDeleteFileTest extends AbstractTempDirTest {
      */
     @Test
     void testDeleteFileEmptyDirectory() throws IOException {
-        Assertions.assertThrows(NoSuchFileException.class, () -> testDeleteFileEmpty(PathUtils.deleteFile(tempDirPath)));
+        assertThrows(NoSuchFileException.class, () -> testDeleteFileEmpty(PathUtils.deleteFile(tempDirPath)));
         // This will throw if not empty.
         Files.deleteIfExists(tempDirPath);
     }
