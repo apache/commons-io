@@ -26,13 +26,13 @@ import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.WritableByteChannel;
 
 /**
- * Proxies a FileChannel.
+ * Filters a FileChannel.
  */
-class FileChannelProxy extends FileChannel {
+public class FilterFileChannel extends FileChannel {
 
     FileChannel fileChannel;
 
-    FileChannelProxy(final FileChannel fileChannel) {
+    FilterFileChannel(final FileChannel fileChannel) {
         this.fileChannel = fileChannel;
     }
 
