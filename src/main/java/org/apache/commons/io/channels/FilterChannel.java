@@ -93,7 +93,9 @@ public class FilterChannel<C extends Channel> implements Channel {
     final C channel;
 
     /**
-     * @param builder
+     * Constructs a new instance.
+     *
+     * @param builder The source builder.
      * @throws IOException if an I/O error occurs.
      */
     @SuppressWarnings("unchecked")
