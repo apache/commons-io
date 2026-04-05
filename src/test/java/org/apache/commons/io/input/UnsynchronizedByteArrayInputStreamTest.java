@@ -163,23 +163,17 @@ class UnsynchronizedByteArrayInputStreamTest {
 
     @Test
     void testInvalidConstructor2OffsetUnder() {
-        assertThrows(IllegalArgumentException.class, () -> {
-            newStream(IOUtils.EMPTY_BYTE_ARRAY, -1);
-        });
+        assertThrows(IllegalArgumentException.class, () -> newStream(IOUtils.EMPTY_BYTE_ARRAY, -1));
     }
 
     @Test
     void testInvalidConstructor3LengthUnder() {
-        assertThrows(IllegalArgumentException.class, () -> {
-            newStream(IOUtils.EMPTY_BYTE_ARRAY, 0, -1);
-        });
+        assertThrows(IllegalArgumentException.class, () -> newStream(IOUtils.EMPTY_BYTE_ARRAY, 0, -1));
     }
 
     @Test
     void testInvalidConstructor3OffsetUnder() {
-        assertThrows(IllegalArgumentException.class, () -> {
-            newStream(IOUtils.EMPTY_BYTE_ARRAY, -1, 1);
-        });
+        assertThrows(IllegalArgumentException.class, () -> newStream(IOUtils.EMPTY_BYTE_ARRAY, -1, 1));
     }
 
     @Test
@@ -187,9 +181,7 @@ class UnsynchronizedByteArrayInputStreamTest {
     void testInvalidReadArrayExplicitLenUnder() {
         final byte[] buf = IOUtils.EMPTY_BYTE_ARRAY;
         final UnsynchronizedByteArrayInputStream is = newStream(new byte[] { (byte) 0xa, (byte) 0xb, (byte) 0xc });
-        assertThrows(IndexOutOfBoundsException.class, () -> {
-            is.read(buf, 0, -1);
-        });
+        assertThrows(IndexOutOfBoundsException.class, () -> is.read(buf, 0, -1));
     }
 
     @Test
@@ -197,9 +189,7 @@ class UnsynchronizedByteArrayInputStreamTest {
         final byte[] buf = IOUtils.EMPTY_BYTE_ARRAY;
         @SuppressWarnings("resource") // not necessary to close these resources
         final UnsynchronizedByteArrayInputStream is = newStream(new byte[] { (byte) 0xa, (byte) 0xb, (byte) 0xc });
-        assertThrows(IndexOutOfBoundsException.class, () -> {
-            is.read(buf, -1, 1);
-        });
+        assertThrows(IndexOutOfBoundsException.class, () -> is.read(buf, -1, 1));
     }
 
     @Test
@@ -207,9 +197,7 @@ class UnsynchronizedByteArrayInputStreamTest {
         final byte[] buf = IOUtils.EMPTY_BYTE_ARRAY;
         @SuppressWarnings("resource") // not necessary to close these resources
         final UnsynchronizedByteArrayInputStream is = newStream(new byte[] { (byte) 0xa, (byte) 0xb, (byte) 0xc });
-        assertThrows(IndexOutOfBoundsException.class, () -> {
-            is.read(buf, 0, 1);
-        });
+        assertThrows(IndexOutOfBoundsException.class, () -> is.read(buf, 0, 1));
     }
 
     @Test
@@ -217,18 +205,14 @@ class UnsynchronizedByteArrayInputStreamTest {
         final byte[] buf = null;
         @SuppressWarnings("resource") // not necessary to close these resources
         final UnsynchronizedByteArrayInputStream is = newStream(new byte[] { (byte) 0xa, (byte) 0xb, (byte) 0xc });
-        assertThrows(NullPointerException.class, () -> {
-            is.read(buf);
-        });
+        assertThrows(NullPointerException.class, () -> is.read(buf));
     }
 
     @Test
     void testInvalidSkipNUnder() {
         @SuppressWarnings("resource") // not necessary to close these resources
         final UnsynchronizedByteArrayInputStream is = newStream(new byte[] { (byte) 0xa, (byte) 0xb, (byte) 0xc });
-        assertThrows(IllegalArgumentException.class, () -> {
-            is.skip(-1);
-        });
+        assertThrows(IllegalArgumentException.class, () -> is.skip(-1));
     }
 
     @Test
