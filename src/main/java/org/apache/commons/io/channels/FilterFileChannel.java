@@ -24,16 +24,19 @@ import java.nio.channels.FileChannel;
 import java.nio.channels.FileLock;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.WritableByteChannel;
+import java.util.Objects;
 
 /**
- * Filters a FileChannel.
+ * Filters a {@link FileChannel}.
+ *
+ * @since 2.22.0
  */
 public class FilterFileChannel extends FileChannel {
 
-    FileChannel fileChannel;
+    final FileChannel fileChannel;
 
     FilterFileChannel(final FileChannel fileChannel) {
-        this.fileChannel = fileChannel;
+        this.fileChannel = Objects.requireNonNull(fileChannel, "fileChannel");
     }
 
     @Override
@@ -119,6 +122,18 @@ public class FilterFileChannel extends FileChannel {
     @Override
     public FileLock tryLock(final long position, final long size, final boolean shared) throws IOException {
         return fileChannel.tryLock(position, size, shared);
+    }
+
+    /**
+     * Unwraps this instance by returning the underlying {@link FileChannel}.
+     * <p>
+     * Use with caution.
+     * </p>
+     *
+     * @return the underlying {@link FileChannel}.
+     */
+    public FileChannel unwrap() {
+        return fileChannel;
     }
 
     @Override
