@@ -17,5 +17,7 @@
 
 /**
  * Provides a framework for controlling the deserialization of classes.
+ *
+ * You can deserlialize an object tree safely using a {@link org.apache.commons.io.serialization.ValidatingObjectInputStream}.
  */
 package org.apache.commons.io.serialization;
