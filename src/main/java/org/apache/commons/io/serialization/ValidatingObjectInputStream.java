@@ -84,37 +84,37 @@ import org.apache.commons.io.input.BoundedInputStream;
  * </p>
  * <pre>{@code
  * // Deserializing with a size limit successfully
- *   try (ByteArrayInputStream bais = new ByteArrayInputStream(byteArray);
- *           ValidatingObjectInputStream vois = ValidatingObjectInputStream.builder()
- *               .accept(HashMap.class, Number.class, Integer.class)
- *               .setInputStream(BoundedInputStream.builder()
- *                   .setMaxCount(10_000)
- *                   .setOnMaxCount((remains, count) -> {
- *                       throw new IllegalArgumentException("Input exceeds limit.");
- *                   })
- *                   .setInputStream(bais)
- *                   .get())
- *               .get()) {
- *       // String.class is automatically accepted
- *       final HashMap<String, Integer> map2 = (HashMap<String, Integer>) vois.readObject();
- *       assertEquals(map1, map2);
- *   }
- *   // Deserializing with a size limit reaching the limit
- *   try (ByteArrayInputStream bais = new ByteArrayInputStream(byteArray);
- *           ValidatingObjectInputStream vois = ValidatingObjectInputStream.builder()
- *               .accept(HashMap.class, Number.class, Integer.class)
- *               .setInputStream(BoundedInputStream.builder()
- *                   .setMaxCount(10)
- *                   .setOnMaxCount((remains, count) -> {
- *                       throw new IllegalArgumentException("Input exceeds limit.");
- *                   })
- *                   .setInputStream(bais)
- *                   .get())
- *               .get()) {
- *       // String.class is automatically accepted
- *       final IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> vois.readObject());
- *       assertEquals("Input exceeds limit.", e.getMessage());
- *   }
+ * try (ByteArrayInputStream bais = new ByteArrayInputStream(byteArray);
+ *         ValidatingObjectInputStream vois = ValidatingObjectInputStream.builder()
+ *             .accept(HashMap.class, Number.class, Integer.class)
+ *             .setInputStream(BoundedInputStream.builder()
+ *                 .setMaxCount(10_000)
+ *                 .setOnMaxCount((remains, count) -> {
+ *                     throw new IllegalArgumentException("Input exceeds limit.");
+ *                 })
+ *                 .setInputStream(bais)
+ *                 .get())
+ *             .get()) {
+ *     // String.class is automatically accepted
+ *     final HashMap<String, Integer> map2 = (HashMap<String, Integer>) vois.readObject();
+ *     assertEquals(map1, map2);
+ * }
+ * // Deserializing with a size limit reaching the limit
+ * try (ByteArrayInputStream bais = new ByteArrayInputStream(byteArray);
+ *         ValidatingObjectInputStream vois = ValidatingObjectInputStream.builder()
+ *             .accept(HashMap.class, Number.class, Integer.class)
+ *             .setInputStream(BoundedInputStream.builder()
+ *                 .setMaxCount(10)
+ *                 .setOnMaxCount((remains, count) -> {
+ *                     throw new IllegalArgumentException("Input exceeds limit.");
+ *                 })
+ *                 .setInputStream(bais)
+ *                 .get())
+ *             .get()) {
+ *     // String.class is automatically accepted
+ *     final IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> vois.readObject());
+ *     assertEquals("Input exceeds limit.", e.getMessage());
+ * }
  * }</pre>
  * @since 2.5
  */
