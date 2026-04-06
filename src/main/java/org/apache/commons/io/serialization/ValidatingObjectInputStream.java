@@ -89,7 +89,7 @@ import org.apache.commons.io.input.BoundedInputStream;
  *             .accept(HashMap.class, Number.class, Integer.class)
  *             .setInputStream(BoundedInputStream.builder()
  *                 .setMaxCount(10_000)
- *                 .setOnMaxCount((remains, count) -> {
+ *                 .setOnMaxCount((max, count) -> {
  *                     throw new IllegalArgumentException("Input exceeds limit.");
  *                 })
  *                 .setInputStream(bais)
@@ -105,7 +105,7 @@ import org.apache.commons.io.input.BoundedInputStream;
  *             .accept(HashMap.class, Number.class, Integer.class)
  *             .setInputStream(BoundedInputStream.builder()
  *                 .setMaxCount(10)
- *                 .setOnMaxCount((remains, count) -> {
+ *                 .setOnMaxCount((max, count) -> {
  *                     throw new IllegalArgumentException("Input exceeds limit.");
  *                 })
  *                 .setInputStream(bais)
