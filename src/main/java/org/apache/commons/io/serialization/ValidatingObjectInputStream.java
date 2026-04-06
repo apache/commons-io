@@ -26,6 +26,7 @@ import java.io.ObjectStreamClass;
 import java.util.regex.Pattern;
 
 import org.apache.commons.io.build.AbstractStreamBuilder;
+import org.apache.commons.io.input.BoundedInputStream;
 
 /**
  * An {@link ObjectInputStream} that's restricted to deserialize a limited set of classes.
@@ -33,7 +34,7 @@ import org.apache.commons.io.build.AbstractStreamBuilder;
  * <p>
  * Various accept/reject methods allow for specifying which classes can be deserialized.
  * </p>
- * <h2>Reading safely</h2>
+ * <h2>Deserlizing safely</h2>
  * <p>
  * Here is the only way to safely read a HashMap of String keys and Integer values:
  * </p>
@@ -50,7 +51,7 @@ import org.apache.commons.io.build.AbstractStreamBuilder;
  *     oos.flush();
  *     byteArray = baos.toByteArray();
  * }
- * // Reading
+ * // Deserializing
  * try (ByteArrayInputStream bais = new ByteArrayInputStream(byteArray);
  *         ValidatingObjectInputStream vois = ValidatingObjectInputStream.builder()
  *             .accept(HashMap.class, Number.class, Integer.class)
@@ -74,9 +75,47 @@ import org.apache.commons.io.build.AbstractStreamBuilder;
  * }
  * }</pre>
  * <p>
- * Design inspired by a <a href="https://www.ibm.com/developerworks/library/se-lookahead/">IBM DeveloperWorks Article</a>.
+ * This design was inspired by a <a href="https://www.ibm.com/developerworks/library/se-lookahead/">IBM DeveloperWorks Article</a>.
  * </p>
- *
+ * <h2>Deserlizing with a size boundary</h2>
+ * <p>
+ * You can further guard your application againt untrusted input by limiting how much data to process using a {@link BoundedInputStream}.
+ * For example:
+ * </p>
+ * <pre>{@code
+ * // Deserializing with a size limit successfully
+ *   try (ByteArrayInputStream bais = new ByteArrayInputStream(byteArray);
+ *           ValidatingObjectInputStream vois = ValidatingObjectInputStream.builder()
+ *               .accept(HashMap.class, Number.class, Integer.class)
+ *               .setInputStream(BoundedInputStream.builder()
+ *                   .setMaxCount(10_000)
+ *                   .setOnMaxCount((remains, count) -> {
+ *                       throw new IllegalArgumentException("Input exceeds limit.");
+ *                   })
+ *                   .setInputStream(bais)
+ *                   .get())
+ *               .get()) {
+ *       // String.class is automatically accepted
+ *       final HashMap<String, Integer> map2 = (HashMap<String, Integer>) vois.readObject();
+ *       assertEquals(map1, map2);
+ *   }
+ *   // Deserializing with a size limit reaching the limit
+ *   try (ByteArrayInputStream bais = new ByteArrayInputStream(byteArray);
+ *           ValidatingObjectInputStream vois = ValidatingObjectInputStream.builder()
+ *               .accept(HashMap.class, Number.class, Integer.class)
+ *               .setInputStream(BoundedInputStream.builder()
+ *                   .setMaxCount(10)
+ *                   .setOnMaxCount((remains, count) -> {
+ *                       throw new IllegalArgumentException("Input exceeds limit.");
+ *                   })
+ *                   .setInputStream(bais)
+ *                   .get())
+ *               .get()) {
+ *       // String.class is automatically accepted
+ *       final IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> vois.readObject());
+ *       assertEquals("Input exceeds limit.", e.getMessage());
+ *   }
+ * }</pre>
  * @since 2.5
  */
 public class ValidatingObjectInputStream extends ObjectInputStream {

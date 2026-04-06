@@ -33,6 +33,7 @@ import java.util.HashMap;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
+import org.apache.commons.io.input.BoundedInputStream;
 import org.apache.commons.io.serialization.ValidatingObjectInputStream.Builder;
 import org.apache.commons.lang3.SerializationUtils;
 import org.junit.jupiter.api.BeforeEach;
@@ -169,12 +170,12 @@ class ValidatingObjectInputStreamTest extends AbstractCloseableListTest {
             oos.flush();
             byteArray = baos.toByteArray();
         }
-        // Reading
+        // Deserializing
         try (ByteArrayInputStream bais = new ByteArrayInputStream(byteArray);
                 ValidatingObjectInputStream vois = ValidatingObjectInputStream.builder()
-                        .accept(HashMap.class, Number.class, Integer.class)
-                        .setInputStream(bais)
-                        .get()) {
+                    .accept(HashMap.class, Number.class, Integer.class)
+                    .setInputStream(bais)
+                    .get()) {
             // String.class is automatically accepted
             final HashMap<String, Integer> map2 = (HashMap<String, Integer>) vois.readObject();
             assertEquals(map1, map2);
@@ -184,12 +185,44 @@ class ValidatingObjectInputStreamTest extends AbstractCloseableListTest {
                 .accept(HashMap.class, Number.class, Integer.class);
         try (ByteArrayInputStream bais = new ByteArrayInputStream(byteArray);
                 ValidatingObjectInputStream vois = ValidatingObjectInputStream.builder()
-                        .setPredicate(predicate)
-                        .setInputStream(bais)
-                        .get()) {
+                    .setPredicate(predicate)
+                    .setInputStream(bais)
+                    .get()) {
             // String.class is automatically accepted
             final HashMap<String, Integer> map2 = (HashMap<String, Integer>) vois.readObject();
             assertEquals(map1, map2);
+        }
+        // Deserializing with a size limit successfully
+        try (ByteArrayInputStream bais = new ByteArrayInputStream(byteArray);
+                ValidatingObjectInputStream vois = ValidatingObjectInputStream.builder()
+                    .accept(HashMap.class, Number.class, Integer.class)
+                    .setInputStream(BoundedInputStream.builder()
+                        .setMaxCount(10_000)
+                        .setOnMaxCount((remains, count) -> {
+                            throw new IllegalArgumentException("Input exceeds limit.");
+                        })
+                        .setInputStream(bais)
+                        .get())
+                    .get()) {
+            // String.class is automatically accepted
+            final HashMap<String, Integer> map2 = (HashMap<String, Integer>) vois.readObject();
+            assertEquals(map1, map2);
+        }
+        // Deserializing with a size limit reaching the limit
+        try (ByteArrayInputStream bais = new ByteArrayInputStream(byteArray);
+                ValidatingObjectInputStream vois = ValidatingObjectInputStream.builder()
+                    .accept(HashMap.class, Number.class, Integer.class)
+                    .setInputStream(BoundedInputStream.builder()
+                        .setMaxCount(10)
+                        .setOnMaxCount((remains, count) -> {
+                            throw new IllegalArgumentException("Input exceeds limit.");
+                        })
+                        .setInputStream(bais)
+                        .get())
+                    .get()) {
+            // String.class is automatically accepted
+            final IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> vois.readObject());
+            assertEquals("Input exceeds limit.", e.getMessage());
         }
         // @formatter:on
     }
