@@ -24,7 +24,7 @@ import java.nio.channels.FileChannel;
 /**
  * Always reads the same amount of bytes on each call (or less).
  */
-class FixedReadSizeFileChannelProxy extends FileChannelProxy {
+class FixedReadSizeFileChannelProxy extends FilterFileChannel {
 
     final int readSize;
 

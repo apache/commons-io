@@ -91,7 +91,7 @@ class FileChannelsTest extends AbstractTempDirTest {
         case STOCK:
             return fc;
         case PROXY:
-            return new FileChannelProxy(fc);
+            return new FilterFileChannel(fc);
         case FIXED_READ_SIZE:
             return new FixedReadSizeFileChannelProxy(fc, readSize);
         default:
