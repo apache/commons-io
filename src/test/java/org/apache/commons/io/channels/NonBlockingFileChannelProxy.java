@@ -25,7 +25,7 @@ import java.nio.channels.ReadableByteChannel;
 /**
  * Simulates a non-blocking file channel by returning 0 from reads every other call as allowed by {@link ReadableByteChannel} and {@link FileChannel}.
  */
-class NonBlockingFileChannelProxy extends FileChannelProxy {
+class NonBlockingFileChannelProxy extends FilterFileChannel {
 
     boolean toggleRead0;
 
