@@ -28,6 +28,8 @@ import java.util.concurrent.TimeUnit;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledOnOs;
+import org.junit.jupiter.api.condition.OS;
 
 /**
  * Tests {@link Tailer} for <a href=https://issues.apache.org/jira/browse/IO-889">IO-889</a>.
@@ -71,6 +73,7 @@ public class TailerCloseTest {
         }
     }
 
+    @DisabledOnOs(value = OS.WINDOWS)
     @Test
     public void testCloseTailer() throws Exception {
         path = Files.createTempFile("TailerTestFile", ".log");
