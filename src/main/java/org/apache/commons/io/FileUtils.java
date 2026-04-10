@@ -1550,7 +1550,7 @@ public class FileUtils {
     }
 
     /**
-     * Getsv the path to the system temporary directory.
+     * Gets the path to the system temporary directory.
      *
      * WARNING: this method relies on the Java system property 'java.io.tmpdir'
      * which may or may not have a trailing file separator.
