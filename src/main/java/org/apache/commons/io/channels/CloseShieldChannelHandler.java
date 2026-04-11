@@ -37,6 +37,9 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+/**
+ * An {@link InvocationHandler} supporting the implementation of {@link CloseShieldChannel}.
+ */
 final class CloseShieldChannelHandler implements InvocationHandler {
 
     private static final Set<Class<? extends Channel>> SUPPORTED_INTERFACES;
@@ -154,7 +157,7 @@ final class CloseShieldChannelHandler implements InvocationHandler {
             return false;
         }
         default:
-            // Not possible, all non-final Object methods are handled above
+            // Not possible, all non-final Object methods are handled above.
             return null;
         }
     }

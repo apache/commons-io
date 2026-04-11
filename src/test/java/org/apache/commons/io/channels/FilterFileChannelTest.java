@@ -54,8 +54,13 @@ class FilterFileChannelTest {
     }
 
     @Test
+    void testBuilderForNothing() throws IOException {
+        assertThrows(IllegalStateException.class, () -> FilterFileChannel.forFilterFileChannel().get());
+    }
+
+    @Test
     void testConstructorRequiresNonNullChannel() {
-        assertThrows(NullPointerException.class, () -> new FilterFileChannel(null));
+        assertThrows(NullPointerException.class, () -> new FilterFileChannel((FileChannel) null));
     }
 
     @Test

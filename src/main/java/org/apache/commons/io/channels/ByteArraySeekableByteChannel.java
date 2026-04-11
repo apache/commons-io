@@ -104,12 +104,14 @@ public class ByteArraySeekableByteChannel implements SeekableByteChannel {
     /**
      * Constructs a new channel backed directly by the given byte array.
      *
-     * <p>The channel initially contains the full contents of the array, with its
-     * size set to {@code bytes.length} and its position set to {@code 0}.</p>
+     * <p>
+     * The channel initially contains the full contents of the array, with its size set to {@code bytes.length} and its position set to {@code 0}.
+     * </p>
      *
-     * <p>Reads and writes operate on the shared array.
-     * If a write operation extends beyond the current capacity, the channel will
-     * automatically allocate a larger backing array and copy the existing contents.</p>
+     * <p>
+     * Reads and writes operate on the shared array. If a write operation extends beyond the current capacity, the channel will automatically allocate a larger
+     * backing array and copy the existing contents.
+     * </p>
      *
      * @param bytes The byte array to wrap, must not be {@code null}
      * @return A new channel that uses the given array as its initial backing store.

@@ -36,11 +36,13 @@ import java.util.Set;
 /**
  * Creates a close-shielding proxy for a {@link Channel}.
  *
- * <p>The returned proxy implements all {@link Channel} sub-interfaces that are both supported by this implementation and actually implemented by the given
- * delegate.</p>
- *
- * <p>The following interfaces are supported:</p>
- *
+ * <p>
+ * The returned proxy implements all {@link Channel} sub-interfaces that are both supported by this implementation and actually implemented by the given
+ * delegate.
+ * </p>
+ * <p>
+ * The following interfaces are supported:
+ * </p>
  * <ul>
  * <li>{@link AsynchronousChannel}</li>
  * <li>{@link ByteChannel}</li>

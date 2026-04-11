@@ -40,7 +40,7 @@ import org.junit.jupiter.api.Test;
 class FilterReadableByteChannelTest {
 
     private FilterReadableByteChannel<ReadableByteChannel> build(final ReadableByteChannel channel) throws IOException {
-        return FilterReadableByteChannel.forReadableByteChannel().setChannel(channel).get();
+        return new FilterReadableByteChannel(channel);
     }
 
     @Test
