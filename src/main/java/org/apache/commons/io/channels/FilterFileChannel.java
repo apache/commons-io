@@ -20,22 +20,89 @@ package org.apache.commons.io.channels;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.MappedByteBuffer;
+import java.nio.channels.Channel;
 import java.nio.channels.FileChannel;
 import java.nio.channels.FileLock;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.WritableByteChannel;
 import java.util.Objects;
 
+import org.apache.commons.io.build.AbstractStreamBuilder;
+
 /**
  * Filters a {@link FileChannel}.
+ * <p>
+ * A {@code FilterFileChannel} wraps some other channel, which it uses as its basic source of data, possibly transforming the data along the way or providing
+ * additional functionality. The class {@code FilterFileChannel} itself simply overrides methods of {@code FileChannel} with versions that pass all requests to
+ * the wrapped channel. Subclasses of {@code FilterFileChannel} may of course override any methods declared or inherited by {@code FilterFileChannel}, and may
+ * also provide additional fields and methods.
+ * </p>
+ * <p>
+ * You construct s simple instance with the {@link FilterFileChannel#FilterFileChannel(FileChannel) channel constructor} and more advanced instances through the
+ * {@link Builder}.
+ * </p>
  *
  * @since 2.22.0
  */
 public class FilterFileChannel extends FileChannel {
 
+    /**
+     * Builds instances of {@link FilterFileChannel} for subclasses.
+     *
+     * @param <F> The {@link FilterFileChannel} type.
+     * @param <C> The {@link Channel} type wrapped by the FilterChannel.
+     * @param <B> The builder type.
+     */
+    public abstract static class AbstractBuilder<F extends FilterFileChannel, C extends FileChannel, B extends AbstractBuilder<F, C, B>>
+            extends AbstractStreamBuilder<F, AbstractBuilder<F, C, B>> {
+
+        /**
+         * Constructs instance for subclasses.
+         */
+        protected AbstractBuilder() {
+            // empty
+        }
+    }
+
+    /**
+     * Builds instances of {@link FilterFileChannel}.
+     */
+    public static class Builder extends AbstractBuilder<FilterFileChannel, FileChannel, Builder> {
+
+        /**
+         * Builds instances of {@link FilterChannel}.
+         */
+        protected Builder() {
+            // empty
+        }
+
+        @Override
+        public FilterFileChannel get() throws IOException {
+            return new FilterFileChannel(this);
+        }
+    }
+
+    /**
+     * Creates a new {@link Builder}.
+     *
+     * @return a new {@link Builder}.
+     */
+    public static Builder forFilterFileChannel() {
+        return new Builder();
+    }
+
     final FileChannel fileChannel;
 
-    FilterFileChannel(final FileChannel fileChannel) {
+    private FilterFileChannel(final Builder builder) throws IOException {
+        this.fileChannel = builder.getChannel(FileChannel.class);
+    }
+
+    /**
+     * Constructs a new instance.
+     *
+     * @param fileChannel the file channel to wrap.
+     */
+    public FilterFileChannel(final FileChannel fileChannel) {
         this.fileChannel = Objects.requireNonNull(fileChannel, "fileChannel");
     }
 

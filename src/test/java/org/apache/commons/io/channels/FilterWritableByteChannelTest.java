@@ -40,7 +40,7 @@ import org.junit.jupiter.api.Test;
 class FilterWritableByteChannelTest {
 
     private FilterWritableByteChannel<WritableByteChannel> build(final WritableByteChannel channel) throws IOException {
-        return FilterWritableByteChannel.forWritableByteChannel().setChannel(channel).get();
+        return new FilterWritableByteChannel(channel);
     }
 
     @Test

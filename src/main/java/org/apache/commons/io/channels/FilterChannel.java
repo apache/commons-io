@@ -31,6 +31,16 @@ import org.apache.commons.io.output.ProxyWriter;
 
 /**
  * A {@link Channel} filter which delegates to the wrapped {@link Channel}.
+ * <p>
+ * A {@code FilterChannel} wraps some other channel, which it uses as its basic source of data, possibly transforming the data along the way or providing
+ * additional functionality. The class {@code FilterChannel} itself simply overrides methods of {@code Channel} with versions that pass all requests to the
+ * wrapped channel. Subclasses of {@code FilterChannel} may of course override any methods declared or inherited by {@code FilterChannel}, and may also provide
+ * additional fields and methods.
+ * </p>
+ * <p>
+ * You construct s simple instance with the {@link FilterChannel#FilterChannel(Channel) channel constructor} and more advanced instances through the
+ * {@link Builder}.
+ * </p>
  *
  * @param <C> the {@link Channel} type.
  * @see FilterInputStream
@@ -101,6 +111,15 @@ public class FilterChannel<C extends Channel> implements Channel {
     @SuppressWarnings("unchecked")
     FilterChannel(final AbstractBuilder<?, ?, ?> builder) throws IOException {
         channel = (C) builder.getChannel(Channel.class);
+    }
+
+    /**
+     * Constructs a new instance.
+     *
+     * @param channel The channel to wrap.
+     */
+    public FilterChannel(final C channel) {
+        this.channel = channel;
     }
 
     @Override

@@ -40,7 +40,7 @@ import org.junit.jupiter.api.Test;
 class FilterSeekableByteChannelTest {
 
     private FilterSeekableByteChannel<SeekableByteChannel> build(final SeekableByteChannel channel) throws IOException {
-        return FilterSeekableByteChannel.forSeekableByteChannel().setChannel(channel).get();
+        return new FilterSeekableByteChannel(channel);
     }
 
     @Test
