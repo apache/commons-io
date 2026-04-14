@@ -136,7 +136,6 @@ file comparators, endian transformation classes, and much more.
     <japicmp.skip>false</japicmp.skip>
     <commons.release.isDistModule>true</commons.release.isDistModule>
     <!-- JaCoCo: Don't make code coverage worse than: -->
-    <jacoco.skip>${env.JACOCO_SKIP}</jacoco.skip>
     <commons.jacoco.haltOnFailure>true</commons.jacoco.haltOnFailure>
     <commons.jacoco.classRatio>0.98</commons.jacoco.classRatio>
     <commons.jacoco.instructionRatio>0.90</commons.jacoco.instructionRatio>
@@ -205,7 +204,7 @@ file comparators, endian transformation classes, and much more.
           <reuseForks>false</reuseForks>
           <!-- Limit memory size see IO-161 -->
           <!-- Mockito inline may need -XX:+EnableDynamicAgentLoading -->
-          <argLine>${argLine} -Xmx25M ${EnableDynamicAgentLoading}</argLine>
+          <argLine>@{argLine} -Xmx25M ${EnableDynamicAgentLoading}</argLine>
           <includes>
             <!-- Only include test classes, not test data -->
             <include>**/*Test*.class</include>
