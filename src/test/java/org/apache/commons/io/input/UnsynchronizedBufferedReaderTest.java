@@ -151,6 +151,12 @@ class UnsynchronizedBufferedReaderTest {
         }
     }
 
+    @Test
+    void testIllegalSize() throws Exception {
+        assertThrows(IllegalArgumentException.class, () -> new UnsynchronizedBufferedReader(new StringReader(""), 0));
+        assertThrows(IllegalArgumentException.class, () -> new UnsynchronizedBufferedReader(new StringReader(""), -1));
+    }
+
     /**
      * Tests {@link UnsynchronizedBufferedReader#mark(int)}.
      *
