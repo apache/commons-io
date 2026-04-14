@@ -1212,9 +1212,9 @@ class FilenameUtilsTest {
     @Test
     void testFilenameWithSeparatorCharOnNonWindows() throws IOException {
         if (!WINDOWS) {
-            Path testFileWithBackSlash = Files.createTempFile(temporaryFolder, "file\\with\\backslash", "txt");
+            Path testFileWithBackSlash = Files.createTempFile(temporaryFolder, "file\\with\\backslash", ".txt");
             String actualFileName = FilenameUtils.getName(testFileWithBackSlash.toString());
-            String expectedFileName = testFileWithBackSlash.getFileName().toString();
+            String expectedFileName = new File(testFileWithBackSlash.toString()).getName();
             assertEquals(expectedFileName, actualFileName);
         }
     }
