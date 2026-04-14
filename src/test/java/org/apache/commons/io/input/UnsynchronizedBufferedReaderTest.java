@@ -229,6 +229,17 @@ class UnsynchronizedBufferedReaderTest {
     }
 
     /**
+     * Tests {@link UnsynchronizedBufferedReader#mark(int)}.
+     *
+     * @throws IOException test failure.
+     */
+    @Test
+    void testMarkIllegal() throws IOException {
+        br = new UnsynchronizedBufferedReader(new StringReader(testString));
+        assertThrows(IllegalArgumentException.class, () -> br.mark(-1));
+    }
+
+    /**
      * Tests {@link UnsynchronizedBufferedReader#markSupported()}.
      */
     @Test
