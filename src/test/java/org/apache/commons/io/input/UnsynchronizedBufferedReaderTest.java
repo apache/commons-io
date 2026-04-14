@@ -622,4 +622,15 @@ class UnsynchronizedBufferedReaderTest {
         br.read(buf, 0, 500);
         assertTrue(testString.substring(500, 1000).equals(new String(buf, 0, 500)));
     }
+
+    /**
+     * Tests {@link UnsynchronizedBufferedReader#skip(int)}.
+     *
+     * @throws IOException test failure.
+     */
+    @Test
+    void testSkipIllegal() throws IOException {
+        br = new UnsynchronizedBufferedReader(new StringReader(testString));
+        assertThrows(IllegalArgumentException.class, () -> br.skip(-1));
+    }
 }
