@@ -69,6 +69,7 @@ The <action> type attribute can be add,update,fix,remove.
       <action type="fix" dev="ggregory" due-to="Gary Gregory">Refactor UnixLineEndingInputStream and WindowsLineEndingInputStream for duplication.</action>
       <action type="fix" dev="ggregory" due-to="Peter De Maeyer, Gary Gregory" issue="IO-857">[Javadoc] PathUtils.cleanDirectory() methods vs FileUtils.</action>
       <action type="fix" dev="ggregory" due-to="Gary Gregory">Fix JaCoCo report generation.</action>
+      <action type="fix" dev="ggregory" due-to="Gary Gregory">AbstractStreamBuilder.setBufferSizeDefault(int) now resets to default for input less than or equal to zero.</action>
       <!-- ADD -->
       <action type="add" dev="ggregory" due-to="Gary Gregory, Piotr P. Karwasz">Add and use IOUtils.closeQuietlySuppress(Closeable, Throwable) #818.</action>
       <action type="add" dev="ggregory" due-to="Gary Gregory">Add ProxyWriter.setReference(Writer).</action>
