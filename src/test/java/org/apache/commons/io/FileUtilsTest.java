@@ -1952,7 +1952,7 @@ class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    void testIO276(@TempDir File dest) throws Exception {
+    void testIO276(@TempDir final File dest) throws Exception {
         final File dir = new File(dest, "IO276");
         Files.deleteIfExists(dir.toPath());
         assertTrue(dir.mkdirs(), dir + " should not be present");

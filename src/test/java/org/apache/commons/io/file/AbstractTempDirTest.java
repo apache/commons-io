@@ -42,11 +42,11 @@ public abstract class AbstractTempDirTest {
         assertTrue(file.createNewFile(), file::toString);
     }
 
-    public static void assertDelete(boolean expected, final File file) {
+    public static void assertDelete(final boolean expected, final File file) {
         assertEquals(expected, file.delete(), file::toString);
     }
 
-    public static void assertMkdir(boolean expected, final File subDir) {
+    public static void assertMkdir(final boolean expected, final File subDir) {
         assertEquals(expected, subDir.mkdir(), subDir::toString);
     }
 

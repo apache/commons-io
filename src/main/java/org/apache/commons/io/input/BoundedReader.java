@@ -131,7 +131,7 @@ public class BoundedReader extends ProxyReader {
     }
 
     @Override
-    public long skip(long n) throws IOException {
+    public long skip(final long n) throws IOException {
         charsRead += n;
         return super.skip(n);
     }
