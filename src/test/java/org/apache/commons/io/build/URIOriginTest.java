@@ -61,15 +61,15 @@ class URIOriginTest extends AbstractOriginTest<URI, URIOrigin> {
         };
     }
 
-    private void checkRead(final InputStream in) throws IOException {
-        assertNotEquals(-1, in.read());
-    }
-
     private void checkRead(final Channel in, final Supplier<String> message) throws IOException {
         if (in instanceof ReadableByteChannel) {
             final ReadableByteChannel rbc = (ReadableByteChannel) in;
             assertNotEquals(-1, rbc.read(ByteBuffer.allocate(1)), message);
         }
+    }
+
+    private void checkRead(final InputStream in) throws IOException {
+        assertNotEquals(-1, in.read());
     }
 
     @Override

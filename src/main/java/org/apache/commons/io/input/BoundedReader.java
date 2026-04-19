@@ -118,12 +118,6 @@ public class BoundedReader extends ProxyReader {
         return len;
     }
 
-    @Override
-    public long skip(long n) throws IOException {
-        charsRead += n;
-        return super.skip(n);
-    }
-
     /**
      * Resets the target to the latest mark,
      *
@@ -134,5 +128,11 @@ public class BoundedReader extends ProxyReader {
     public void reset() throws IOException {
         charsRead = markedAt;
         super.reset();
+    }
+
+    @Override
+    public long skip(long n) throws IOException {
+        charsRead += n;
+        return super.skip(n);
     }
 }
