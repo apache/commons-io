@@ -1,5 +1,91 @@
 
 Apache Commons IO 2.22.0 Release Notes
+--------------------------------------
+
+The Apache Commons IO team is pleased to announce the release of Apache Commons IO 2.22.0.
+
+Introduction
+------------
+
+The Apache Commons IO library contains utility classes, stream implementations, file filters,
+file comparators, endian transformation classes, and much more.
+
+This is a feature and maintenance release. Java 8 or later is required.
+
+New features
+------------
+
+o          Add and use IOUtils.closeQuietlySuppress(Closeable, Throwable) #818. Thanks to Gary Gregory, Piotr P. Karwasz. 
+o          Add ProxyWriter.setReference(Writer). Thanks to Gary Gregory. 
+o          Add ProxyWriter.unwrap(). Thanks to Gary Gregory. 
+o          Add ProxyReader.setReference(Reader). Thanks to Gary Gregory. 
+o          Add ProxyReader.unrwap(). Thanks to Gary Gregory. 
+o IO-883:  ByteArraySeekableByteChannel should optionally configure a read-only channel. Thanks to Konrad Windszus, Gary Gregory, Makarand Hinge. 
+o IO-883:  Add ByteArraySeekableByteChannel.Builder and builder(). Thanks to Gary Gregory. 
+o IO-883:  Add AbstractStreamBuilder.getByteArray(). Thanks to Gary Gregory. 
+o          CloseShieldInputStream now supports a custom close shield as a function #836. Thanks to Gary Gregory. 
+o          Add FlushShieldOutputStream to workaround issues in generic code that ends up calling third parties like like org.tukaani.xz.LZMAOutputStream.flush(). Thanks to Gary Gregory. 
+o          Add filter channels. Thanks to Gary Gregory. 
+
+Fixed Bugs
+----------
+
+o          Fix Apache RAT plugin console warnings. Thanks to Gary Gregory. 
+o          ByteArraySeekableByteChannel.position(long) and truncate(long) shouldn't throw an IllegalArgumentException for a new positive position that's too large #817. Thanks to Gary Gregory, Piotr P. Karwasz. 
+o          Fix malformed Javadoc comments. Thanks to Gary Gregory. 
+o          ReadAheadInputStream.close() doesn't always close its filtered input stream. Thanks to Stanislav Fort, Gary Gregory. 
+o          ReadAheadInputStream now restores the current thread's interrupt flag when catching InterruptedException. Thanks to Gary Gregory. 
+o          FileAlterationMonitor.stop(long) now restores the current thread's interrupt flag when catching InterruptedException. Thanks to Gary Gregory. 
+o          FileCleaningTracker now restores the current thread's interrupt flag when catching InterruptedException. Thanks to Gary Gregory. 
+o          ThreadMonitor.run() now restores the current thread's interrupt flag when catching InterruptedException. Thanks to Gary Gregory. 
+o          ThrottledInputStream.throttle() now restores the current thread's interrupt flag when catching InterruptedException. Thanks to Gary Gregory. 
+o          ThrottledInputStream.throttle() doesn't preserve the original InterruptedException as the cause of its InterruptedIOException. Thanks to Gary Gregory. 
+o          All thread names are now prefixed with "commons-io-". Thanks to Gary Gregory. 
+o IO-639:  ReversedLinesFileReader does not read first line if its empty #829. Thanks to Kishor, Mashrur Mia. 
+o IO-886:  Fixed incorrect regular expression in PathUtils.RelativeSortedPaths.extractKey(String, String). Thanks to Peter De Maeyer. 
+o          Fix typos in Javadoc of FileUtils and related test classes #833. Thanks to Martin Wiesner. 
+o IO-887:  WriterOutputStream from a builder fails on malformed or unmappable input bytes. Thanks to Daniel Vega, Gary Gregory. 
+o          BoundedReader now extends ProxyReader. Thanks to Gary Gregory. 
+o          AbstractStreamBuilder.setOpenOptions(OpenOption...) now makes a defensive copy of its input array. Thanks to Gary Gregory. 
+o IO-885:  Path visits follow links #832. Thanks to Peter De Maeyer, Gary Gregory. 
+o          BOMInputStream fail-fast and tracks its ByteOrderMark as a final #835. Thanks to Gary Gregory. 
+o          Refactor UnixLineEndingInputStream and WindowsLineEndingInputStream for duplication. Thanks to Gary Gregory. 
+o IO-857:  [Javadoc] PathUtils.cleanDirectory() methods vs FileUtils. Thanks to Peter De Maeyer, Gary Gregory. 
+o          Fix JaCoCo report generation (code coverage). Thanks to Gary Gregory. 
+o          AbstractStreamBuilder.setBufferSizeDefault(int) now resets to default for input less than or equal to zero. Thanks to Gary Gregory. 
+
+Changes
+-------
+
+o          Bump org.apache.commons:commons-parent from 91 to 98 #816. Thanks to Gary Gregory, Dependabot. 
+o          Bump commons-codec:commons-codec from 1.19.0 to 1.21.0 #812. Thanks to Gary Gregory, Dependabot. 
+o          Bump commons.bytebuddy.version from 1.17.8 to 1.18.8 #814, #820, #838. Thanks to Gary Gregory, Dependabot. 
+o          Bump commons-lang3 from 3.19.0 to 3.20.0. Thanks to Gary Gregory, Dependabot. 
+
+
+Commons IO 2.7 and up requires Java 8 or above.
+Commons IO 2.6 requires Java 7 or above.
+Commons IO 2.3 through 2.5 requires Java 6 or above.
+Commons IO 2.2 requires Java 5 or above.
+Commons IO 1.4 requires Java 1.3 or above.
+
+Historical list of changes: https://commons.apache.org/proper/commons-io/changes.html
+
+For complete information on Apache Commons IO, including instructions on how to submit bug reports,
+patches, or suggestions for improvement, see the Apache Commons IO website:
+
+https://commons.apache.org/proper/commons-io/
+
+Download page: https://commons.apache.org/proper/commons-io/download_io.cgi
+
+Have fun!
+-Apache Commons Team
+
+------------------------------------------------------------------------------
+
+
+Apache Commons IO 2.22.0 Release Notes
+--------------------------------------
 
 The Apache Commons IO team is pleased to announce the release of Apache Commons IO 2.22.0.
 
@@ -54,6 +140,7 @@ Have fun!
 ------------------------------------------------------------------------------
 
 Apache Commons IO 2.22.0 Release Notes
+--------------------------------------
 
 The Apache Commons IO team is pleased to announce the release of Apache Commons IO 2.22.0.
 
@@ -109,6 +196,7 @@ Have fun!
 
 
 Apache Commons IO 2.21.0 Release Notes
+--------------------------------------
 
 The Apache Commons IO team is pleased to announce the release of Apache Commons IO 2.21.0.
 
@@ -187,6 +275,7 @@ Have fun!
 
 
 Apache Commons IO 2.20.0 Release Notes
+--------------------------------------
 
 The Apache Commons IO team is pleased to announce the release of Apache Commons IO 2.20.0.
 
@@ -265,6 +354,7 @@ Have fun!
 
 
 Apache Commons IO 2.19.0 Release Notes
+--------------------------------------
 
 Introduction
 ------------
@@ -360,6 +450,7 @@ Have fun!
 
 
 Apache Commons IO 2.18.0 Release Notes
+--------------------------------------
 
 Introduction
 ------------
@@ -438,6 +529,7 @@ Apache Commons Team
 
 
 Apache Commons IO 2.17.0 Release Notes
+--------------------------------------
 
 Introduction
 ------------
@@ -528,6 +620,7 @@ Have fun!
 
 
 Apache Commons IO 2.16.1 Release Notes
+--------------------------------------
 
 Introduction
 ------------
@@ -580,6 +673,7 @@ Have fun!
 
 
 Apache Commons IO 2.16.1 Release Notes
+--------------------------------------
 
 Introduction
 ------------
@@ -631,6 +725,7 @@ Have fun!
 
 
 Apache Commons IO 2.16.0 Release Notes
+--------------------------------------
 
 Introduction
 ------------
