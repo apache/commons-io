@@ -1208,4 +1208,14 @@ class FilenameUtilsTest {
         assertEquals("\\a\\b\\c", FilenameUtils.separatorsToWindows("/a/b/c"));
         assertEquals("D:\\a\\b\\c", FilenameUtils.separatorsToWindows("D:/a/b/c"));
     }
+
+    @Test
+    void testFilenameWithSeparatorCharOnNonWindows() throws IOException {
+        if (!WINDOWS) {
+            final Path testFileWithBackSlash = Files.createTempFile(temporaryFolder, "file\\with\\backslash", ".txt");
+            final String actualFileName = FilenameUtils.getName(testFileWithBackSlash.toString());
+            final String expectedFileName = new File(testFileWithBackSlash.toString()).getName();
+            assertEquals(expectedFileName, actualFileName);
+        }
+    }
 }
