@@ -19,7 +19,7 @@
   <parent>
     <groupId>org.apache.commons</groupId>
     <artifactId>commons-parent</artifactId>
-    <version>98</version>
+    <version>99</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>commons-io</groupId>
