@@ -780,6 +780,69 @@ public class IOUtils {
     }
 
     /**
+     * Closes a {@link AutoCloseable} unconditionally.
+     * <p>
+     * Equivalent to {@link AutoCloseable#close()}, except any exceptions will be ignored. This is typically used in finally blocks.
+     * <p>
+     * Example code:
+     * </p>
+     *
+     * <pre>
+     * AutoCloseable closeable = null;
+     * try {
+     *     closeable = new FileReader(&quot;foo.txt&quot;);
+     *     // process closeable
+     *     closeable.close();
+     * } catch (Exception e) {
+     *     // error handling
+     * } finally {
+     *     IOUtils.closeQuietly(closeable);
+     * }
+     * </pre>
+     * <p>
+     * Closing all streams:
+     * </p>
+     *
+     * <pre>
+     * try {
+     *     return IOUtils.copy(inputStream, outputStream);
+     * } finally {
+     *     IOUtils.closeQuietly(inputStream);
+     *     IOUtils.closeQuietly(outputStream);
+     * }
+     * </pre>
+     * <p>
+     * Also consider using a try-with-resources statement where appropriate.
+     * </p>
+     *
+     * @param closeable the objects to close, may be null or already closed.
+     * @since 2.23.0
+     * @see Throwable#addSuppressed(Throwable)
+     */
+    public static void closeQuietly(final AutoCloseable closeable) {
+        closeQuietly(closeable, (Consumer<Exception>) null);
+    }
+
+    /**
+     * Closes the given {@link AutoCloseable} as a null-safe operation while consuming IOException by the given {@code consumer}.
+     *
+     * @param closeable The resource to close, may be null.
+     * @param consumer  Consumes the Exception thrown by {@link AutoCloseable#close()}.
+     * @since 2.23.0
+     */
+    public static void closeQuietly(final AutoCloseable closeable, final Consumer<Exception> consumer) {
+        if (closeable != null) {
+            try {
+                closeable.close();
+            } catch (final Exception e) {
+                if (consumer != null) {
+                    consumer.accept(e);
+                }
+            }
+        }
+    }
+
+    /**
      * Closes a {@link Closeable} unconditionally.
      * <p>
      * Equivalent to {@link Closeable#close()}, except any exceptions will be ignored. This is typically used in finally blocks.
@@ -885,15 +948,7 @@ public class IOUtils {
      * @since 2.7
      */
     public static void closeQuietly(final Closeable closeable, final Consumer<Exception> consumer) {
-        if (closeable != null) {
-            try {
-                closeable.close();
-            } catch (final Exception e) {
-                if (consumer != null) {
-                    consumer.accept(e);
-                }
-            }
-        }
+        closeQuietly((AutoCloseable) closeable, consumer);
     }
 
     /**
