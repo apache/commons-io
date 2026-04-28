@@ -1540,7 +1540,7 @@ public class FileUtils {
     }
 
     /**
-     * Gets a {@link File} representing the system temporary directory.
+     * Gets a {@link File} representing the system temporary directory based on the Java system property {@code java.io.tmpdir}.
      *
      * @return the system temporary directory as a File.
      * @since 2.0
@@ -1550,12 +1550,11 @@ public class FileUtils {
     }
 
     /**
-     * Getsv the path to the system temporary directory.
-     *
-     * WARNING: this method relies on the Java system property 'java.io.tmpdir'
-     * which may or may not have a trailing file separator.
-     * This can affect code that uses String processing to manipulate pathnames rather
-     * than the standard library methods in classes such as {@link File}
+     * Gets the path to the system temporary directory.
+     * <p>
+     * WARNING: This method reads the Java system property {@code java.io.tmpdir}, which may or may not have a trailing file separator. This can affect code
+     * that uses String processing to manipulate pathnames rather than the standard library methods in classes such as {@link File}.
+     * </p>
      *
      * @return the path to the system temporary directory as a String.
      * @since 2.0
@@ -1565,7 +1564,7 @@ public class FileUtils {
     }
 
     /**
-     * Gets a {@link File} representing the user's home directory.
+     * Gets a {@link File} representing the user's home directory based on the Java system property {@code user.home}.
      *
      * @return the user's home directory.
      * @since 2.0
@@ -1575,7 +1574,7 @@ public class FileUtils {
     }
 
     /**
-     * Gets the path to the user's home directory.
+     * Gets the path to the user's home directory based on the Java system property {@code user.home}.
      *
      * @return the path to the user's home directory.
      * @since 2.0

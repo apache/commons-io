@@ -31,6 +31,16 @@ import org.apache.commons.io.output.ProxyWriter;
 
 /**
  * A {@link ByteChannel} filter which delegates to the wrapped {@link ByteChannel}.
+ * <p>
+ * A {@code FilterByteChannel} wraps some other channel, which it uses as its basic source of data, possibly transforming the data along the way or providing
+ * additional functionality. The class {@code FilterByteChannel} itself simply overrides methods of {@code ByteChannel} with versions that pass all requests to
+ * the wrapped channel. Subclasses of {@code FilterByteChannel} may of course override any methods declared or inherited by {@code FilterByteChannel}, and may
+ * also provide additional fields and methods.
+ * </p>
+ * <p>
+ * You construct s simple instance with the {@link FilterByteChannel#FilterByteChannel(ByteChannel) channel constructor} and more advanced instances through the
+ * {@link Builder}.
+ * </p>
  *
  * @param <C> the {@link ByteChannel} type.
  * @see FilterInputStream
@@ -92,6 +102,15 @@ public class FilterByteChannel<C extends ByteChannel> extends FilterChannel<C> i
 
     FilterByteChannel(final AbstractBuilder<?, ?, ?> builder) throws IOException {
         super(builder);
+    }
+
+    /**
+     * Constructs a new instance.
+     *
+     * @param byteChannel The channel to wrap.
+     */
+    public FilterByteChannel(final C byteChannel) {
+        super(byteChannel);
     }
 
     @Override

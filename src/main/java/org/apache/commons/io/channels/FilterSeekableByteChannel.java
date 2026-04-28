@@ -30,6 +30,16 @@ import org.apache.commons.io.output.ProxyWriter;
 
 /**
  * A {@link SeekableByteChannel} filter which delegates to the wrapped {@link SeekableByteChannel}.
+ * <p>
+ * A {@code FilterSeekableByteChannel} wraps some other channel, which it uses as its basic source of data, possibly transforming the data along the way or
+ * providing additional functionality. The class {@code FilterSeekableByteChannel} itself simply overrides methods of {@code SeekableByteChannel} with versions
+ * that pass all requests to the wrapped channel. Subclasses of {@code FilterSeekableByteChannel} may of course override any methods declared or inherited by
+ * {@code FilterSeekableByteChannel}, and may also provide additional fields and methods.
+ * </p>
+ * <p>
+ * You construct s simple instance with the {@link FilterSeekableByteChannel#FilterSeekableByteChannel(SeekableByteChannel) Channel constructor} and more
+ * advanced instances through the {@link Builder}.
+ * </p>
  *
  * @param <C> the {@link SeekableByteChannel} type.
  * @see FilterInputStream
@@ -91,6 +101,15 @@ public class FilterSeekableByteChannel<C extends SeekableByteChannel> extends Fi
 
     FilterSeekableByteChannel(final Builder builder) throws IOException {
         super(builder);
+    }
+
+    /**
+     * Constructs a new instance.
+     *
+     * @param channel The channel to wrap.
+     */
+    public FilterSeekableByteChannel(final C channel) {
+        super(channel);
     }
 
     @Override

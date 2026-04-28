@@ -275,6 +275,11 @@ class ProxyWriterTest {
     }
 
     @Test
+    void testUnrwap() throws Exception {
+        assertSame(target, proxied.unwrap());
+    }
+
+    @Test
     void testWriteCharArray() throws Exception {
         try (StringBuilderWriter writer = new StringBuilderWriter();
                 ProxyWriter proxy = new ProxyWriter(writer)) {
@@ -308,11 +313,6 @@ class ProxyWriterTest {
             proxy.write("ABC");
             assertEquals("ABC", writer.toString());
         }
-    }
-
-    @Test
-    void testUnrwap() throws Exception {
-        assertSame(target, proxied.unwrap());
     }
 
 

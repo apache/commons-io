@@ -51,6 +51,17 @@ import org.junit.jupiter.params.support.ParameterDeclarations;
  */
 class PathUtilsCopyTest extends AbstractTempDirTest {
 
+    private static class CopyOptionsArgumentsProvider implements ArgumentsProvider {
+
+        @Override
+        public Stream<? extends Arguments> provideArguments(final ParameterDeclarations parameters, final ExtensionContext context) {
+            return Stream.of(
+                    Arguments.of((Object) new CopyOption[0]),
+                    Arguments.of((Object) new CopyOption[] { LinkOption.NOFOLLOW_LINKS })
+            );
+        }
+    }
+
     private static final String TEST_JAR_NAME = "test.jar";
 
     private static final String TEST_JAR_PATH = "src/test/resources/org/apache/commons/io/test.jar";
@@ -64,6 +75,59 @@ class PathUtilsCopyTest extends AbstractTempDirTest {
             return FileSystems.newFileSystem(uri, env, null);
         }
         return FileSystems.newFileSystem(p, (ClassLoader) null);
+    }
+
+    @Test
+    void testCopyDirectoryCyclicSymbolicLink() throws Exception {
+        // sourceDir = tempDirPath/source
+        final Path sourceDir = Files.createDirectory(tempDirPath.resolve("source"));
+        // dir1 = tempDirPath/source/dir1
+        final Path dir1 = Files.createDirectory(sourceDir.resolve("dir1"));
+        // dir2 = tempDirPath/source/dir1/dir2
+        final Path dir2 = Files.createDirectory(dir1.resolve("dir2"));
+        // link = tempDirPath/source/dir1/dir2/cyclic-symlink
+        // target = ..
+        Files.createSymbolicLink(dir2.resolve("cyclic-symlink"), dir2.relativize(dir1));
+        final Path targetDir = tempDirPath.resolve("target");
+        PathUtils.copyDirectory(sourceDir, targetDir);
+        assertTrue(Files.exists(targetDir));
+        final Path copyOfDir2 = targetDir.resolve("dir1").resolve("dir2");
+        assertTrue(Files.exists(copyOfDir2));
+        assertTrue(Files.isDirectory(copyOfDir2));
+        assertTrue(Files.exists(copyOfDir2.resolve("cyclic-symlink")));
+    }
+
+    @Test
+    void testCopyDirectoryFollowsAbsoluteSymbolicLinkToDirectory() throws Exception {
+        // Given
+        final Path externalDir = Files.createDirectory(tempDirPath.resolve("external"));
+        final Path dir1 = Files.createDirectory(externalDir.resolve("dir1"));
+        final Path file2 = Files.write(dir1.resolve("file2"), PathUtilsTest.BYTE_ARRAY_FIXTURE);
+        final Path sourceDir = Files.createDirectory(tempDirPath.resolve("source"));
+        final Path dir3 = Files.createDirectory(sourceDir.resolve("dir3"));
+        final Path file4 = Files.write(dir3.resolve("file4"), PathUtilsTest.BYTE_ARRAY_FIXTURE);
+        Files.createSymbolicLink(sourceDir.resolve("symlink1"), dir1.toAbsolutePath());
+        Files.createSymbolicLink(sourceDir.resolve("symlink2"), sourceDir.relativize(file2));
+        Files.createSymbolicLink(sourceDir.resolve("symlink3"), sourceDir.relativize(dir3));
+        Files.createSymbolicLink(dir3.resolve("symlink4"), file4.toAbsolutePath());
+        final Path targetDir = tempDirPath.resolve("target");
+        // When
+        final PathCounters pathCounters = PathUtils.copyDirectory(sourceDir, targetDir);
+        // Then
+        // 6 * 11 bytes == 66:
+        // file2
+        // file4
+        // symlink2 -> file2
+        // symlink4 -> file4
+        // symlink1 -> dir1 containing file2
+        // symlink3 -> dir3 containing file4
+        //
+        // Different result value depending on the Java version and operating system, but should not throw an exception or loop infinitely.
+        pathCounters.getByteCounter().get();
+        assertEquals(2L, pathCounters.getDirectoryCounter().get());
+        assertEquals(5L, pathCounters.getFileCounter().get());
+        assertTrue(Files.exists(targetDir.resolve("dir3").resolve("file4")));
+        assertTrue(Files.exists(targetDir.resolve("dir3").resolve("symlink4")));
     }
 
     @Test
@@ -130,6 +194,21 @@ class PathUtilsCopyTest extends AbstractTempDirTest {
         }
     }
 
+    @ParameterizedTest
+    @ArgumentsSource(CopyOptionsArgumentsProvider.class)
+    void testCopyDirectoryIgnoresBrokenSymbolicLink(final CopyOption... copyOptions) throws Exception {
+        final Path sourceDir = Files.createDirectory(tempDirPath.resolve("source"));
+        final Path dir = Files.createDirectory(sourceDir.resolve("dir"));
+        Files.createSymbolicLink(dir.resolve("broken-symlink"), dir.relativize(sourceDir.resolve("file")));
+        final Path targetDir = tempDirPath.resolve("target");
+        PathUtils.copyDirectory(sourceDir, targetDir, copyOptions);
+        assertTrue(Files.exists(targetDir));
+        final Path copyOfDir = targetDir.resolve("dir");
+        assertTrue(Files.exists(copyOfDir));
+        assertTrue(Files.isDirectory(copyOfDir));
+        assertFalse(Files.exists(copyOfDir.resolve("broken-symlink")));
+    }
+
     /**
      * Source tree:
      * <pre>
@@ -160,77 +239,6 @@ class PathUtilsCopyTest extends AbstractTempDirTest {
         final Path copyOfFileLink = copyOfDir.resolve("link-to-file");
         assertTrue(Files.exists(copyOfFileLink));
         assertTrue(Files.isSymbolicLink(copyOfFileLink));
-    }
-
-    @Test
-    void testCopyFile() throws IOException {
-        final Path sourceFile = Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-1/file-size-1.bin");
-        final Path targetFile = PathUtils.copyFileToDirectory(sourceFile, tempDirPath);
-        assertTrue(Files.exists(targetFile));
-        assertEquals(Files.size(sourceFile), Files.size(targetFile));
-    }
-
-    @Test
-    void testCopyFileTwoFileSystem() throws IOException {
-        try (FileSystem archive = openArchive(Paths.get(TEST_JAR_PATH), false)) {
-            final Path sourceFile = archive.getPath("next/dir/test.log");
-            final Path targetFile = PathUtils.copyFileToDirectory(sourceFile, tempDirPath);
-            assertTrue(Files.exists(targetFile));
-            assertEquals(Files.size(sourceFile), Files.size(targetFile));
-        }
-    }
-
-    @Test
-    void testCopyURL() throws IOException {
-        final Path sourceFile = Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-1/file-size-1.bin");
-        final URL url = new URL("file:///" + FilenameUtils.getPath(sourceFile.toAbsolutePath().toString()) + sourceFile.getFileName());
-        final Path targetFile = PathUtils.copyFileToDirectory(url, tempDirPath);
-        assertTrue(Files.exists(targetFile));
-        assertEquals(Files.size(sourceFile), Files.size(targetFile));
-    }
-
-    /**
-     * Illustrates how copy with {@link LinkOption#NOFOLLOW_LINKS} preserves relative symlinks to directories.
-     * This simulates to the behavior of Linux {@code cp -r}.
-     * Given the source directory structure:
-     * <pre>{@code
-     * user@host:/tmp$ tree source/
-     * source/
-     * ├── dir1
-     * │   └── symlink -> ../dir2
-     * └── dir2
-     * }</pre>
-     * When doing {@code user@host:/tmp$ cp -r source target}, then the resulting target directory structure is:
-     * <pre>{@code
-     * user@host:/tmp$ tree target/
-     * target/
-     * ├── dir1
-     * │   └── symlink -> ../dir2
-     * └── dir2
-     * }</pre>
-     */
-    @Test
-    void testCopyDirectoryWithNoFollowLinksPreservesRelativeSymbolicLinkToDir() throws Exception {
-        // Given
-        final Path sourceDir = Files.createDirectory(tempDirPath.resolve("source"));
-        final Path dir1 = Files.createDirectory(sourceDir.resolve("dir1"));
-        final Path dir2 = Files.createDirectory(sourceDir.resolve("dir2"));
-        // source/dir1/symlink -> ../dir2
-        Files.createSymbolicLink(dir1.resolve("symlink"), dir1.relativize(dir2));
-        final Path targetDir = tempDirPath.resolve("target");
-        // When
-        final PathCounters pathCounters = PathUtils.copyDirectory(sourceDir, targetDir, LinkOption.NOFOLLOW_LINKS);
-        // Then
-        // assertEquals(0L, pathCounters.getByteCounter().get());
-        assertEquals(3L, pathCounters.getDirectoryCounter().get());
-        // Verify that symlink with NOFOLLOW_LINKS counts as file
-        assertEquals(1L, pathCounters.getFileCounter().get());
-        final Path copyOfDir2 = targetDir.resolve("dir2");
-        final Path copyOfRelativeSymlinkToDir2 = targetDir.resolve("dir1").resolve("symlink");
-        assertTrue(Files.isSymbolicLink(copyOfRelativeSymlinkToDir2));
-        assertTrue(Files.isDirectory(copyOfRelativeSymlinkToDir2));
-        // Verify that target/dir1/symlink resolves to /tmp/target/dir2
-        assertEquals(copyOfDir2.toRealPath(), copyOfRelativeSymlinkToDir2.toRealPath());
     }
 
     /**
@@ -296,50 +304,6 @@ class PathUtilsCopyTest extends AbstractTempDirTest {
      * }</pre>
      */
     @Test
-    void testCopyDirectoryWithNoFollowLinksPreservesRelativeSymbolicLinkToFile() throws Exception {
-        // Given
-        final Path sourceDir = Files.createDirectory(tempDirPath.resolve("source"));
-        final Path dir = Files.createDirectory(sourceDir.resolve("dir"));
-        final Path file = Files.write(sourceDir.resolve("file"), PathUtilsTest.BYTE_ARRAY_FIXTURE);
-        // source/dir/symlink -> ../file
-        Files.createSymbolicLink(dir.resolve("symlink"), dir.relativize(file));
-        final Path targetDir = tempDirPath.resolve("target");
-        // When
-        final PathCounters pathCounters = PathUtils.copyDirectory(sourceDir, targetDir, LinkOption.NOFOLLOW_LINKS);
-        // Then
-        // assertEquals(11L, pathCounters.getByteCounter().get());
-        assertEquals(2L, pathCounters.getDirectoryCounter().get());
-        // Verify that file + symlink with NOFOLLOW_LINKS counts as 2 files
-        assertEquals(2L, pathCounters.getFileCounter().get());
-        final Path copyOfFile = targetDir.resolve("file");
-        final Path copyOfRelativeSymlinkToFile = targetDir.resolve("dir").resolve("symlink");
-        assertTrue(Files.isSymbolicLink(copyOfRelativeSymlinkToFile));
-        assertTrue(Files.isRegularFile(copyOfRelativeSymlinkToFile));
-        // Verify that /tmp/target/dir/symlink resolves to /tmp/target/file
-        assertEquals(copyOfFile.toRealPath(), copyOfRelativeSymlinkToFile.toRealPath());
-    }
-
-    /**
-     * Illustrates how copy with {@link LinkOption#NOFOLLOW_LINKS} preserves relative symlinks to files.
-     * This simulates to the behavior of Linux {@code cp -r}.
-     * Given the source directory structure:
-     * <pre>{@code
-     * user@host:/tmp$ tree source/
-     * source/
-     * ├── dir
-     * │   └── symlink -> ../file
-     * └── file
-     * }</pre>
-     * When doing {@code user@host:/tmp$ cp -r source target}, then the resulting target directory structure is:
-     * <pre>{@code
-     * user@host:/tmp$ tree target/
-     * target/
-     * ├── dir
-     * │   └── symlink -> ../file
-     * └── file
-     * }</pre>
-     */
-    @Test
     void testCopyDirectoryWithNoFollowLinksPreservesAbsoluteSymbolicLinkToFile() throws Exception {
         // Given
         final Path externalDir = Files.createDirectory(tempDirPath.resolve("external"));
@@ -363,26 +327,6 @@ class PathUtilsCopyTest extends AbstractTempDirTest {
     }
 
     @Test
-    void testCopyDirectoryCyclicSymbolicLink() throws Exception {
-        // sourceDir = tempDirPath/source
-        final Path sourceDir = Files.createDirectory(tempDirPath.resolve("source"));
-        // dir1 = tempDirPath/source/dir1
-        final Path dir1 = Files.createDirectory(sourceDir.resolve("dir1"));
-        // dir2 = tempDirPath/source/dir1/dir2
-        final Path dir2 = Files.createDirectory(dir1.resolve("dir2"));
-        // link = tempDirPath/source/dir1/dir2/cyclic-symlink
-        // target = ..
-        Files.createSymbolicLink(dir2.resolve("cyclic-symlink"), dir2.relativize(dir1));
-        final Path targetDir = tempDirPath.resolve("target");
-        PathUtils.copyDirectory(sourceDir, targetDir);
-        assertTrue(Files.exists(targetDir));
-        final Path copyOfDir2 = targetDir.resolve("dir1").resolve("dir2");
-        assertTrue(Files.exists(copyOfDir2));
-        assertTrue(Files.isDirectory(copyOfDir2));
-        assertTrue(Files.exists(copyOfDir2.resolve("cyclic-symlink")));
-    }
-
-    @Test
     void testCopyDirectoryWithNoFollowLinksPreservesCyclicSymbolicLink() throws Exception {
         final Path sourceDir = Files.createDirectory(tempDirPath.resolve("source"));
         final Path dir1 = Files.createDirectory(sourceDir.resolve("dir1"));
@@ -400,62 +344,118 @@ class PathUtilsCopyTest extends AbstractTempDirTest {
         assertEquals(copyOfDir1.toRealPath(), copyOfCyclicSymlink.toRealPath());
     }
 
-    @ParameterizedTest
-    @ArgumentsSource(CopyOptionsArgumentsProvider.class)
-    void testCopyDirectoryIgnoresBrokenSymbolicLink(final CopyOption... copyOptions) throws Exception {
+    /**
+     * Illustrates how copy with {@link LinkOption#NOFOLLOW_LINKS} preserves relative symlinks to directories.
+     * This simulates to the behavior of Linux {@code cp -r}.
+     * Given the source directory structure:
+     * <pre>{@code
+     * user@host:/tmp$ tree source/
+     * source/
+     * ├── dir1
+     * │   └── symlink -> ../dir2
+     * └── dir2
+     * }</pre>
+     * When doing {@code user@host:/tmp$ cp -r source target}, then the resulting target directory structure is:
+     * <pre>{@code
+     * user@host:/tmp$ tree target/
+     * target/
+     * ├── dir1
+     * │   └── symlink -> ../dir2
+     * └── dir2
+     * }</pre>
+     */
+    @Test
+    void testCopyDirectoryWithNoFollowLinksPreservesRelativeSymbolicLinkToDir() throws Exception {
+        // Given
         final Path sourceDir = Files.createDirectory(tempDirPath.resolve("source"));
-        final Path dir = Files.createDirectory(sourceDir.resolve("dir"));
-        Files.createSymbolicLink(dir.resolve("broken-symlink"), dir.relativize(sourceDir.resolve("file")));
+        final Path dir1 = Files.createDirectory(sourceDir.resolve("dir1"));
+        final Path dir2 = Files.createDirectory(sourceDir.resolve("dir2"));
+        // source/dir1/symlink -> ../dir2
+        Files.createSymbolicLink(dir1.resolve("symlink"), dir1.relativize(dir2));
         final Path targetDir = tempDirPath.resolve("target");
-        PathUtils.copyDirectory(sourceDir, targetDir, copyOptions);
-        assertTrue(Files.exists(targetDir));
-        final Path copyOfDir = targetDir.resolve("dir");
-        assertTrue(Files.exists(copyOfDir));
-        assertTrue(Files.isDirectory(copyOfDir));
-        assertFalse(Files.exists(copyOfDir.resolve("broken-symlink")));
+        // When
+        final PathCounters pathCounters = PathUtils.copyDirectory(sourceDir, targetDir, LinkOption.NOFOLLOW_LINKS);
+        // Then
+        // assertEquals(0L, pathCounters.getByteCounter().get());
+        assertEquals(3L, pathCounters.getDirectoryCounter().get());
+        // Verify that symlink with NOFOLLOW_LINKS counts as file
+        assertEquals(1L, pathCounters.getFileCounter().get());
+        final Path copyOfDir2 = targetDir.resolve("dir2");
+        final Path copyOfRelativeSymlinkToDir2 = targetDir.resolve("dir1").resolve("symlink");
+        assertTrue(Files.isSymbolicLink(copyOfRelativeSymlinkToDir2));
+        assertTrue(Files.isDirectory(copyOfRelativeSymlinkToDir2));
+        // Verify that target/dir1/symlink resolves to /tmp/target/dir2
+        assertEquals(copyOfDir2.toRealPath(), copyOfRelativeSymlinkToDir2.toRealPath());
     }
 
-    private static class CopyOptionsArgumentsProvider implements ArgumentsProvider {
+    /**
+     * Illustrates how copy with {@link LinkOption#NOFOLLOW_LINKS} preserves relative symlinks to files.
+     * This simulates to the behavior of Linux {@code cp -r}.
+     * Given the source directory structure:
+     * <pre>{@code
+     * user@host:/tmp$ tree source/
+     * source/
+     * ├── dir
+     * │   └── symlink -> ../file
+     * └── file
+     * }</pre>
+     * When doing {@code user@host:/tmp$ cp -r source target}, then the resulting target directory structure is:
+     * <pre>{@code
+     * user@host:/tmp$ tree target/
+     * target/
+     * ├── dir
+     * │   └── symlink -> ../file
+     * └── file
+     * }</pre>
+     */
+    @Test
+    void testCopyDirectoryWithNoFollowLinksPreservesRelativeSymbolicLinkToFile() throws Exception {
+        // Given
+        final Path sourceDir = Files.createDirectory(tempDirPath.resolve("source"));
+        final Path dir = Files.createDirectory(sourceDir.resolve("dir"));
+        final Path file = Files.write(sourceDir.resolve("file"), PathUtilsTest.BYTE_ARRAY_FIXTURE);
+        // source/dir/symlink -> ../file
+        Files.createSymbolicLink(dir.resolve("symlink"), dir.relativize(file));
+        final Path targetDir = tempDirPath.resolve("target");
+        // When
+        final PathCounters pathCounters = PathUtils.copyDirectory(sourceDir, targetDir, LinkOption.NOFOLLOW_LINKS);
+        // Then
+        // assertEquals(11L, pathCounters.getByteCounter().get());
+        assertEquals(2L, pathCounters.getDirectoryCounter().get());
+        // Verify that file + symlink with NOFOLLOW_LINKS counts as 2 files
+        assertEquals(2L, pathCounters.getFileCounter().get());
+        final Path copyOfFile = targetDir.resolve("file");
+        final Path copyOfRelativeSymlinkToFile = targetDir.resolve("dir").resolve("symlink");
+        assertTrue(Files.isSymbolicLink(copyOfRelativeSymlinkToFile));
+        assertTrue(Files.isRegularFile(copyOfRelativeSymlinkToFile));
+        // Verify that /tmp/target/dir/symlink resolves to /tmp/target/file
+        assertEquals(copyOfFile.toRealPath(), copyOfRelativeSymlinkToFile.toRealPath());
+    }
 
-        @Override
-        public Stream<? extends Arguments> provideArguments(final ParameterDeclarations parameters, final ExtensionContext context) {
-            return Stream.of(
-                    Arguments.of((Object) new CopyOption[0]),
-                    Arguments.of((Object) new CopyOption[] { LinkOption.NOFOLLOW_LINKS })
-            );
+    @Test
+    void testCopyFile() throws IOException {
+        final Path sourceFile = Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-1/file-size-1.bin");
+        final Path targetFile = PathUtils.copyFileToDirectory(sourceFile, tempDirPath);
+        assertTrue(Files.exists(targetFile));
+        assertEquals(Files.size(sourceFile), Files.size(targetFile));
+    }
+
+    @Test
+    void testCopyFileTwoFileSystem() throws IOException {
+        try (FileSystem archive = openArchive(Paths.get(TEST_JAR_PATH), false)) {
+            final Path sourceFile = archive.getPath("next/dir/test.log");
+            final Path targetFile = PathUtils.copyFileToDirectory(sourceFile, tempDirPath);
+            assertTrue(Files.exists(targetFile));
+            assertEquals(Files.size(sourceFile), Files.size(targetFile));
         }
     }
 
     @Test
-    void testCopyDirectoryFollowsAbsoluteSymbolicLinkToDirectory() throws Exception {
-        // Given
-        final Path externalDir = Files.createDirectory(tempDirPath.resolve("external"));
-        final Path dir1 = Files.createDirectory(externalDir.resolve("dir1"));
-        final Path file2 = Files.write(dir1.resolve("file2"), PathUtilsTest.BYTE_ARRAY_FIXTURE);
-        final Path sourceDir = Files.createDirectory(tempDirPath.resolve("source"));
-        final Path dir3 = Files.createDirectory(sourceDir.resolve("dir3"));
-        final Path file4 = Files.write(dir3.resolve("file4"), PathUtilsTest.BYTE_ARRAY_FIXTURE);
-        Files.createSymbolicLink(sourceDir.resolve("symlink1"), dir1.toAbsolutePath());
-        Files.createSymbolicLink(sourceDir.resolve("symlink2"), sourceDir.relativize(file2));
-        Files.createSymbolicLink(sourceDir.resolve("symlink3"), sourceDir.relativize(dir3));
-        Files.createSymbolicLink(dir3.resolve("symlink4"), file4.toAbsolutePath());
-        final Path targetDir = tempDirPath.resolve("target");
-        // When
-        final PathCounters pathCounters = PathUtils.copyDirectory(sourceDir, targetDir);
-        // Then
-        // 6 * 11 bytes == 66:
-        // file2
-        // file4
-        // symlink2 -> file2
-        // symlink4 -> file4
-        // symlink1 -> dir1 containing file2
-        // symlink3 -> dir3 containing file4
-        //
-        // Different result value depending on the Java version and operating system, but should not throw an exception or loop infinitely.
-        pathCounters.getByteCounter().get();
-        assertEquals(2L, pathCounters.getDirectoryCounter().get());
-        assertEquals(5L, pathCounters.getFileCounter().get());
-        assertTrue(Files.exists(targetDir.resolve("dir3").resolve("file4")));
-        assertTrue(Files.exists(targetDir.resolve("dir3").resolve("symlink4")));
+    void testCopyURL() throws IOException {
+        final Path sourceFile = Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-1/file-size-1.bin");
+        final URL url = new URL("file:///" + FilenameUtils.getPath(sourceFile.toAbsolutePath().toString()) + sourceFile.getFileName());
+        final Path targetFile = PathUtils.copyFileToDirectory(url, tempDirPath);
+        assertTrue(Files.exists(targetFile));
+        assertEquals(Files.size(sourceFile), Files.size(targetFile));
     }
 }

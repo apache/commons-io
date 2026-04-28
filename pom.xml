@@ -19,12 +19,12 @@
   <parent>
     <groupId>org.apache.commons</groupId>
     <artifactId>commons-parent</artifactId>
-    <version>98</version>
+    <version>99</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>commons-io</groupId>
   <artifactId>commons-io</artifactId>
-  <version>2.22.0-SNAPSHOT</version>
+  <version>2.22.1-SNAPSHOT</version>
   <name>Apache Commons IO</name>
   <inceptionYear>2002</inceptionYear>
   <description>
@@ -85,7 +85,7 @@ file comparators, endian transformation classes, and much more.
     <dependency>
       <groupId>commons-codec</groupId>
       <artifactId>commons-codec</artifactId>
-      <version>1.21.0</version>
+      <version>1.22.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -101,11 +101,11 @@ file comparators, endian transformation classes, and much more.
     <commons.componentid>io</commons.componentid>
     <commons.module.name>org.apache.commons.io</commons.module.name>
     <commons.rc.version>RC1</commons.rc.version>
-    <commons.bc.version>2.21.0</commons.bc.version>
-    <commons.release.version>2.22.0</commons.release.version>
-    <commons.release.next>2.22.1</commons.release.next>
+    <commons.bc.version>2.22.0</commons.bc.version>
+    <commons.release.version>2.22.1</commons.release.version>
+    <commons.release.next>2.22.2</commons.release.next>
     <!-- project.build.outputTimestamp is managed by Maven plugins, see https://maven.apache.org/guides/mini/guide-reproducible-builds.html -->
-    <project.build.outputTimestamp>2025-11-06T21:58:17Z</project.build.outputTimestamp>
+    <project.build.outputTimestamp>2026-04-23T10:25:32Z</project.build.outputTimestamp>
     <commons.release.desc>(requires Java 8)</commons.release.desc>
     <commons.jira.id>IO</commons.jira.id>
     <commons.jira.pid>12310477</commons.jira.pid>
@@ -136,7 +136,6 @@ file comparators, endian transformation classes, and much more.
     <japicmp.skip>false</japicmp.skip>
     <commons.release.isDistModule>true</commons.release.isDistModule>
     <!-- JaCoCo: Don't make code coverage worse than: -->
-    <jacoco.skip>${env.JACOCO_SKIP}</jacoco.skip>
     <commons.jacoco.haltOnFailure>true</commons.jacoco.haltOnFailure>
     <commons.jacoco.classRatio>0.98</commons.jacoco.classRatio>
     <commons.jacoco.instructionRatio>0.90</commons.jacoco.instructionRatio>
@@ -205,7 +204,7 @@ file comparators, endian transformation classes, and much more.
           <reuseForks>false</reuseForks>
           <!-- Limit memory size see IO-161 -->
           <!-- Mockito inline may need -XX:+EnableDynamicAgentLoading -->
-          <argLine>${argLine} -Xmx25M ${EnableDynamicAgentLoading}</argLine>
+          <argLine>@{argLine} -Xmx25M ${EnableDynamicAgentLoading}</argLine>
           <includes>
             <!-- Only include test classes, not test data -->
             <include>**/*Test*.class</include>

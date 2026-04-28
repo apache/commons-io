@@ -31,6 +31,16 @@ import org.apache.commons.io.output.ProxyWriter;
 
 /**
  * A {@link ReadableByteChannel} filter which delegates to the wrapped {@link ReadableByteChannel}.
+ * <p>
+ * A {@code FilterReadableByteChannel} wraps some other channel, which it uses as its basic source of data, possibly transforming the data along the way or
+ * providing additional functionality. The class {@code FilterReadableByteChannel} itself simply overrides methods of {@code ReadableByteChannel} with versions
+ * that pass all requests to the wrapped channel. Subclasses of {@code FilterReadableByteChannel} may of course override any methods declared or inherited by
+ * {@code FilterReadableByteChannel}, and may also provide additional fields and methods.
+ * </p>
+ * <p>
+ * You construct s simple instance with the {@link FilterReadableByteChannel#FilterReadableByteChannel(ReadableByteChannel) channel constructor} and more
+ * advanced instances through the {@link Builder}.
+ * </p>
  *
  * @param <C> the {@link ReadableByteChannel} type.
  * @see FilterInputStream
@@ -92,6 +102,15 @@ public class FilterReadableByteChannel<C extends ReadableByteChannel> extends Fi
 
     FilterReadableByteChannel(final Builder builder) throws IOException {
         super(builder);
+    }
+
+    /**
+     * Constructs a new instance.
+     *
+     * @param channel The channel to wrap.
+     */
+    public FilterReadableByteChannel(final C channel) {
+        super(channel);
     }
 
     @Override

@@ -299,7 +299,7 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
      * Subclasses may ignore this setting.
      * </p>
      *
-     * @param bufferSize the buffer size.
+     * @param bufferSize the buffer size, 0 resets to the default from {@link #getBufferSizeDefault()}.
      * @return {@code this} instance.
      */
     public B setBufferSize(final int bufferSize) {
@@ -313,7 +313,7 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
      * Subclasses may ignore this setting.
      * </p>
      *
-     * @param bufferSize the buffer size, null resets to the default.
+     * @param bufferSize the buffer size, null resets to the default from {@link #getBufferSizeDefault()}.
      * @return {@code this} instance.
      */
     public B setBufferSize(final Integer bufferSize) {
@@ -339,11 +339,11 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
      * Subclasses may ignore this setting.
      * </p>
      *
-     * @param bufferSizeDefault the buffer size, null resets to the default.
+     * @param bufferSizeDefault the buffer size, 0 resets to the default {@link IOUtils#DEFAULT_BUFFER_SIZE}.
      * @return {@code this} instance.
      */
     protected B setBufferSizeDefault(final int bufferSizeDefault) {
-        this.bufferSizeDefault = bufferSizeDefault;
+        this.bufferSizeDefault = checkBufferSize(bufferSizeDefault > 0 ? bufferSizeDefault : IOUtils.DEFAULT_BUFFER_SIZE);
         return asThis();
     }
 

@@ -58,7 +58,6 @@ public final class FlushShieldOutputStream extends ProxyOutputStream {
      * </pre>
      *
      * @see #get()
-     * @since 2.13.0
      */
     // @formatter:on
     public static class Builder extends AbstractStreamBuilder<FlushShieldOutputStream, Builder> {

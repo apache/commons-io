@@ -151,6 +151,12 @@ class UnsynchronizedBufferedReaderTest {
         }
     }
 
+    @Test
+    void testIllegalSize() throws Exception {
+        assertThrows(IllegalArgumentException.class, () -> new UnsynchronizedBufferedReader(new StringReader(""), 0));
+        assertThrows(IllegalArgumentException.class, () -> new UnsynchronizedBufferedReader(new StringReader(""), -1));
+    }
+
     /**
      * Tests {@link UnsynchronizedBufferedReader#mark(int)}.
      *
@@ -220,6 +226,17 @@ class UnsynchronizedBufferedReaderTest {
             reader.mark(Integer.MAX_VALUE);
             reader.read();
         }
+    }
+
+    /**
+     * Tests {@link UnsynchronizedBufferedReader#mark(int)}.
+     *
+     * @throws IOException test failure.
+     */
+    @Test
+    void testMarkIllegal() throws IOException {
+        br = new UnsynchronizedBufferedReader(new StringReader(testString));
+        assertThrows(IllegalArgumentException.class, () -> br.mark(-1));
     }
 
     /**
@@ -604,5 +621,16 @@ class UnsynchronizedBufferedReaderTest {
         final char[] buf = new char[testString.length()];
         br.read(buf, 0, 500);
         assertTrue(testString.substring(500, 1000).equals(new String(buf, 0, 500)));
+    }
+
+    /**
+     * Tests {@link UnsynchronizedBufferedReader#skip(int)}.
+     *
+     * @throws IOException test failure.
+     */
+    @Test
+    void testSkipIllegal() throws IOException {
+        br = new UnsynchronizedBufferedReader(new StringReader(testString));
+        assertThrows(IllegalArgumentException.class, () -> br.skip(-1));
     }
 }

@@ -55,7 +55,7 @@ class CloseShieldChannelFilterByteChannelTest {
     @BeforeEach
     void setUp() throws IOException {
         mockChannel = mock(ByteChannel.class);
-        filterChannel = FilterByteChannel.forByteChannel().setChannel(mockChannel).get();
+        filterChannel = new FilterByteChannel<>(mockChannel);
         shield = CloseShieldChannel.wrap(filterChannel);
     }
 
