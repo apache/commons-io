@@ -43,6 +43,21 @@ public interface IOConsumer<T> {
     };
 
     /**
+     * Applies the given {@link IOConsumer} action to the object if the consumer is not {@code null}. Otherwise, does nothing.
+     *
+     * @param consumer the consumer to consume.
+     * @param object   the object to be consumed.
+     * @param <T>      the type of the argument the consumer accepts.
+     * @throws IOException Thrown when the consumer fails.
+     * @since 2.23.0
+     */
+    static <T> void accept(final IOConsumer<T> consumer, final T object) throws IOException {
+        if (consumer != null) {
+            consumer.accept(object);
+        }
+    }
+
+    /**
      * Performs an action for each element of the collection gathering any exceptions.
      *
      * @param action The action to apply to each input element.

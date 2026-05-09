@@ -747,13 +747,9 @@ public class IOUtils {
             try {
                 closeable.close();
             } catch (final IOException e) {
-                if (consumer != null) {
-                    consumer.accept(e);
-                }
+                IOConsumer.accept(consumer, e);
             } catch (final Exception e) {
-                if (consumer != null) {
-                    consumer.accept(new IOException(e));
-                }
+                IOConsumer.accept(consumer, new IOException(e));
             }
         }
     }

@@ -55,6 +55,17 @@ class IOConsumerTest {
     }
 
     @Test
+    void testAcceptStatic() throws IOException {
+        IOConsumer.accept(null, null);
+        IOConsumer.accept((IOConsumer<String>) null, ".");
+        //
+        final AtomicReference<String> ref = new AtomicReference<>();
+        final IOConsumer<String> consumer = s -> ref.set(s + "1");
+        IOConsumer.accept(consumer, "A");
+        assertEquals("A1", ref.get());
+    }
+
+    @Test
     void testAndThen() throws IOException {
         final AtomicReference<String> ref = new AtomicReference<>();
         final IOConsumer<String> consumer1 = s -> ref.set(s + "1");
