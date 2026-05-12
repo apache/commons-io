@@ -47,6 +47,7 @@ The <action> type attribute can be add,update,fix,remove.
   <body>
     <release version="2.23.0" date="YYYY-MM-DD" description="This is a feature and maintenance release. Java 8 or later is required.">
       <!-- FIX -->
+      <action issue="IO-867" type="fix" dev="ggregory" due-to="Sai Asish Y">ThresholdingOutputStream.isThresholdExceeded() now reflects the threshold-reached state, and a failed thresholdReached() no longer leaves the stream unable to fire the event again.</action>
       <!-- ADD -->
       <action type="add" dev="ggregory" due-to="Gary Gregory">Add IOConsumer.accept(IOConsumer, T) (#846).</action>
       <!-- UPDATE -->

@@ -111,7 +111,12 @@ public class ThresholdingOutputStream extends OutputStream {
     protected void checkThreshold(final int count) throws IOException {
         if (!thresholdExceeded && written + count > threshold) {
             thresholdExceeded = true;
-            thresholdReached();
+            try {
+                thresholdReached();
+            } catch (final IOException | RuntimeException e) {
+                thresholdExceeded = false;
+                throw e;
+            }
         }
     }
 
@@ -192,7 +197,7 @@ public class ThresholdingOutputStream extends OutputStream {
      * @return {@code true} if the threshold has been reached; {@code false} otherwise.
      */
     public boolean isThresholdExceeded() {
-        return written > threshold;
+        return thresholdExceeded;
     }
 
     /**
