@@ -21,6 +21,7 @@ import static org.apache.commons.io.IOUtils.EOF;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -632,5 +633,13 @@ class UnsynchronizedBufferedReaderTest {
     void testSkipIllegal() throws IOException {
         br = new UnsynchronizedBufferedReader(new StringReader(testString));
         assertThrows(IllegalArgumentException.class, () -> br.skip(-1));
+    }
+
+    @SuppressWarnings("resource")
+    @Test
+    void testUnwrap() throws IOException {
+        final StringReader reader = new StringReader(testString);
+        br = new UnsynchronizedBufferedReader(reader);
+        assertSame(reader, br.unwrap());
     }
 }
