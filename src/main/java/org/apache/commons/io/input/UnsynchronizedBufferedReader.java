@@ -482,4 +482,17 @@ public class UnsynchronizedBufferedReader extends UnsynchronizedReader {
         return amount;
     }
 
+    /**
+     * Unwraps this instance by returning the underlying {@link Reader}.
+     * <p>
+     * Use with caution.
+     * </p>
+     *
+     * @return the underlying {@link Reader}.
+     * @since 2.23.0
+     */
+    public Reader unwrap() {
+        return in;
+    }
+
 }
