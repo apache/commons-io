@@ -50,6 +50,7 @@ The <action> type attribute can be add,update,fix,remove.
       <action issue="IO-867" type="fix" dev="ggregory" due-to="Sai Asish Y">ThresholdingOutputStream.isThresholdExceeded() now reflects the threshold-reached state, and a failed thresholdReached() no longer leaves the stream unable to fire the event again.</action>
       <!-- ADD -->
       <action type="add" dev="ggregory" due-to="Gary Gregory">Add IOConsumer.accept(IOConsumer, T) (#846).</action>
+      <action type="add" dev="ggregory" due-to="Gary Gregory">Add UnsynchronizedBufferedReader.unwrap() (#850).</action>
       <!-- UPDATE -->
       <action type="update" dev="ggregory" due-to="Gary Gregory">Bump org.apache.commons:commons-parent from 98 to 100 (#849).</action>
       <action type="update" dev="ggregory" due-to="Gary Gregory">[test] Bump commons-codec:commons-codec from 1.21.0 to 1.22.0.</action>
