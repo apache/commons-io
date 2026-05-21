@@ -153,6 +153,40 @@ class UnsynchronizedBufferedReaderTest {
     }
 
     @Test
+    void testGetPosition() throws IOException {
+        // new reader
+        br = new UnsynchronizedBufferedReader(new StringReader(testString));
+        assertEquals(0, br.getPosition());
+        br.read();
+        assertEquals(1, br.getPosition());
+        br.read(new char[1]);
+        assertEquals(2, br.getPosition());
+        br.read(new char[1], 0, 1);
+        assertEquals(3, br.getPosition());
+        br.read(new char[2], 1, 1);
+        assertEquals(4, br.getPosition());
+        br.read(new char[10], 0, 10);
+        assertEquals(14, br.getPosition());
+        IOUtils.toString(br);
+        assertEquals(testString.length(), br.getPosition());
+        br.close();
+        // new reader
+        br = new UnsynchronizedBufferedReader(new StringReader(testString));
+        br.mark(testString.length());
+        assertEquals(testString, IOUtils.toString(br));
+        assertEquals(testString.length(), br.getPosition());
+        br.reset();
+        assertEquals(testString, IOUtils.toString(br));
+        assertEquals(testString.length(), br.getPosition());
+        // new reader
+        br = new UnsynchronizedBufferedReader(new StringReader(testString));
+        br.skip(1);
+        assertEquals(1, br.getPosition());
+        br.skip(Integer.MAX_VALUE);
+        assertEquals(testString.length(), br.getPosition());
+    }
+
+    @Test
     void testIllegalSize() throws Exception {
         assertThrows(IllegalArgumentException.class, () -> new UnsynchronizedBufferedReader(new StringReader(""), 0));
         assertThrows(IllegalArgumentException.class, () -> new UnsynchronizedBufferedReader(new StringReader(""), -1));
