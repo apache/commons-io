@@ -77,13 +77,16 @@ public class UnsynchronizedBufferedReader extends UnsynchronizedReader {
      */
     private char[] buf;
 
-    private int pos;
+    private int bufPos;
 
     private int end;
 
     private int mark = -1;
 
     private int markLimit = -1;
+
+    private long pos;
+    private long posMark;
 
     /**
      * Constructs a new BufferedReader on the Reader {@code in}. The buffer gets the default size (8 KB).
@@ -113,8 +116,8 @@ public class UnsynchronizedBufferedReader extends UnsynchronizedReader {
      * Peeks at the next input character, refilling the buffer if necessary. If this character is a newline character ("\n"), it is discarded.
      */
     final void chompNewline() throws IOException {
-        if ((pos != end || fillBuf() != EOF) && buf[pos] == LF) {
-            pos++;
+        if ((bufPos != end || fillBuf() != EOF) && buf[bufPos] == LF) {
+            bufPos++;
         }
     }
 
@@ -141,12 +144,12 @@ public class UnsynchronizedBufferedReader extends UnsynchronizedReader {
     private int fillBuf() throws IOException {
         // assert(pos == end);
 
-        if (mark == EOF || pos - mark >= markLimit) {
+        if (mark == EOF || bufPos - mark >= markLimit) {
             /* mark isn't set or has exceeded its limit. use the whole buffer */
             final int result = in.read(buf, 0, buf.length);
             if (result > 0) {
                 mark = -1;
-                pos = 0;
+                bufPos = 0;
                 end = result;
             }
             return result;
@@ -164,17 +167,47 @@ public class UnsynchronizedBufferedReader extends UnsynchronizedReader {
         } else if (mark > 0) {
             /* make room by shifting the buffered data to left mark positions */
             System.arraycopy(buf, mark, buf, 0, buf.length - mark);
-            pos -= mark;
+            bufPos -= mark;
             end -= mark;
             mark = 0;
         }
 
         /* Set the new position and mark position */
-        final int count = in.read(buf, pos, buf.length - pos);
+        final int count = in.read(buf, bufPos, buf.length - bufPos);
         if (count != EOF) {
             end += count;
         }
         return count;
+    }
+
+    /**
+     * Gets the character position in the reader.
+     * <p>
+     * Returns {@link Long#MAX_VALUE} instead of overflowing.
+     * </p>
+     * <p>
+     * Since this is a Reader, this is the character position, not the byte position (use an InputStream to count bytes).
+     * </p>
+     *
+     * @return the character position in the reader.
+     * @since 2.23.0
+     */
+    public long getPosition() {
+        return pos;
+    }
+
+    /**
+     * Increments the position by a given value, overflow sets the value to {@link Long#MAX_VALUE};
+     *
+     * @param v a value.
+     * @return the new position.
+     * @since 2.23.0
+     */
+    protected long incPos(final long v) {
+        // Like Math.addExact(long, long) but clamp to Long.MAX_VALUE.
+        final long r = pos + v;
+        // Overflow iff both arguments have the opposite sign of the result.
+        return pos = ((pos ^ r) & (v ^ r)) < 0 ? Long.MAX_VALUE : r;
     }
 
     /**
@@ -194,7 +227,8 @@ public class UnsynchronizedBufferedReader extends UnsynchronizedReader {
         }
         checkOpen();
         this.markLimit = markLimit;
-        mark = pos;
+        mark = bufPos;
+        posMark = pos;
     }
 
     /**
@@ -250,8 +284,9 @@ public class UnsynchronizedBufferedReader extends UnsynchronizedReader {
     public int read() throws IOException {
         checkOpen();
         /* Are there buffered characters available? */
-        if (pos < end || fillBuf() != EOF) {
-            return buf[pos++];
+        if (bufPos < end || fillBuf() != EOF) {
+            incPos(1);
+            return buf[bufPos++];
         }
         return EOF;
     }
@@ -281,22 +316,19 @@ public class UnsynchronizedBufferedReader extends UnsynchronizedReader {
         if (length == 0) {
             return 0;
         }
-
         int outstanding = length;
         while (outstanding > 0) {
-
             /*
              * If there are bytes in the buffer, grab those first.
              */
-            final int available = end - pos;
+            final int available = end - bufPos;
             if (available > 0) {
                 final int count = available >= outstanding ? outstanding : available;
-                System.arraycopy(buf, pos, buffer, offset, count);
-                pos += count;
+                System.arraycopy(buf, bufPos, buffer, offset, count);
+                bufPos += count;
                 offset += count;
                 outstanding -= count;
             }
-
             /*
              * Before attempting to read from the underlying stream, make sure we really, really want to. We won't bother if we're done, or if we've already got
              * some bytes and reading from the underlying stream would block.
@@ -304,29 +336,25 @@ public class UnsynchronizedBufferedReader extends UnsynchronizedReader {
             if (outstanding == 0 || outstanding < length && !in.ready()) {
                 break;
             }
-
             // assert(pos == end);
-
             /*
              * If we're unmarked and the requested size is greater than our buffer, read the bytes directly into the caller's buffer. We don't read into smaller
              * buffers because that could result in a many reads.
              */
-            if ((mark == -1 || pos - mark >= markLimit) && outstanding >= buf.length) {
+            if ((mark == -1 || bufPos - mark >= markLimit) && outstanding >= buf.length) {
                 final int count = in.read(buffer, offset, outstanding);
                 if (count > 0) {
                     outstanding -= count;
                     mark = -1;
                 }
-
                 break; // assume the source stream gave us all that it could
             }
-
             if (fillBuf() == EOF) {
                 break; // source is exhausted
             }
         }
-
         final int count = length - outstanding;
+        incPos(count);
         return count > 0 || count == length ? count : EOF;
     }
 
@@ -340,24 +368,24 @@ public class UnsynchronizedBufferedReader extends UnsynchronizedReader {
     public String readLine() throws IOException {
         checkOpen();
         /* has the underlying stream been exhausted? */
-        if (pos == end && fillBuf() == EOF) {
+        if (bufPos == end && fillBuf() == EOF) {
             return null;
         }
-        for (int charPos = pos; charPos < end; charPos++) {
+        for (int charPos = bufPos; charPos < end; charPos++) {
             final char ch = buf[charPos];
             if (ch > CR) {
                 continue;
             }
             if (ch == LF) {
-                final String res = new String(buf, pos, charPos - pos);
-                pos = charPos + 1;
+                final String res = new String(buf, bufPos, charPos - bufPos);
+                bufPos = charPos + 1;
                 return res;
             }
             if (ch == CR) {
-                final String res = new String(buf, pos, charPos - pos);
-                pos = charPos + 1;
-                if ((pos < end || fillBuf() != EOF) && buf[pos] == LF) {
-                    pos++;
+                final String res = new String(buf, bufPos, charPos - bufPos);
+                bufPos = charPos + 1;
+                if ((bufPos < end || fillBuf() != EOF) && buf[bufPos] == LF) {
+                    bufPos++;
                 }
                 return res;
             }
@@ -367,9 +395,9 @@ public class UnsynchronizedBufferedReader extends UnsynchronizedReader {
         final StringBuilder result = new StringBuilder(80);
         /* Typical Line Length */
 
-        result.append(buf, pos, end - pos);
+        result.append(buf, bufPos, end - bufPos);
         while (true) {
-            pos = end;
+            bufPos = end;
 
             /* Are there buffered characters available? */
             if (eol == LF) {
@@ -380,19 +408,19 @@ public class UnsynchronizedBufferedReader extends UnsynchronizedReader {
                 // characters or null.
                 return result.length() > 0 || eol != NUL ? result.toString() : null;
             }
-            for (int charPos = pos; charPos < end; charPos++) {
+            for (int charPos = bufPos; charPos < end; charPos++) {
                 final char c = buf[charPos];
                 if (eol != NUL) {
                     if (eol == CR && c == LF) {
-                        if (charPos > pos) {
-                            result.append(buf, pos, charPos - pos - 1);
+                        if (charPos > bufPos) {
+                            result.append(buf, bufPos, charPos - bufPos - 1);
                         }
-                        pos = charPos + 1;
+                        bufPos = charPos + 1;
                     } else {
-                        if (charPos > pos) {
-                            result.append(buf, pos, charPos - pos - 1);
+                        if (charPos > bufPos) {
+                            result.append(buf, bufPos, charPos - bufPos - 1);
                         }
-                        pos = charPos;
+                        bufPos = charPos;
                     }
                     return result.toString();
                 }
@@ -401,9 +429,9 @@ public class UnsynchronizedBufferedReader extends UnsynchronizedReader {
                 }
             }
             if (eol == NUL) {
-                result.append(buf, pos, end - pos);
+                result.append(buf, bufPos, end - bufPos);
             } else {
-                result.append(buf, pos, end - pos - 1);
+                result.append(buf, bufPos, end - bufPos - 1);
             }
         }
     }
@@ -420,7 +448,7 @@ public class UnsynchronizedBufferedReader extends UnsynchronizedReader {
     @Override
     public boolean ready() throws IOException {
         checkOpen();
-        return end - pos > 0 || in.ready();
+        return end - bufPos > 0 || in.ready();
     }
 
     /**
@@ -436,7 +464,8 @@ public class UnsynchronizedBufferedReader extends UnsynchronizedReader {
         if (mark == -1) {
             throw new IOException("mark == -1");
         }
-        pos = mark;
+        bufPos = mark;
+        pos = posMark;
     }
 
     /**
@@ -460,27 +489,27 @@ public class UnsynchronizedBufferedReader extends UnsynchronizedReader {
         if (amount < 1) {
             return 0;
         }
-        if (end - pos >= amount) {
-            pos += Math.toIntExact(amount);
-            return amount;
+        if (end - bufPos >= amount) {
+            bufPos += Math.toIntExact(amount);
+            return incPos(amount);
         }
-
-        long read = end - pos;
-        pos = end;
+        long read = end - bufPos;
+        bufPos = end;
         while (read < amount) {
             if (fillBuf() == EOF) {
-                return read;
+                return incPos(read);
             }
-            if (end - pos >= amount - read) {
-                pos += Math.toIntExact(amount - read);
-                return amount;
+            if (end - bufPos >= amount - read) {
+                bufPos += Math.toIntExact(amount - read);
+                return incPos(amount);
             }
             // Couldn't get all the characters, skip what we read
-            read += end - pos;
-            pos = end;
+            read += end - bufPos;
+            bufPos = end;
         }
-        return amount;
+        return incPos(amount);
     }
+
 
     /**
      * Unwraps this instance by returning the underlying {@link Reader}.
