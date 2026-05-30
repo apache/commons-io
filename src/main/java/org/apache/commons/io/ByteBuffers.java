@@ -68,8 +68,11 @@ public final class ByteBuffers {
         return littleEndian(ByteBuffer.allocate(capacity));
     }
 
+    /**
+     * No instances.
+     */
     private ByteBuffers() {
-        // empty, no instance.
+        // empty.
     }
 
 }
