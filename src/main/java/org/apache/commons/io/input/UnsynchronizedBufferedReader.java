@@ -137,13 +137,12 @@ public class UnsynchronizedBufferedReader extends UnsynchronizedReader {
     }
 
     /**
-     * Populates the buffer with data. It is an error to call this method when the buffer still contains data; ie. if {@code pos < end}.
+     * Fills the buffer with characters. It is an error to call this method when the buffer still contains data, that is, if {@code pos < end}.
      *
      * @return the number of bytes read into the buffer, or -1 if the end of the source stream has been reached.
      */
     private int fillBuf() throws IOException {
         // assert(pos == end);
-
         if (mark == EOF || bufPos - mark >= markLimit) {
             /* mark isn't set or has exceeded its limit. use the whole buffer */
             final int result = in.read(buf, 0, buf.length);
@@ -154,7 +153,6 @@ public class UnsynchronizedBufferedReader extends UnsynchronizedReader {
             }
             return result;
         }
-
         if (mark == 0 && markLimit > buf.length) {
             /* the only way to make room when mark=0 is by growing the buffer */
             int newLength = buf.length * 2;
@@ -171,7 +169,6 @@ public class UnsynchronizedBufferedReader extends UnsynchronizedReader {
             end -= mark;
             mark = 0;
         }
-
         /* Set the new position and mark position */
         final int count = in.read(buf, bufPos, buf.length - bufPos);
         if (count != EOF) {
@@ -360,7 +357,7 @@ public class UnsynchronizedBufferedReader extends UnsynchronizedReader {
 
     /**
      * Returns the next line of text available from this reader. A line is represented by zero or more characters followed by {@code LF}, {@code CR},
-     * {@code "\r\n"} or the end of the reader. The string does not include the newline sequence.
+     * {@code "\r\n"}, or the end of the reader. The string does not include the newline sequence.
      *
      * @return the contents of the line or {@code null} if no characters were read before the end of the reader has been reached.
      * @throws IOException if this reader is closed or some other I/O error occurs.
@@ -371,6 +368,7 @@ public class UnsynchronizedBufferedReader extends UnsynchronizedReader {
         if (bufPos == end && fillBuf() == EOF) {
             return null;
         }
+        final int startPos = bufPos;
         for (int charPos = bufPos; charPos < end; charPos++) {
             final char ch = buf[charPos];
             if (ch > CR) {
@@ -379,6 +377,7 @@ public class UnsynchronizedBufferedReader extends UnsynchronizedReader {
             if (ch == LF) {
                 final String res = new String(buf, bufPos, charPos - bufPos);
                 bufPos = charPos + 1;
+                incPos(bufPos - startPos);
                 return res;
             }
             if (ch == CR) {
@@ -387,18 +386,16 @@ public class UnsynchronizedBufferedReader extends UnsynchronizedReader {
                 if ((bufPos < end || fillBuf() != EOF) && buf[bufPos] == LF) {
                     bufPos++;
                 }
+                incPos(bufPos - startPos);
                 return res;
             }
         }
-
         char eol = NUL;
+        // Typical Line Length
         final StringBuilder result = new StringBuilder(80);
-        /* Typical Line Length */
-
         result.append(buf, bufPos, end - bufPos);
         while (true) {
             bufPos = end;
-
             /* Are there buffered characters available? */
             if (eol == LF) {
                 return result.toString();
