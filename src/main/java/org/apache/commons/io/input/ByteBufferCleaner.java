@@ -14,19 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.apache.commons.io.input;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.nio.ByteBuffer;
 
+import org.apache.commons.io.Buffers;
+
 /**
- * Cleans a direct {@link ByteBuffer}. Without manual intervention, direct ByteBuffers will be cleaned eventually upon
- * garbage collection. However, this should not be relied upon since it may not occur in a timely fashion -
- * especially since off heap ByeBuffers don't put pressure on the garbage collector.
+ * Cleans a direct {@link ByteBuffer}. Without manual intervention, direct ByteBuffers will be cleaned eventually upon garbage collection. However, this should
+ * not be relied upon since it may not occur in a timely fashion - especially since off heap ByeBuffers don't put pressure on the garbage collector.
  * <p>
- * <strong>Warning:</strong> Do not attempt to use a direct {@link ByteBuffer} that has been cleaned or bad things will happen.
- * Don't use this class unless you can ensure that the cleaned buffer will not be accessed anymore.
+ * <strong>Warning:</strong> Do not attempt to use a direct {@link ByteBuffer} that has been cleaned or bad things will happen. Don't use this class unless you
+ * can ensure that the cleaned buffer will not be accessed anymore.
  * </p>
  * <p>
  * See <a href=https://bugs.openjdk.java.net/browse/JDK-4724038>JDK-4724038</a>
@@ -35,6 +37,7 @@ import java.nio.ByteBuffer;
 final class ByteBufferCleaner {
 
     private interface Cleaner {
+
         void clean(ByteBuffer buffer) throws ReflectiveOperationException;
     }
 
@@ -86,7 +89,10 @@ final class ByteBufferCleaner {
      */
     static void clean(final ByteBuffer buffer) {
         try {
-            INSTANCE.clean(buffer);
+            if (buffer.isDirect()) {
+                Buffers.clearWritable(buffer);
+                INSTANCE.clean(buffer);
+            }
         } catch (final Exception e) {
             throw new IllegalStateException("Failed to clean direct buffer.", e);
         }
@@ -105,8 +111,8 @@ final class ByteBufferCleaner {
     }
 
     /**
-     * Tests if were able to load a suitable cleaner for the current JVM. Attempting to call
-     * {@code ByteBufferCleaner#clean(ByteBuffer)} when this method returns false will result in an exception.
+     * Tests if were able to load a suitable cleaner for the current JVM. Attempting to call {@code ByteBufferCleaner#clean(ByteBuffer)} when this method
+     * returns false will result in an exception.
      *
      * @return {@code true} if cleaning is supported, {@code false} otherwise.
      */
