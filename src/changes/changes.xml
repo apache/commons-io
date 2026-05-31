@@ -49,6 +49,11 @@ The <action> type attribute can be add,update,fix,remove.
       <!-- FIX -->
       <action type="fix" dev="ggregory" due-to="Sai Asish Y" issue="IO-867">ThresholdingOutputStream.isThresholdExceeded() now reflects the threshold-reached state, and a failed thresholdReached() no longer leaves the stream unable to fire the event again.</action>
       <action type="fix" dev="ggregory" due-to="Gary Gregory">Clean BufferedFileChannelInputStream's direct ByteBuffer only once #854.</action>
+      <action type="fix" dev="ggregory" due-to="Gary Gregory">BufferedFileChannelInputStream now clears its direct memory byte buffer on close (#855).</action>
+      <action type="fix" dev="ggregory" due-to="Gary Gregory">MemoryMappedFileInputStream now clears its direct memory byte buffer on close (#855).</action>
+      <action type="fix" dev="ggregory" due-to="Gary Gregory">FileChannels.contentEquals(ReadableByteChannel, ReadableByteChannel, int) now clears its direct memory byte buffer on close (#855).</action>
+      <action type="fix" dev="ggregory" due-to="Gary Gregory">BufferedFileChannelInputStream now clears its direct memory byte buffer on close (#855).</action>
+      <action type="fix" dev="ggregory" due-to="Gary Gregory">MemoryMappedFileInputStream now clears its direct memory byte buffer on close (#855).</action>
       <!-- ADD -->
       <action type="add" dev="ggregory" due-to="Gary Gregory">Add IOConsumer.accept(IOConsumer, T) (#846).</action>
       <action type="add" dev="ggregory" due-to="Gary Gregory">Add UnsynchronizedBufferedReader.unwrap() (#850).</action>
