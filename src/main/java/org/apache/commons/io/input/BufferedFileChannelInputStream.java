@@ -220,7 +220,7 @@ public final class BufferedFileChannelInputStream extends InputStream {
      * @param buffer the buffer to clean.
      */
     private void clean(final ByteBuffer buffer) {
-        if (!clean && buffer.isDirect() && ByteBufferCleaner.isSupported()) {
+        if (!clean && ByteBufferCleaner.isSupported()) {
             ByteBufferCleaner.clean(buffer);
             clean = true;
         }

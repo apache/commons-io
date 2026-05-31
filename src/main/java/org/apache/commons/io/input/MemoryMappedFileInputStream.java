@@ -172,7 +172,7 @@ public final class MemoryMappedFileInputStream extends AbstractInputStream {
     }
 
     private void cleanBuffer() {
-        if (ByteBufferCleaner.isSupported() && buffer.isDirect()) {
+        if (ByteBufferCleaner.isSupported()) {
             ByteBufferCleaner.clean(buffer);
         }
     }
