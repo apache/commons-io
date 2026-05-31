@@ -137,6 +137,8 @@ public final class BufferedFileChannelInputStream extends InputStream {
 
     private final ByteBuffer byteBuffer;
 
+    private boolean clean;
+
     private final FileChannel fileChannel;
 
     @SuppressWarnings("resource")
@@ -209,26 +211,18 @@ public final class BufferedFileChannelInputStream extends InputStream {
      * disposed buffer. However, neither the bytes allocated to direct buffers nor file descriptors opened for memory-mapped buffers put pressure on the garbage
      * collector. Waiting for garbage collection may lead to the depletion of off-heap memory or huge numbers of open files. There's unfortunately no standard
      * API to manually dispose of these kinds of buffers.
-     *
-     * @param buffer the buffer to clean.
-     */
-    private void clean(final ByteBuffer buffer) {
-        if (buffer.isDirect()) {
-            cleanDirectBuffer(buffer);
-        }
-    }
-
-    /**
+     * <p>
      * In Java 8, the type of {@code sun.nio.ch.DirectBuffer.cleaner()} was {@code sun.misc.Cleaner}, and it was possible to access the method
      * {@code sun.misc.Cleaner.clean()} to invoke it. The type changed to {@code jdk.internal.ref.Cleaner} in later JDKs, and the {@code clean()} method is not
      * accessible even with reflection. However {@code sun.misc.Unsafe} added an {@code invokeCleaner()} method in JDK 9+ and this is still accessible with
      * reflection.
-     *
-     * @param buffer the buffer to clean. must be a DirectBuffer.
+     * </p>
+     * @param buffer the buffer to clean.
      */
-    private void cleanDirectBuffer(final ByteBuffer buffer) {
-        if (ByteBufferCleaner.isSupported()) {
+    private void clean(final ByteBuffer buffer) {
+        if (!clean && buffer.isDirect() && ByteBufferCleaner.isSupported()) {
             ByteBufferCleaner.clean(buffer);
+            clean = true;
         }
     }
 
@@ -239,6 +233,10 @@ public final class BufferedFileChannelInputStream extends InputStream {
         } finally {
             clean(byteBuffer);
         }
+    }
+
+    boolean isClean() {
+        return clean;
     }
 
     @Override
@@ -300,6 +298,7 @@ public final class BufferedFileChannelInputStream extends InputStream {
         byteBuffer.flip();
         return skippedFromBuffer + skipFromFileChannel(toSkipFromFileChannel);
     }
+
 
     private long skipFromFileChannel(final long n) throws IOException {
         final long currentFilePosition = fileChannel.position();

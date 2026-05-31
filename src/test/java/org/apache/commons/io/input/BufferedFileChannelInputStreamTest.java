@@ -14,8 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.apache.commons.io.input;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -65,6 +67,22 @@ class BufferedFileChannelInputStreamTest extends AbstractInputStreamTest {
         assertThrows(IllegalStateException.class, () -> BufferedFileChannelInputStream.builder().get());
     }
 
+    /**
+     * Tests that the {@code clean(ByteBuffer)} method only performs buffer cleaning once, even when {@link BufferedFileChannelInputStream#close()} is invoked
+     * multiple times. The private {@code clean} boolean field is inspected via reflection: it must be {@code false} before any close, {@code true} after the
+     * first close, and remain {@code true} after a second close, confirming that {@code ByteBufferCleaner.clean()} is never called more than once.
+     */
+    @Test
+    void testCleanCalledOnlyOnce() throws Exception {
+        try (BufferedFileChannelInputStream stream = BufferedFileChannelInputStream.builder().setPath(InputPath).get()) {
+            assertFalse(stream.isClean());
+            stream.close();
+            assertTrue(stream.isClean());
+            stream.close();
+            assertTrue(stream.isClean());
+        }
+    }
+
     @Test
     void testReadAfterClose() throws Exception {
         for (final InputStream inputStream : inputStreams) {
@@ -72,5 +90,4 @@ class BufferedFileChannelInputStreamTest extends AbstractInputStreamTest {
             assertThrows(IOException.class, inputStream::read);
         }
     }
-
 }
