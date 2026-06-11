@@ -54,6 +54,7 @@ The <action> type attribute can be add,update,fix,remove.
       <action type="fix" dev="ggregory" due-to="Gary Gregory">FileChannels.contentEquals(ReadableByteChannel, ReadableByteChannel, int) now clears its direct memory byte buffer on close (#855).</action>
       <action type="fix" dev="ggregory" due-to="Gary Gregory">BufferedFileChannelInputStream now clears its direct memory byte buffer on close (#855).</action>
       <action type="fix" dev="ggregory" due-to="Gary Gregory">MemoryMappedFileInputStream now clears its direct memory byte buffer on close (#855).</action>
+      <action type="fix" dev="ggregory" due-to="Sarankumar Baskar" issue="IO-855">Clarify PeekableInputStream.peek() behavior in Javadoc (#856).</action>
       <!-- ADD -->
       <action type="add" dev="ggregory" due-to="Gary Gregory">Add IOConsumer.accept(IOConsumer, T) (#846).</action>
       <action type="add" dev="ggregory" due-to="Gary Gregory">Add UnsynchronizedBufferedReader.unwrap() (#850).</action>
