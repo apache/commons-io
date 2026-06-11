@@ -17,6 +17,7 @@
 
 package org.apache.commons.io.input.buffer;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -24,6 +25,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.Random;
 
 import org.junit.jupiter.api.Test;
@@ -99,5 +101,30 @@ class PeekableInputStreamTest {
             }
         }
         assertTrue(true, "Test finished OK");
+    }
+
+    @Test
+    void testPeekExactMatch() throws IOException {
+        final byte[] input = "Some text buffer".getBytes(StandardCharsets.UTF_8);
+        try (PeekableInputStream inputStream = new PeekableInputStream(new ByteArrayInputStream(input))) {
+            assertTrue(inputStream.peek(input));
+        }
+    }
+
+    @Test
+    void testPeekPrefixDoesNotMatchLongerInput() throws IOException {
+        try (PeekableInputStream inputStream = new PeekableInputStream(
+                new ByteArrayInputStream("Some text buffer".getBytes(StandardCharsets.UTF_8)))) {
+            assertFalse(inputStream.peek("Some".getBytes(StandardCharsets.UTF_8)));
+        }
+    }
+
+    @Test
+    void testPeekDoesNotConsumeBytes() throws IOException {
+        final byte[] input = "Some".getBytes(StandardCharsets.UTF_8);
+        try (PeekableInputStream inputStream = new PeekableInputStream(new ByteArrayInputStream(input))) {
+            assertTrue(inputStream.peek(input));
+            assertEquals('S', inputStream.read());
+        }
     }
 }
