@@ -66,7 +66,7 @@ class DeferredFileOutputStreamTest extends AbstractTempDirTest {
      */
     private final byte[] testBytes = testString.getBytes();
 
-    void assertContentsEquals(DeferredFileOutputStream out) throws IOException {
+    void assertContentsEquals(final DeferredFileOutputStream out) throws IOException {
         try (InputStream is = out.toInputStream()) {
             assertArrayEquals(testBytes, IOUtils.toByteArray(is));
         }
