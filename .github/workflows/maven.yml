@@ -40,7 +40,7 @@ jobs:
       max-parallel: 20
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
-        java: [ 8, 11, 17, 21, 25 ]
+        java: [ 8, 11, 17, 21, 25, 26 ]
         experimental: [false]
         # Keep the same parameter order as the matrix above
         include:
@@ -49,15 +49,15 @@ jobs:
             java: 21
             experimental: false
             deploy: true
-          # Experimental builds: Java 26-ea
+          # Experimental builds: Java 27-ea
           - os: ubuntu-latest
-            java: 26-ea
+            java: 27-ea
             experimental: true
           - os: windows-latest
-            java: 26-ea
+            java: 27-ea
             experimental: true
           - os: macos-latest
-            java: 26-ea
+            java: 27-ea
             experimental: true
             fail-fast: false
     steps:
