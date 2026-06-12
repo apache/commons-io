@@ -18,6 +18,7 @@
 package org.apache.commons.io.file;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -75,6 +76,7 @@ import java.util.stream.StreamSupport;
 import org.apache.commons.io.Charsets;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IORandomAccessFile;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.RandomAccessFileMode;
 import org.apache.commons.io.RandomAccessFiles;
@@ -308,6 +310,33 @@ public final class PathUtils {
      */
     public static PathCounters cleanDirectory(final Path directory, final DeleteOption... deleteOptions) throws IOException {
         return visitFileTree(new CleaningPathVisitor(Counters.longPathCounters(), deleteOptions), directory).getPathCounters();
+    }
+
+    /**
+     * Clears the contents at an existing Path by filling it with NUL ({@code 0)} bytes.
+     *
+     * @param path The target path to an existing file.
+     * @return The given path.
+     * @throws FileNotFoundException See {@link IORandomAccessFile#IORandomAccessFile(File, String)}.
+     * @throws IOException Thrown writing to the Path.
+     * @since 2.23.0
+     */
+    public static Path clear(final Path path) throws IOException {
+        RandomAccessFileMode.READ_WRITE.accept(path, IORandomAccessFile::clear);
+        return path;
+    }
+
+    /**
+     * Clears the contents at a Path by filling it with NUL ({@code 0)} bytes.
+     *
+     * @param path The target path, may not exist, may be null.
+     * @return The given path.
+     * @throws FileNotFoundException See {@link IORandomAccessFile#IORandomAccessFile(File, String)}.
+     * @throws IOException Thrown writing to the Path.
+     * @since 2.23.0
+     */
+    public static Path clearIfExists(final Path path) throws IOException {
+        return exists(path) ? clear(path) : path;
     }
 
     /**
@@ -696,6 +725,18 @@ public final class PathUtils {
             }
         }
         return pathCounts;
+    }
+
+    /**
+     * A null-safe version of {@link Files#deleteIfExists(Path)}.
+     *
+     * @param path The path to the file to delete, may be {@code null}.
+     * @return Same as {@link Files#deleteIfExists(Path)} if {@code path} is non-null, false otherwise.
+     * @throws IOException Same as {@link Files#deleteIfExists(Path)}.
+     * @since 2.23.0
+     */
+    public static boolean deleteIfExists(final Path path) throws IOException {
+        return path != null && Files.deleteIfExists(path);
     }
 
     /**

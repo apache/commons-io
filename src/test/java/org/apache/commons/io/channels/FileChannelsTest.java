@@ -37,6 +37,7 @@ import java.nio.file.Path;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.file.AbstractTempDirTest;
+import org.apache.commons.io.file.PathUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -231,9 +232,9 @@ class FileChannelsTest extends AbstractTempDirTest {
             }
         } finally {
             // Delete ASAP
-            Files.deleteIfExists(bigFile1);
-            Files.deleteIfExists(bigFile2);
-            Files.deleteIfExists(bigFile3);
+            PathUtils.deleteIfExists(bigFile1);
+            PathUtils.deleteIfExists(bigFile2);
+            PathUtils.deleteIfExists(bigFile3);
         }
     }
 
@@ -294,9 +295,9 @@ class FileChannelsTest extends AbstractTempDirTest {
             }
         } finally {
             // Delete ASAP
-            Files.deleteIfExists(bigFile1);
-            Files.deleteIfExists(bigFile2);
-            Files.deleteIfExists(bigFile3);
+            PathUtils.deleteIfExists(bigFile1);
+            PathUtils.deleteIfExists(bigFile2);
+            PathUtils.deleteIfExists(bigFile3);
         }
     }
 
