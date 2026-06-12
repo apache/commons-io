@@ -480,7 +480,7 @@ public class FileAlterationObserver implements Serializable {
     }
 
     /**
-     * Returns the directory being observed.
+     * Gets the directory being observed.
      *
      * @return the directory being observed.
      */
@@ -489,7 +489,7 @@ public class FileAlterationObserver implements Serializable {
     }
 
     /**
-     * Returns the fileFilter.
+     * Gets the fileFilter.
      *
      * @return the fileFilter.
      * @since 2.1
@@ -499,7 +499,7 @@ public class FileAlterationObserver implements Serializable {
     }
 
     /**
-     * Returns the set of registered file system listeners.
+     * Gets the set of registered file system listeners.
      *
      * @return The file system listeners.
      */

@@ -107,7 +107,7 @@ public final class FileAlterationMonitor implements Runnable {
     }
 
     /**
-     * Returns the interval.
+     * Gets the interval.
      *
      * @return the interval.
      */
@@ -116,7 +116,7 @@ public final class FileAlterationMonitor implements Runnable {
     }
 
     /**
-     * Returns the set of {@link FileAlterationObserver} registered with
+     * Gets the set of {@link FileAlterationObserver} registered with
      * this monitor.
      *
      * @return The set of {@link FileAlterationObserver}
