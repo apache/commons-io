@@ -968,13 +968,6 @@ public class FilenameUtils {
         if (fileName == null) {
             return NOT_FOUND;
         }
-        if (isSystemWindows()) {
-            // Special handling for NTFS ADS: Don't accept colon in the file name.
-            final int offset = fileName.indexOf(':', getAdsCriticalOffset(fileName));
-            if (offset != -1) {
-                throw new IllegalArgumentException("NTFS ADS separator (':') in file name is forbidden.");
-            }
-        }
         final int extensionPos = fileName.lastIndexOf(EXTENSION_SEPARATOR);
         final int lastSeparator = indexOfLastSeparator(fileName);
         return lastSeparator > extensionPos ? NOT_FOUND : extensionPos;
