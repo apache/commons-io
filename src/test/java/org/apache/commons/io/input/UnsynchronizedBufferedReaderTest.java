@@ -51,8 +51,6 @@ import org.junit.jupiter.params.provider.ValueSource;
  */
 class UnsynchronizedBufferedReaderTest {
 
-    private UnsynchronizedBufferedReader reader;
-
     /** All line endings in the test fixture are LF (\n).  */
     private static final String LINES =
             "Test_All_Tests\nTest_java_io_BufferedInputStream\nTest_java_io_BufferedOutputStream\nTest_java_io_ByteArrayInputStream\n"
@@ -81,6 +79,8 @@ class UnsynchronizedBufferedReaderTest {
             + "Test_java_net_SocketOutputStream\nTest_java_net_UnknownHostException\nTest_java_util_ArrayEnumerator\nTest_java_util_Date\n"
             + "Test_java_util_EventObject\nTest_java_util_HashEnumerator\nTest_java_util_Hashtable\nTest_java_util_Properties\nTest_java_util_ResourceBundle\n"
             + "Test_java_util_tm\nTest_java_util_Vector\n";
+
+    private UnsynchronizedBufferedReader reader;
 
     /**
      * Tears down the fixture, for example, close a network connection. This method is called after a test is executed.

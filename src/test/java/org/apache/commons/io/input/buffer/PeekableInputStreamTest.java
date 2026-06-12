@@ -68,6 +68,31 @@ class PeekableInputStreamTest {
     }
 
     @Test
+    void testPeekDoesNotConsumeBytes() throws IOException {
+        final byte[] input = "Some".getBytes(StandardCharsets.UTF_8);
+        try (PeekableInputStream inputStream = new PeekableInputStream(new ByteArrayInputStream(input))) {
+            assertTrue(inputStream.peek(input));
+            assertEquals('S', inputStream.read());
+        }
+    }
+
+    @Test
+    void testPeekExactMatch() throws IOException {
+        final byte[] input = "Some text buffer".getBytes(StandardCharsets.UTF_8);
+        try (PeekableInputStream inputStream = new PeekableInputStream(new ByteArrayInputStream(input))) {
+            assertTrue(inputStream.peek(input));
+        }
+    }
+
+    @Test
+    void testPeekPrefixDoesNotMatchLongerInput() throws IOException {
+        try (PeekableInputStream inputStream = new PeekableInputStream(
+                new ByteArrayInputStream("Some text buffer".getBytes(StandardCharsets.UTF_8)))) {
+            assertFalse(inputStream.peek("Some".getBytes(StandardCharsets.UTF_8)));
+        }
+    }
+
+    @Test
     void testRandomRead() throws Exception {
         final byte[] inputBuffer = newInputBuffer();
         final byte[] bufferCopy = new byte[inputBuffer.length];
@@ -101,30 +126,5 @@ class PeekableInputStreamTest {
             }
         }
         assertTrue(true, "Test finished OK");
-    }
-
-    @Test
-    void testPeekExactMatch() throws IOException {
-        final byte[] input = "Some text buffer".getBytes(StandardCharsets.UTF_8);
-        try (PeekableInputStream inputStream = new PeekableInputStream(new ByteArrayInputStream(input))) {
-            assertTrue(inputStream.peek(input));
-        }
-    }
-
-    @Test
-    void testPeekPrefixDoesNotMatchLongerInput() throws IOException {
-        try (PeekableInputStream inputStream = new PeekableInputStream(
-                new ByteArrayInputStream("Some text buffer".getBytes(StandardCharsets.UTF_8)))) {
-            assertFalse(inputStream.peek("Some".getBytes(StandardCharsets.UTF_8)));
-        }
-    }
-
-    @Test
-    void testPeekDoesNotConsumeBytes() throws IOException {
-        final byte[] input = "Some".getBytes(StandardCharsets.UTF_8);
-        try (PeekableInputStream inputStream = new PeekableInputStream(new ByteArrayInputStream(input))) {
-            assertTrue(inputStream.peek(input));
-            assertEquals('S', inputStream.read());
-        }
     }
 }
