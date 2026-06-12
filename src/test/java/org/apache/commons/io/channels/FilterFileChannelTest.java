@@ -38,6 +38,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 
+import org.apache.commons.io.file.PathUtils;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -144,7 +145,7 @@ class FilterFileChannelTest {
                 assertEquals(1024, mapped.capacity());
             }
         } finally {
-            Files.deleteIfExists(tmp);
+            PathUtils.deleteIfExists(tmp);
         }
     }
 

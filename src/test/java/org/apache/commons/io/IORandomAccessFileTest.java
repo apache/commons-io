@@ -17,10 +17,13 @@
 
 package org.apache.commons.io;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 
 import org.apache.commons.io.build.AbstractOriginTest;
 import org.junit.jupiter.api.Test;
@@ -38,6 +41,32 @@ class IORandomAccessFileTest {
         final File file = new File(FILE_NAME_RW);
         FileUtils.touch(file);
         return file;
+    }
+
+    /**
+     * Tests {@link IORandomAccessFile#clear()} by writing known non-zero bytes to the file, calling {@code clear()},
+     * and verifying that every byte in the file is {@code 0}.
+     *
+     * @throws IOException Thrown on a test failure.
+     */
+    @Test
+    void testClear() throws IOException {
+        final File file = newFileFixture();
+        final byte[] originalData = { 1, 2, 3, 4, 5, 6, 7, 8 };
+        // Write non-zero data into the file first
+        Files.write(file.toPath(), originalData);
+        try (IORandomAccessFile raf = new IORandomAccessFile(file, "rw")) {
+            assertEquals(originalData.length, raf.length());
+            // clear() should overwrite every byte with 0 and return 'this'
+            @SuppressWarnings("resource")
+            final IORandomAccessFile echoRaf = raf.clear();
+            assertSame(raf, echoRaf);
+            // Seek back to the start and read the contents
+            raf.seek(0);
+            final byte[] result = new byte[originalData.length];
+            raf.readFully(result);
+            assertArrayEquals(new byte[originalData.length], result, "All bytes should be 0 after clear()");
+        }
     }
 
     @ParameterizedTest

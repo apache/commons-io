@@ -107,9 +107,9 @@ class FilesUncheckTest {
     @BeforeEach
     @AfterEach
     public void deleteFixtures() throws IOException {
-        Files.deleteIfExists(NEW_FILE_PATH);
-        Files.deleteIfExists(NEW_DIR_PATH);
-        Files.deleteIfExists(NEW_FILE_PATH_LINK);
+        PathUtils.deleteIfExists(NEW_FILE_PATH);
+        PathUtils.deleteIfExists(NEW_DIR_PATH);
+        PathUtils.deleteIfExists(NEW_FILE_PATH_LINK);
     }
 
     @Test

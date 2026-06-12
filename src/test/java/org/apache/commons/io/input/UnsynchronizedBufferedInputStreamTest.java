@@ -30,6 +30,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.file.PathUtils;
 import org.apache.commons.io.input.UnsynchronizedBufferedInputStream.Builder;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.AfterEach;
@@ -82,7 +83,7 @@ class UnsynchronizedBufferedInputStreamTest {
     @AfterEach
     protected void tearDown() throws IOException {
         IOUtils.closeQuietly(is);
-        Files.deleteIfExists(fileName);
+        PathUtils.deleteIfExists(fileName);
     }
 
     /**

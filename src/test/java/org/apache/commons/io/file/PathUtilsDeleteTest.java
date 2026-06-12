@@ -20,7 +20,6 @@ package org.apache.commons.io.file;
 import static org.apache.commons.io.file.CounterAssertions.assertCounts;
 
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import org.apache.commons.io.FileUtils;
@@ -40,7 +39,7 @@ class PathUtilsDeleteTest extends AbstractTempDirTest {
             tempDirPath.toFile());
         assertCounts(0, 1, 0, PathUtils.delete(tempDirPath.resolve(fileName)));
         // This will throw if not empty.
-        Files.deleteIfExists(tempDirPath);
+        PathUtils.deleteIfExists(tempDirPath);
     }
 
     private void testDeleteDirectory1FileSize0(final DeleteOption... options) throws IOException {
@@ -50,7 +49,7 @@ class PathUtilsDeleteTest extends AbstractTempDirTest {
             tempDirPath.toFile());
         assertCounts(0, 1, 0, PathUtils.delete(tempDirPath.resolve(fileName), options));
         // This will throw if not empty.
-        Files.deleteIfExists(tempDirPath);
+        PathUtils.deleteIfExists(tempDirPath);
     }
 
     /**
@@ -87,7 +86,7 @@ class PathUtilsDeleteTest extends AbstractTempDirTest {
             tempDirPath.toFile());
         assertCounts(0, 1, 1, PathUtils.delete(tempDirPath.resolve(fileName)));
         // This will throw if not empty.
-        Files.deleteIfExists(tempDirPath);
+        PathUtils.deleteIfExists(tempDirPath);
     }
 
     private void testDeleteDirectory1FileSize1(final DeleteOption... options) throws IOException {
@@ -98,7 +97,7 @@ class PathUtilsDeleteTest extends AbstractTempDirTest {
             tempDirPath.toFile());
         assertCounts(0, 1, 1, PathUtils.delete(tempDirPath.resolve(fileName), options));
         // This will throw if not empty.
-        Files.deleteIfExists(tempDirPath);
+        PathUtils.deleteIfExists(tempDirPath);
     }
 
     /**
@@ -134,7 +133,7 @@ class PathUtilsDeleteTest extends AbstractTempDirTest {
     void testDeleteEmptyDirectory() throws IOException {
         testDeleteEmptyDirectory(PathUtils.delete(tempDirPath));
         // This will throw if not empty.
-        Files.deleteIfExists(tempDirPath);
+        PathUtils.deleteIfExists(tempDirPath);
     }
 
     /**
@@ -143,7 +142,7 @@ class PathUtilsDeleteTest extends AbstractTempDirTest {
     private void testDeleteEmptyDirectory(final DeleteOption... options) throws IOException {
         testDeleteEmptyDirectory(PathUtils.delete(tempDirPath, options));
         // This will throw if not empty.
-        Files.deleteIfExists(tempDirPath);
+        PathUtils.deleteIfExists(tempDirPath);
     }
 
     private void testDeleteEmptyDirectory(final PathCounters pathCounts) {
@@ -183,6 +182,6 @@ class PathUtilsDeleteTest extends AbstractTempDirTest {
     void testDeleteFileDoesNotExist() throws IOException {
         assertCounts(0, 0, 0, PathUtils.deleteFile(tempDirPath.resolve("file-does-not-exist.bin")));
         // This will throw if not empty.
-        Files.deleteIfExists(tempDirPath);
+        PathUtils.deleteIfExists(tempDirPath);
     }
 }

@@ -2988,7 +2988,7 @@ class FileUtilsTest extends AbstractTempDirTest {
             // Different result value depending on the Java version and operating system, but should not throw an exception or loop infinitely.
             FileUtils.sizeOfDirectory(file);
         } finally {
-            Files.deleteIfExists(linkPath);
+            PathUtils.deleteIfExists(linkPath);
         }
     }
 
@@ -3030,7 +3030,7 @@ class FileUtilsTest extends AbstractTempDirTest {
             assertDelete(true, nonEmptyFile);
             assertDelete(false, file);
         } finally {
-            Files.deleteIfExists(linkPath);
+            PathUtils.deleteIfExists(linkPath);
         }
     }
 

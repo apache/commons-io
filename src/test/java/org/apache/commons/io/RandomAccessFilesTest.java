@@ -29,6 +29,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import org.apache.commons.io.file.PathUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
@@ -126,9 +127,9 @@ class RandomAccessFilesTest {
             }
         } finally {
             // Delete ASAP
-            Files.deleteIfExists(bigFile1);
-            Files.deleteIfExists(bigFile2);
-            Files.deleteIfExists(bigFile3);
+            PathUtils.deleteIfExists(bigFile1);
+            PathUtils.deleteIfExists(bigFile2);
+            PathUtils.deleteIfExists(bigFile3);
         }
     }
 

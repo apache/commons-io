@@ -23,6 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assumptions.assumeFalse;
@@ -78,6 +79,70 @@ class PathUtilsTest extends AbstractTempDirTest {
 
     private void setLastModifiedMillis(final Path file, final long millis) throws IOException {
         Files.setLastModifiedTime(file, FileTime.fromMillis(millis));
+    }
+
+    /**
+     * Tests {@link PathUtils#clear(Path)} by writing known non-zero bytes to a temporary file, calling {@code clear()}, and verifying that every byte in the
+     * file is {@code 0} and that the file length is unchanged. Also verifies the returned {@link Path} is the same instance.
+     *
+     * @throws IOException Thrown on a test failure.
+     */
+    @Test
+    void testClear() throws IOException {
+        final Path file = tempDirPath.resolve("testClear.bin");
+        final byte[] originalData = { 1, 2, 3, 4, 5, 6, 7, 8 };
+        Files.write(file, originalData);
+        assertEquals(originalData.length, Files.size(file)); // Sanity check
+        // clear() should zero all bytes and return the same Path
+        final Path echoRaf = PathUtils.clear(file);
+        assertSame(file, echoRaf);
+        final byte[] result = Files.readAllBytes(file);
+        assertEquals(originalData.length, result.length, "File length must be unchanged after clear()");
+        assertArrayEquals(new byte[originalData.length], result, "All bytes should be 0 after clear()");
+    }
+
+    /**
+     * Tests {@link PathUtils#clearIfExists(Path)} when the path exists: verifies that all bytes are zeroed, the file length is unchanged, and the returned
+     * {@link Path} is the same instance.
+     *
+     * @throws IOException Thrown on a test failure.
+     */
+    @Test
+    void testClearIfExistsExistingFile() throws IOException {
+        final Path file = tempDirPath.resolve("testClearIfExists.bin");
+        final byte[] originalData = { 1, 2, 3, 4, 5, 6, 7, 8 };
+        Files.write(file, originalData);
+        assertEquals(originalData.length, Files.size(file)); // Sanity check
+        // clearIfExists() should zero all bytes and return the same Path
+        final Path returned = PathUtils.clearIfExists(file);
+        assertSame(file, returned, "clearIfExists() should return the given path when it exists");
+        final byte[] result = Files.readAllBytes(file);
+        assertEquals(originalData.length, result.length, "File length must be unchanged after clearIfExists()");
+        assertArrayEquals(new byte[originalData.length], result, "All bytes should be 0 after clearIfExists()");
+    }
+
+    /**
+     * Tests {@link PathUtils#clearIfExists(Path)} when the path does not exist: verifies the method is a no-op and returns the given (non-existing) path.
+     *
+     * @throws IOException Thrown on a test failure.
+     */
+    @Test
+    void testClearIfExistsNonExistentFile() throws IOException {
+        final Path nonExistent = tempDirPath.resolve("does-not-exist.bin");
+        assertFalse(Files.exists(nonExistent)); // Sanity check
+        final Path returned = PathUtils.clearIfExists(nonExistent);
+        assertSame(nonExistent, returned, "clearIfExists() should return the given path when it does not exist");
+        assertFalse(Files.exists(nonExistent), "clearIfExists() must not create the file when it does not exist");
+    }
+
+    /**
+     * Tests {@link PathUtils#clearIfExists(Path)} with a {@code null} path: verifies the method returns {@code null} without throwing an exception.
+     *
+     * @throws IOException Thrown on a test failure.
+     */
+    @Test
+    void testClearIfExistsNull() throws IOException {
+        assertNull(PathUtils.clearIfExists(null));
     }
 
     @Test

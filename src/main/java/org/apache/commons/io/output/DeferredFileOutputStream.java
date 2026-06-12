@@ -30,13 +30,13 @@ import org.apache.commons.io.file.PathUtils;
 
 /**
  * An output stream which will retain data in memory until a specified threshold is reached, and only then commit it to disk. If the stream is closed before the
- * threshold is reached, the data will not be written to disk at all.
+ * threshold is reached, the data will not be written to disk.
  * <p>
- * To build an instance, use {@link Builder}.
+ * To build an instance, use the {@link Builder builder}.
  * </p>
  * <p>
- * The caller is responsible for deleting the output file ({@link #getFile()}, {@link #getPath()}) created by a DeferredFileOutputStream when the caller only
- * configured a prefix.
+ * A temporary file created <em>only</em> when a prefix is configured (via {@link Builder#setPrefix(String)}) and is deleted automatically when {@link #close()}
+ * is called.
  * </p>
  * <p>
  * The caller is responsible for deleting the output file passed to a constructor or builder through {@link Builder#setOutputFile(File)} or
@@ -82,6 +82,7 @@ public class DeferredFileOutputStream extends ThresholdingOutputStream {
         private String prefix;
         private String suffix;
         private Path directory;
+        private boolean deleteTempFileOnClose = true;
 
         /**
          * Constructs a new builder of {@link DeferredFileOutputStream}.
@@ -111,6 +112,24 @@ public class DeferredFileOutputStream extends ThresholdingOutputStream {
         @Override
         public DeferredFileOutputStream get() {
             return new DeferredFileOutputStream(this);
+        }
+
+        /**
+         * Sets whether to delete the temporary file when {@link DeferredFileOutputStream#close()} is called.
+         * <p>
+         * This only applies when a temporary file is created internally via a prefix/suffix configuration (i.e.,
+         * {@link #setPrefix(String)} is used). It has no effect when an explicit output file is provided via
+         * {@link #setOutputFile(File)} or {@link #setOutputFile(Path)}.
+         * </p>
+         *
+         * @param deleteTempFileOnClose {@code true} to delete the temporary file on close (default), {@code false} to
+         *                              keep it (the caller is then responsible for deleting it).
+         * @return {@code this} instance.
+         * @since 2.23.0
+         */
+        public Builder setDeleteTempFileOnClose(final boolean deleteTempFileOnClose) {
+            this.deleteTempFileOnClose = deleteTempFileOnClose;
+            return this;
         }
 
         /**
@@ -255,9 +274,20 @@ public class DeferredFileOutputStream extends ThresholdingOutputStream {
     private boolean closed;
 
     /**
+     * True when the output file was created internally as a temporary file by {@link #thresholdReached()}.
+     * Such a file is deleted automatically when {@link #close()} is called (subject to {@link #deleteTempFileOnClose}).
+     */
+    private boolean tempFile;
+
+    /**
+     * Controls whether a temporary file created internally is deleted when {@link #close()} is called.
+     */
+    private final boolean deleteTempFileOnClose;
+
+    /**
      * Constructs an instance of this class which will trigger an event at the specified threshold, and save data either to a file beyond that point.
      *
-     * @param builder         The construction data source.
+     * @param builder The construction data source.
      */
     private DeferredFileOutputStream(final Builder builder) {
         super(builder.threshold);
@@ -265,6 +295,7 @@ public class DeferredFileOutputStream extends ThresholdingOutputStream {
         this.prefix = builder.prefix;
         this.suffix = builder.suffix;
         this.directory = toPath(builder.directory, PathUtils::getTempDirectory);
+        this.deleteTempFileOnClose = builder.deleteTempFileOnClose;
         this.memoryOutputStream = new ByteArrayOutputStream(checkBufferSize(builder.getBufferSize()));
         this.currentOutputStream = memoryOutputStream;
     }
@@ -300,6 +331,7 @@ public class DeferredFileOutputStream extends ThresholdingOutputStream {
         this.prefix = prefix;
         this.suffix = suffix;
         this.directory = toPath(directory, PathUtils::getTempDirectory);
+        this.deleteTempFileOnClose = true;
         this.memoryOutputStream = new ByteArrayOutputStream(checkBufferSize(initialBufferSize));
         this.currentOutputStream = memoryOutputStream;
     }
@@ -351,14 +383,22 @@ public class DeferredFileOutputStream extends ThresholdingOutputStream {
     }
 
     /**
-     * Closes underlying output stream, and mark this as closed
+     * Closes underlying output stream, and marks this as closed. If the output was directed to a temporary file created
+     * internally via a prefix/suffix configuration, and {@link Builder#setDeleteTempFileOnClose(boolean)} is
+     * {@code true} (the default), that file is deleted.
      *
      * @throws IOException if an error occurs.
      */
     @Override
     public void close() throws IOException {
-        super.close();
-        closed = true;
+        try {
+            super.close();
+        } finally {
+            closed = true;
+            if (tempFile && deleteTempFileOnClose && outputPath != null) {
+                PathUtils.deleteIfExists(PathUtils.clearIfExists(outputPath));
+            }
+        }
     }
 
     /**
@@ -436,6 +476,7 @@ public class DeferredFileOutputStream extends ThresholdingOutputStream {
     protected void thresholdReached() throws IOException {
         if (prefix != null) {
             outputPath = Files.createTempFile(directory, prefix, suffix);
+            tempFile = true;
         }
         PathUtils.createParentDirectories(outputPath, null, PathUtils.EMPTY_FILE_ATTRIBUTE_ARRAY);
         final OutputStream fos = Files.newOutputStream(outputPath);

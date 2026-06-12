@@ -163,8 +163,8 @@ public enum RandomAccessFileMode {
      * @throws IOException Thrown by the given function.
      * @since 2.18.0
      */
-    public void accept(final Path file, final IOConsumer<RandomAccessFile> consumer) throws IOException {
-        try (RandomAccessFile raf = create(file)) {
+    public void accept(final Path file, final IOConsumer<IORandomAccessFile> consumer) throws IOException {
+        try (IORandomAccessFile raf = new IORandomAccessFile(file.toFile(), mode)) {
             consumer.accept(raf);
         }
     }
@@ -282,7 +282,7 @@ public enum RandomAccessFileMode {
     /**
      * Constructs a random access file to read from, and optionally to write to, the file specified by the {@link File} argument.
      *
-     * @param name the file object.
+     * @param name the system-dependent file name.
      * @return a random access file.
      * @throws FileNotFoundException See {@link IORandomAccessFile#IORandomAccessFile(File, String)}.
      * @since 2.18.0
