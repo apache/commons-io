@@ -800,6 +800,20 @@ public class IOUtils {
      * }
      * </pre>
      * <p>
+     * Closing all streams:
+     * </p>
+     *
+     * <pre>
+     * try {
+     *     IOUtils.copy(inputStream, outputStream);
+     *     outputStream.close(); // close errors are handled
+     *     outputStream = null;
+     * } finally {
+     *     IOUtils.closeQuietly(inputStream);
+     *     IOUtils.closeQuietly(outputStream); // only if normal close was skipped
+     * }
+     * </pre>
+     * <p>
      * Also consider using a try-with-resources statement where appropriate.
      * </p>
      *
@@ -837,6 +851,19 @@ public class IOUtils {
      *     // error handling
      * } finally {
      *     <strong>IOUtils.closeQuietly(closeable); // In case normal close was skipped due to Exception</strong>
+     * }
+     * </pre>
+     * <p>
+     * Closing all streams:
+     * </p>
+     *
+     * <pre>
+     * try {
+     *     IOUtils.copy(inputStream, outputStream);
+     *     outputStream.close(); // close errors are handled
+     *     outputStream = null;
+     * } finally {
+     *     IOUtils.closeQuietly(inputStream, outputStream); // only closes outputStream if normal close was skipped
      * }
      * </pre>
      * <p>
