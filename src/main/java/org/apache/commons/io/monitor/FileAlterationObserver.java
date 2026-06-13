@@ -36,17 +36,17 @@ import org.apache.commons.io.comparator.NameFileComparator;
 import org.apache.commons.io.filefilter.TrueFileFilter;
 
 /**
- * FileAlterationObserver represents the state of files below a root directory, checking the file system and notifying listeners of create, change or delete
+ * Represents the state of files below a root directory, checking the file system and notifying listeners of create, change or delete
  * events.
  * <p>
  * To use this implementation:
  * </p>
- * <ul>
+ * <ol>
  * <li>Create {@link FileAlterationListener} implementation(s) that process the file/directory create, change and delete events</li>
  * <li>Register the listener(s) with a {@link FileAlterationObserver} for the appropriate directory.</li>
  * <li>Either register the observer(s) with a {@link FileAlterationMonitor} or run manually.</li>
- * </ul>
- * <h2>Basic Usage</h2> Create a {@link FileAlterationObserver} for the directory and register the listeners:
+ * </ol>
+ * <h2>Observing a Directory</h2> Create a {@link FileAlterationObserver} for the directory and register the listeners:
  *
  * <pre>
  *      File directory = new File(FileUtils.current(), "src");
@@ -110,7 +110,7 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  *      observer.addListener(...);
  * </pre>
  *
- * <h2>FileEntry</h2>
+ * <h2>Filtering File Entries</h2>
  * <p>
  * {@link FileEntry} represents the state of a file or directory, capturing {@link File} attributes at a point in time. Custom implementations of
  * {@link FileEntry} can be used to capture additional properties that the basic implementation does not support. The {@link FileEntry#refresh(File)} method is
@@ -118,7 +118,7 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  * </p>
  * <h2>Deprecating Serialization</h2>
  * <p>
- * <em>Serialization is deprecated and will be removed in 3.0.</em>
+ * <em>Serialization is deprecated and will be removed in 3.0. Consider using a serialization proxy.</em>
  * </p>
  *
  * @see FileAlterationListener
@@ -135,7 +135,9 @@ public class FileAlterationObserver implements Serializable {
     public static final class Builder extends AbstractOriginSupplier<FileAlterationObserver, Builder> {
 
         private FileEntry rootEntry;
+
         private FileFilter fileFilter;
+
         private IOCase ioCase;
 
         private Builder() {
@@ -149,7 +151,7 @@ public class FileAlterationObserver implements Serializable {
         /**
          * Gets a new {@link FileAlterationObserver} instance.
          *
-         * @throws IOException                   if an I/O error occurs converting to an {@link File} using {@link AbstractOrigin#getFile()}.
+         * @throws IOException if an I/O error occurs converting to an {@link File} using {@link AbstractOrigin#getFile()}.
          * @see #getUnchecked()
          */
         @Override
@@ -189,7 +191,6 @@ public class FileAlterationObserver implements Serializable {
             this.rootEntry = rootEntry;
             return asThis();
         }
-
     }
 
     private static final long serialVersionUID = 1185122225658782848L;
