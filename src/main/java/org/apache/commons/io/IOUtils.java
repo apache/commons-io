@@ -778,7 +778,11 @@ public class IOUtils {
     /**
      * Closes a {@link Closeable} unconditionally.
      * <p>
-     * Equivalent to {@link Closeable#close()}, except any exceptions will be ignored. This is typically used in finally blocks.
+     * Equivalent to {@link Closeable#close()}, except any exceptions will be ignored. This is typically used in cleanup code when reporting a close failure is not
+     * necessary or useful.
+     * <p>
+     * Do not use this method to close output streams or writers when close failures must be reported. Closing an output stream or writer may flush buffered data,
+     * and ignoring a close failure can hide that data was not fully written.
      * <p>
      * Example code:
      * </p>
@@ -801,10 +805,12 @@ public class IOUtils {
      *
      * <pre>
      * try {
-     *     return IOUtils.copy(inputStream, outputStream);
+     *     IOUtils.copy(inputStream, outputStream);
+     *     outputStream.close(); // close errors are handled
+     *     outputStream = null;
      * } finally {
      *     IOUtils.closeQuietly(inputStream);
-     *     IOUtils.closeQuietly(outputStream);
+     *     IOUtils.closeQuietly(outputStream); // only if normal close was skipped
      * }
      * </pre>
      * <p>
@@ -853,9 +859,11 @@ public class IOUtils {
      *
      * <pre>
      * try {
-     *     return IOUtils.copy(inputStream, outputStream);
+     *     IOUtils.copy(inputStream, outputStream);
+     *     outputStream.close(); // close errors are handled
+     *     outputStream = null;
      * } finally {
-     *     IOUtils.closeQuietly(inputStream, outputStream);
+     *     IOUtils.closeQuietly(inputStream, outputStream); // only closes outputStream if normal close was skipped
      * }
      * </pre>
      * <p>
