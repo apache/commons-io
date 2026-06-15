@@ -510,7 +510,11 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
     @Override
     protected Class<?> resolveClass(final ObjectStreamClass osc) throws IOException, ClassNotFoundException {
         checkClassName(osc.getName());
-        return super.resolveClass(osc);
+        final Class<?> result = super.resolveClass(osc);
+        for (final Class<?> interfaceName : result.getInterfaces()) {
+            checkClassName(interfaceName.getName());
+        }
+        return result;
     }
 
     /**
