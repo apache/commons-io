@@ -132,7 +132,18 @@ public class BoundedReader extends ProxyReader {
 
     @Override
     public long skip(final long n) throws IOException {
-        charsRead += n;
-        return super.skip(n);
+        if (n <= 0) {
+            return super.skip(n);
+        }
+        int remaining = maxCharsFromTargetReader - charsRead;
+        if (markedAt >= 0) {
+            remaining = Math.min(remaining, readAheadLimit - (charsRead - markedAt));
+        }
+        if (remaining <= 0) {
+            return 0;
+        }
+        final long skipped = super.skip(Math.min(n, remaining));
+        charsRead += (int) skipped;
+        return skipped;
     }
 }

@@ -24,6 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FilterReader;
 import java.io.IOException;
 import java.io.LineNumberReader;
 import java.io.Reader;
@@ -239,6 +240,44 @@ class BoundedReaderTest {
         try (BoundedReader mr = new BoundedReader(bufReader1, 3)) {
             mr.skip(2);
             mr.read();
+            assertEquals(-1, mr.read());
+        }
+    }
+
+    @Test
+    void testSkipDoesNotExceedBound() throws IOException {
+        try (BoundedReader mr = new BoundedReader(new StringReader("01234567890"), 3)) {
+            assertEquals(3, mr.skip(100));
+            assertEquals(-1, mr.read());
+        }
+    }
+
+    @Test
+    void testSkipDoesNotOverflowCharsRead() throws IOException {
+        try (BoundedReader mr = new BoundedReader(new StringReader("01234567890"), 3)) {
+            assertEquals(3, mr.skip(Long.MAX_VALUE));
+            assertEquals(-1, mr.read());
+        }
+    }
+
+    @Test
+    void testSkipUsesActualSkippedCount() throws IOException {
+        try (BoundedReader mr = new BoundedReader(new FilterReader(new StringReader("01234567890")) {
+            @Override
+            public long skip(final long n) throws IOException {
+                return super.skip(Math.min(n, 2));
+            }
+        }, 5)) {
+            assertEquals(2, mr.skip(5));
+            assertEquals('2', mr.read());
+        }
+    }
+
+    @Test
+    void testSkipRespectsReadAheadLimit() throws IOException {
+        try (BoundedReader mr = new BoundedReader(new StringReader("01234567890"), 10)) {
+            mr.mark(3);
+            assertEquals(3, mr.skip(100));
             assertEquals(-1, mr.read());
         }
     }
