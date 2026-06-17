@@ -49,7 +49,7 @@ public class BoundedReader extends ProxyReader {
     private final int maxCharsFromTargetReader;
 
     /**
-     * Constructs a bounded reader
+     * Constructs a bounded reader.
      *
      * @param target                   The target stream that will be used.
      * @param maxCharsFromTargetReader The maximum number of characters that can be read from target.
@@ -60,7 +60,7 @@ public class BoundedReader extends ProxyReader {
     }
 
     /**
-     * marks the target stream
+     * marks the target stream.
      *
      * @param readAheadLimit The number of characters that can be read while still retaining the ability to do #reset().
      *                       Note that this parameter is not validated with respect to maxCharsFromTargetReader. There
@@ -77,7 +77,7 @@ public class BoundedReader extends ProxyReader {
     }
 
     /**
-     * Reads a single character
+     * Reads a single character.
      *
      * @return -1 on EOF or the character read.
      * @throws IOException If an I/O error occurs while calling the underlying reader's read method.
@@ -93,7 +93,7 @@ public class BoundedReader extends ProxyReader {
     }
 
     /**
-     * Reads into an array
+     * Reads into an array.
      *
      * @param cbuf The buffer to fill.
      * @param off  The offset.
@@ -119,7 +119,7 @@ public class BoundedReader extends ProxyReader {
     }
 
     /**
-     * Resets the target to the latest mark,
+     * Resets the target to the latest mark.
      *
      * @throws IOException If an I/O error occurs while calling the underlying reader's reset method.
      * @see Reader#reset()
