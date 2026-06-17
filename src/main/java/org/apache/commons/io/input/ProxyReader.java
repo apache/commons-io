@@ -95,7 +95,7 @@ public abstract class ProxyReader extends FilterReader {
     }
 
     /**
-     * Invokes the delegate's {@code close()} method.
+     * Closes the stream and releases any system resources associated with it by invoking the delegate's {@link Reader#close()} method.
      *
      * @throws IOException if an I/O error occurs.
      */
@@ -124,7 +124,7 @@ public abstract class ProxyReader extends FilterReader {
     }
 
     /**
-     * Invokes the delegate's {@code mark(int)} method.
+     * Marks the present position in the stream by invoking the delegate's {@link Reader#mark(int)} method.
      *
      * @param readAheadLimit read ahead limit.
      * @throws IOException if an I/O error occurs.
@@ -139,7 +139,7 @@ public abstract class ProxyReader extends FilterReader {
     }
 
     /**
-     * Invokes the delegate's {@code markSupported()} method.
+     * Tests whether this stream supports the {@link Reader#mark(int)} operation by invoking the delegate's {@link Reader#markSupported()} method.
      *
      * @return true if mark is supported, otherwise false.
      */
@@ -149,7 +149,7 @@ public abstract class ProxyReader extends FilterReader {
     }
 
     /**
-     * Invokes the delegate's {@code read()} method.
+     * Reads characters into an array by invoking the delegate's {@link Reader#read()} method.
      *
      * @return the character read or -1 if the end of stream.
      * @throws IOException if an I/O error occurs.
@@ -188,7 +188,7 @@ public abstract class ProxyReader extends FilterReader {
     }
 
     /**
-     * Invokes the delegate's {@code read(char[], int, int)} method.
+     * Reads characters into a portion of an array by invoking the delegate's {@link Reader#read(char[], int, int)} method.
      *
      * @param chr the buffer to read the characters into.
      * @param st The start offset.
@@ -210,7 +210,7 @@ public abstract class ProxyReader extends FilterReader {
     }
 
     /**
-     * Invokes the delegate's {@code read(CharBuffer)} method.
+     * Attempts to read characters into the specified character buffer by invoking the delegate's {@link Reader#read(CharBuffer)} method.
      *
      * @param target the char buffer to read the characters into.
      * @return the number of characters read or -1 if the end of stream.
@@ -231,7 +231,7 @@ public abstract class ProxyReader extends FilterReader {
     }
 
     /**
-     * Invokes the delegate's {@code ready()} method.
+     * Tells whether this stream is ready to be read by invoking the delegate's {@link Reader#ready()} method.
      *
      * @return true if the stream is ready to be read.
      * @throws IOException if an I/O error occurs.
@@ -247,7 +247,7 @@ public abstract class ProxyReader extends FilterReader {
     }
 
     /**
-     * Invokes the delegate's {@code reset()} method.
+     * Resets the stream by invoking the delegate's {@link Reader#reset()} method.
      *
      * @throws IOException if an I/O error occurs.
      */
@@ -277,7 +277,7 @@ public abstract class ProxyReader extends FilterReader {
 
 
     /**
-     * Invokes the delegate's {@code skip(long)} method.
+     * Skips characters by invoking the delegate's {@link Reader#skip(long)} method.
      *
      * @param ln the number of bytes to skip.
      * @return the number of bytes to skipped or EOF if the end of stream.
