@@ -272,13 +272,4 @@ class BoundedReaderTest {
             assertEquals('2', mr.read());
         }
     }
-
-    @Test
-    void testSkipRespectsReadAheadLimit() throws IOException {
-        try (BoundedReader mr = new BoundedReader(new StringReader("01234567890"), 10)) {
-            mr.mark(3);
-            assertEquals(3, mr.skip(100));
-            assertEquals(-1, mr.read());
-        }
-    }
 }

@@ -136,9 +136,6 @@ public class BoundedReader extends ProxyReader {
             return super.skip(n);
         }
         int remaining = maxCharsFromTargetReader - charsRead;
-        if (markedAt >= 0) {
-            remaining = Math.min(remaining, readAheadLimit - (charsRead - markedAt));
-        }
         if (remaining <= 0) {
             return 0;
         }
