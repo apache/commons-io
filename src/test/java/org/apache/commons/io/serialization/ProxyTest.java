@@ -45,6 +45,8 @@ class ProxyTest {
 
     public static class InvocationHandlerImpl implements InvocationHandler, Serializable {
 
+        private static final long serialVersionUID = 1L;
+
         @Override
         public Object invoke(final Object proxy, final Method method, final Object[] args) {
             return "InvocationHandlerImpl.invoke()";
