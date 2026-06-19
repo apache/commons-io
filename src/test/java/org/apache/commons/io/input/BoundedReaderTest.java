@@ -236,15 +236,6 @@ class BoundedReaderTest {
     }
 
     @Test
-    void testSkipTest() throws IOException {
-        try (BoundedReader mr = new BoundedReader(bufReader1, 3)) {
-            mr.skip(2);
-            mr.read();
-            assertEquals(-1, mr.read());
-        }
-    }
-
-    @Test
     void testSkipDoesNotExceedBound() throws IOException {
         try (BoundedReader mr = new BoundedReader(new StringReader("01234567890"), 3)) {
             assertEquals(3, mr.skip(100));
@@ -256,6 +247,15 @@ class BoundedReaderTest {
     void testSkipDoesNotOverflowCharsRead() throws IOException {
         try (BoundedReader mr = new BoundedReader(new StringReader("01234567890"), 3)) {
             assertEquals(3, mr.skip(Long.MAX_VALUE));
+            assertEquals(-1, mr.read());
+        }
+    }
+
+    @Test
+    void testSkipTest() throws IOException {
+        try (BoundedReader mr = new BoundedReader(bufReader1, 3)) {
+            mr.skip(2);
+            mr.read();
             assertEquals(-1, mr.read());
         }
     }
