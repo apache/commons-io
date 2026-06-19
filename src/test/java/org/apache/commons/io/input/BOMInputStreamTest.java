@@ -51,7 +51,6 @@ import org.xml.sax.SAXParseException;
 /**
  * Test case for {@link BOMInputStream}.
  */
-@SuppressWarnings("ResultOfMethodCallIgnored")
 class BOMInputStreamTest {
 
     /**
