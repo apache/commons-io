@@ -36,10 +36,14 @@ import java.util.stream.Stream;
  */
 public class ObjectStreamClassPredicate implements Predicate<ObjectStreamClass> {
 
-    // This is not a Set for now to avoid ClassNameMatchers requiring proper implementations of hashCode() and equals().
+    /**
+     * This is not a Set for now to avoid ClassNameMatchers requiring proper implementations of hashCode() and equals().
+     */
     private final List<ClassNameMatcher> acceptMatchers = new ArrayList<>();
 
-    // This is not a Set for now to avoid ClassNameMatchers requiring proper implementations of hashCode() and equals().
+    /**
+     * This is not a Set for now to avoid ClassNameMatchers requiring proper implementations of hashCode() and equals().
+     */
     private final List<ClassNameMatcher> rejectMatchers = new ArrayList<>();
 
     /**
@@ -188,17 +192,8 @@ public class ObjectStreamClassPredicate implements Predicate<ObjectStreamClass> 
      */
     public boolean test(final String name) {
         // The reject list takes precedence over the accept list.
-        for (final ClassNameMatcher m : rejectMatchers) {
-            if (m.matches(name)) {
-                return false;
-            }
-        }
-        for (final ClassNameMatcher m : acceptMatchers) {
-            if (m.matches(name)) {
-                return true;
-            }
-        }
-        return false;
+        final Predicate<ClassNameMatcher> p = m -> m.matches(name);
+        return rejectMatchers.stream().noneMatch(p) && acceptMatchers.stream().anyMatch(p);
     }
 
 }
