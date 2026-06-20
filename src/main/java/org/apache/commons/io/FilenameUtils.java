@@ -952,11 +952,13 @@ public class FilenameUtils {
      * The output will be the same irrespective of the machine that the code is running on, with the
      * exception of a possible {@link IllegalArgumentException} on Windows (see below).
      * </p>
+     * <p>
      * <strong>Note:</strong> This method used to have a hidden problem for names like "foo.exe:bar.txt".
      * In this case, the name wouldn't be the name of a file, but the identifier of an
      * alternate data stream (bar.txt) on the file foo.exe. The method used to return
      * ".txt" here, which would be misleading. Commons IO 2.7, and later versions, are throwing
      * an {@link IllegalArgumentException} for names like this.
+     * </p>
      *
      * @param fileName
      *            the file name to find the last extension separator in, null returns -1.
@@ -985,8 +987,10 @@ public class FilenameUtils {
      * <p>
      * This method will handle a file in either Unix or Windows format.
      * The position of the last forward or backslash is returned.
+     * </p>
      * <p>
      * The output will be the same irrespective of the machine that the code is running on.
+     * </p>
      *
      * @param fileName  the file name to find the last path separator in, null returns -1.
      * @return the index of the last separator character, or -1 if there
@@ -1011,6 +1015,7 @@ public class FilenameUtils {
      * This method obtains the extension as the textual part of the file name
      * after the last period. There must be no directory separator after the period.
      * The extension check is case-sensitive on all platforms.
+     * </p>
      *
      * @param fileName  the file name, null returns false.
      * @param extensions  the extensions to check for, null checks for no extension.
@@ -1034,6 +1039,7 @@ public class FilenameUtils {
      * This method obtains the extension as the textual part of the file name
      * after the last period. There must be no directory separator after the period.
      * The extension check is case-sensitive on all platforms.
+     * </p>
      *
      * @param fileName  the file name, null returns false.
      * @param extension  the extension to check for, null or empty checks for no extension.
@@ -1057,6 +1063,7 @@ public class FilenameUtils {
      * This method obtains the extension as the textual part of the file name
      * after the last period. There must be no directory separator after the period.
      * The extension check is case-sensitive on all platforms.
+     * </p>
      *
      * @param fileName  the file name, null returns false.
      * @param extensions  the extensions to check for, null checks for no extension.
@@ -1210,10 +1217,11 @@ public class FilenameUtils {
     /**
      * Checks whether a given string is a valid host name according to
      * RFC 3986.
-     *
-     * <p>Accepted are IP addresses (v4 and v6) as well as what the
+     * <p>
+     * Accepted are IP addresses (v4 and v6) as well as what the
      * RFC calls a "reg-name". Percent encoded names don't seem to be
-     * valid names in UNC paths.</p>
+     * valid names in UNC paths.
+     * </p>
      *
      * @see "https://tools.ietf.org/html/rfc3986#section-3.2.2"
      * @param name the hostname to validate.
@@ -1229,15 +1237,18 @@ public class FilenameUtils {
      * This method normalizes a path to a standard format.
      * The input may contain separators in either Unix or Windows format.
      * The output will contain separators in the format of the system.
-     * <p>
-     * A trailing slash will be retained.
-     * A double slash will be merged to a single slash (but UNC names are handled).
-     * A single period path segment will be removed.
-     * A double period will cause that path segment and the one before to be removed.
-     * If the double period has no parent path segment, {@code null} is returned.
+     * </p>
+     * <ul>
+     * <li>A trailing slash will be retained.</li>
+     * <li>A double slash will be merged to a single slash (but UNC names are handled).</li>
+     * <li>A single period path segment will be removed.</li>
+     * <li>A double period will cause that path segment and the one before to be removed.</li>
+     * <li>If the double period has no parent path segment, {@code null} is returned.</li>
+     * </ul>
      * <p>
      * The output will be the same on both Unix and Windows except
      * for the separator character.
+     * </p>
      * <pre>
      * /foo//               --&gt;   /foo/
      * /foo/./              --&gt;   /foo/
@@ -1257,7 +1268,9 @@ public class FilenameUtils {
      * ~/foo/../bar/        --&gt;   ~/bar/
      * ~/../bar             --&gt;   null
      * </pre>
+     * <p>
      * (Note the file separator will be correct for Windows/Unix.)
+     * </p>
      *
      * @param fileName  the file name to normalize, null returns null.
      * @return the normalized fileName, or null if invalid.
@@ -1273,16 +1286,18 @@ public class FilenameUtils {
      * This method normalizes a path to a standard format.
      * The input may contain separators in either Unix or Windows format.
      * The output will contain separators in the format specified.
-     * <p>
-     * A trailing slash will be retained.
-     * A double slash will be merged to a single slash (but UNC names are handled).
-     * A single period path segment will be removed.
-     * A double period will cause that path segment and the one before to be removed.
-     * If the double period has no parent path segment to work with, {@code null}
-     * is returned.
+     * </p>
+     * <ul>
+     * <li>A trailing slash will be retained.</li>
+     * <li>A double slash will be merged to a single slash (but UNC names are handled).</li>
+     * <li>A single period path segment will be removed.</li>
+     * <li>A double period will cause that path segment and the one before to be removed.</li>
+     * <li>If the double period has no parent path segment to work with, {@code null} is returned.</li>
+     * </ul>
      * <p>
      * The output will be the same on both Unix and Windows except
      * for the separator character.
+     * </p>
      * <pre>
      * /foo//               --&gt;   /foo/
      * /foo/./              --&gt;   /foo/
@@ -1302,8 +1317,10 @@ public class FilenameUtils {
      * ~/foo/../bar/        --&gt;   ~/bar/
      * ~/../bar             --&gt;   null
      * </pre>
+     * <p>
      * The output will be the same on both Unix and Windows including
      * the separator character.
+     * </p>
      *
      * @param fileName  the file name to normalize, null returns null.
      * @param unixSeparator {@code true} if a Unix separator should
@@ -1323,16 +1340,18 @@ public class FilenameUtils {
      * This method normalizes a path to a standard format.
      * The input may contain separators in either Unix or Windows format.
      * The output will contain separators in the format of the system.
-     * <p>
-     * A trailing slash will be removed.
-     * A double slash will be merged to a single slash (but UNC names are handled).
-     * A single period path segment will be removed.
-     * A double period will cause that path segment and the one before to be removed.
-     * If the double period has no parent path segment to work with, {@code null}
-     * is returned.
+     * </p>
+     * <ul>
+     * <li>A trailing slash will be removed.</li>
+     * <li>A double slash will be merged to a single slash (but UNC names are handled).</li>
+     * <li>A single period path segment will be removed.</li>
+     * <li>A double period will cause that path segment and the one before to be removed.</li>
+     * <li>If the double period has no parent path segment to work with, {@code null} is returned.</li>
+     * </ul>
      * <p>
      * The output will be the same on both Unix and Windows except
      * for the separator character.
+     * </p>
      * <pre>
      * /foo//               --&gt;   /foo
      * /foo/./              --&gt;   /foo
@@ -1369,13 +1388,14 @@ public class FilenameUtils {
      * This method normalizes a path to a standard format.
      * The input may contain separators in either Unix or Windows format.
      * The output will contain separators in the format specified.
-     * <p>
-     * A trailing slash will be removed.
-     * A double slash will be merged to a single slash (but UNC names are handled).
-     * A single period path segment will be removed.
-     * A double period will cause that path segment and the one before to be removed.
-     * If the double period has no parent path segment to work with, {@code null}
-     * is returned.
+     * </p>
+     * <ul>
+     * <li>A trailing slash will be removed.</li>
+     * <li>A double slash will be merged to a single slash (but UNC names are handled).</li>
+     * <li>A single period path segment will be removed.</li>
+     * <li>A double period will cause that path segment and the one before to be removed.</li>
+     * <li>If the double period has no parent path segment to work with, {@code null} is returned.</li>
+     * </ul>
      * <p>
      * The output will be the same on both Unix and Windows including
      * the separator character.
@@ -1547,6 +1567,7 @@ public class FilenameUtils {
      * single or multiple (zero or more) wildcard characters.
      * This is the same as often found on DOS/Unix command lines.
      * The check is case-sensitive always.
+     * </p>
      * <pre>
      * wildcardMatch("c.txt", "*.txt")      --&gt; true
      * wildcardMatch("c.txt", "*.jpg")      --&gt; false
@@ -1554,7 +1575,9 @@ public class FilenameUtils {
      * wildcardMatch("c.txt", "*.???")      --&gt; true
      * wildcardMatch("c.txt", "*.????")     --&gt; false
      * </pre>
+     * <p>
      * The sequence "*?" does not work properly at present in match strings.
+     * </p>
      *
      * @param fileName  the file name to match on, may be null.
      * @param wildcardMatcher  the wildcard string to match against, may be null.
@@ -1572,6 +1595,7 @@ public class FilenameUtils {
      * The wildcard matcher uses the characters '?' and '*' to represent a
      * single or multiple (zero or more) wildcard characters.
      * The sequence "*?" does not work properly at present in match strings.
+     * </p>
      *
      * @param fileName  the file name to match on, may be null.
      * @param wildcardMatcher  the wildcard string to match against, may be null.
@@ -1655,6 +1679,7 @@ public class FilenameUtils {
      * single or multiple (zero or more) wildcard characters.
      * This is the same as often found on DOS/Unix command lines.
      * The check is case-sensitive on Unix and case-insensitive on Windows.
+     * </p>
      * <pre>
      * wildcardMatch("c.txt", "*.txt")      --&gt; true
      * wildcardMatch("c.txt", "*.jpg")      --&gt; false
@@ -1662,7 +1687,9 @@ public class FilenameUtils {
      * wildcardMatch("c.txt", "*.???")      --&gt; true
      * wildcardMatch("c.txt", "*.????")     --&gt; false
      * </pre>
+     * <p>
      * The sequence "*?" does not work properly at present in match strings.
+     * </p>
      *
      * @param fileName  the file name to match on.
      * @param wildcardMatcher  the wildcard string to match against.

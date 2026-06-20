@@ -20,7 +20,7 @@ package org.apache.commons.io;
 import java.io.IOException;
 
 /**
- * Subclasses IOException with the {@link Throwable} constructors missing before Java 6.
+ * Subclasses {@link IOException} with the {@link Throwable} constructors missing before Java 6.
  *
  * @since 1.4
  * @deprecated (since 2.5) use {@link IOException} instead.

@@ -20,7 +20,7 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * Indicates that a file already exists.
+ * Signals that a file already exists.
  *
  * @since 2.0
  */
