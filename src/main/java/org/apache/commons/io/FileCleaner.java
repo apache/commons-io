@@ -25,12 +25,14 @@ import java.io.File;
  * This utility creates a background thread to handle file deletion.
  * Each file to be deleted is registered with a handler object.
  * When the handler object is garbage collected, the file is deleted.
+ * </p>
  * <p>
  * In an environment with multiple class loaders (a servlet container, for
  * example), you should consider stopping the background thread if it is no
  * longer needed. This is done by invoking the method
  * {@link #exitWhenFinished}, typically in
  * {@code javax.servlet.ServletContextListener.contextDestroyed(javax.servlet.ServletContextEvent)} or similar.
+ * </p>
  *
  * @deprecated Use {@link FileCleaningTracker}
  */
@@ -51,6 +53,7 @@ public class FileCleaner {
      * with multiple class loaders (such as an application server), you should be
      * aware that the file cleaner thread will continue running even if the class
      * loader it was started from terminates. This can constitute a memory leak.
+     * </p>
      * <p>
      * For example, suppose that you have developed a web application, which
      * contains the Commons IO jar file in your WEB-INF/lib directory. In other
@@ -58,11 +61,13 @@ public class FileCleaner {
      * web application. If the web application is terminated, but the servlet
      * container is still running, then the file cleaner thread will still exist,
      * posing a memory leak.
+     * </p>
      * <p>
      * This method allows the thread to be terminated. Simply call this method
      * in the resource cleanup code, such as
      * {@code javax.servlet.ServletContextListener.contextDestroyed(javax.servlet.ServletContextEvent)}.
      * One called, no new objects can be tracked by the file cleaner.
+     * </p>
      *
      * @deprecated Use {@link FileCleaningTracker#exitWhenFinished()}.
      */
