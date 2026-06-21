@@ -58,7 +58,8 @@ The <action> type attribute can be add,update,fix,remove.
       <action type="fix" dev="ggregory" due-to="Gary Gregory">DeferredFileOutputStream now clears and deletes its temporary storage by default (#858).</action>
       <action type="fix" dev="ggregory" due-to="Gary Gregory">Update generic type of RandomAccessFileMode.accept(Path, IOConsumer) from IOConsumer&lt;RandomAccessFile&gt; to IOConsumer&lt;IORandomAccessFile&gt;.</action>
       <action type="fix" dev="ggregory" due-to="Gary Gregory">Harden tests for NPEs on failures, happy path unchanged.</action>
-      <action type="fix" dev="ggregory" due-to="Sarankumar Baskar, Gary Gregory" issue="IO-891">Fix BoundedReader.skip(long) accounting and bounds handling (#860)..</action>
+      <action type="fix" dev="ggregory" due-to="Sarankumar Baskar, Gary Gregory" issue="IO-891">Fix BoundedReader.skip(long) accounting and bounds handling (#860).</action>
+      <action type="fix" dev="ggregory" due-to="Gary Gregory">DeferredFileOutputStream better NPE message and new file permission tests (#862).</action>
       <!-- ADD -->
       <action type="add" dev="ggregory" due-to="Gary Gregory">Add IOConsumer.accept(IOConsumer, T) (#846).</action>
       <action type="add" dev="ggregory" due-to="Gary Gregory">Add UnsynchronizedBufferedReader.unwrap() (#850).</action>
