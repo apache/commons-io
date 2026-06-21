@@ -52,7 +52,7 @@ public class ThresholdingOutputStream extends OutputStream {
     private static final IOFunction<ThresholdingOutputStream, OutputStream> NOOP_OS_GETTER = os -> NullOutputStream.INSTANCE;
 
     /**
-     * The threshold at which the event will be triggered.
+     * The number of bytes at which to trigger an event, a negative threshold is mapped to zero
      */
     private final int threshold;
 
@@ -79,24 +79,24 @@ public class ThresholdingOutputStream extends OutputStream {
     /**
      * Constructs an instance of this class which will trigger an event at the specified threshold.
      *
-     * @param threshold The number of bytes at which to trigger an event.
+     * @param threshold The number of bytes at which to trigger an event, a negative threshold is mapped to zero.
      */
     public ThresholdingOutputStream(final int threshold) {
         this(threshold, IOConsumer.noop(), NOOP_OS_GETTER);
     }
 
     /**
-     * Constructs an instance of this class which will trigger an event at the specified threshold.
-     * A negative threshold has no meaning and will be treated as 0
+     * Constructs an instance of this class which will trigger an event at the specified threshold. A negative threshold has no meaning and will be treated as
+     * 0.
      *
-     * @param threshold The number of bytes at which to trigger an event.
-     * @param thresholdConsumer Accepts reaching the threshold.
+     * @param threshold          The number of bytes at which to trigger an event, a negative threshold is mapped to zero.
+     * @param thresholdConsumer  Accepts reaching the threshold.
      * @param outputStreamGetter Gets the output stream.
      * @since 2.9.0
      */
     public ThresholdingOutputStream(final int threshold, final IOConsumer<ThresholdingOutputStream> thresholdConsumer,
         final IOFunction<ThresholdingOutputStream, OutputStream> outputStreamGetter) {
-        this.threshold = threshold < 0 ? 0 : threshold;
+        this.threshold = Math.min(0, threshold);
         this.thresholdConsumer = thresholdConsumer == null ? IOConsumer.noop() : thresholdConsumer;
         this.outputStreamGetter = outputStreamGetter == null ? NOOP_OS_GETTER : outputStreamGetter;
     }
@@ -185,7 +185,7 @@ public class ThresholdingOutputStream extends OutputStream {
     /**
      * Gets the threshold, in bytes, at which an event will be triggered.
      *
-     * @return The threshold point, in bytes.
+     * @return The threshold point, in bytes, at which an event will be triggered, zero or greater.
      */
     public int getThreshold() {
         return threshold;
