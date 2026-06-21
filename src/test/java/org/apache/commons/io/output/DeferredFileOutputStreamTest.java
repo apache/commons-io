@@ -24,17 +24,22 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
+import java.nio.file.attribute.PosixFilePermissions;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.IntStream;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.file.AbstractTempDirTest;
+import org.apache.commons.io.file.NioFileSystem;
 import org.apache.commons.io.file.PathUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -203,6 +208,57 @@ class DeferredFileOutputStreamTest extends AbstractTempDirTest {
             assertEquals(testBytes.length, out.getByteCount());
             assertContentsEquals(out);
         }
+    }
+
+    /**
+     * Tests that the temporary file is created with owner-only permissions on POSIX file systems.
+     */
+    @Test
+    void testPersistedFileIsOwnerOnlyOnPosix() throws IOException {
+      assumeTrue(NioFileSystem.isPosix(tempDirPath));
+      // Mirror production, where the supplier only resolves a not-yet-existing path.
+      final Path target = tempDirPath.resolve("posixPerms.bin");
+      final AtomicReference<Path> pathRef = new AtomicReference<>();
+      try (DeferredFileOutputStream dos = DeferredFileOutputStream.builder()
+              // @formatter:off
+              .setPath(target)
+              .setPrefix(getClass().getSimpleName())
+              .setDeleteTempFileOnClose(false)
+              .get()
+              // @formatter:on
+              ) {
+        dos.write(testBytes);
+        pathRef.set(dos.getPath());
+      }
+      final Path pathTemp = pathRef.get();
+      assertTrue(Files.exists(pathTemp));
+      assertTrue(Files.isRegularFile(pathTemp));
+      assertEquals("rw-------", PosixFilePermissions.toString(Files.getPosixFilePermissions(pathTemp)));
+    }
+
+    /**
+     * Tests that persisting over an already existing path truncates and overwrites it.
+     */
+    @Test
+    void testPersistedFileOverwritesExisting() throws IOException {
+      final Path target = tempDirPath.resolve("overwrite.bin");
+      Files.write(target, "stale-and-longer".getBytes(StandardCharsets.UTF_8));
+      final AtomicReference<Path> pathRef = new AtomicReference<>();
+      try (DeferredFileOutputStream dos = DeferredFileOutputStream.builder()
+              // @formatter:off
+              .setPath(target)
+              .setPrefix(getClass().getSimpleName())
+              .setDeleteTempFileOnClose(false)
+              .get()
+              // @formatter:on
+              ) {
+        dos.write(testBytes);
+        pathRef.set(dos.getPath());
+      }
+      final Path pathTemp = pathRef.get();
+      assertTrue(Files.exists(pathTemp));
+      assertTrue(Files.isRegularFile(pathTemp));
+      assertArrayEquals(testBytes, Files.readAllBytes(pathTemp));
     }
 
     /**
@@ -516,8 +572,7 @@ class DeferredFileOutputStreamTest extends AbstractTempDirTest {
             assertThrows(IOException.class, () -> dfos.writeTo(baos));
             dfos.close();
             dfos.writeTo(baos);
-            final byte[] copiedBytes = baos.toByteArray();
-            assertArrayEquals(testBytes, copiedBytes);
+            assertArrayEquals(testBytes, baos.toByteArray());
             verifyResultFile(testFile);
         }
     }
@@ -541,8 +596,7 @@ class DeferredFileOutputStreamTest extends AbstractTempDirTest {
             assertEquals(testBytes.length, dfos.getByteCount());
             dfos.close();
             dfos.writeTo(baos);
-            final byte[] copiedBytes = baos.toByteArray();
-            assertArrayEquals(testBytes, copiedBytes);
+            assertArrayEquals(testBytes, baos.toByteArray());
             verifyResultFile(testFile);
         }
     }
@@ -567,8 +621,7 @@ class DeferredFileOutputStreamTest extends AbstractTempDirTest {
             assertEquals(testBytes.length, dfos.getByteCount());
             dfos.close();
             dfos.writeTo(baos);
-            final byte[] copiedBytes = baos.toByteArray();
-            assertArrayEquals(testBytes, copiedBytes);
+            assertArrayEquals(testBytes, baos.toByteArray());
         }
     }
 

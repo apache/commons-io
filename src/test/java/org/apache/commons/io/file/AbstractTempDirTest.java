@@ -22,7 +22,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -97,8 +96,4 @@ public abstract class AbstractTempDirTest {
         tempDirFile = tempDirPath.toFile();
     }
 
-    @SuppressWarnings("resource") // no FileSystem allocation
-    protected final boolean isPosixFilePermissionsSupported() {
-        return FileSystems.getDefault().supportedFileAttributeViews().contains("posix");
-    }
 }
