@@ -96,7 +96,7 @@ public class ThresholdingOutputStream extends OutputStream {
      */
     public ThresholdingOutputStream(final int threshold, final IOConsumer<ThresholdingOutputStream> thresholdConsumer,
         final IOFunction<ThresholdingOutputStream, OutputStream> outputStreamGetter) {
-        this.threshold = Math.min(0, threshold);
+        this.threshold = Math.max(0, threshold);
         this.thresholdConsumer = thresholdConsumer == null ? IOConsumer.noop() : thresholdConsumer;
         this.outputStreamGetter = outputStreamGetter == null ? NOOP_OS_GETTER : outputStreamGetter;
     }
