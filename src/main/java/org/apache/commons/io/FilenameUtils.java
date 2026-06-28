@@ -26,7 +26,6 @@ import java.util.Deque;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Stream;
 
 /**
  * General file name and file path manipulation utilities. The methods in this class operate on strings that represent relative or absolute paths. Nothing in
@@ -1009,10 +1008,31 @@ public class FilenameUtils {
             return false;
         }
         requireNonNullChars(fileName);
+        final int index = indexOfExtension(fileName);
         if (isEmpty(extension)) {
-            return indexOfExtension(fileName) == NOT_FOUND;
+            return index == NOT_FOUND;
         }
-        return getExtension(fileName).equals(extension);
+        // Compare the extension region in place rather than allocating getExtension(fileName).
+        return index != NOT_FOUND && extensionEquals(fileName, index, extension);
+    }
+
+    /**
+     * Tests whether the extension of {@code fileName} equals {@code extension}, without allocating the extension
+     * substring. This is equivalent to {@code getExtension(fileName).equals(extension)}: {@code index} is the extension
+     * separator position from {@link #indexOfExtension(String)} ({@link #NOT_FOUND} meaning the empty extension), and a
+     * {@code null} extension never matches.
+     *
+     * @param fileName  the file name, not null.
+     * @param index     the extension separator position, or {@link #NOT_FOUND} for the empty extension.
+     * @param extension the extension to compare against; null never matches.
+     * @return true if the extension equals the given extension.
+     */
+    private static boolean extensionEquals(final String fileName, final int index, final String extension) {
+        if (extension == null) {
+            return false;
+        }
+        final int extLen = index == NOT_FOUND ? 0 : fileName.length() - index - 1;
+        return extLen == extension.length() && (extLen == 0 || fileName.regionMatches(index + 1, extension, 0, extLen));
     }
 
     /**
@@ -1032,11 +1052,18 @@ public class FilenameUtils {
             return false;
         }
         requireNonNullChars(fileName);
+        final int index = indexOfExtension(fileName);
         if (extensions == null || extensions.length == 0) {
-            return indexOfExtension(fileName) == NOT_FOUND;
+            return index == NOT_FOUND;
         }
-        final String fileExt = getExtension(fileName);
-        return Stream.of(extensions).anyMatch(fileExt::equals);
+        // Compare the extension region against each candidate in place, avoiding both the getExtension
+        // substring and the Stream pipeline.
+        for (final String extension : extensions) {
+            if (extensionEquals(fileName, index, extension)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
