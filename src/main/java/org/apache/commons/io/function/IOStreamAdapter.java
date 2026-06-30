@@ -24,7 +24,7 @@ import java.util.stream.Stream;
  *
  * Keep package-private for now.
  *
- * @param <T> the type of the stream elements.
+ * @param <T> The type of the stream elements.
  */
 final class IOStreamAdapter<T> extends IOBaseStreamAdapter<T, IOStream<T>, Stream<T>> implements IOStream<T> {
 

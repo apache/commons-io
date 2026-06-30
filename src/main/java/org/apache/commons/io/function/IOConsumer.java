@@ -29,7 +29,7 @@ import org.apache.commons.io.IOIndexedException;
 /**
  * Like {@link Consumer} but throws {@link IOException}.
  *
- * @param <T> the type of the input to the operations.
+ * @param <T> The type of the input to the operations.
  * @since 2.7
  */
 @FunctionalInterface

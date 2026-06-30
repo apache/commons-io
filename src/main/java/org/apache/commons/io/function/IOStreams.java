@@ -53,7 +53,7 @@ final class IOStreams {
      *
      * Copied from Apache Commons Lang.
      *
-     * @param <T> the type of stream elements.
+     * @param <T> The type of stream elements.
      * @param values the elements of the new stream, may be {@code null}.
      * @return the new stream on {@code values} or {@link Stream#empty()}.
      */
@@ -70,7 +70,7 @@ final class IOStreams {
      *
      * Copied from Apache Commons Lang.
      *
-     * @param <T> the type of stream elements.
+     * @param <T> The type of stream elements.
      * @param values the elements of the new stream, may be {@code null}.
      * @return the new stream on {@code values} or {@link Stream#empty()}.
      */

@@ -26,7 +26,7 @@ import java.util.function.Consumer;
 /**
  * Like {@link Spliterator} but throws {@link IOException}.
  *
- * @param <T> the type of elements returned by this IOSpliterator.
+ * @param <T> The type of elements returned by this IOSpliterator.
  * @since 2.12.0
  */
 public interface IOSpliterator<T> {
@@ -34,7 +34,7 @@ public interface IOSpliterator<T> {
     /**
      * Adapts the given Spliterator as an IOSpliterator.
      *
-     * @param <E> the type of the stream elements.
+     * @param <E> The type of the stream elements.
      * @param iterator The iterator to adapt.
      * @return A new IOSpliterator.
      */

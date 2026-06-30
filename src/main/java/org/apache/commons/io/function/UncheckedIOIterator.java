@@ -28,7 +28,7 @@ import java.util.Objects;
  * Keep package-private for now.
  * </p>
  *
- * @param <E> the type of elements returned by this iterator.
+ * @param <E> The type of elements returned by this iterator.
  */
 final class UncheckedIOIterator<E> implements Iterator<E> {
 

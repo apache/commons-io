@@ -40,8 +40,8 @@ import org.apache.commons.io.file.PathUtils;
  * buffer size checker, a buffer size default, buffer size maximum, Charset, Charset default, default size checker, and open options. A subclass may use all,
  * some, or none of these properties in building instances of {@code T}.
  *
- * @param <T> the type of instances to build.
- * @param <B> the type of builder subclass.
+ * @param <T> The type of instances to build.
+ * @param <B> The type of builder subclass.
  * @since 2.12.0
  */
 public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T, B>> extends AbstractOriginSupplier<T, B> {

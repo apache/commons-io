@@ -31,7 +31,7 @@ import java.util.function.Consumer;
  * Keep package-private for now.
  * </p>
  *
- * @param <T> the type of elements returned by this iterator.
+ * @param <T> The type of elements returned by this iterator.
  */
 final class UncheckedIOSpliterator<T> implements Spliterator<T> {
 

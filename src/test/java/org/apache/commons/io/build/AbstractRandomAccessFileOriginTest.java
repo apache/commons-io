@@ -32,8 +32,8 @@ import org.apache.commons.lang3.ArrayUtils;
 /**
  * Tests {@link RandomAccessFileOrigin} and {@link IORandomAccessFileOrigin}.
  *
- * @param <T> the type of instances to build.
- * @param <B> the type of builder subclass.
+ * @param <T> The type of instances to build.
+ * @param <B> The type of builder subclass.
  * @see RandomAccessFile
  * @see IORandomAccessFile
  */

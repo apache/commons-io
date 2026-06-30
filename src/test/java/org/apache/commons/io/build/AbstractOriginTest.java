@@ -56,8 +56,8 @@ import org.junit.jupiter.params.provider.EnumSource;
 /**
  * Tests {@link AbstractOrigin} and subclasses.
  *
- * @param <T> the type of instances to build.
- * @param <B> the type of builder subclass.
+ * @param <T> The type of instances to build.
+ * @param <B> The type of builder subclass.
  */
 public abstract class AbstractOriginTest<T, B extends AbstractOrigin<T, B>> {
 

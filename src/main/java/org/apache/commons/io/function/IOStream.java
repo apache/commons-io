@@ -47,7 +47,7 @@ import org.apache.commons.io.IOExceptionList;
 /**
  * Like {@link Stream} but throws {@link IOException}.
  *
- * @param <T> the type of the stream elements.
+ * @param <T> The type of the stream elements.
  * @since 2.12.0
  */
 public interface IOStream<T> extends IOBaseStream<T, IOStream<T>, Stream<T>> {
@@ -55,7 +55,7 @@ public interface IOStream<T> extends IOBaseStream<T, IOStream<T>, Stream<T>> {
     /**
      * Constructs a new IOStream for the given Stream.
      *
-     * @param <T> the type of the stream elements.
+     * @param <T> The type of the stream elements.
      * @param stream The stream to delegate.
      * @return a new IOStream.
      */
@@ -66,7 +66,7 @@ public interface IOStream<T> extends IOBaseStream<T, IOStream<T>, Stream<T>> {
     /**
      * This class' version of {@link Stream#empty()}.
      *
-     * @param <T> the type of the stream elements.
+     * @param <T> The type of the stream elements.
      * @return an empty sequential {@code IOStreamImpl}.
      * @see Stream#empty()
      */
@@ -77,7 +77,7 @@ public interface IOStream<T> extends IOBaseStream<T, IOStream<T>, Stream<T>> {
     /**
      * Like {@link Stream#iterate(Object, UnaryOperator)} but for IO.
      *
-     * @param <T> the type of stream elements.
+     * @param <T> The type of stream elements.
      * @param seed the initial element.
      * @param f a function to be applied to the previous element to produce a new element.
      * @return a new sequential {@code IOStream}.
@@ -112,7 +112,7 @@ public interface IOStream<T> extends IOBaseStream<T, IOStream<T>, Stream<T>> {
      *
      * Copied from Apache Commons Lang.
      *
-     * @param <T> the type of stream elements.
+     * @param <T> The type of stream elements.
      * @param values the elements of the new stream, may be {@code null}.
      * @return the new stream on {@code values} or {@link Stream#empty()}.
      */
@@ -123,7 +123,7 @@ public interface IOStream<T> extends IOBaseStream<T, IOStream<T>, Stream<T>> {
     /**
      * Null-safe version of {@link Stream#of(Object[])} for an IO stream.
      *
-     * @param <T> the type of stream elements.
+     * @param <T> The type of stream elements.
      * @param values the elements of the new stream, may be {@code null}.
      * @return the new stream on {@code values} or {@link Stream#empty()}.
      */
@@ -136,7 +136,7 @@ public interface IOStream<T> extends IOBaseStream<T, IOStream<T>, Stream<T>> {
      * Returns a sequential {@code IOStreamImpl} containing a single element.
      *
      * @param t the single element.
-     * @param <T> the type of stream elements.
+     * @param <T> The type of stream elements.
      * @return a singleton sequential stream.
      */
     static <T> IOStream<T> of(final T t) {

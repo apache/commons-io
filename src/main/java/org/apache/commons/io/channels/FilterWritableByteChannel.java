@@ -42,7 +42,7 @@ import org.apache.commons.io.output.ProxyWriter;
  * advanced instances through the {@link Builder}.
  * </p>
  *
- * @param <C> the {@link WritableByteChannel} type.
+ * @param <C> The {@link WritableByteChannel} type.
  * @see FilterInputStream
  * @see FilterOutputStream
  * @see FilterReader

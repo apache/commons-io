@@ -23,7 +23,7 @@ import java.util.Spliterator;
 /**
  * Adapts an {@link Spliterator} as an {@link IOSpliterator}.
  *
- * @param <T> the type of the stream elements.
+ * @param <T> The type of the stream elements.
  */
 final class IOSpliteratorAdapter<T> implements IOSpliterator<T> {
 

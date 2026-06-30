@@ -27,7 +27,7 @@ import java.util.function.Supplier;
  * Using an IOSupplier allows you to compose usage of checked and unchecked exceptions as you best see fit.
  * </p>
  *
- * @param <T> the return type of the operations.
+ * @param <T> The return type of the operations.
  * @since 2.7
  */
 @FunctionalInterface

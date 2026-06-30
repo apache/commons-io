@@ -26,9 +26,9 @@ import java.util.stream.Stream;
 /**
  * Like {@link BaseStream} but throws {@link IOException}.
  *
- * @param <T> the type of the stream elements.
- * @param <S> the type of the IO stream extending {@code IOBaseStream}.
- * @param <B> the type of the stream extending {@code BaseStream}.
+ * @param <T> The type of the stream elements.
+ * @param <S> The type of the IO stream extending {@code IOBaseStream}.
+ * @param <B> The type of the stream extending {@code BaseStream}.
  * @since 2.12.0
  */
 public interface IOBaseStream<T, S extends IOBaseStream<T, S, B>, B extends BaseStream<T, B>> extends Closeable {

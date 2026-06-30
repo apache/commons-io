@@ -64,7 +64,7 @@ public abstract class AbstractByteArrayOutputStream<T extends AbstractByteArrayO
     /**
      * Constructor for an InputStream subclass.
      *
-     * @param <T> the type of the InputStream.
+     * @param <T> The type of the InputStream.
      */
     @FunctionalInterface
     protected interface InputStreamConstructor<T extends InputStream> {
@@ -246,7 +246,7 @@ public abstract class AbstractByteArrayOutputStream<T extends AbstractByteArrayO
      * returned stream is backed by buffers of {@code this} stream,
      * avoiding memory allocation and copy, thus saving space and time.
      *
-     * @param <S> the type of the InputStream which makes up
+     * @param <S> The type of the InputStream which makes up
      *            the {@link SequenceInputStream}.
      * @param isConstructor A constructor for an InputStream which makes
      *                     up the {@link SequenceInputStream}.

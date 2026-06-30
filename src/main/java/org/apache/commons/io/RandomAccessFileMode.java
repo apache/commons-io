@@ -175,7 +175,7 @@ public enum RandomAccessFileMode {
      * This method allocates and releases the {@link RandomAccessFile} given to the function.
      * </p>
      *
-     * @param <T> the return type of the function.
+     * @param <T> The return type of the function.
      * @param file the file specifying the {@link RandomAccessFile} to open.
      * @param function the function to apply.
      * @return the function's result value.

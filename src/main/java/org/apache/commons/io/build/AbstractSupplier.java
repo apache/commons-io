@@ -118,8 +118,8 @@ import org.apache.commons.io.function.IOSupplier;
     }
  * </pre>
  *
- * @param <T> the type of instances to build.
- * @param <B> the type of builder subclass.
+ * @param <T> The type of instances to build.
+ * @param <B> The type of builder subclass.
  * @see IOSupplier
  * @since 2.12.0
  */

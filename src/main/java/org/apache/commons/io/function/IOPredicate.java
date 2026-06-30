@@ -25,7 +25,7 @@ import java.util.function.Predicate;
 /**
  * Like {@link Predicate} but throws {@link IOException}.
  *
- * @param <T> the type of the input to the predicate.
+ * @param <T> The type of the input to the predicate.
  * @since 2.12.0
  */
 @FunctionalInterface
@@ -34,7 +34,7 @@ public interface IOPredicate<T> {
     /**
      * Always false.
      *
-     * @param <T> the type of the input to the predicate.
+     * @param <T> The type of the input to the predicate.
      * @return a constant predicate that tests always false.
      */
     @SuppressWarnings("unchecked")
@@ -45,7 +45,7 @@ public interface IOPredicate<T> {
     /**
      * Always true.
      *
-     * @param <T> the type of the input to the predicate.
+     * @param <T> The type of the input to the predicate.
      * @return a constant predicate that tests always true.
      */
     @SuppressWarnings("unchecked")
@@ -56,7 +56,7 @@ public interface IOPredicate<T> {
     /**
      * Creates a predicate that tests if two arguments are equal using {@link Objects#equals(Object, Object)}.
      *
-     * @param <T> the type of arguments to the predicate.
+     * @param <T> The type of arguments to the predicate.
      * @param target the object to compare for equality, may be {@code null}
      * @return a predicate that tests if two arguments are equal using {@link Objects#equals(Object, Object)}
      */

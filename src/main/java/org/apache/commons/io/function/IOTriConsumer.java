@@ -24,9 +24,9 @@ import java.util.function.BiConsumer;
 /**
  * Like {@link BiConsumer} but throws {@link IOException}.
  *
- * @param <T> the type of the first argument to the operation.
- * @param <U> the type of the second argument to the operation.
- * @param <V> the type of the third argument to the operation.
+ * @param <T> The type of the first argument to the operation.
+ * @param <U> The type of the second argument to the operation.
+ * @param <V> The type of the third argument to the operation.
  * @see BiConsumer
  * @since 2.12.0
  */
@@ -36,9 +36,9 @@ public interface IOTriConsumer<T, U, V> {
     /**
      * Returns the no-op singleton.
      *
-     * @param <T> the type of the first argument to the operation.
-     * @param <U> the type of the second argument to the operation.
-     * @param <V> the type of the third argument to the operation.
+     * @param <T> The type of the first argument to the operation.
+     * @param <U> The type of the second argument to the operation.
+     * @param <V> The type of the third argument to the operation.
      * @return The no-op singleton.
      */
     @SuppressWarnings("unchecked")

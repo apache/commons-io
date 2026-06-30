@@ -24,7 +24,7 @@ import java.util.Objects;
 /**
  * Like {@link Iterable} but throws {@link IOException}.
  *
- * @param <T> the type of elements returned by the iterable.
+ * @param <T> The type of elements returned by the iterable.
  * @since 2.19.0
  */
 public interface IOIterable<T> {

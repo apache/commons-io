@@ -27,8 +27,8 @@ import java.util.function.Supplier;
 /**
  * Like {@link Function} but throws {@link IOException}.
  *
- * @param <T> the type of the input to the operations.
- * @param <R> the return type of the operations.
+ * @param <T> The type of the input to the operations.
+ * @param <R> The return type of the operations.
  * @since 2.7
  */
 @FunctionalInterface
@@ -37,7 +37,7 @@ public interface IOFunction<T, R> {
     /**
      * Returns a {@link IOFunction} that always returns its input argument.
      *
-     * @param <T> the type of the input and output objects to the function.
+     * @param <T> The type of the input and output objects to the function.
      * @return a function that always returns its input argument.
      */
     @SuppressWarnings("unchecked")
@@ -65,7 +65,7 @@ public interface IOFunction<T, R> {
      * {@code after} function to the result. If evaluation of either function throws an exception, it is relayed to the
      * caller of the composed function.
      *
-     * @param <V> the type of output of the {@code after} function, and of the composed function.
+     * @param <V> The type of output of the {@code after} function, and of the composed function.
      * @param after the function to apply after this function is applied.
      * @return a composed function that first applies this function and then applies the {@code after} function.
      * @throws NullPointerException if after is null.
@@ -96,7 +96,7 @@ public interface IOFunction<T, R> {
      * {@code after} function to the result. If evaluation of either function throws an exception, it is relayed to the
      * caller of the composed function.
      *
-     * @param <V> the type of output of the {@code after} function, and of the composed function.
+     * @param <V> The type of output of the {@code after} function, and of the composed function.
      * @param after the function to apply after this function is applied.
      * @return a composed function that first applies this function and then applies the {@code after} function.
      * @throws NullPointerException if after is null.
@@ -131,7 +131,7 @@ public interface IOFunction<T, R> {
      * this function to the result. If evaluation of either function throws an exception, it is relayed to the caller of the
      * composed function.
      *
-     * @param <V> the type of input to the {@code before} function, and to the composed function.
+     * @param <V> The type of input to the {@code before} function, and to the composed function.
      * @param before the function to apply before this function is applied.
      * @return a composed function that first applies the {@code before} function and then applies this function.
      * @throws NullPointerException if before is null.
@@ -147,7 +147,7 @@ public interface IOFunction<T, R> {
      * this function to the result. If evaluation of either function throws an exception, it is relayed to the caller of the
      * composed function.
      *
-     * @param <V> the type of input to the {@code before} function, and to the composed function.
+     * @param <V> The type of input to the {@code before} function, and to the composed function.
      * @param before the function to apply before this function is applied.
      * @return a composed function that first applies the {@code before} function and then applies this function.
      * @throws NullPointerException if before is null.

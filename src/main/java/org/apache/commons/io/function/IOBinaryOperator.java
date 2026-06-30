@@ -25,7 +25,7 @@ import java.util.function.BinaryOperator;
 /**
  * Like {@link BinaryOperator} but throws {@link IOException}.
  *
- * @param <T> the type of the operands and result of the operator.
+ * @param <T> The type of the operands and result of the operator.
  * @see IOBiFunction
  * @see BinaryOperator
  * @since 2.12.0
@@ -37,7 +37,7 @@ public interface IOBinaryOperator<T> extends IOBiFunction<T, T, T> {
      * Creates a {@link IOBinaryOperator} which returns the greater of two elements according to the specified
      * {@code Comparator}.
      *
-     * @param <T> the type of the input arguments of the comparator.
+     * @param <T> The type of the input arguments of the comparator.
      * @param comparator a {@code Comparator} for comparing the two values.
      * @return a {@code BinaryOperator} which returns the greater of its operands, according to the supplied
      *         {@code Comparator}
@@ -52,7 +52,7 @@ public interface IOBinaryOperator<T> extends IOBiFunction<T, T, T> {
      * Creates a {@link IOBinaryOperator} which returns the lesser of two elements according to the specified
      * {@code Comparator}.
      *
-     * @param <T> the type of the input arguments of the comparator.
+     * @param <T> The type of the input arguments of the comparator.
      * @param comparator a {@code Comparator} for comparing the two values.
      * @return a {@code BinaryOperator} which returns the lesser of its operands, according to the supplied
      *         {@code Comparator}

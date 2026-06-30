@@ -24,7 +24,7 @@ import java.util.Objects;
 /**
  * Adapts an {@link Iterator} as an {@link IOIterator}.
  *
- * @param <E> the type of the stream elements.
+ * @param <E> The type of the stream elements.
  */
 final class IOIteratorAdapter<E> implements IOIterator<E> {
 

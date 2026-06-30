@@ -27,7 +27,7 @@ import java.util.function.Consumer;
 /**
  * Like {@link Iterator} but throws {@link IOException}.
  *
- * @param <E> the type of elements returned by this iterator.
+ * @param <E> The type of elements returned by this iterator.
  * @since 2.12.0
  */
 public interface IOIterator<E> {
@@ -35,7 +35,7 @@ public interface IOIterator<E> {
     /**
      * Adapts the given Iterable as an IOIterator.
      *
-     * @param <E> the type of the stream elements.
+     * @param <E> The type of the stream elements.
      * @param iterable The iterable to adapt.
      * @return A new IOIterator.
      * @since 2.17.0
@@ -47,7 +47,7 @@ public interface IOIterator<E> {
     /**
      * Adapts the given Iterator as an IOIterator.
      *
-     * @param <E> the type of the stream elements.
+     * @param <E> The type of the stream elements.
      * @param iterator The iterator to adapt.
      * @return A new IOIterator.
      */

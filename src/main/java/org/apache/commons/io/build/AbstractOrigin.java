@@ -343,8 +343,8 @@ import org.apache.commons.io.output.WriterOutputStream;
  *   </li>
  * </ul>
  *
- * @param <T> the type produced by the builder.
- * @param <B> the concrete builder subclass type.
+ * @param <T> The type produced by the builder.
+ * @param <B> The concrete builder subclass type.
  * @since 2.12.0
  */
 public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends AbstractSupplier<T, B> {
@@ -356,8 +356,8 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
      * instead.
      * </p>
      *
-     * @param <T> the type of instances to build.
-     * @param <B> the type of builder subclass.
+     * @param <T> The type of instances to build.
+     * @param <B> The type of builder subclass.
      */
     public abstract static class AbstractRandomAccessFileOrigin<T extends RandomAccessFile, B extends AbstractRandomAccessFileOrigin<T, B>>
             extends AbstractOrigin<T, B> {

@@ -280,8 +280,8 @@ public class FileFilterUtils {
      * @param filter the filter to apply to the stream of files.
      * @param stream the stream of files on which to apply the filter.
      * @param collector how to collect the end result.
-     * @param <R> the return type.
-     * @param <A> the mutable accumulation type of the reduction operation (often hidden as an implementation detail).
+     * @param <R> The return type.
+     * @param <A> The mutable accumulation type of the reduction operation (often hidden as an implementation detail).
      * @return a subset of files from the stream that is accepted by the filter.
      * @throws NullPointerException if the filter is {@code null}.
      */

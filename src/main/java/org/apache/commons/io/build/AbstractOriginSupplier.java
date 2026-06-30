@@ -45,8 +45,8 @@ import org.apache.commons.io.build.AbstractOrigin.WriterOrigin;
 /**
  * Abstracts <em>building</em> an instance of type {@code T} where {@code T} is unbounded from a wrapped {@linkplain AbstractOrigin origin}.
  *
- * @param <T> the type of instances to build.
- * @param <B> the type of builder subclass.
+ * @param <T> The type of instances to build.
+ * @param <B> The type of builder subclass.
  * @since 2.12.0
  */
 public abstract class AbstractOriginSupplier<T, B extends AbstractOriginSupplier<T, B>> extends AbstractSupplier<T, B> {
