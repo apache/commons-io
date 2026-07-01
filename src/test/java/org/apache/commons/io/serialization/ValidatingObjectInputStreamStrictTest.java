@@ -32,7 +32,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link ValidatingObjectInputStream}.
  */
-class ValidatingObjectInputStream2Test {
+class ValidatingObjectInputStreamStrictTest {
 
     abstract static class AbtractFoo implements IFoo {
 
