@@ -23,6 +23,7 @@ import java.io.InputStream;
 import java.io.InvalidClassException;
 import java.io.ObjectInputStream;
 import java.io.ObjectStreamClass;
+import java.lang.annotation.Annotation;
 import java.util.regex.Pattern;
 
 import org.apache.commons.io.build.AbstractStreamBuilder;
@@ -145,6 +146,8 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
 
         private ObjectStreamClassPredicate predicate = new ObjectStreamClassPredicate();
 
+        private boolean strict;
+
         /**
          * Constructs a new builder of {@link ValidatingObjectInputStream}.
          *
@@ -157,6 +160,9 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
 
         /**
          * Accepts the specified classes for deserialization, unless they are otherwise rejected.
+         * <p>
+         * The reject list takes precedence over the accept list.
+         * </p>
          *
          * @param classes Classes to accept.
          * @return this object.
@@ -169,6 +175,9 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
 
         /**
          * Accepts class names where the supplied ClassNameMatcher matches for deserialization, unless they are otherwise rejected.
+         * <p>
+         * The reject list takes precedence over the accept list.
+         * </p>
          *
          * @param matcher a class name matcher to <em>accept</em> objects.
          * @return {@code this} instance.
@@ -181,6 +190,9 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
 
         /**
          * Accepts class names that match the supplied pattern for deserialization, unless they are otherwise rejected.
+         * <p>
+         * The reject list takes precedence over the accept list.
+         * </p>
          *
          * @param pattern a Pattern for compiled regular expression.
          * @return {@code this} instance.
@@ -193,6 +205,9 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
 
         /**
          * Accepts the wildcard specified classes for deserialization, unless they are otherwise rejected.
+         * <p>
+         * The reject list takes precedence over the accept list.
+         * </p>
          *
          * @param patterns Wildcard file name patterns as defined by {@link org.apache.commons.io.FilenameUtils#wildcardMatch(String, String)
          *                 FilenameUtils.wildcardMatch}
@@ -206,6 +221,9 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
 
         /**
          * Builds a new {@link ValidatingObjectInputStream}.
+         * <p>
+         * The reject list takes precedence over the accept list.
+         * </p>
          * <p>
          * You must set an aspect that supports {@link #getInputStream()} on this builder, otherwise, this method throws an exception.
          * </p>
@@ -242,6 +260,9 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
 
         /**
          * Rejects the specified classes for deserialization, even if they are otherwise accepted.
+         * <p>
+         * The reject list takes precedence over the accept list.
+         * </p>
          *
          * @param classes Classes to reject.
          * @return {@code this} instance.
@@ -254,6 +275,9 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
 
         /**
          * Rejects class names where the supplied ClassNameMatcher matches for deserialization, even if they are otherwise accepted.
+         * <p>
+         * The reject list takes precedence over the accept list.
+         * </p>
          *
          * @param matcher the matcher to use.
          * @return {@code this} instance.
@@ -266,6 +290,9 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
 
         /**
          * Rejects class names that match the supplied pattern for deserialization, even if they are otherwise accepted.
+         * <p>
+         * The reject list takes precedence over the accept list.
+         * </p>
          *
          * @param pattern standard Java regexp.
          * @return {@code this} instance.
@@ -278,6 +305,9 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
 
         /**
          * Rejects the wildcard specified classes for deserialization, even if they are otherwise accepted.
+         * <p>
+         * The reject list takes precedence over the accept list.
+         * </p>
          *
          * @param patterns Wildcard file name patterns as defined by {@link org.apache.commons.io.FilenameUtils#wildcardMatch(String, String)
          *                 FilenameUtils.wildcardMatch}
@@ -291,6 +321,9 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
 
         /**
          * Sets the predicate, null resets to an empty new ObjectStreamClassPredicate.
+         * <p>
+         * The reject list takes precedence over the accept list.
+         * </p>
          *
          * @param predicate the predicate.
          * @return {@code this} instance.
@@ -301,10 +334,39 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
             return this;
         }
 
+        /**
+         * If true, checks that all interfaces and annotations for a given type are not rejected and accepted.
+         * <p>
+         * For compatibility with previous versions, this is false by default.
+         * </p>
+         * <p>
+         * Checks:
+         * </p>
+         * <ol>
+         * <li>The type name.</li>
+         * <li>The interfaces implemented by the class, recursively.</li>
+         * <li>The annotation on this type, recursively.</li>
+         * </ol>
+         * <p>
+         * The reject list takes precedence over the accept list.
+         * </p>
+         *
+         * @param strict If true, checks that all interfaces and annotations for a given type are not rejected and accepted.
+         * @return {@code this} instance.
+         * @since 2.23.0
+         */
+        public Builder setStrict(final boolean strict) {
+            this.strict = strict;
+            return this;
+        }
+
     }
 
     /**
      * Constructs a new {@link Builder}.
+     * <p>
+     * The reject list takes precedence over the accept list.
+     * </p>
      *
      * @return a new {@link Builder}.
      * @since 2.18.0
@@ -314,15 +376,30 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
     }
 
     private final ObjectStreamClassPredicate predicate;
+    private final boolean strict;
 
-    @SuppressWarnings("resource") // caller closes/
+    /**
+     * Constructs an instance to deserialize the specified input stream. At least one accept method needs to be called to specify which classes can be
+     * deserialized, as by default no classes are accepted.
+     * <p>
+     * The reject list takes precedence over the accept list.
+     * </p>
+     *
+     * @param builder     The builder.
+     */
+    @SuppressWarnings("resource") // caller closes
     private ValidatingObjectInputStream(final Builder builder) throws IOException {
-        this(builder.getInputStream(), builder.predicate);
+        super(builder.getInputStream());
+        this.predicate = builder.predicate;
+        this.strict = builder.strict;
     }
 
     /**
      * Constructs an instance to deserialize the specified input stream. At least one accept method needs to be called to specify which classes can be
      * deserialized, as by default no classes are accepted.
+     * <p>
+     * The reject list takes precedence over the accept list.
+     * </p>
      *
      * @param input an input stream.
      * @throws IOException if an I/O error occurs while reading stream header.
@@ -330,20 +407,7 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
      */
     @Deprecated
     public ValidatingObjectInputStream(final InputStream input) throws IOException {
-        this(input, new ObjectStreamClassPredicate());
-    }
-
-    /**
-     * Constructs an instance to deserialize the specified input stream. At least one accept method needs to be called to specify which classes can be
-     * deserialized, as by default no classes are accepted.
-     *
-     * @param input     an input stream.
-     * @param predicate how to accept and reject classes.
-     * @throws IOException if an I/O error occurs while reading stream header.
-     */
-    private ValidatingObjectInputStream(final InputStream input, final ObjectStreamClassPredicate predicate) throws IOException {
-        super(input);
-        this.predicate = predicate;
+        this(builder().setInputStream(input).setPredicate(new ObjectStreamClassPredicate()));
     }
 
     /**
@@ -404,15 +468,38 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
     }
 
     /**
-     * Checks that the class name conforms to requirements.
+     * Checks that the given type can be legally resolved as configured.
+     * <p>
+     * Checks:
+     * <ol>
+     * <li>The type name.</li>
+     * <li>The interfaces implemented by the class, recursively.</li>
+     * <li>The annotation on this type, recursively.</li>
+     * </ol>
+     *
+     * @param result
+     * @throws InvalidClassException
+     */
+    private void check(final Class<?> result) throws InvalidClassException {
+        checkTypeName(result.getName());
+        for (final Class<?> iface : result.getInterfaces()) {
+            check(iface);
+        }
+        for (final Annotation annotation : result.getAnnotations()) {
+            check(annotation.annotationType());
+        }
+    }
+
+    /**
+     * Checks that the type name conforms to requirements.
      * <p>
      * The reject list takes precedence over the accept list.
      * </p>
      *
-     * @param name The class name to test.
+     * @param name The type name to test.
      * @throws InvalidClassException Thrown when a rejected or non-accepted class is found.
      */
-    private void checkClassName(final String name) throws InvalidClassException {
+    private void checkTypeName(final String name) throws InvalidClassException {
         if (!predicate.test(name)) {
             invalidClassNameFound(name);
         }
@@ -509,8 +596,14 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
      */
     @Override
     protected Class<?> resolveClass(final ObjectStreamClass osc) throws IOException, ClassNotFoundException {
-        checkClassName(osc.getName());
-        return super.resolveClass(osc);
+        checkTypeName(osc.getName());
+        // resolveClass() calls Class.forName(String, boolean, ClassLoader) with initialize set to false.
+        // The result Class is therefore not initialized.
+        final Class<?> result = super.resolveClass(osc);
+        if (strict) {
+            check(result);
+        }
+        return result;
     }
 
     /**
@@ -522,7 +615,7 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
     @Override
     protected Class<?> resolveProxyClass(final String[] interfaces) throws IOException, ClassNotFoundException {
         for (final String interfaceName : interfaces) {
-            checkClassName(interfaceName);
+            checkTypeName(interfaceName);
         }
         return super.resolveProxyClass(interfaces);
     }
