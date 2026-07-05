@@ -69,7 +69,7 @@ public class DemuxInputStream extends InputStream {
     @Override
     public int read() throws IOException {
         final InputStream inputStream = inputStreamLocal.get();
-        if (null != inputStream) {
+        if (inputStream != null) {
             return inputStream.read();
         }
         return EOF;

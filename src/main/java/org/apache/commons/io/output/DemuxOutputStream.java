@@ -68,7 +68,7 @@ public class DemuxOutputStream extends OutputStream {
     public void flush() throws IOException {
         @SuppressWarnings("resource")
         final OutputStream output = outputStreamThreadLocal.get();
-        if (null != output) {
+        if (output != null) {
             output.flush();
         }
     }
@@ -83,7 +83,7 @@ public class DemuxOutputStream extends OutputStream {
     public void write(final int ch) throws IOException {
         @SuppressWarnings("resource")
         final OutputStream output = outputStreamThreadLocal.get();
-        if (null != output) {
+        if (output != null) {
             output.write(ch);
         }
     }
