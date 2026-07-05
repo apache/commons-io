@@ -61,7 +61,7 @@ public interface IOPredicate<T> {
      * @return a predicate that tests if two arguments are equal using {@link Objects#equals(Object, Object)}
      */
     static <T> IOPredicate<T> isEqual(final Object target) {
-        return null == target ? Objects::isNull : object -> target.equals(object);
+        return target == null ? Objects::isNull : object -> target.equals(object);
     }
 
     /**
