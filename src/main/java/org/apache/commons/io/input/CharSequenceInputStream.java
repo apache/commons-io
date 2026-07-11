@@ -128,7 +128,7 @@ public class CharSequenceInputStream extends InputStream {
         /**
          * Sets the charset encoder. Assumes that the caller has configured the encoder.
          *
-         * @param newEncoder the charset encoder.
+         * @param newEncoder The charset encoder.
          * @return {@code this} instance.
          * @since 2.13.0
          */
@@ -188,8 +188,8 @@ public class CharSequenceInputStream extends InputStream {
     /**
      * Constructs a new instance with a buffer size of {@link IOUtils#DEFAULT_BUFFER_SIZE}.
      *
-     * @param cs the input character sequence.
-     * @param charset the character set name to use.
+     * @param cs The input character sequence.
+     * @param charset The character set name to use.
      * @throws IllegalArgumentException if the buffer is not large enough to hold a complete character.
      * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
      */
@@ -201,9 +201,9 @@ public class CharSequenceInputStream extends InputStream {
     /**
      * Constructs a new instance.
      *
-     * @param cs the input character sequence.
-     * @param charset the character set name to use, null maps to the default Charset.
-     * @param bufferSize the buffer size to use.
+     * @param cs The input character sequence.
+     * @param charset The character set name to use, null maps to the default Charset.
+     * @param bufferSize The buffer size to use.
      * @throws IllegalArgumentException if the buffer is not large enough to hold a complete character.
      * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
      */
@@ -215,8 +215,8 @@ public class CharSequenceInputStream extends InputStream {
     /**
      * Constructs a new instance with a buffer size of {@link IOUtils#DEFAULT_BUFFER_SIZE}.
      *
-     * @param cs the input character sequence.
-     * @param charset the character set name to use.
+     * @param cs The input character sequence.
+     * @param charset The character set name to use.
      * @throws IllegalArgumentException if the buffer is not large enough to hold a complete character.
      * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
      */
@@ -228,9 +228,9 @@ public class CharSequenceInputStream extends InputStream {
     /**
      * Constructs a new instance.
      *
-     * @param cs the input character sequence.
-     * @param charset the character set name to use, null maps to the default Charset.
-     * @param bufferSize the buffer size to use.
+     * @param cs The input character sequence.
+     * @param charset The character set name to use, null maps to the default Charset.
+     * @param bufferSize The buffer size to use.
      * @throws IllegalArgumentException if the buffer is not large enough to hold a complete character.
      * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
      */

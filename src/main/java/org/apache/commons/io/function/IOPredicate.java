@@ -57,7 +57,7 @@ public interface IOPredicate<T> {
      * Creates a predicate that tests if two arguments are equal using {@link Objects#equals(Object, Object)}.
      *
      * @param <T> The type of arguments to the predicate.
-     * @param target the object to compare for equality, may be {@code null}
+     * @param target The object to compare for equality, may be {@code null}
      * @return A predicate that tests if two arguments are equal using {@link Objects#equals(Object, Object)}
      */
     static <T> IOPredicate<T> isEqual(final Object target) {
@@ -74,7 +74,7 @@ public interface IOPredicate<T> {
      * predicate throws an exception, the {@code other} predicate will not be evaluated.
      * </p>
      *
-     * @param other a predicate that will be logically-ANDed with this predicate.
+     * @param other A predicate that will be logically-ANDed with this predicate.
      * @return A composed predicate that represents the short-circuiting logical AND of this predicate and the {@code other}
      *         predicate.
      * @throws NullPointerException if other is null.
@@ -113,7 +113,7 @@ public interface IOPredicate<T> {
      * predicate throws an exception, the {@code other} predicate will not be evaluated.
      * </p>
      *
-     * @param other a predicate that will be logically-ORed with this predicate.
+     * @param other A predicate that will be logically-ORed with this predicate.
      * @return A composed predicate that represents the short-circuiting logical OR of this predicate and the {@code other}
      *         predicate.
      * @throws NullPointerException if other is null.
@@ -126,7 +126,7 @@ public interface IOPredicate<T> {
     /**
      * Evaluates this predicate on the given argument.
      *
-     * @param t the input argument.
+     * @param t The input argument.
      * @return {@code true} if the input argument matches the predicate, otherwise {@code false}
      * @throws IOException if an I/O error occurs.
      */

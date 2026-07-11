@@ -184,7 +184,7 @@ public class FileAlterationObserver implements Serializable {
         /**
          * Sets the root directory to observe.
          *
-         * @param rootEntry the root directory to observe.
+         * @param rootEntry The root directory to observe.
          * @return This instance.
          */
         public Builder setRootEntry(final FileEntry rootEntry) {
@@ -243,7 +243,7 @@ public class FileAlterationObserver implements Serializable {
     /**
      * Constructs an observer for the specified directory.
      *
-     * @param directory the directory to observe.
+     * @param directory The directory to observe.
      * @deprecated Use {@link #builder()}.
      */
     @Deprecated
@@ -305,7 +305,7 @@ public class FileAlterationObserver implements Serializable {
     /**
      * Constructs an observer for the specified directory.
      *
-     * @param directoryName the name of the directory to observe.
+     * @param directoryName The name of the directory to observe.
      * @deprecated Use {@link #builder()}.
      */
     @Deprecated
@@ -316,7 +316,7 @@ public class FileAlterationObserver implements Serializable {
     /**
      * Constructs an observer for the specified directory and file filter.
      *
-     * @param directoryName the name of the directory to observe.
+     * @param directoryName The name of the directory to observe.
      * @param fileFilter    The file filter or null if none.
      * @deprecated Use {@link #builder()}.
      */
@@ -328,7 +328,7 @@ public class FileAlterationObserver implements Serializable {
     /**
      * Constructs an observer for the specified directory, file filter and file comparator.
      *
-     * @param directoryName the name of the directory to observe.
+     * @param directoryName The name of the directory to observe.
      * @param fileFilter    The file filter or null if none.
      * @param ioCase        what case sensitivity to use comparing file names, null means system sensitive.
      * @deprecated Use {@link #builder()}.
@@ -523,7 +523,7 @@ public class FileAlterationObserver implements Serializable {
      * Lists the file entries in {@code file}.
      *
      * @param file  The directory to list.
-     * @param entry the parent entry.
+     * @param entry The parent entry.
      * @return The child file entries.
      */
     private FileEntry[] listFileEntries(final File file, final FileEntry entry) {

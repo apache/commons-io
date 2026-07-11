@@ -82,7 +82,7 @@ public class SizeFileFilter extends AbstractFileFilter implements Serializable {
      * Constructs a new size file filter for files equal to or
      * larger than a certain size.
      *
-     * @param size  the threshold size of the files.
+     * @param size  The threshold size of the files.
      * @throws IllegalArgumentException if the size is negative.
      */
     public SizeFileFilter(final long size) {
@@ -93,7 +93,7 @@ public class SizeFileFilter extends AbstractFileFilter implements Serializable {
      * Constructs a new size file filter for files based on a certain size
      * threshold.
      *
-     * @param size  the threshold size of the files.
+     * @param size  The threshold size of the files.
      * @param acceptLarger  if true, files equal to or larger are accepted,
      * otherwise smaller ones (but not equal to).
      * @throws IllegalArgumentException if the size is negative.
@@ -115,7 +115,7 @@ public class SizeFileFilter extends AbstractFileFilter implements Serializable {
      * file <strong>IS</strong> selected.
      * </p>
      *
-     * @param file  the File to check.
+     * @param file  The File to check.
      * @return true if the file name matches.
      */
     @Override
@@ -134,8 +134,8 @@ public class SizeFileFilter extends AbstractFileFilter implements Serializable {
      * file <strong>IS</strong> selected.
      * </p>
      *
-     * @param file       the File to check.
-     * @param attributes the path's basic attributes (may be null).
+     * @param file       The File to check.
+     * @param attributes The path's basic attributes (may be null).
      * @return true if the file name matches.
      */
     @Override

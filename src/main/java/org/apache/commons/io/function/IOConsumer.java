@@ -45,8 +45,8 @@ public interface IOConsumer<T> {
     /**
      * Applies the given {@link IOConsumer} action to the object if the consumer is not {@code null}. Otherwise, does nothing.
      *
-     * @param consumer the consumer to consume.
-     * @param object   the object to be consumed.
+     * @param consumer The consumer to consume.
+     * @param object   The object to be consumed.
      * @param <T>      the type of the argument the consumer accepts.
      * @throws IOException Thrown when the consumer fails.
      * @since 2.23.0
@@ -151,7 +151,7 @@ public interface IOConsumer<T> {
     /**
      * Performs this operation on the given argument.
      *
-     * @param t the input argument.
+     * @param t The input argument.
      * @throws IOException if an I/O error occurs.
      */
     void accept(T t) throws IOException;
@@ -161,7 +161,7 @@ public interface IOConsumer<T> {
      * operation. If performing either operation throws an exception, it is relayed to the caller of the composed operation.
      * If performing this operation throws an exception, the {@code after} operation will not be performed.
      *
-     * @param after the operation to perform after this operation.
+     * @param after The operation to perform after this operation.
      * @return A composed {@link Consumer} that performs in sequence this operation followed by the {@code after} operation.
      * @throws NullPointerException if {@code after} is null.
      */

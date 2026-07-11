@@ -62,8 +62,8 @@ public class HexDump {
      * characters (if any) that those bytes represent printed per each line
      * of output.
      *
-     * @param data  the byte array to be dumped.
-     * @param appendable  the Appendable to which the data is to be written.
+     * @param data  The byte array to be dumped.
+     * @param appendable  The Appendable to which the data is to be written.
      * @throws IOException is thrown if anything goes wrong writing
      *         the data to appendable.
      * @throws NullPointerException if the output appendable is null.
@@ -89,9 +89,9 @@ public class HexDump {
      * the first byte on that line is located.
      * </p>
      *
-     * @param data  the byte array to be dumped.
+     * @param data  The byte array to be dumped.
      * @param offset  offset of the byte array within a larger entity.
-     * @param appendable  the Appendable to which the data is to be written.
+     * @param appendable  The Appendable to which the data is to be written.
      * @param index initial index into the byte array.
      * @param length number of bytes to dump from the array.
      * @throws IOException is thrown if anything goes wrong writing
@@ -172,9 +172,9 @@ public class HexDump {
      * This method uses the virtual machine's {@linkplain Charset#defaultCharset() default charset}.
      * </p>
      *
-     * @param data  the byte array to be dumped.
+     * @param data  The byte array to be dumped.
      * @param offset  offset of the byte array within a larger entity.
-     * @param stream  the OutputStream to which the data is to be
+     * @param stream  The OutputStream to which the data is to be
      *               written.
      * @param index initial index into the byte array.
      * @throws IOException is thrown if anything goes wrong writing
@@ -197,8 +197,8 @@ public class HexDump {
     /**
      * Dumps a byte value into a StringBuilder.
      *
-     * @param builder the StringBuilder to dump the value in.
-     * @param value  the byte value to be dumped.
+     * @param builder The StringBuilder to dump the value in.
+     * @param value  The byte value to be dumped.
      * @return StringBuilder containing the dumped value.
      */
     private static StringBuilder dump(final StringBuilder builder, final byte value) {
@@ -211,8 +211,8 @@ public class HexDump {
     /**
      * Dumps a long value into a StringBuilder.
      *
-     * @param builder the StringBuilder to dump the value in.
-     * @param value  the long value to be dumped.
+     * @param builder The StringBuilder to dump the value in.
+     * @param value  The long value to be dumped.
      * @return StringBuilder containing the dumped value.
      */
     private static StringBuilder dump(final StringBuilder builder, final long value) {

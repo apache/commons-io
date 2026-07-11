@@ -38,7 +38,7 @@ public abstract class ProxyReader extends FilterReader {
     /**
      * Constructs a new ProxyReader.
      *
-     * @param delegate  the Reader to delegate to.
+     * @param delegate  The Reader to delegate to.
      */
     public ProxyReader(final Reader delegate) {
         // the delegate is stored in a protected superclass variable named 'in'
@@ -170,7 +170,7 @@ public abstract class ProxyReader extends FilterReader {
     /**
      * Invokes the delegate's {@code read(char[])} method.
      *
-     * @param chr the buffer to read the characters into.
+     * @param chr The buffer to read the characters into.
      * @return The number of characters read or -1 if the end of stream.
      * @throws IOException if an I/O error occurs.
      */
@@ -190,7 +190,7 @@ public abstract class ProxyReader extends FilterReader {
     /**
      * Reads characters into a portion of an array by invoking the delegate's {@link Reader#read(char[], int, int)} method.
      *
-     * @param chr the buffer to read the characters into.
+     * @param chr The buffer to read the characters into.
      * @param st The start offset.
      * @param len The number of bytes to read.
      * @return The number of characters read or -1 if the end of stream.
@@ -212,7 +212,7 @@ public abstract class ProxyReader extends FilterReader {
     /**
      * Attempts to read characters into the specified character buffer by invoking the delegate's {@link Reader#read(CharBuffer)} method.
      *
-     * @param target the char buffer to read the characters into.
+     * @param target The char buffer to read the characters into.
      * @return The number of characters read or -1 if the end of stream.
      * @throws IOException if an I/O error occurs.
      * @since 2.0
@@ -279,7 +279,7 @@ public abstract class ProxyReader extends FilterReader {
     /**
      * Skips characters by invoking the delegate's {@link Reader#skip(long)} method.
      *
-     * @param ln the number of bytes to skip.
+     * @param ln The number of bytes to skip.
      * @return The number of bytes to skipped or EOF if the end of stream.
      * @throws IOException if an I/O error occurs.
      */

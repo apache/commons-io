@@ -73,7 +73,7 @@ public class ObjectStreamClassPredicate implements Predicate<ObjectStreamClass> 
      * The reject list takes precedence over the accept list.
      * </p>
      *
-     * @param matcher a class name matcher to <em>accept</em> objects.
+     * @param matcher A class name matcher to <em>accept</em> objects.
      * @return {@code this} instance.
      */
     public ObjectStreamClassPredicate accept(final ClassNameMatcher matcher) {
@@ -87,7 +87,7 @@ public class ObjectStreamClassPredicate implements Predicate<ObjectStreamClass> 
      * The reject list takes precedence over the accept list.
      * </p>
      *
-     * @param pattern a Pattern for compiled regular expression.
+     * @param pattern A Pattern for compiled regular expression.
      * @return {@code this} instance.
      */
     public ObjectStreamClassPredicate accept(final Pattern pattern) {
@@ -130,7 +130,7 @@ public class ObjectStreamClassPredicate implements Predicate<ObjectStreamClass> 
      * The reject list takes precedence over the accept list.
      * </p>
      *
-     * @param m the matcher to use.
+     * @param m The matcher to use.
      * @return {@code this} instance.
      */
     public ObjectStreamClassPredicate reject(final ClassNameMatcher m) {

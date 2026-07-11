@@ -79,8 +79,8 @@ public class RegexFileFilter extends AbstractFileFilter implements Serializable 
     /**
      * Compiles the given pattern source.
      *
-     * @param pattern the source pattern.
-     * @param flags the compilation flags.
+     * @param pattern The source pattern.
+     * @param flags The compilation flags.
      * @return A new Pattern.
      */
     private static Pattern compile(final String pattern, final int flags) {
@@ -164,8 +164,8 @@ public class RegexFileFilter extends AbstractFileFilter implements Serializable 
     /**
      * Tests to see if the file name matches one of the regular expressions.
      *
-     * @param dir the file directory (ignored).
-     * @param name the file name.
+     * @param dir The file directory (ignored).
+     * @param name The file name.
      * @return true if the file name matches one of the regular expressions.
      */
     @Override
@@ -176,8 +176,8 @@ public class RegexFileFilter extends AbstractFileFilter implements Serializable 
     /**
      * Tests to see if the file name matches one of the regular expressions.
      *
-     * @param path the path.
-     * @param attributes the path's basic attributes (may be null).
+     * @param path The path.
+     * @param attributes The path's basic attributes (may be null).
      * @return true if the file name matches one of the regular expressions.
      */
     @Override

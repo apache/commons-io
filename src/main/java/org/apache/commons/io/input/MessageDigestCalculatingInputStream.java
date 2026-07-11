@@ -116,7 +116,7 @@ public class MessageDigestCalculatingInputStream extends ObservableInputStream {
          * <em>The MD5 cryptographic algorithm is weak and should not be used.</em>
          * </p>
          *
-         * @param messageDigest the message digest.
+         * @param messageDigest The message digest.
          */
         public void setMessageDigest(final MessageDigest messageDigest) {
             this.messageDigest = messageDigest;
@@ -128,7 +128,7 @@ public class MessageDigestCalculatingInputStream extends ObservableInputStream {
          * <em>The MD5 cryptographic algorithm is weak and should not be used.</em>
          * </p>
          *
-         * @param algorithm the name of the algorithm. See the MessageDigest section in the
+         * @param algorithm The name of the algorithm. See the MessageDigest section in the
          *                  <a href= "https://docs.oracle.com/javase/8/docs/technotes/guides/security/StandardNames.html#MessageDigest"> Java Cryptography
          *                  Architecture Standard Algorithm Name Documentation</a> for information about standard algorithm names.
          * @throws NoSuchAlgorithmException if no Provider supports a MessageDigestSpi implementation for the specified algorithm.
@@ -148,7 +148,7 @@ public class MessageDigestCalculatingInputStream extends ObservableInputStream {
         /**
          * Constructs an MessageDigestMaintainingObserver for the given MessageDigest.
          *
-         * @param messageDigest the message digest to use.
+         * @param messageDigest The message digest to use.
          * @throws NullPointerException if messageDigest is null.
          */
         public MessageDigestMaintainingObserver(final MessageDigest messageDigest) {
@@ -211,7 +211,7 @@ public class MessageDigestCalculatingInputStream extends ObservableInputStream {
      * The MD5 algorithm is weak and should not be used.
      * </p>
      *
-     * @param inputStream the stream to calculate the message digest for.
+     * @param inputStream The stream to calculate the message digest for.
      * @throws NoSuchAlgorithmException if no Provider supports a MessageDigestSpi implementation for the specified algorithm.
      * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}.
      */
@@ -226,8 +226,8 @@ public class MessageDigestCalculatingInputStream extends ObservableInputStream {
      * The MD5 cryptographic algorithm is weak and should not be used.
      * </p>
      *
-     * @param inputStream   the stream to calculate the message digest for.
-     * @param messageDigest the message digest to use.
+     * @param inputStream   The stream to calculate the message digest for.
+     * @param messageDigest The message digest to use.
      * @throws NullPointerException if messageDigest is null.
      * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}.
      */
@@ -243,8 +243,8 @@ public class MessageDigestCalculatingInputStream extends ObservableInputStream {
      * The MD5 cryptographic algorithm is weak and should not be used.
      * </p>
      *
-     * @param inputStream the stream to calculate the message digest for.
-     * @param algorithm   the name of the algorithm requested. See the MessageDigest section in the
+     * @param inputStream The stream to calculate the message digest for.
+     * @param algorithm   The name of the algorithm requested. See the MessageDigest section in the
      *                    <a href= "https://docs.oracle.com/javase/8/docs/technotes/guides/security/StandardNames.html#MessageDigest"> Java Cryptography
      *                    Architecture Standard Algorithm Name Documentation</a> for information about standard algorithm names.
      * @throws NoSuchAlgorithmException if no Provider supports a MessageDigestSpi implementation for the specified algorithm.

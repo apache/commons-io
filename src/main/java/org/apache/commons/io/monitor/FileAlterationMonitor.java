@@ -157,7 +157,7 @@ public final class FileAlterationMonitor implements Runnable {
     /**
      * Sets the thread factory.
      *
-     * @param threadFactory the thread factory.
+     * @param threadFactory The thread factory.
      */
     public synchronized void setThreadFactory(final ThreadFactory threadFactory) {
         this.threadFactory = threadFactory;
@@ -196,7 +196,7 @@ public final class FileAlterationMonitor implements Runnable {
     /**
      * Stops monitoring.
      *
-     * @param stopInterval the amount of time in milliseconds to wait for the thread to finish.
+     * @param stopInterval The amount of time in milliseconds to wait for the thread to finish.
      * A value of zero will wait until the thread is finished (see {@link Thread#join(long)}).
      * @throws Exception if an error occurs initializing the observer.
      * @since 2.1

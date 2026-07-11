@@ -57,7 +57,7 @@ public class CloseShieldInputStream extends ProxyInputStream {
         /**
          * Sets the {@code onClose} function. By default, replaces the underlying input stream when {@link #close()} is called.
          *
-         * @param onClose the onClose function.
+         * @param onClose The onClose function.
          * @return {@code this} instance.
          */
         public Builder setOnClose(final IOUnaryOperator<InputStream> onClose) {
@@ -80,7 +80,7 @@ public class CloseShieldInputStream extends ProxyInputStream {
     /**
      * Constructs a proxy that only shields {@link System#in} from closing.
      *
-     * @param inputStream the candidate input stream.
+     * @param inputStream The candidate input stream.
      * @return The given stream or a proxy on {@link System#in}.
      * @since 2.17.0
      */
@@ -91,7 +91,7 @@ public class CloseShieldInputStream extends ProxyInputStream {
     /**
      * Constructs a proxy that shields the given input stream from being closed.
      *
-     * @param inputStream the input stream to wrap.
+     * @param inputStream The input stream to wrap.
      * @return The created proxy.
      * @since 2.9.0
      */

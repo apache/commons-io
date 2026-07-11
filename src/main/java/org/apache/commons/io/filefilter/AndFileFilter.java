@@ -60,7 +60,7 @@ public class AndFileFilter extends AbstractFileFilter implements ConditionalFile
     /**
      * Constructs a new instance with the given initial list.
      *
-     * @param initialList the initial list.
+     * @param initialList The initial list.
      */
     private AndFileFilter(final ArrayList<IOFileFilter> initialList) {
         this.fileFilters = Objects.requireNonNull(initialList, "initialList");
@@ -69,7 +69,7 @@ public class AndFileFilter extends AbstractFileFilter implements ConditionalFile
     /**
      * Constructs a new instance with the given initial capacity.
      *
-     * @param initialCapacity the initial capacity.
+     * @param initialCapacity The initial capacity.
      */
     private AndFileFilter(final int initialCapacity) {
         this(new ArrayList<>(initialCapacity));
@@ -89,8 +89,8 @@ public class AndFileFilter extends AbstractFileFilter implements ConditionalFile
     /**
      * Constructs a new file filter that ANDs the result of other filters.
      *
-     * @param filter1  the first filter, must second be null.
-     * @param filter2  the first filter, must not be null.
+     * @param filter1  The first filter, must second be null.
+     * @param filter2  The first filter, must not be null.
      * @throws IllegalArgumentException if either filter is null.
      */
     public AndFileFilter(final IOFileFilter filter1, final IOFileFilter filter2) {
@@ -103,7 +103,7 @@ public class AndFileFilter extends AbstractFileFilter implements ConditionalFile
      * Constructs a new instance of {@link AndFileFilter}
      * with the specified list of filters.
      *
-     * @param fileFilters  a List of IOFileFilter instances, copied.
+     * @param fileFilters  A List of IOFileFilter instances, copied.
      * @since 1.1
      */
     public AndFileFilter(final List<IOFileFilter> fileFilters) {
@@ -148,7 +148,7 @@ public class AndFileFilter extends AbstractFileFilter implements ConditionalFile
     /**
      * Adds the given file filters.
      *
-     * @param fileFilters the filters to add.
+     * @param fileFilters The filters to add.
      * @since 2.9.0
      */
     public void addFileFilter(final IOFileFilter... fileFilters) {

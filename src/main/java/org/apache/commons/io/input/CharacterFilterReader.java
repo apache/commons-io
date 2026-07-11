@@ -41,7 +41,7 @@ public class CharacterFilterReader extends AbstractCharacterFilterReader {
     /**
      * Constructs a new reader.
      *
-     * @param reader the reader to filter.
+     * @param reader The reader to filter.
      * @param skip Skip test.
      * @since 2.9.0
      */

@@ -77,7 +77,7 @@ public class LineIterator implements Iterator<String>, Closeable {
     /**
      * Constructs an iterator of the lines for a {@link Reader}.
      *
-     * @param reader the {@link Reader} to read from, not null.
+     * @param reader The {@link Reader} to read from, not null.
      * @throws NullPointerException if the reader is null.
      */
     @SuppressWarnings("resource") // Caller closes Reader
@@ -138,7 +138,7 @@ public class LineIterator implements Iterator<String>, Closeable {
      * Overridable method to validate each line that is returned.
      * This implementation always returns true.
      *
-     * @param line  the line that is to be validated.
+     * @param line  The line that is to be validated.
      * @return true if valid, false to remove from the iterator.
      */
     protected boolean isValidLine(final String line) {

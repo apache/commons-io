@@ -77,7 +77,7 @@ public abstract class AbstractFileFilter implements IOFileFilter, PathVisitor {
     /**
      * Tests to see if the File should be accepted by this filter.
      *
-     * @param file the File to check.
+     * @param file The File to check.
      * @return true if this file matches the test.
      */
     @Override
@@ -89,8 +89,8 @@ public abstract class AbstractFileFilter implements IOFileFilter, PathVisitor {
     /**
      * Tests to see if the File should be accepted by this filter.
      *
-     * @param dir the directory File to check.
-     * @param name the file name within the directory to check.
+     * @param dir The directory File to check.
+     * @param name The file name within the directory to check.
      * @return true if this file matches the test.
      */
     @Override
@@ -128,7 +128,7 @@ public abstract class AbstractFileFilter implements IOFileFilter, PathVisitor {
     /**
      * Handles exceptions caught while accepting.
      *
-     * @param t the caught Throwable.
+     * @param t The caught Throwable.
      * @return The given Throwable.
      * @since 2.9.0
      */

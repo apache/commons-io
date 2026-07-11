@@ -89,7 +89,7 @@ public class AgeFileFilter extends AbstractFileFilter implements Serializable {
     /**
      * Constructs a new age file filter for files older than (at or before) a certain cutoff date.
      *
-     * @param cutoffDate the threshold age of the files.
+     * @param cutoffDate The threshold age of the files.
      */
     public AgeFileFilter(final Date cutoffDate) {
         this(cutoffDate, true);
@@ -98,7 +98,7 @@ public class AgeFileFilter extends AbstractFileFilter implements Serializable {
     /**
      * Constructs a new age file filter for files on any one side of a certain cutoff date.
      *
-     * @param cutoffDate the threshold age of the files.
+     * @param cutoffDate The threshold age of the files.
      * @param acceptOlder if true, older files (at or before the cutoff) are accepted, else newer ones (after the
      *        cutoff).
      */
@@ -110,7 +110,7 @@ public class AgeFileFilter extends AbstractFileFilter implements Serializable {
      * Constructs a new age file filter for files older than (at or before) a certain File (whose last modification time
      * will be used as reference).
      *
-     * @param cutoffReference the file whose last modification time is used as the threshold age of the files.
+     * @param cutoffReference The file whose last modification time is used as the threshold age of the files.
      */
     public AgeFileFilter(final File cutoffReference) {
         this(cutoffReference, true);
@@ -120,7 +120,7 @@ public class AgeFileFilter extends AbstractFileFilter implements Serializable {
      * Constructs a new age file filter for files on any one side of a certain File (whose last modification time will
      * be used as reference).
      *
-     * @param cutoffReference the file whose last modification time is used as the threshold age of the files.
+     * @param cutoffReference The file whose last modification time is used as the threshold age of the files.
      * @param acceptOlder if true, older files (at or before the cutoff) are accepted, else newer ones (after the
      *        cutoff).
      */
@@ -179,7 +179,7 @@ public class AgeFileFilter extends AbstractFileFilter implements Serializable {
      * modification time equals cutoff and older files are required, file <strong>IS</strong> selected.
      * </p>
      *
-     * @param file the File to check.
+     * @param file The File to check.
      * @return true if the file name matches.
      */
     @Override
@@ -194,8 +194,8 @@ public class AgeFileFilter extends AbstractFileFilter implements Serializable {
      * modification time equals cutoff and older files are required, file <strong>IS</strong> selected.
      * </p>
      *
-     * @param file the File to check.
-     * @param attributes the path's basic attributes (may be null).
+     * @param file The File to check.
+     * @param attributes The path's basic attributes (may be null).
      * @return true if the file name matches.
      * @since 2.9.0
      */

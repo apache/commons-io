@@ -84,7 +84,7 @@ public class SuffixFileFilter extends AbstractFileFilter implements Serializable
     /**
      * Constructs a new Suffix file filter for a list of suffixes.
      *
-     * @param suffixes  the suffixes to allow, must not be null.
+     * @param suffixes  The suffixes to allow, must not be null.
      * @throws IllegalArgumentException if the suffix list is null.
      * @throws ClassCastException if the list does not contain Strings.
      */
@@ -96,7 +96,7 @@ public class SuffixFileFilter extends AbstractFileFilter implements Serializable
      * Constructs a new Suffix file filter for a list of suffixes
      * specifying case-sensitivity.
      *
-     * @param suffixes  the suffixes to allow, must not be null.
+     * @param suffixes  The suffixes to allow, must not be null.
      * @param ioCase  how to handle case sensitivity, null means case-sensitive.
      * @throws IllegalArgumentException if the suffix list is null.
      * @throws ClassCastException if the list does not contain Strings.
@@ -111,7 +111,7 @@ public class SuffixFileFilter extends AbstractFileFilter implements Serializable
     /**
      * Constructs a new Suffix file filter for a single extension.
      *
-     * @param suffix  the suffix to allow, must not be null.
+     * @param suffix  The suffix to allow, must not be null.
      * @throws IllegalArgumentException if the suffix is null.
      */
     public SuffixFileFilter(final String suffix) {
@@ -125,7 +125,7 @@ public class SuffixFileFilter extends AbstractFileFilter implements Serializable
      * instance. This would be inadvisable however.
      * </p>
      *
-     * @param suffixes  the suffixes to allow, must not be null.
+     * @param suffixes  The suffixes to allow, must not be null.
      * @throws NullPointerException if the suffix array is null.
      */
     public SuffixFileFilter(final String... suffixes) {
@@ -136,7 +136,7 @@ public class SuffixFileFilter extends AbstractFileFilter implements Serializable
      * Constructs a new Suffix file filter for a single extension
      * specifying case-sensitivity.
      *
-     * @param suffix  the suffix to allow, must not be null.
+     * @param suffix  The suffix to allow, must not be null.
      * @param ioCase  how to handle case sensitivity, null means case-sensitive.
      * @throws NullPointerException if the suffix is null.
      * @since 1.4
@@ -151,7 +151,7 @@ public class SuffixFileFilter extends AbstractFileFilter implements Serializable
      * Constructs a new Suffix file filter for an array of suffixes
      * specifying case-sensitivity.
      *
-     * @param suffixes  the suffixes to allow, must not be null.
+     * @param suffixes  The suffixes to allow, must not be null.
      * @param ioCase  how to handle case sensitivity, null means case-sensitive.
      * @throws NullPointerException if the suffix array is null.
      * @since 1.4
@@ -165,7 +165,7 @@ public class SuffixFileFilter extends AbstractFileFilter implements Serializable
     /**
      * Tests to see if the file name ends with the suffix.
      *
-     * @param file  the File to check.
+     * @param file  The File to check.
      * @return true if the file name ends with one of our suffixes.
      */
     @Override
@@ -176,8 +176,8 @@ public class SuffixFileFilter extends AbstractFileFilter implements Serializable
     /**
      * Tests to see if the file name ends with the suffix.
      *
-     * @param file  the File directory.
-     * @param name  the file name.
+     * @param file  The File directory.
+     * @param name  The file name.
      * @return true if the file name ends with one of our suffixes.
      */
     @Override
@@ -188,8 +188,8 @@ public class SuffixFileFilter extends AbstractFileFilter implements Serializable
     /**
      * Tests to see if the file name ends with the suffix.
      *
-     * @param path       the File to check.
-     * @param attributes the path's basic attributes (may be null).
+     * @param path       The File to check.
+     * @param attributes The path's basic attributes (may be null).
      * @return true if the file name ends with one of our suffixes.
      * @since 2.9.0
      */

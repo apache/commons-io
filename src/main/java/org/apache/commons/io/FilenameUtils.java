@@ -218,8 +218,8 @@ public class FilenameUtils {
      * problem, use {@link #getFullPath(String)} on the base path argument.
      * </p>
      *
-     * @param basePath          the base path to attach to, always treated as a path.
-     * @param fullFileNameToAdd the file name (or path) to attach to the base.
+     * @param basePath          The base path to attach to, always treated as a path.
+     * @param fullFileNameToAdd The file name (or path) to attach to the base.
      * @return The concatenated path, or null if invalid.
      * @throws IllegalArgumentException if the result path contains the null character ({@code U+0000}).
      */
@@ -258,8 +258,8 @@ public class FilenameUtils {
      * <li>A null child file is not contained in any parent: return false</li>
      * </ul>
      *
-     * @param canonicalParent the path string to consider as the parent.
-     * @param canonicalChild  the path string to consider as the child.
+     * @param canonicalParent The path string to consider as the parent.
+     * @param canonicalChild  The path string to consider as the child.
      * @return true if the candidate leaf is under the specified composite. False otherwise.
      * @since 2.2
      * @see FileUtils#directoryContains(File, File)
@@ -276,7 +276,7 @@ public class FilenameUtils {
     /**
      * Does the work of getting the path.
      *
-     * @param fileName            the file name.
+     * @param fileName            The file name.
      * @param includeEndSeparator true to include the end separator.
      * @return The path.
      * @throws IllegalArgumentException if the result path contains the null character ({@code U+0000}).
@@ -309,7 +309,7 @@ public class FilenameUtils {
     /**
      * Does the work of getting the path.
      *
-     * @param fileName     the file name.
+     * @param fileName     The file name.
      * @param separatorAdd 0 to omit the end separator, 1 to return it.
      * @return The path.
      * @throws IllegalArgumentException if the result path contains the null character ({@code U+0000}).
@@ -333,7 +333,7 @@ public class FilenameUtils {
     /**
      * Internal method to perform the normalization.
      *
-     * @param fileName      the file name.
+     * @param fileName      The file name.
      * @param separator     The separator character to use.
      * @param keepSeparator true to keep the final separator.
      * @return The normalized fileName.
@@ -428,8 +428,8 @@ public class FilenameUtils {
      * No processing is performed on the file names other than comparison. This is merely a null-safe case-sensitive string equality.
      * </p>
      *
-     * @param fileName1 the first file name, may be null.
-     * @param fileName2 the second file name, may be null.
+     * @param fileName1 The first file name, may be null.
+     * @param fileName2 The second file name, may be null.
      * @return true if the file names are equal, null equals null.
      * @see IOCase#SENSITIVE
      */
@@ -440,8 +440,8 @@ public class FilenameUtils {
     /**
      * Checks whether two file names are equal, optionally normalizing and providing control over the case-sensitivity.
      *
-     * @param fileName1 the first file name, may be null.
-     * @param fileName2 the second file name, may be null.
+     * @param fileName1 The first file name, may be null.
+     * @param fileName2 The second file name, may be null.
      * @param normalize whether to normalize the file names.
      * @param ioCase    what case sensitivity rule to use, null means case-sensitive.
      * @return true if the file names are equal, null equals null.
@@ -470,8 +470,8 @@ public class FilenameUtils {
      * Both file names are first passed to {@link #normalize(String)}. The check is then performed in a case-sensitive manner.
      * </p>
      *
-     * @param fileName1 the first file name, may be null.
-     * @param fileName2 the second file name, may be null.
+     * @param fileName1 The first file name, may be null.
+     * @param fileName2 The second file name, may be null.
      * @return true if the file names are equal, null equals null.
      * @see IOCase#SENSITIVE
      */
@@ -485,8 +485,8 @@ public class FilenameUtils {
      * Both file names are first passed to {@link #normalize(String)}. The check is then performed case-sensitively on Unix and case-insensitively on Windows.
      * </p>
      *
-     * @param fileName1 the first file name, may be null.
-     * @param fileName2 the second file name, may be null.
+     * @param fileName1 The first file name, may be null.
+     * @param fileName2 The second file name, may be null.
      * @return true if the file names are equal, null equals null.
      * @see IOCase#SYSTEM
      */
@@ -500,8 +500,8 @@ public class FilenameUtils {
      * No processing is performed on the file names other than comparison. The check is case-sensitive on Unix and case-insensitive on Windows.
      * </p>
      *
-     * @param fileName1 the first file name, may be null.
-     * @param fileName2 the second file name, may be null.
+     * @param fileName1 The first file name, may be null.
+     * @param fileName2 The second file name, may be null.
      * @return true if the file names are equal, null equals null.
      * @see IOCase#SYSTEM
      */
@@ -528,7 +528,7 @@ public class FilenameUtils {
     /**
      * Special handling for NTFS ADS: Don't accept colon in the file name.
      *
-     * @param fileName a file name.
+     * @param fileName A file name.
      * @return ADS offsets.
      */
     private static int getAdsCriticalOffset(final String fileName) {
@@ -565,7 +565,7 @@ public class FilenameUtils {
      * The output will be the same irrespective of the machine that the code is running on.
      * </p>
      *
-     * @param fileName the file name, null returns null.
+     * @param fileName The file name, null returns null.
      * @return The name of the file without the path, or an empty string if none exists.
      * @throws IllegalArgumentException if the file name contains the null character ({@code U+0000}).
      */
@@ -595,7 +595,7 @@ public class FilenameUtils {
      * IO 2.7 and later throw an {@link IllegalArgumentException} for names like this.
      * </p>
      *
-     * @param fileName the file name to retrieve the extension of.
+     * @param fileName The file name to retrieve the extension of.
      * @return The extension of the file or an empty string if none exists or {@code null} if the file name is {@code null}.
      * @throws IllegalArgumentException <strong>Windows only:</strong> the file name parameter is, in fact, the identifier of an Alternate Data Stream, for
      *                                  example "foo.exe:bar.txt".
@@ -635,7 +635,7 @@ public class FilenameUtils {
      * The output will be the same irrespective of the machine that the code is running on.
      * </p>
      *
-     * @param fileName the file name, null returns null.
+     * @param fileName The file name, null returns null.
      * @return The path of the file, an empty string if none exists, null if invalid.
      * @throws IllegalArgumentException if the result path contains the null character ({@code U+0000}).
      */
@@ -667,7 +667,7 @@ public class FilenameUtils {
      * The output will be the same irrespective of the machine that the code is running on.
      * </p>
      *
-     * @param fileName the file name, null returns null.
+     * @param fileName The file name, null returns null.
      * @return The path of the file, an empty string if none exists, null if invalid.
      * @throws IllegalArgumentException if the result path contains the null character ({@code U+0000}).
      */
@@ -692,7 +692,7 @@ public class FilenameUtils {
      * The output will be the same irrespective of the machine that the code is running on.
      * </p>
      *
-     * @param fileName the file name, null returns null.
+     * @param fileName The file name, null returns null.
      * @return The name of the file without the path, or an empty string if none exists.
      * @throws IllegalArgumentException if the file name contains the null character ({@code U+0000}).
      */
@@ -724,7 +724,7 @@ public class FilenameUtils {
      * This method drops the prefix from the result. See {@link #getFullPath(String)} for the method that retains the prefix.
      * </p>
      *
-     * @param fileName the file name, null returns null.
+     * @param fileName The file name, null returns null.
      * @return The path of the file, an empty string if none exists, null if invalid.
      * @throws IllegalArgumentException if the result path contains the null character ({@code U+0000}).
      */
@@ -753,7 +753,7 @@ public class FilenameUtils {
      * This method drops the prefix from the result. See {@link #getFullPathNoEndSeparator(String)} for the method that retains the prefix.
      * </p>
      *
-     * @param fileName the file name, null returns null.
+     * @param fileName The file name, null returns null.
      * @return The path of the file, an empty string if none exists, null if invalid.
      * @throws IllegalArgumentException if the result path contains the null character ({@code U+0000}).
      */
@@ -787,7 +787,7 @@ public class FilenameUtils {
      * The output will be the same irrespective of the machine that the code is running on. ie. both Unix and Windows prefixes are matched regardless.
      * </p>
      *
-     * @param fileName the file name, null returns null.
+     * @param fileName The file name, null returns null.
      * @return The prefix of the file, null if invalid.
      * @throws IllegalArgumentException if the result contains the null character ({@code U+0000}).
      */
@@ -844,7 +844,7 @@ public class FilenameUtils {
      * a single slash at the start of the file name.
      * </p>
      *
-     * @param fileName the file name to find the prefix in, null returns -1.
+     * @param fileName The file name to find the prefix in, null returns -1.
      * @return The length of the prefix, -1 if invalid or null.
      */
     public static int getPrefixLength(final String fileName) {
@@ -923,7 +923,7 @@ public class FilenameUtils {
      * IO 2.7, and later versions, are throwing an {@link IllegalArgumentException} for names like this.
      * </p>
      *
-     * @param fileName the file name to find the last extension separator in, null returns -1.
+     * @param fileName The file name to find the last extension separator in, null returns -1.
      * @return The index of the last extension separator character, or -1 if there is no such character.
      * @throws IllegalArgumentException <strong>Windows only:</strong> the file name parameter is, in fact, the identifier of an Alternate Data Stream, for
      *                                  example "foo.exe:bar.txt".
@@ -953,7 +953,7 @@ public class FilenameUtils {
      * The output will be the same irrespective of the machine that the code is running on.
      * </p>
      *
-     * @param fileName the file name to find the last path separator in, null returns -1.
+     * @param fileName The file name to find the last path separator in, null returns -1.
      * @return The index of the last separator character, or -1 if there is no such character.
      */
     public static int indexOfLastSeparator(final String fileName) {
@@ -976,8 +976,8 @@ public class FilenameUtils {
      * extension check is case-sensitive on all platforms.
      * </p>
      *
-     * @param fileName   the file name, null returns false.
-     * @param extensions the extensions to check for, null checks for no extension.
+     * @param fileName   The file name, null returns false.
+     * @param extensions The extensions to check for, null checks for no extension.
      * @return true if the file name is one of the extensions.
      * @throws IllegalArgumentException if the file name contains the null character ({@code U+0000}).
      */
@@ -999,8 +999,8 @@ public class FilenameUtils {
      * extension check is case-sensitive on all platforms.
      * </p>
      *
-     * @param fileName  the file name, null returns false.
-     * @param extension the extension to check for, null or empty checks for no extension.
+     * @param fileName  The file name, null returns false.
+     * @param extension The extension to check for, null or empty checks for no extension.
      * @return true if the file name has the specified extension.
      * @throws IllegalArgumentException if the file name contains the null character ({@code U+0000}).
      */
@@ -1022,8 +1022,8 @@ public class FilenameUtils {
      * extension check is case-sensitive on all platforms.
      * </p>
      *
-     * @param fileName   the file name, null returns false.
-     * @param extensions the extensions to check for, null checks for no extension.
+     * @param fileName   The file name, null returns false.
+     * @param extensions The extensions to check for, null checks for no extension.
      * @return true if the file name is one of the extensions.
      * @throws IllegalArgumentException if the file name contains the null character ({@code U+0000}).
      */
@@ -1042,7 +1042,7 @@ public class FilenameUtils {
     /**
      * Checks whether a given string represents a valid IPv4 address.
      *
-     * @param name the name to validate.
+     * @param name The name to validate.
      * @return true if the given name is a valid IPv4 address.
      */
     // mostly copied from org.apache.commons.validator.routines.InetAddressValidator#isValidInet4Address
@@ -1066,7 +1066,7 @@ public class FilenameUtils {
     /**
      * Checks whether a given string represents a valid IPv6 address.
      *
-     * @param inet6Address the name to validate.
+     * @param inet6Address The name to validate.
      * @return true if the given name is a valid IPv6 address.
      */
     private static boolean isIPv6Address(final String inet6Address) {
@@ -1132,7 +1132,7 @@ public class FilenameUtils {
      * Checks whether a given string is a valid host name according to RFC 3986 - not accepting IP addresses.
      *
      * @see "https://tools.ietf.org/html/rfc3986#section-3.2.2"
-     * @param name the hostname to validate.
+     * @param name The hostname to validate.
      * @return true if the given name is a valid host name.
      */
     private static boolean isRFC3986HostName(final String name) {
@@ -1152,7 +1152,7 @@ public class FilenameUtils {
     /**
      * Checks if the character is a separator.
      *
-     * @param ch the character to check.
+     * @param ch The character to check.
      * @return true if it is a separator character.
      */
     private static boolean isSeparator(final char ch) {
@@ -1175,7 +1175,7 @@ public class FilenameUtils {
      * </p>
      *
      * @see "https://tools.ietf.org/html/rfc3986#section-3.2.2"
-     * @param name the hostname to validate.
+     * @param name The hostname to validate.
      * @return true if the given name is a valid host name.
      */
     private static boolean isValidHostName(final String name) {
@@ -1222,7 +1222,7 @@ public class FilenameUtils {
      * (Note the file separator will be correct for Windows/Unix.)
      * </p>
      *
-     * @param fileName the file name to normalize, null returns null.
+     * @param fileName The file name to normalize, null returns null.
      * @return The normalized fileName, or null if invalid.
      * @throws IllegalArgumentException if the file name contains the null character ({@code U+0000}).
      */
@@ -1270,7 +1270,7 @@ public class FilenameUtils {
      * The output will be the same on both Unix and Windows including the separator character.
      * </p>
      *
-     * @param fileName      the file name to normalize, null returns null.
+     * @param fileName      The file name to normalize, null returns null.
      * @param unixSeparator {@code true} if a Unix separator should be used or {@code false} if a Windows separator should be used.
      * @return The normalized fileName, or null if invalid.
      * @throws IllegalArgumentException if the file name contains the null character ({@code U+0000}).
@@ -1319,7 +1319,7 @@ public class FilenameUtils {
      *
      * (Note the file separator returned will be correct for Windows/Unix)
      *
-     * @param fileName the file name to normalize, null returns null.
+     * @param fileName The file name to normalize, null returns null.
      * @return The normalized fileName, or null if invalid.
      * @throws IllegalArgumentException if the file name contains the null character ({@code U+0000}).
      */
@@ -1363,7 +1363,7 @@ public class FilenameUtils {
      * ~/../bar             --&gt;   null
      * </pre>
      *
-     * @param fileName      the file name to normalize, null returns null.
+     * @param fileName      The file name to normalize, null returns null.
      * @param unixSeparator {@code true} if a Unix separator should be used or {@code false} if a Windows separator should be used.
      * @return The normalized fileName, or null if invalid.
      * @throws IllegalArgumentException if the file name contains the null character ({@code U+0000}).
@@ -1389,7 +1389,7 @@ public class FilenameUtils {
      * <p>
      * The output will be the same irrespective of the machine that the code is running on.
      *
-     * @param fileName the file name, null returns null.
+     * @param fileName The file name, null returns null.
      * @return The file name minus the extension.
      * @throws IllegalArgumentException if the file name contains the null character ({@code U+0000}).
      */
@@ -1409,7 +1409,7 @@ public class FilenameUtils {
      * Checks the input for null characters ({@code U+0000}), a sign of unsanitized data being passed to file level functions. This may be used to defend
      * against poison byte attacks.
      *
-     * @param path the path to check.
+     * @param path The path to check.
      * @return The input.
      * @throws IllegalArgumentException if path contains the null character ({@code U+0000}).
      */
@@ -1424,7 +1424,7 @@ public class FilenameUtils {
     /**
      * Converts all separators to the system separator.
      *
-     * @param path the path to be changed, null ignored.
+     * @param path The path to be changed, null ignored.
      * @return The updated path.
      */
     public static String separatorsToSystem(final String path) {
@@ -1434,7 +1434,7 @@ public class FilenameUtils {
     /**
      * Converts all separators to the Unix separator of forward slash.
      *
-     * @param path the path to be changed, null ignored.
+     * @param path The path to be changed, null ignored.
      * @return The new path.
      */
     public static String separatorsToUnix(final String path) {
@@ -1444,7 +1444,7 @@ public class FilenameUtils {
     /**
      * Converts all separators to the Windows separator of backslash.
      *
-     * @param path the path to be changed, null ignored.
+     * @param path The path to be changed, null ignored.
      * @return The updated path.
      */
     public static String separatorsToWindows(final String path) {
@@ -1454,7 +1454,7 @@ public class FilenameUtils {
     /**
      * Splits a string into a number of tokens. The text is split by '?' and '*'. Where multiple '*' occur consecutively they are collapsed into a single '*'.
      *
-     * @param text the text to split.
+     * @param text The text to split.
      * @return The array of tokens, never null.
      */
     static String[] splitOnTokens(final String text) {
@@ -1517,8 +1517,8 @@ public class FilenameUtils {
      * The sequence "*?" does not work properly at present in match strings.
      * </p>
      *
-     * @param fileName        the file name to match on, may be null.
-     * @param wildcardMatcher the wildcard string to match against, may be null.
+     * @param fileName        The file name to match on, may be null.
+     * @param wildcardMatcher The wildcard string to match against, may be null.
      * @return true if the file name matches the wildcard string.
      * @see IOCase#SENSITIVE
      */
@@ -1533,8 +1533,8 @@ public class FilenameUtils {
      * work properly at present in match strings.
      * </p>
      *
-     * @param fileName        the file name to match on, may be null.
-     * @param wildcardMatcher the wildcard string to match against, may be null.
+     * @param fileName        The file name to match on, may be null.
+     * @param wildcardMatcher The wildcard string to match against, may be null.
      * @param ioCase          what case sensitivity rule to use, null means case-sensitive.
      * @return true if the file name matches the wildcard string.
      * @since 1.3
@@ -1625,8 +1625,8 @@ public class FilenameUtils {
      * The sequence "*?" does not work properly at present in match strings.
      * </p>
      *
-     * @param fileName        the file name to match on.
-     * @param wildcardMatcher the wildcard string to match against.
+     * @param fileName        The file name to match on.
+     * @param wildcardMatcher The wildcard string to match against.
      * @return true if the file name matches the wildcard string.
      * @see IOCase#SYSTEM
      */

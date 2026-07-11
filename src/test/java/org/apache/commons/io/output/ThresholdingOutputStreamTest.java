@@ -40,9 +40,9 @@ class ThresholdingOutputStreamTest {
     /**
      * Asserts initial state without changing it.
      *
-     * @param out the stream to test.
-     * @param expectedThreshold the expected threshold.
-     * @param expectedByeCount the expected byte count.
+     * @param out The stream to test.
+     * @param expectedThreshold The expected threshold.
+     * @param expectedByeCount The expected byte count.
      */
     static void assertThresholdingInitialState(final ThresholdingOutputStream out, final int expectedThreshold, final int expectedByeCount) {
         assertFalse(out.isThresholdExceeded());

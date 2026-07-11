@@ -38,7 +38,7 @@ abstract class IOBaseStreamAdapter<T, S extends IOBaseStream<T, S, B>, B extends
     /**
      * Constructs an instance.
      *
-     * @param delegate the delegate.
+     * @param delegate The delegate.
      */
     IOBaseStreamAdapter(final B delegate) {
         this.delegate = Objects.requireNonNull(delegate, "delegate");

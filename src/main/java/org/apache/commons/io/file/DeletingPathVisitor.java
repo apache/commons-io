@@ -102,7 +102,7 @@ public class DeletingPathVisitor extends CountingPathVisitor {
     /**
      * Returns true to process the given path, false if not.
      *
-     * @param path the path to test.
+     * @param path The path to test.
      * @return true to process the given path, false if not.
      */
     private boolean accept(final Path path) {

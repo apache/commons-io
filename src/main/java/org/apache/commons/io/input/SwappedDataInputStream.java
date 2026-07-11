@@ -106,7 +106,7 @@ public class SwappedDataInputStream extends ProxyInputStream implements DataInpu
     /**
      * Invokes the delegate's {@code read(byte[] data, int, int)} method.
      *
-     * @param data the buffer to read the bytes into.
+     * @param data The buffer to read the bytes into.
      * @throws EOFException if an end of file is reached unexpectedly.
      * @throws IOException if an I/O error occurs.
      */
@@ -118,7 +118,7 @@ public class SwappedDataInputStream extends ProxyInputStream implements DataInpu
     /**
      * Invokes the delegate's {@code read(byte[] data, int, int)} method.
      *
-     * @param data the buffer to read the bytes into.
+     * @param data The buffer to read the bytes into.
      * @param offset The start offset.
      * @param length The number of bytes to read.
      * @throws EOFException if an end of file is reached unexpectedly.
@@ -229,7 +229,7 @@ public class SwappedDataInputStream extends ProxyInputStream implements DataInpu
     /**
      * Invokes the delegate's {@code skip(int)} method.
      *
-     * @param count the number of bytes to skip.
+     * @param count The number of bytes to skip.
      * @return The number of bytes skipped or -1 if the end of stream.
      * @throws IOException if an I/O error occurs.
      */

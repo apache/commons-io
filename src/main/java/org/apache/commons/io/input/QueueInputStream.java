@@ -126,7 +126,7 @@ public class QueueInputStream extends InputStream {
         /**
          * Sets the polling timeout.
          *
-         * @param timeout the polling timeout.
+         * @param timeout The polling timeout.
          * @return {@code this} instance.
          */
         public Builder setTimeout(final Duration timeout) {
@@ -232,9 +232,9 @@ public class QueueInputStream extends InputStream {
      * an array of bytes.  The first byte is read while honoring the timeout; the rest are read while <em>not</em> honoring
      * the timeout. The number of bytes actually read is returned as an integer.
      *
-     * @param b     the buffer into which the data is read.
-     * @param offset   the start offset in array {@code b} at which the data is written.
-     * @param length   the maximum number of bytes to read.
+     * @param b     The buffer into which the data is read.
+     * @param offset   The start offset in array {@code b} at which the data is written.
+     * @param length   The maximum number of bytes to read.
      * @return     the total number of bytes read into the buffer, or {@code -1} if there is no more data because the
      *              end of the stream has been reached.
      * @throws NullPointerException If {@code b} is {@code null}.

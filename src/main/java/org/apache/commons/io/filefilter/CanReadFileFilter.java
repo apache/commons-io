@@ -87,7 +87,7 @@ public class CanReadFileFilter extends AbstractFileFilter implements Serializabl
     /**
      * Tests to see if the file can be read.
      *
-     * @param file the File to check.
+     * @param file The File to check.
      * @return {@code true} if the file can be read, otherwise {@code false}.
      */
     @Override
@@ -98,8 +98,8 @@ public class CanReadFileFilter extends AbstractFileFilter implements Serializabl
     /**
      * Tests to see if the file can be read.
      *
-     * @param file the File to check.
-     * @param attributes the path's basic attributes (may be null).
+     * @param file The File to check.
+     * @param attributes The path's basic attributes (may be null).
      * @return {@code true} if the file can be read, otherwise {@code false}.
      * @since 2.9.0
      */

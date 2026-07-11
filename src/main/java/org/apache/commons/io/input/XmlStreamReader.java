@@ -177,7 +177,7 @@ public class XmlStreamReader extends Reader {
         /**
          * Sets the HTTP content type.
          *
-         * @param httpContentType the HTTP content type.
+         * @param httpContentType The HTTP content type.
          * @return {@code this} instance.
          */
         public Builder setHttpContentType(final String httpContentType) {
@@ -188,7 +188,7 @@ public class XmlStreamReader extends Reader {
         /**
          * Sets the lenient toggle.
          *
-         * @param lenient the lenient toggle.
+         * @param lenient The lenient toggle.
          * @return {@code this} instance.
          */
         public Builder setLenient(final boolean lenient) {
@@ -277,7 +277,7 @@ public class XmlStreamReader extends Reader {
     /**
      * Gets the charset parameter value, {@code null} if not present, {@code null} if httpContentType is {@code null}.
      *
-     * @param httpContentType the HTTP content type.
+     * @param httpContentType The HTTP content type.
      * @return The content type encoding (upcased).
      */
     static String getContentTypeEncoding(final String httpContentType) {
@@ -297,7 +297,7 @@ public class XmlStreamReader extends Reader {
     /**
      * Gets the MIME type or {@code null} if httpContentType is {@code null}.
      *
-     * @param httpContentType the HTTP content type.
+     * @param httpContentType The HTTP content type.
      * @return The mime content type.
      */
     static String getContentTypeMime(final String httpContentType) {
@@ -727,7 +727,7 @@ public class XmlStreamReader extends Reader {
     /**
      * Reads the underlying reader's {@code read(char[], int, int)} method.
      *
-     * @param buf    the buffer to read the characters into.
+     * @param buf    The buffer to read the characters into.
      * @param offset The start offset.
      * @param len    The number of bytes to read.
      * @return The number of characters read or -1 if the end of stream.

@@ -47,7 +47,7 @@ public enum StandardLineSeparator {
     /**
      * Constructs a new instance for a non-null line separator.
      *
-     * @param lineSeparator a non-null line separator.
+     * @param lineSeparator A non-null line separator.
      */
     StandardLineSeparator(final String lineSeparator) {
         this.lineSeparator = Objects.requireNonNull(lineSeparator, "lineSeparator");
@@ -56,7 +56,7 @@ public enum StandardLineSeparator {
     /**
      * Gets the bytes for this instance encoded using the given Charset.
      *
-     * @param charset the encoding Charset.
+     * @param charset The encoding Charset.
      * @return The bytes for this instance encoded using the given Charset.
      */
     public byte[] getBytes(final Charset charset) {

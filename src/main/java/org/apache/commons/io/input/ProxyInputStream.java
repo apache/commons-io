@@ -85,7 +85,7 @@ public abstract class ProxyInputStream extends FilterInputStream {
          * supplement it.
          * </p>
          *
-         * @param afterRead the {@link ProxyInputStream#afterRead(int)} behavior.
+         * @param afterRead The {@link ProxyInputStream#afterRead(int)} behavior.
          * @return {@code this} instance.
          */
         public B setAfterRead(final IOIntConsumer afterRead) {
@@ -118,7 +118,7 @@ public abstract class ProxyInputStream extends FilterInputStream {
     /**
      * Constructs a new ProxyInputStream.
      *
-     * @param proxy  the InputStream to proxy.
+     * @param proxy  The InputStream to proxy.
      */
     public ProxyInputStream(final InputStream proxy) {
         // the delegate is stored in a protected superclass variable named 'in'.
@@ -129,7 +129,7 @@ public abstract class ProxyInputStream extends FilterInputStream {
     /**
      * Constructs a new ProxyInputStream.
      *
-     * @param proxy  the InputStream to proxy.
+     * @param proxy  The InputStream to proxy.
      * @param builder  How to build an instance.
      * @since 2.18.0
      */
@@ -294,7 +294,7 @@ public abstract class ProxyInputStream extends FilterInputStream {
     /**
      * Invokes the delegate's {@link InputStream#read(byte[])} method.
      *
-     * @param b the buffer to read the bytes into.
+     * @param b The buffer to read the bytes into.
      * @return The number of bytes read or {@link IOUtils#EOF EOF} if we reached the end of stream.
      * @throws IOException
      *                     <ul>
@@ -319,7 +319,7 @@ public abstract class ProxyInputStream extends FilterInputStream {
     /**
      * Invokes the delegate's {@link InputStream#read(byte[], int, int)} method.
      *
-     * @param b   the buffer to read the bytes into.
+     * @param b   The buffer to read the bytes into.
      * @param off The start offset.
      * @param len The number of bytes to read.
      * @return The number of bytes read or {@link IOUtils#EOF EOF} if we reached the end of stream.
@@ -375,7 +375,7 @@ public abstract class ProxyInputStream extends FilterInputStream {
     /**
      * Invokes the delegate's {@link InputStream#skip(long)} method.
      *
-     * @param n the number of bytes to skip.
+     * @param n The number of bytes to skip.
      * @return The actual number of bytes skipped.
      * @throws IOException if the stream does not support seek, or if some other I/O error occurs.
      */

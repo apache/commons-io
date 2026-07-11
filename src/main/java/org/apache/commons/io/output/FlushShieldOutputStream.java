@@ -104,7 +104,7 @@ public final class FlushShieldOutputStream extends ProxyOutputStream {
     /**
      * Constructs a {@code FlushShieldOutputStream} filter for the specified underlying output stream.
      *
-     * @param out the underlying output stream to be assigned to the field {@code this.out} for later use, or {@code null} if this instance is to be created
+     * @param out The underlying output stream to be assigned to the field {@code this.out} for later use, or {@code null} if this instance is to be created
      *            without an underlying stream.
      */
     public FlushShieldOutputStream(final OutputStream out) {

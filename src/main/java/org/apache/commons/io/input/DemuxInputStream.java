@@ -40,7 +40,7 @@ public class DemuxInputStream extends InputStream {
     /**
      * Binds the specified stream to the current thread.
      *
-     * @param input the stream to bind.
+     * @param input The stream to bind.
      * @return The InputStream that was previously active.
      */
     public InputStream bindStream(final InputStream input) {

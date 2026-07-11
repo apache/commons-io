@@ -38,7 +38,7 @@ public interface IOBinaryOperator<T> extends IOBiFunction<T, T, T> {
      * {@code Comparator}.
      *
      * @param <T> The type of the input arguments of the comparator.
-     * @param comparator a {@code Comparator} for comparing the two values.
+     * @param comparator A {@code Comparator} for comparing the two values.
      * @return A {@code BinaryOperator} which returns the greater of its operands, according to the supplied
      *         {@code Comparator}
      * @throws NullPointerException if the argument is null.
@@ -53,7 +53,7 @@ public interface IOBinaryOperator<T> extends IOBiFunction<T, T, T> {
      * {@code Comparator}.
      *
      * @param <T> The type of the input arguments of the comparator.
-     * @param comparator a {@code Comparator} for comparing the two values.
+     * @param comparator A {@code Comparator} for comparing the two values.
      * @return A {@code BinaryOperator} which returns the lesser of its operands, according to the supplied
      *         {@code Comparator}
      * @throws NullPointerException if the argument is null.

@@ -40,7 +40,7 @@ public abstract class AbstractCharacterFilterReader extends FilterReader {
     /**
      * Constructs a new reader.
      *
-     * @param reader the reader to filter.
+     * @param reader The reader to filter.
      */
     protected AbstractCharacterFilterReader(final Reader reader) {
         this(reader, SKIP_NONE);
@@ -49,7 +49,7 @@ public abstract class AbstractCharacterFilterReader extends FilterReader {
     /**
      * Constructs a new reader.
      *
-     * @param reader the reader to filter.
+     * @param reader The reader to filter.
      * @param skip Skip test.
      * @since 2.9.0
      */
@@ -61,7 +61,7 @@ public abstract class AbstractCharacterFilterReader extends FilterReader {
     /**
      * Returns true if the given character should be filtered out, false to keep the character.
      *
-     * @param ch the character to test.
+     * @param ch The character to test.
      * @return true if the given character should be filtered out, false to keep the character.
      */
     protected boolean filter(final int ch) {

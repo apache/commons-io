@@ -168,8 +168,8 @@ public class FileWriterWithEncoding extends ProxyWriter {
     /**
      * Initializes the wrapped file writer. Ensure that a cleanup occurs if the writer creation fails.
      *
-     * @param file     the file to be accessed.
-     * @param encoding the encoding to use - may be Charset, CharsetEncoder or String, null uses the default Charset.
+     * @param file     The file to be accessed.
+     * @param encoding The encoding to use - may be Charset, CharsetEncoder or String, null uses the default Charset.
      * @param append   true to append.
      * @return A new initialized OutputStreamWriter.
      * @throws IOException if an I/O error occurs.
@@ -204,8 +204,8 @@ public class FileWriterWithEncoding extends ProxyWriter {
     /**
      * Constructs a FileWriterWithEncoding with a file encoding.
      *
-     * @param file    the file to write to, not null.
-     * @param charset the encoding to use, not null.
+     * @param file    The file to write to, not null.
+     * @param charset The encoding to use, not null.
      * @throws NullPointerException if the file or encoding is null.
      * @throws IOException          in case of an I/O error.
      * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}.
@@ -218,8 +218,8 @@ public class FileWriterWithEncoding extends ProxyWriter {
     /**
      * Constructs a FileWriterWithEncoding with a file encoding.
      *
-     * @param file     the file to write to, not null.
-     * @param encoding the name of the requested charset, null uses the default Charset.
+     * @param file     The file to write to, not null.
+     * @param encoding The name of the requested charset, null uses the default Charset.
      * @param append   true if content should be appended, false to overwrite.
      * @throws NullPointerException if the file is null.
      * @throws IOException          in case of an I/O error.
@@ -234,8 +234,8 @@ public class FileWriterWithEncoding extends ProxyWriter {
     /**
      * Constructs a FileWriterWithEncoding with a file encoding.
      *
-     * @param file           the file to write to, not null.
-     * @param charsetEncoder the encoding to use, not null.
+     * @param file           The file to write to, not null.
+     * @param charsetEncoder The encoding to use, not null.
      * @throws NullPointerException if the file or encoding is null.
      * @throws IOException          in case of an I/O error.
      * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}.
@@ -248,8 +248,8 @@ public class FileWriterWithEncoding extends ProxyWriter {
     /**
      * Constructs a FileWriterWithEncoding with a file encoding.
      *
-     * @param file           the file to write to, not null.
-     * @param charsetEncoder the encoding to use, null uses the default Charset.
+     * @param file           The file to write to, not null.
+     * @param charsetEncoder The encoding to use, null uses the default Charset.
      * @param append         true if content should be appended, false to overwrite.
      * @throws NullPointerException if the file is null.
      * @throws IOException          in case of an I/O error.
@@ -264,8 +264,8 @@ public class FileWriterWithEncoding extends ProxyWriter {
     /**
      * Constructs a FileWriterWithEncoding with a file encoding.
      *
-     * @param file        the file to write to, not null.
-     * @param charsetName the name of the requested charset, not null.
+     * @param file        The file to write to, not null.
+     * @param charsetName The name of the requested charset, not null.
      * @throws NullPointerException if the file or encoding is null.
      * @throws IOException          in case of an I/O error.
      * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}.
@@ -278,8 +278,8 @@ public class FileWriterWithEncoding extends ProxyWriter {
     /**
      * Constructs a FileWriterWithEncoding with a file encoding.
      *
-     * @param file        the file to write to, not null.
-     * @param charsetName the name of the requested charset, null uses the default Charset.
+     * @param file        The file to write to, not null.
+     * @param charsetName The name of the requested charset, null uses the default Charset.
      * @param append      true if content should be appended, false to overwrite.
      * @throws NullPointerException if the file is null.
      * @throws IOException          in case of an I/O error.
@@ -298,8 +298,8 @@ public class FileWriterWithEncoding extends ProxyWriter {
     /**
      * Constructs a FileWriterWithEncoding with a file encoding.
      *
-     * @param fileName the name of the file to write to, not null.
-     * @param charset  the charset to use, not null.
+     * @param fileName The name of the file to write to, not null.
+     * @param charset  The charset to use, not null.
      * @throws NullPointerException if the file name or encoding is null.
      * @throws IOException          in case of an I/O error.
      * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}.
@@ -312,8 +312,8 @@ public class FileWriterWithEncoding extends ProxyWriter {
     /**
      * Constructs a FileWriterWithEncoding with a file encoding.
      *
-     * @param fileName the name of the file to write to, not null.
-     * @param charset  the encoding to use, not null.
+     * @param fileName The name of the file to write to, not null.
+     * @param charset  The encoding to use, not null.
      * @param append   true if content should be appended, false to overwrite.
      * @throws NullPointerException if the file name or encoding is null.
      * @throws IOException          in case of an I/O error.
@@ -327,8 +327,8 @@ public class FileWriterWithEncoding extends ProxyWriter {
     /**
      * Constructs a FileWriterWithEncoding with a file encoding.
      *
-     * @param fileName the name of the file to write to, not null.
-     * @param encoding the encoding to use, not null.
+     * @param fileName The name of the file to write to, not null.
+     * @param encoding The encoding to use, not null.
      * @throws NullPointerException if the file name or encoding is null.
      * @throws IOException          in case of an I/O error.
      * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}.
@@ -341,8 +341,8 @@ public class FileWriterWithEncoding extends ProxyWriter {
     /**
      * Constructs a FileWriterWithEncoding with a file encoding.
      *
-     * @param fileName       the name of the file to write to, not null.
-     * @param charsetEncoder the encoding to use, not null.
+     * @param fileName       The name of the file to write to, not null.
+     * @param charsetEncoder The encoding to use, not null.
      * @param append         true if content should be appended, false to overwrite.
      * @throws NullPointerException if the file name or encoding is null.
      * @throws IOException          in case of an I/O error.
@@ -356,8 +356,8 @@ public class FileWriterWithEncoding extends ProxyWriter {
     /**
      * Constructs a FileWriterWithEncoding with a file encoding.
      *
-     * @param fileName    the name of the file to write to, not null.
-     * @param charsetName the name of the requested charset, not null.
+     * @param fileName    The name of the file to write to, not null.
+     * @param charsetName The name of the requested charset, not null.
      * @throws NullPointerException if the file name or encoding is null.
      * @throws IOException          in case of an I/O error.
      * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}.
@@ -370,8 +370,8 @@ public class FileWriterWithEncoding extends ProxyWriter {
     /**
      * Constructs a FileWriterWithEncoding with a file encoding.
      *
-     * @param fileName    the name of the file to write to, not null.
-     * @param charsetName the name of the requested charset, not null.
+     * @param fileName    The name of the file to write to, not null.
+     * @param charsetName The name of the requested charset, not null.
      * @param append      true if content should be appended, false to overwrite.
      * @throws NullPointerException if the file name or encoding is null.
      * @throws IOException          in case of an I/O error.

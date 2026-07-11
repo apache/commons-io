@@ -81,7 +81,7 @@ class DeferredFileOutputStreamTest extends AbstractTempDirTest {
      * Tests the case where the amount of data exceeds the threshold, and is therefore written to disk. The actual data
      * written to disk is verified, as is the file itself.
      *
-     * @param initialBufferSize the initial buffer size.
+     * @param initialBufferSize The initial buffer size.
      * @throws IOException on a test failure.
      */
     @ParameterizedTest(name = "initialBufferSize = {0}")

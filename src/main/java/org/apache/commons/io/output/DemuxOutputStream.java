@@ -39,7 +39,7 @@ public class DemuxOutputStream extends OutputStream {
     /**
      * Binds the specified stream to the current thread.
      *
-     * @param output the stream to bind.
+     * @param output The stream to bind.
      * @return The OutputStream that was previously active.
      */
     public OutputStream bindStream(final OutputStream output) {
@@ -76,7 +76,7 @@ public class DemuxOutputStream extends OutputStream {
     /**
      * Writes byte to stream associated with current thread.
      *
-     * @param ch the byte to write to stream.
+     * @param ch The byte to write to stream.
      * @throws IOException if an error occurs.
      */
     @Override

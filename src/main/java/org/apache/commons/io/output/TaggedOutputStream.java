@@ -92,7 +92,7 @@ public class TaggedOutputStream extends ProxyOutputStream {
     /**
      * Tests if the given exception was caused by this stream.
      *
-     * @param exception an exception.
+     * @param exception An exception.
      * @return {@code true} if the exception was thrown by this stream,
      *         {@code false} otherwise.
      */
@@ -107,7 +107,7 @@ public class TaggedOutputStream extends ProxyOutputStream {
      * original wrapped exception. Returns normally if the exception was
      * not thrown by this stream.
      *
-     * @param exception an exception.
+     * @param exception An exception.
      * @throws IOException original exception, if any, thrown by this stream.
      */
     public void throwIfCauseOf(final Exception exception) throws IOException {

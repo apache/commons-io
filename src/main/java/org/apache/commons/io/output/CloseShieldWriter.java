@@ -33,7 +33,7 @@ public class CloseShieldWriter extends ProxyWriter {
     /**
      * Constructs a proxy that shields the given writer from being closed.
      *
-     * @param writer the writer to wrap.
+     * @param writer The writer to wrap.
      * @return The created proxy.
      * @since 2.9.0
      */

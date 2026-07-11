@@ -118,8 +118,8 @@ public class CopyUtils {
     /**
      * Copies bytes from a {@code byte[]} to an {@link OutputStream}.
      *
-     * @param input the byte array to read from.
-     * @param output the {@link OutputStream} to write to.
+     * @param input The byte array to read from.
+     * @param output The {@link OutputStream} to write to.
      * @throws IOException In case of an I/O problem.
      */
     public static void copy(final byte[] input, final OutputStream output) throws IOException {
@@ -131,8 +131,8 @@ public class CopyUtils {
      * {@link Writer}.
      * The platform's default encoding is used for the byte-to-char conversion.
      *
-     * @param input the byte array to read from.
-     * @param output the {@link Writer} to write to.
+     * @param input The byte array to read from.
+     * @param output The {@link Writer} to write to.
      * @throws IOException In case of an I/O problem.
      * @deprecated Use {@link #copy(byte[], Writer, String)} instead.
      */
@@ -146,8 +146,8 @@ public class CopyUtils {
      * Copies and convert bytes from a {@code byte[]} to chars on a
      * {@link Writer}, using the specified encoding.
      *
-     * @param input the byte array to read from.
-     * @param output the {@link Writer} to write to.
+     * @param input The byte array to read from.
+     * @param output The {@link Writer} to write to.
      * @param encoding The name of a supported character encoding. See the
      * <a href="https://www.iana.org/assignments/character-sets">IANA
      * Charset Registry</a> for a list of valid encoding types.
@@ -162,8 +162,8 @@ public class CopyUtils {
      * Copies bytes from an {@link InputStream} to an
      * {@link OutputStream}.
      *
-     * @param input the {@link InputStream} to read from.
-     * @param output the {@link OutputStream} to write to.
+     * @param input The {@link InputStream} to read from.
+     * @param output The {@link OutputStream} to write to.
      * @return The number of bytes copied.
      * @throws IOException In case of an I/O problem.
      */
@@ -185,8 +185,8 @@ public class CopyUtils {
      * This method uses the virtual machine's {@linkplain Charset#defaultCharset() default charset} for byte-to-char conversion.
      * </p>
      *
-     * @param input the {@link InputStream} to read from.
-     * @param output the {@link Writer} to write to.
+     * @param input The {@link InputStream} to read from.
+     * @param output The {@link Writer} to write to.
      * @throws IOException In case of an I/O problem.
      * @deprecated Use {@link #copy(InputStream, Writer, String)} instead.
      */
@@ -204,8 +204,8 @@ public class CopyUtils {
      * Copies and convert bytes from an {@link InputStream} to chars on a
      * {@link Writer}, using the specified encoding.
      *
-     * @param input the {@link InputStream} to read from.
-     * @param output the {@link Writer} to write to.
+     * @param input The {@link InputStream} to read from.
+     * @param output The {@link Writer} to write to.
      * @param encoding The name of a supported character encoding. See the
      * <a href="https://www.iana.org/assignments/character-sets">IANA
      * Charset Registry</a> for a list of valid encoding types.
@@ -227,8 +227,8 @@ public class CopyUtils {
      * This method uses the virtual machine's {@linkplain Charset#defaultCharset() default charset} for byte-to-char conversion.
      * </p>
      *
-     * @param input the {@link Reader} to read from.
-     * @param output the {@link OutputStream} to write to.
+     * @param input The {@link Reader} to read from.
+     * @param output The {@link OutputStream} to write to.
      * @throws IOException In case of an I/O problem.
      * @deprecated Use {@link #copy(Reader, OutputStream, String)} instead.
      */
@@ -249,8 +249,8 @@ public class CopyUtils {
      * Serialize chars from a {@link Reader} to bytes on an
      * {@link OutputStream}, and flush the {@link OutputStream}.
      *
-     * @param input the {@link Reader} to read from.
-     * @param output the {@link OutputStream} to write to.
+     * @param input The {@link Reader} to read from.
+     * @param output The {@link OutputStream} to write to.
      * @param encoding The name of a supported character encoding. See the
      * <a href="https://www.iana.org/assignments/character-sets">IANA
      * Charset Registry</a> for a list of valid encoding types.
@@ -272,8 +272,8 @@ public class CopyUtils {
     /**
      * Copies chars from a {@link Reader} to a {@link Writer}.
      *
-     * @param input the {@link Reader} to read from.
-     * @param output the {@link Writer} to write to.
+     * @param input The {@link Reader} to read from.
+     * @param output The {@link Writer} to write to.
      * @return The number of characters copied.
      * @throws IOException In case of an I/O problem.
      */
@@ -301,8 +301,8 @@ public class CopyUtils {
      * This method uses the virtual machine's {@linkplain Charset#defaultCharset() default charset} for byte-to-char conversion.
      * </p>
      *
-     * @param input the {@link String} to read from.
-     * @param output the {@link OutputStream} to write to.
+     * @param input The {@link String} to read from.
+     * @param output The {@link OutputStream} to write to.
      * @throws IOException In case of an I/O problem.
      * @deprecated Use {@link #copy(String, OutputStream, String)} instead.
      */
@@ -325,8 +325,8 @@ public class CopyUtils {
      * {@link OutputStream}, and
      * flush the {@link OutputStream}.
      *
-     * @param input the {@link String} to read from.
-     * @param output the {@link OutputStream} to write to.
+     * @param input The {@link String} to read from.
+     * @param output The {@link OutputStream} to write to.
      * @param encoding The name of a supported character encoding. See the
      * <a href="https://www.iana.org/assignments/character-sets">IANA
      * Charset Registry</a> for a list of valid encoding types.
@@ -349,8 +349,8 @@ public class CopyUtils {
     /**
      * Copies chars from a {@link String} to a {@link Writer}.
      *
-     * @param input the {@link String} to read from.
-     * @param output the {@link Writer} to write to.
+     * @param input The {@link String} to read from.
+     * @param output The {@link Writer} to write to.
      * @throws IOException In case of an I/O problem.
      */
     public static void copy(final String input, final Writer output)

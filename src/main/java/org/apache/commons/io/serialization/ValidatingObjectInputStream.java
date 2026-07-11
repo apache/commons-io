@@ -179,7 +179,7 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
          * The reject list takes precedence over the accept list.
          * </p>
          *
-         * @param matcher a class name matcher to <em>accept</em> objects.
+         * @param matcher A class name matcher to <em>accept</em> objects.
          * @return {@code this} instance.
          * @since 2.18.0
          */
@@ -194,7 +194,7 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
          * The reject list takes precedence over the accept list.
          * </p>
          *
-         * @param pattern a Pattern for compiled regular expression.
+         * @param pattern A Pattern for compiled regular expression.
          * @return {@code this} instance.
          * @since 2.18.0
          */
@@ -279,7 +279,7 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
          * The reject list takes precedence over the accept list.
          * </p>
          *
-         * @param matcher the matcher to use.
+         * @param matcher The matcher to use.
          * @return {@code this} instance.
          * @since 2.18.0
          */
@@ -325,7 +325,7 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
          * The reject list takes precedence over the accept list.
          * </p>
          *
-         * @param predicate the predicate.
+         * @param predicate The predicate.
          * @return {@code this} instance.
          * @since 2.18.0
          */
@@ -401,7 +401,7 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
      * The reject list takes precedence over the accept list.
      * </p>
      *
-     * @param input an input stream.
+     * @param input An input stream.
      * @throws IOException if an I/O error occurs while reading stream header.
      * @deprecated Use {@link #builder()}.
      */
@@ -430,7 +430,7 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
      * The reject list takes precedence over the accept list.
      * </p>
      *
-     * @param matcher a class name matcher to <em>accept</em> objects.
+     * @param matcher A class name matcher to <em>accept</em> objects.
      * @return {@code this} instance.
      */
     public ValidatingObjectInputStream accept(final ClassNameMatcher matcher) {
@@ -444,7 +444,7 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
      * The reject list takes precedence over the accept list.
      * </p>
      *
-     * @param pattern a Pattern for compiled regular expression.
+     * @param pattern A Pattern for compiled regular expression.
      * @return {@code this} instance.
      */
     public ValidatingObjectInputStream accept(final Pattern pattern) {
@@ -551,7 +551,7 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
      * The reject list takes precedence over the accept list.
      * </p>
      *
-     * @param matcher a class name matcher to <em>reject</em> objects.
+     * @param matcher A class name matcher to <em>reject</em> objects.
      * @return {@code this} instance.
      */
     public ValidatingObjectInputStream reject(final ClassNameMatcher matcher) {
@@ -565,7 +565,7 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
      * The reject list takes precedence over the accept list.
      * </p>
      *
-     * @param pattern a Pattern for compiled regular expression.
+     * @param pattern A Pattern for compiled regular expression.
      * @return {@code this} instance.
      */
     public ValidatingObjectInputStream reject(final Pattern pattern) {

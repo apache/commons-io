@@ -994,7 +994,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
                 /**
                  * Sets the connect timeout duration.
                  *
-                 * @param connectTimeout the connect timeout duration.
+                 * @param connectTimeout The connect timeout duration.
                  * @return {@code this instance}.
                  */
                 public Builder setConnectTimeout(final Duration connectTimeout) {
@@ -1005,7 +1005,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
                 /**
                  * Sets the read timeout duration.
                  *
-                 * @param readTimeout the read timeout duration.
+                 * @param readTimeout The read timeout duration.
                  * @return {@code this instance}.
                  */
                 public Builder setReadTimeout(final Duration readTimeout) {
@@ -1212,7 +1212,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
     /**
      * Gets a portion of this origin as a byte array, if possible.
      *
-     * @param position the initial index of the range to be copied, inclusive.
+     * @param position The initial index of the range to be copied, inclusive.
      * @param length   How many bytes to copy.
      * @return this origin as a byte array, if possible.
      * @throws UnsupportedOperationException if the origin cannot be converted to a Path.
@@ -1337,7 +1337,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
     /**
      * Gets a new Reader on the origin, buffered by default.
      *
-     * @param charset the charset to use for decoding, null maps to the default Charset.
+     * @param charset The charset to use for decoding, null maps to the default Charset.
      * @return A new Reader on the origin.
      * @throws IOException if an I/O error occurs opening the file.
      */
@@ -1357,7 +1357,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
     /**
      * Gets a new Writer on the origin, buffered by default.
      *
-     * @param charset the charset to use for encoding.
+     * @param charset The charset to use for encoding.
      * @param options options specifying how the file is opened.
      * @return A new Writer on the origin.
      * @throws IOException                   if an I/O error occurs opening or creating the file.

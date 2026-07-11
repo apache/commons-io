@@ -53,7 +53,7 @@ public abstract class AbstractMonitorTest {
     /**
      * Check all the Collections are empty
      *
-     * @param label the label to use for this check.
+     * @param label The label to use for this check.
      */
     protected void checkCollectionsEmpty(final String label) {
         checkCollectionSizes("EMPTY-" + label, 0, 0, 0, 0, 0, 0);
@@ -62,7 +62,7 @@ public abstract class AbstractMonitorTest {
     /**
      * Check all the Collections have the expected sizes.
      *
-     * @param label the label to use for this check.
+     * @param label The label to use for this check.
      * @param dirCreate expected number of dirs created.
      * @param dirChange expected number of dirs changed.
      * @param dirDelete expected number of dirs deleted.

@@ -145,7 +145,7 @@ public final class UnsynchronizedByteArrayOutputStream extends AbstractByteArray
      * </p>
      *
      * @param input Stream to be fully buffered.
-     * @param size the initial buffer size.
+     * @param size The initial buffer size.
      * @return A fully buffered stream.
      * @throws IOException if an I/O error occurs.
      */
@@ -176,7 +176,7 @@ public final class UnsynchronizedByteArrayOutputStream extends AbstractByteArray
     /**
      * Constructs a new byte array output stream, with a buffer capacity of the specified size, in bytes.
      *
-     * @param size the initial size.
+     * @param size The initial size.
      * @throws IllegalArgumentException if size is negative.
      * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}. Will be private in 3.0.0.
      */

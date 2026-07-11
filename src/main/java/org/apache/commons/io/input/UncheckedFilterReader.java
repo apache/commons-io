@@ -111,7 +111,7 @@ public final class UncheckedFilterReader extends FilterReader {
     /**
      * Constructs a new filtered reader.
      *
-     * @param builder a Builder object providing the underlying stream.
+     * @param builder A Builder object providing the underlying stream.
      * @throws IOException          if an I/O error occurs.
      * @throws NullPointerException if {@code reader} is {@code null}.
      */

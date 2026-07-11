@@ -34,7 +34,7 @@ public class ProxyWriter extends FilterWriter {
     /**
      * Constructs a new ProxyWriter.
      *
-     * @param delegate  the Writer to delegate to.
+     * @param delegate  The Writer to delegate to.
      */
     public ProxyWriter(final Writer delegate) {
         // the delegate is stored in a protected superclass variable named 'out'
@@ -188,7 +188,7 @@ public class ProxyWriter extends FilterWriter {
      * Use with caution.
      * </p>
      *
-     * @param out the underlying output writer.
+     * @param out The underlying output writer.
      * @return {@code this} instance.
      * @since 2.22.0
      */
@@ -213,7 +213,7 @@ public class ProxyWriter extends FilterWriter {
     /**
      * Invokes the delegate's {@code write(char[])} method.
      *
-     * @param cbuf the characters to write.
+     * @param cbuf The characters to write.
      * @throws IOException if an I/O error occurs.
      */
     @Override
@@ -231,7 +231,7 @@ public class ProxyWriter extends FilterWriter {
     /**
      * Invokes the delegate's {@code write(char[], int, int)} method.
      *
-     * @param cbuf the characters to write.
+     * @param cbuf The characters to write.
      * @param off The start offset.
      * @param len The number of characters to write.
      * @throws IOException if an I/O error occurs.
@@ -250,7 +250,7 @@ public class ProxyWriter extends FilterWriter {
     /**
      * Invokes the delegate's {@code write(int)} method.
      *
-     * @param c the character to write.
+     * @param c The character to write.
      * @throws IOException if an I/O error occurs.
      */
     @Override
@@ -267,7 +267,7 @@ public class ProxyWriter extends FilterWriter {
     /**
      * Invokes the delegate's {@code write(String)} method.
      *
-     * @param str the string to write.
+     * @param str The string to write.
      * @throws IOException if an I/O error occurs.
      */
     @Override
@@ -285,7 +285,7 @@ public class ProxyWriter extends FilterWriter {
     /**
      * Invokes the delegate's {@code write(String)} method.
      *
-     * @param str the string to write.
+     * @param str The string to write.
      * @param off The start offset.
      * @param len The number of characters to write.
      * @throws IOException if an I/O error occurs.

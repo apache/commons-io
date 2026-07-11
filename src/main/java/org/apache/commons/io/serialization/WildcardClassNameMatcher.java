@@ -34,7 +34,7 @@ final class WildcardClassNameMatcher implements ClassNameMatcher {
     /**
      * Constructs an object based on the specified simplified regular expression.
      *
-     * @param pattern a {@link FilenameUtils#wildcardMatch} pattern.
+     * @param pattern A {@link FilenameUtils#wildcardMatch} pattern.
      */
     WildcardClassNameMatcher(final String pattern) {
         this.pattern = pattern;

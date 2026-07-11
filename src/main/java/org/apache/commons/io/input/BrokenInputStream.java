@@ -54,7 +54,7 @@ public class BrokenInputStream extends InputStream {
     /**
      * Constructs a new stream that always throws the given exception.
      *
-     * @param exception the exception to be thrown.
+     * @param exception The exception to be thrown.
      * @deprecated Use {@link #BrokenInputStream(Throwable)}.
      */
     @Deprecated
@@ -65,7 +65,7 @@ public class BrokenInputStream extends InputStream {
     /**
      * Constructs a new stream that always throws the supplied exception.
      *
-     * @param exceptionSupplier a supplier for the IOException or RuntimeException to be thrown.
+     * @param exceptionSupplier A supplier for the IOException or RuntimeException to be thrown.
      * @since 2.12.0
      */
     public BrokenInputStream(final Supplier<Throwable> exceptionSupplier) {
@@ -75,7 +75,7 @@ public class BrokenInputStream extends InputStream {
     /**
      * Constructs a new stream that always throws the given exception.
      *
-     * @param exception the exception to be thrown.
+     * @param exception The exception to be thrown.
      * @since 2.16.0
      */
     public BrokenInputStream(final Throwable exception) {

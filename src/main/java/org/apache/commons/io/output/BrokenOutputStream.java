@@ -58,7 +58,7 @@ public class BrokenOutputStream extends OutputStream {
      * This class uses the invoked method name as the function input.
      * </p>
      *
-     * @param exceptionFunction a supplier for the IOException or RuntimeException to be thrown.
+     * @param exceptionFunction A supplier for the IOException or RuntimeException to be thrown.
      * @since 2.19.0
      */
     public BrokenOutputStream(final Function<String, Throwable> exceptionFunction) {
@@ -68,7 +68,7 @@ public class BrokenOutputStream extends OutputStream {
     /**
      * Constructs a new stream that always throws the given exception.
      *
-     * @param exception the exception to be thrown.
+     * @param exception The exception to be thrown.
      * @deprecated Use {@link #BrokenOutputStream(Throwable)}.
      */
     @Deprecated
@@ -79,7 +79,7 @@ public class BrokenOutputStream extends OutputStream {
     /**
      * Constructs a new stream that always throws the supplied exception.
      *
-     * @param exceptionSupplier a supplier for the IOException or RuntimeException to be thrown.
+     * @param exceptionSupplier A supplier for the IOException or RuntimeException to be thrown.
      * @since 2.12.0
      * @deprecated Use {@link #BrokenOutputStream(Function)}.
      */
@@ -91,7 +91,7 @@ public class BrokenOutputStream extends OutputStream {
     /**
      * Constructs a new stream that always throws the given exception.
      *
-     * @param exception the exception to be thrown.
+     * @param exception The exception to be thrown.
      * @since 2.16.0
      */
     public BrokenOutputStream(final Throwable exception) {

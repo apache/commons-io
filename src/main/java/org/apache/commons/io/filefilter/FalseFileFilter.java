@@ -60,7 +60,7 @@ public class FalseFileFilter implements IOFileFilter, Serializable {
     /**
      * Returns false.
      *
-     * @param file the file to check (ignored).
+     * @param file The file to check (ignored).
      * @return false.
      */
     @Override
@@ -71,8 +71,8 @@ public class FalseFileFilter implements IOFileFilter, Serializable {
     /**
      * Returns false.
      *
-     * @param dir the directory to check (ignored).
-     * @param name the file name (ignored).
+     * @param dir The directory to check (ignored).
+     * @param name The file name (ignored).
      * @return false.
      */
     @Override
@@ -83,8 +83,8 @@ public class FalseFileFilter implements IOFileFilter, Serializable {
     /**
      * Returns false.
      *
-     * @param file the file to check (ignored).
-     * @param attributes the path's basic attributes (may be null).
+     * @param file The file to check (ignored).
+     * @param attributes The path's basic attributes (may be null).
      * @return {@link FileVisitResult#TERMINATE}.
      * @since 2.9.0
      */

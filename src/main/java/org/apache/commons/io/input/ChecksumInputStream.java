@@ -156,7 +156,7 @@ public final class ChecksumInputStream extends CountingInputStream {
          * Sets the Checksum. There is no default {@link Checksum}, you MUST provide one. This avoids any issue with a default {@link Checksum} being proven
          * deficient or insecure in the future.
          *
-         * @param checksum the Checksum.
+         * @param checksum The Checksum.
          * @return {@code this} instance.
          */
         public Builder setChecksum(final Checksum checksum) {
@@ -171,7 +171,7 @@ public final class ChecksumInputStream extends CountingInputStream {
          * By default, all input updates the {@link Checksum}.
          * </p>
          *
-         * @param countThreshold the count threshold. A negative number means the threshold is unbound.
+         * @param countThreshold The count threshold. A negative number means the threshold is unbound.
          * @return {@code this} instance.
          */
         public Builder setCountThreshold(final long countThreshold) {

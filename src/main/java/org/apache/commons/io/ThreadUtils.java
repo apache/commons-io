@@ -37,7 +37,7 @@ public final class ThreadUtils {
      * {@link Thread#sleep(long, int)}} for further interesting details.
      * </p>
      *
-     * @param duration the sleep duration.
+     * @param duration The sleep duration.
      * @throws InterruptedException if interrupted.
      * @see Thread#sleep(long, int)
      */

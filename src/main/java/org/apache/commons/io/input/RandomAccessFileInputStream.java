@@ -109,7 +109,7 @@ public class RandomAccessFileInputStream extends AbstractInputStream {
         /**
          * Sets the RandomAccessFile to stream.
          *
-         * @param randomAccessFile the RandomAccessFile to stream.
+         * @param randomAccessFile The RandomAccessFile to stream.
          * @return {@code this} instance.
          */
         @Override // MUST keep this method for binary compatibility since the super version of this method uses a generic which compiles to Object.

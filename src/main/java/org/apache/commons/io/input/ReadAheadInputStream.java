@@ -114,7 +114,7 @@ public class ReadAheadInputStream extends FilterInputStream {
          * If not set, a single-threaded daemon executor service is used.
          * </p>
          *
-         * @param executorService the executor service for the read-ahead thread, may be {@code null}.
+         * @param executorService The executor service for the read-ahead thread, may be {@code null}.
          * @return {@code this} instance.
          */
         public Builder setExecutorService(final ExecutorService executorService) {
@@ -139,7 +139,7 @@ public class ReadAheadInputStream extends FilterInputStream {
     /**
      * Constructs a new daemon thread.
      *
-     * @param r the thread's runnable.
+     * @param r The thread's runnable.
      * @return A new daemon thread.
      */
     private static Thread newDaemonThread(final Runnable r) {
@@ -501,7 +501,7 @@ public class ReadAheadInputStream extends FilterInputStream {
      * Internal skip function which should be called only from skip(). The assumption is that the stateChangeLock is already acquired in the caller before
      * calling this function.
      *
-     * @param n the number of bytes to be skipped.
+     * @param n The number of bytes to be skipped.
      * @return The actual number of bytes skipped.
      * @throws IOException if an I/O error occurs.
      */

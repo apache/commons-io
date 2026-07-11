@@ -225,7 +225,7 @@ public class FileEntry implements Serializable {
      * and {@code length} properties are compared for changes
      * </p>
      *
-     * @param file the file instance to compare to.
+     * @param file The file instance to compare to.
      * @return {@code true} if the file has changed, otherwise {@code false}.
      */
     public boolean refresh(final File file) {
@@ -306,7 +306,7 @@ public class FileEntry implements Serializable {
     /**
      * Sets the length.
      *
-     * @param length the length.
+     * @param length The length.
      */
     public void setLength(final long length) {
         this.length = length;
@@ -315,7 +315,7 @@ public class FileEntry implements Serializable {
     /**
      * Sets the file name.
      *
-     * @param name the file name.
+     * @param name The file name.
      */
     public void setName(final String name) {
         this.name = name;

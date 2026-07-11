@@ -214,7 +214,7 @@ public class XmlStreamWriter extends Writer {
     /**
      * Detects the encoding.
      *
-     * @param cbuf the buffer to write the characters from.
+     * @param cbuf The buffer to write the characters from.
      * @param off The start offset.
      * @param len The number of characters to write.
      * @throws IOException if an error occurs detecting the encoding.
@@ -299,7 +299,7 @@ public class XmlStreamWriter extends Writer {
     /**
      * Writes the characters to the underlying writer, detecting encoding.
      *
-     * @param cbuf the buffer to write the characters from.
+     * @param cbuf The buffer to write the characters from.
      * @param off The start offset.
      * @param len The number of characters to write.
      * @throws NullPointerException if the buffer is {@code null}.

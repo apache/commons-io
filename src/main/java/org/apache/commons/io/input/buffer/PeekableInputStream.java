@@ -55,7 +55,7 @@ public class PeekableInputStream extends CircularBufferInputStream {
      * This method does not perform a prefix or starts-with check; for example, peeking {@code "Some"} against a stream
      * containing {@code "Some text buffer"} returns {@code false}. This method does not consume bytes from the stream.
      *
-     * @param sourceBuffer the buffer to compare against.
+     * @param sourceBuffer The buffer to compare against.
      * @return true if the next bytes exactly match {@code sourceBuffer}.
      * @throws IOException Refilling the buffer failed.
      */
@@ -68,9 +68,9 @@ public class PeekableInputStream extends CircularBufferInputStream {
      * Returns whether the next bytes in the buffer exactly match {@code length} bytes from {@code sourceBuffer}, starting at
      * {@code offset}. This method does not consume bytes from the stream.
      *
-     * @param sourceBuffer the buffer to compare against.
-     * @param offset the start offset in {@code sourceBuffer}.
-     * @param length the length to compare.
+     * @param sourceBuffer The buffer to compare against.
+     * @param offset The start offset in {@code sourceBuffer}.
+     * @param length The length to compare.
      * @return true if the next bytes exactly match the requested range from {@code sourceBuffer}.
      * @throws IOException if there is a problem calling fillBuffer().
      */

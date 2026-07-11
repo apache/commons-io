@@ -91,7 +91,7 @@ public class UnsynchronizedBufferedReader extends UnsynchronizedReader {
     /**
      * Constructs a new BufferedReader on the Reader {@code in}. The buffer gets the default size (8 KB).
      *
-     * @param in the Reader that is buffered.
+     * @param in The Reader that is buffered.
      */
     public UnsynchronizedBufferedReader(final Reader in) {
         this(in, IOUtils.DEFAULT_BUFFER_SIZE);
@@ -100,8 +100,8 @@ public class UnsynchronizedBufferedReader extends UnsynchronizedReader {
     /**
      * Constructs a new BufferedReader on the Reader {@code in}. The buffer size is specified by the parameter {@code size}.
      *
-     * @param in   the Reader that is buffered.
-     * @param size the size of the buffer to allocate.
+     * @param in   The Reader that is buffered.
+     * @param size The size of the buffer to allocate.
      * @throws IllegalArgumentException if {@code size <= 0}.
      */
     public UnsynchronizedBufferedReader(final Reader in, final int size) {
@@ -196,7 +196,7 @@ public class UnsynchronizedBufferedReader extends UnsynchronizedReader {
     /**
      * Increments the position by a given value, overflow sets the value to {@link Long#MAX_VALUE};
      *
-     * @param v a value.
+     * @param v A value.
      * @return The new position.
      * @since 2.23.0
      */
@@ -211,7 +211,7 @@ public class UnsynchronizedBufferedReader extends UnsynchronizedReader {
      * Sets a mark position in this reader. The parameter {@code markLimit} indicates how many characters can be read before the mark is invalidated. Calling
      * {@link #reset()} will reposition the reader back to the marked position if {@code markLimit} has not been surpassed.
      *
-     * @param markLimit the number of characters that can be read before the mark is invalidated.
+     * @param markLimit The number of characters that can be read before the mark is invalidated.
      * @throws IllegalArgumentException if {@code markLimit < 0}.
      * @throws IOException              if an error occurs while setting a mark in this reader.
      * @see #markSupported()
@@ -257,7 +257,7 @@ public class UnsynchronizedBufferedReader extends UnsynchronizedReader {
      * Populates the buffer with the next {@code buf.length} characters in the current reader without consuming them. The next call to {@link #read()} will
      * still return the next value.
      *
-     * @param buf the buffer to fill for the look ahead.
+     * @param buf The buffer to fill for the look ahead.
      * @return The buffer itself.
      * @throws IOException If an I/O error occurs.
      */
@@ -294,9 +294,9 @@ public class UnsynchronizedBufferedReader extends UnsynchronizedReader {
      * and the requested number of characters is larger than this readers buffer size, BufferedReader bypasses the buffer and simply places the results directly
      * into {@code buffer}.
      *
-     * @param buffer the character array to store the characters read.
-     * @param offset the initial position in {@code buffer} to store the bytes read from this reader.
-     * @param length the maximum number of characters to read, must be non-negative.
+     * @param buffer The character array to store the characters read.
+     * @param offset The initial position in {@code buffer} to store the bytes read from this reader.
+     * @param length The maximum number of characters to read, must be non-negative.
      * @return number of characters read or -1 if the end of the source reader has been reached.
      * @throws IndexOutOfBoundsException if {@code offset < 0} or {@code length < 0}, or if {@code offset + length} is greater than the size of {@code buffer}.
      * @throws IOException               if this reader is closed or some other I/O error occurs.
@@ -469,7 +469,7 @@ public class UnsynchronizedBufferedReader extends UnsynchronizedReader {
      * Skips {@code amount} characters in this reader. Subsequent {@code read()}s will not return these characters unless {@code reset()} is used. Skipping
      * characters may invalidate a mark if {@code markLimit} is surpassed.
      *
-     * @param amount the maximum number of characters to skip.
+     * @param amount The maximum number of characters to skip.
      * @return The number of characters actually skipped.
      * @throws IllegalArgumentException if {@code amount < 0}.
      * @throws IOException              if this reader is closed or some other I/O error occurs.

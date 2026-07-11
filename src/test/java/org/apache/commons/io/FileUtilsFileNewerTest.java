@@ -101,9 +101,9 @@ class FileUtilsFileNewerTest {
      * The test is successful if the three comparisons return the specified wanted result.
      *
      * @param description describes the tested situation.
-     * @param file the file of which the last modification date is compared.
-     * @param fileTime the time reference measured in milliseconds since the epoch.
-     * @param wantedResult the expected result.
+     * @param file The file of which the last modification date is compared.
+     * @param fileTime The time reference measured in milliseconds since the epoch.
+     * @param wantedResult The expected result.
      * @throws IOException if an I/O error occurs.
      */
     protected void testIsFileNewer(final String description, final File file, final FileTime fileTime, final boolean wantedResult) throws IOException {

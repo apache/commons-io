@@ -40,7 +40,7 @@ public class AppendableWriter<T extends Appendable> extends Writer {
     /**
      * Constructs a new instance with the specified appendable.
      *
-     * @param appendable the appendable to write to.
+     * @param appendable The appendable to write to.
      */
     public AppendableWriter(final T appendable) {
         this.appendable = appendable;
@@ -49,7 +49,7 @@ public class AppendableWriter<T extends Appendable> extends Writer {
     /**
      * Appends the specified character to the underlying appendable.
      *
-     * @param c the character to append.
+     * @param c The character to append.
      * @return this writer.
      * @throws IOException If an I/O error occurs.
      */
@@ -62,7 +62,7 @@ public class AppendableWriter<T extends Appendable> extends Writer {
     /**
      * Appends the specified character sequence to the underlying appendable.
      *
-     * @param csq the character sequence to append.
+     * @param csq The character sequence to append.
      * @return this writer.
      * @throws IOException If an I/O error occurs.
      */
@@ -75,9 +75,9 @@ public class AppendableWriter<T extends Appendable> extends Writer {
     /**
      * Appends a subsequence of the specified character sequence to the underlying appendable.
      *
-     * @param csq   the character sequence from which a subsequence will be appended.
-     * @param start the index of the first character in the subsequence.
-     * @param end   the index of the character following the last character in the subsequence.
+     * @param csq   The character sequence from which a subsequence will be appended.
+     * @param start The index of the first character in the subsequence.
+     * @param end   The index of the character following the last character in the subsequence.
      * @return this writer.
      * @throws IndexOutOfBoundsException If {@code start} or {@code end} are negative, {@code start} is greater than
      *                                   {@code end}, or {@code end} is greater than {@code csq.length()}.
@@ -121,7 +121,7 @@ public class AppendableWriter<T extends Appendable> extends Writer {
     /**
      * Writes a portion of an array of characters to the underlying appendable.
      *
-     * @param cbuf an array with the characters to write.
+     * @param cbuf An array with the characters to write.
      * @param off  offset from which to start writing characters.
      * @param len  number of characters to write.
      * @throws NullPointerException if the array is {@code null}.
@@ -139,7 +139,7 @@ public class AppendableWriter<T extends Appendable> extends Writer {
     /**
      * Writes a character to the underlying appendable.
      *
-     * @param c the character to write.
+     * @param c The character to write.
      * @throws IOException If an I/O error occurs.
      */
     @Override
@@ -150,7 +150,7 @@ public class AppendableWriter<T extends Appendable> extends Writer {
     /**
      * Writes a portion of a String to the underlying appendable.
      *
-     * @param str a string.
+     * @param str A string.
      * @param off offset from which to start writing characters.
      * @param len number of characters to write.
      * @throws NullPointerException if the string is {@code null}.

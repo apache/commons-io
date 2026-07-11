@@ -49,8 +49,8 @@ public abstract class TestUtils {
     /**
      * Assert that the content of a file is equal to that in a byte[].
      *
-     * @param b0   the expected contents.
-     * @param file the file to check.
+     * @param b0   The expected contents.
+     * @param file The file to check.
      * @throws IOException If an I/O error occurs while reading the file contents.
      */
     public static void assertEqualContent(final byte[] b0, final File file) throws IOException {
@@ -60,8 +60,8 @@ public abstract class TestUtils {
     /**
      * Assert that the content of a file is equal to that in a byte[].
      *
-     * @param b0   the expected contents.
-     * @param file the file to check.
+     * @param b0   The expected contents.
+     * @param file The file to check.
      * @throws IOException If an I/O error occurs while reading the file contents.
      */
     public static void assertEqualContent(final byte[] b0, final Path file) throws IOException {
@@ -83,8 +83,8 @@ public abstract class TestUtils {
     /**
      * Assert that the content of a file is equal to that in a char[].
      *
-     * @param c0   the expected contents.
-     * @param file the file to check.
+     * @param c0   The expected contents.
+     * @param file The file to check.
      * @throws IOException If an I/O error occurs while reading the file contents.
      */
     public static void assertEqualContent(final char[] c0, final File file) throws IOException {
@@ -94,8 +94,8 @@ public abstract class TestUtils {
     /**
      * Assert that the content of a file is equal to that in a char[].
      *
-     * @param c0   the expected contents.
-     * @param file the file to check.
+     * @param c0   The expected contents.
+     * @param file The file to check.
      * @throws IOException If an I/O error occurs while reading the file contents.
      */
     public static void assertEqualContent(final char[] c0, final Path file) throws IOException {
@@ -245,7 +245,7 @@ public abstract class TestUtils {
      * This method exists because Thread.sleep(100) can sleep for 0, 70, 100 or 200ms or anything else it deems appropriate. Read the docs on Thread.sleep for
      * further details.
      *
-     * @param millis the number of milliseconds to sleep.
+     * @param millis The number of milliseconds to sleep.
      * @throws InterruptedException if {@code interrupt()} was called for this Thread while it was sleeping.
      */
     public static void sleep(final long millis) throws InterruptedException {
@@ -255,7 +255,7 @@ public abstract class TestUtils {
     /**
      * Sleeps and swallows InterruptedException.
      *
-     * @param millis the number of milliseconds to sleep.
+     * @param millis The number of milliseconds to sleep.
      */
     public static void sleepQuietly(final long millis) {
         try {

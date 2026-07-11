@@ -138,7 +138,7 @@ public class MagicNumberFileFilter extends AbstractFileFilter implements Seriali
      *       (byte) 0xBA, (byte) 0xBE});
      * </pre>
      *
-     * @param magicNumber the magic number to look for in the file.
+     * @param magicNumber The magic number to look for in the file.
      * @throws IllegalArgumentException if {@code magicNumber} is
      *         {@code null}, or contains no bytes.
      */
@@ -163,8 +163,8 @@ public class MagicNumberFileFilter extends AbstractFileFilter implements Seriali
      *     MagicNumberFileFilter(new byte[] {0xCA, 0xFE, 0xBA, 0xBE}, 0);
      * </pre>
      *
-     * @param magicNumbers the magic number to look for in the file.
-     * @param offset the byte offset in the file to start comparing bytes.
+     * @param magicNumbers The magic number to look for in the file.
+     * @param offset The byte offset in the file to start comparing bytes.
      * @throws IllegalArgumentException if {@code magicNumber}
      *         contains no bytes, or {@code offset}
      *         is a negative number.
@@ -197,7 +197,7 @@ public class MagicNumberFileFilter extends AbstractFileFilter implements Seriali
      * }
      * </pre>
      *
-     * @param magicNumber the magic number to look for in the file.
+     * @param magicNumber The magic number to look for in the file.
      *        The string is converted to bytes using the platform default charset.
      *
      * @throws IllegalArgumentException if {@code magicNumber} is
@@ -221,9 +221,9 @@ public class MagicNumberFileFilter extends AbstractFileFilter implements Seriali
      * This method uses the virtual machine's {@linkplain Charset#defaultCharset() default charset}.
      * </p>
      *
-     * @param magicNumber the magic number to look for in the file.
+     * @param magicNumber The magic number to look for in the file.
      *        The string is converted to bytes using the platform default charset.
-     * @param offset the byte offset in the file to start comparing bytes.
+     * @param offset The byte offset in the file to start comparing bytes.
      * @throws IllegalArgumentException if {@code magicNumber} is
      *         the empty String, or {@code offset} is
      *         a negative number.
@@ -243,7 +243,7 @@ public class MagicNumberFileFilter extends AbstractFileFilter implements Seriali
      * be rejected.
      * </p>
      *
-     * @param file the file to accept or reject.
+     * @param file The file to accept or reject.
      * @return {@code true} if the file contains the filter's magic number
      *         at the specified offset, {@code false} otherwise.
      */
@@ -271,8 +271,8 @@ public class MagicNumberFileFilter extends AbstractFileFilter implements Seriali
      *
      * </p>
      *
-     * @param file the file to accept or reject.
-     * @param attributes the path's basic attributes (may be null).
+     * @param file The file to accept or reject.
+     * @param attributes The path's basic attributes (may be null).
      * @return {@code true} if the file contains the filter's magic number
      *         at the specified offset, {@code false} otherwise.
      * @since 2.9.0

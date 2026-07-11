@@ -81,8 +81,8 @@ public class CopyDirectoryVisitor extends CountingPathVisitor {
     /**
      * Copies the sourceFile to the targetFile.
      *
-     * @param sourceFile the source file.
-     * @param targetFile the target file.
+     * @param sourceFile The source file.
+     * @param targetFile The target file.
      * @throws IOException if an I/O error occurs.
      * @since 2.8.0
      */
@@ -161,7 +161,7 @@ public class CopyDirectoryVisitor extends CountingPathVisitor {
      * {@link ProviderMismatchException}. Special care is taken to handle differences in file system separators.
      * </p>
      *
-     * @param directory the directory to relativize.
+     * @param directory The directory to relativize.
      * @return A new path, relativized against sourceDirectory, then resolved against targetDirectory.
      */
     private Path resolveRelativeAsString(final Path directory) {

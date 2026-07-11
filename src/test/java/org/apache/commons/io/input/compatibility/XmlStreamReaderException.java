@@ -45,7 +45,7 @@ public class XmlStreamReaderException extends org.apache.commons.io.input.XmlStr
      * @param bomEnc BOM encoding.
      * @param xmlGuessEnc XML guess encoding.
      * @param xmlEnc XML prolog encoding.
-     * @param is the unconsumed InputStream.
+     * @param is The unconsumed InputStream.
      */
     public XmlStreamReaderException(final String msg, final String bomEnc,
             final String xmlGuessEnc, final String xmlEnc, final InputStream is) {
@@ -64,7 +64,7 @@ public class XmlStreamReaderException extends org.apache.commons.io.input.XmlStr
      * @param bomEnc BOM encoding.
      * @param xmlGuessEnc XML guess encoding.
      * @param xmlEnc XML prolog encoding.
-     * @param inputStream the unconsumed InputStream.
+     * @param inputStream The unconsumed InputStream.
      */
     public XmlStreamReaderException(final String msg, final String ctMime, final String ctEnc,
             final String bomEnc, final String xmlGuessEnc, final String xmlEnc, final InputStream inputStream) {

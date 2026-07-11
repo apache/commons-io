@@ -105,7 +105,7 @@ public interface IOSpliterator<T> {
     /**
      * Like {@link Spliterator#hasCharacteristics(int)}.
      *
-     * @param characteristics the characteristics to check for.
+     * @param characteristics The characteristics to check for.
      * @return {@code true} if all the specified characteristics are present, else {@code false}
      */
     default boolean hasCharacteristics(final int characteristics) {

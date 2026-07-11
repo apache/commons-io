@@ -191,7 +191,7 @@ public class ProxyCollectionWriter extends FilterCollectionWriter {
     /**
      * Invokes the delegate's {@code write(char[])} method.
      *
-     * @param cbuf the characters to write.
+     * @param cbuf The characters to write.
      * @throws IOException if an I/O error occurs.
      */
     @Override
@@ -209,7 +209,7 @@ public class ProxyCollectionWriter extends FilterCollectionWriter {
     /**
      * Invokes the delegate's {@code write(char[], int, int)} method.
      *
-     * @param cbuf the characters to write.
+     * @param cbuf The characters to write.
      * @param off  The start offset.
      * @param len  The number of characters to write.
      * @throws IOException if an I/O error occurs.
@@ -228,7 +228,7 @@ public class ProxyCollectionWriter extends FilterCollectionWriter {
     /**
      * Invokes the delegate's {@code write(int)} method.
      *
-     * @param c the character to write.
+     * @param c The character to write.
      * @throws IOException if an I/O error occurs.
      */
     @Override
@@ -245,7 +245,7 @@ public class ProxyCollectionWriter extends FilterCollectionWriter {
     /**
      * Invokes the delegate's {@code write(String)} method.
      *
-     * @param str the string to write.
+     * @param str The string to write.
      * @throws IOException if an I/O error occurs.
      */
     @Override
@@ -263,7 +263,7 @@ public class ProxyCollectionWriter extends FilterCollectionWriter {
     /**
      * Invokes the delegate's {@code write(String)} method.
      *
-     * @param str the string to write.
+     * @param str The string to write.
      * @param off The start offset.
      * @param len The number of characters to write.
      * @throws IOException if an I/O error occurs.

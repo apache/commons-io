@@ -44,8 +44,8 @@ public class CharacterSetFilterReader extends AbstractCharacterFilterReader {
     /**
      * Constructs a new reader.
      *
-     * @param reader the reader to filter.
-     * @param skip the set of characters to filter out.
+     * @param reader The reader to filter.
+     * @param skip The set of characters to filter out.
      * @since 2.9.0
      */
     public CharacterSetFilterReader(final Reader reader, final Integer... skip) {
@@ -55,8 +55,8 @@ public class CharacterSetFilterReader extends AbstractCharacterFilterReader {
     /**
      * Constructs a new reader.
      *
-     * @param reader the reader to filter.
-     * @param skip the set of characters to filter out.
+     * @param reader The reader to filter.
+     * @param skip The set of characters to filter out.
      */
     public CharacterSetFilterReader(final Reader reader, final Set<Integer> skip) {
         super(reader, toIntPredicate(skip));

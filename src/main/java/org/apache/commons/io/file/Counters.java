@@ -39,9 +39,9 @@ public class Counters {
         /**
          * Constructs a new instance.
          *
-         * @param byteCounter the byte counter.
-         * @param directoryCounter the directory counter.
-         * @param fileCounter the file counter.
+         * @param byteCounter The byte counter.
+         * @param directoryCounter The directory counter.
+         * @param fileCounter The file counter.
          */
         protected AbstractPathCounters(final Counter byteCounter, final Counter directoryCounter, final Counter fileCounter) {
             this.byteCounter = byteCounter;
@@ -186,7 +186,7 @@ public class Counters {
         /**
          * Adds the given number to this counter.
          *
-         * @param val the value to add.
+         * @param val The value to add.
          */
         void add(long val);
 

@@ -78,8 +78,8 @@ public interface IOStream<T> extends IOBaseStream<T, IOStream<T>, Stream<T>> {
      * Like {@link Stream#iterate(Object, UnaryOperator)} but for IO.
      *
      * @param <T> The type of stream elements.
-     * @param seed the initial element.
-     * @param f a function to be applied to the previous element to produce a new element.
+     * @param seed The initial element.
+     * @param f A function to be applied to the previous element to produce a new element.
      * @return A new sequential {@code IOStream}.
      */
     static <T> IOStream<T> iterate(final T seed, final IOUnaryOperator<T> f) {
@@ -113,7 +113,7 @@ public interface IOStream<T> extends IOBaseStream<T, IOStream<T>, Stream<T>> {
      * Copied from Apache Commons Lang.
      *
      * @param <T> The type of stream elements.
-     * @param values the elements of the new stream, may be {@code null}.
+     * @param values The elements of the new stream, may be {@code null}.
      * @return The new stream on {@code values} or {@link Stream#empty()}.
      */
     static <T> IOStream<T> of(final Iterable<T> values) {
@@ -124,7 +124,7 @@ public interface IOStream<T> extends IOBaseStream<T, IOStream<T>, Stream<T>> {
      * Null-safe version of {@link Stream#of(Object[])} for an IO stream.
      *
      * @param <T> The type of stream elements.
-     * @param values the elements of the new stream, may be {@code null}.
+     * @param values The elements of the new stream, may be {@code null}.
      * @return The new stream on {@code values} or {@link Stream#empty()}.
      */
     @SafeVarargs // Creating a stream from an array is safe
@@ -135,7 +135,7 @@ public interface IOStream<T> extends IOBaseStream<T, IOStream<T>, Stream<T>> {
     /**
      * Returns a sequential {@code IOStreamImpl} containing a single element.
      *
-     * @param t the single element.
+     * @param t The single element.
      * @param <T> The type of stream elements.
      * @return A singleton sequential stream.
      */

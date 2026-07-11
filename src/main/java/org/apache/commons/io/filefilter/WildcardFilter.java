@@ -93,7 +93,7 @@ public class WildcardFilter extends AbstractFileFilter implements Serializable {
     /**
      * Constructs a new case-sensitive wildcard filter for a list of wildcards.
      *
-     * @param wildcards  the list of wildcards to match.
+     * @param wildcards  The list of wildcards to match.
      * @throws NullPointerException if the pattern list is null.
      * @throws ClassCastException if the list does not contain Strings.
      */
@@ -105,7 +105,7 @@ public class WildcardFilter extends AbstractFileFilter implements Serializable {
     /**
      * Constructs a new case-sensitive wildcard filter for a single wildcard.
      *
-     * @param wildcard  the wildcard to match.
+     * @param wildcard  The wildcard to match.
      * @throws NullPointerException if the pattern is null.
      */
     public WildcardFilter(final String wildcard) {
@@ -116,7 +116,7 @@ public class WildcardFilter extends AbstractFileFilter implements Serializable {
     /**
      * Constructs a new case-sensitive wildcard filter for an array of wildcards.
      *
-     * @param wildcards  the array of wildcards to match.
+     * @param wildcards  The array of wildcards to match.
      * @throws NullPointerException if the pattern array is null.
      */
     public WildcardFilter(final String... wildcards) {
@@ -127,7 +127,7 @@ public class WildcardFilter extends AbstractFileFilter implements Serializable {
     /**
      * Tests to see if the file name matches one of the wildcards.
      *
-     * @param file the file to check.
+     * @param file The file to check.
      * @return true if the file name matches one of the wildcards.
      */
     @Override
@@ -141,8 +141,8 @@ public class WildcardFilter extends AbstractFileFilter implements Serializable {
     /**
      * Tests to see if the file name matches one of the wildcards.
      *
-     * @param dir  the file directory.
-     * @param name  the file name.
+     * @param dir  The file directory.
+     * @param name  The file name.
      * @return true if the file name matches one of the wildcards.
      */
     @Override
@@ -156,8 +156,8 @@ public class WildcardFilter extends AbstractFileFilter implements Serializable {
     /**
      * Tests to see if the file name matches one of the wildcards.
      *
-     * @param path the file to check.
-     * @param attributes the path's basic attributes (may be null).
+     * @param path The file to check.
+     * @param attributes The path's basic attributes (may be null).
      * @return true if the file name matches one of the wildcards.
      * @since 2.9.0
      */

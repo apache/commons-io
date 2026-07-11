@@ -51,7 +51,7 @@ public class FileDeleteStrategy {
          * if the file exists.
          * </p>
          *
-         * @param fileToDelete  the file to delete, not null.
+         * @param fileToDelete  The file to delete, not null.
          * @return Always returns {@code true}
          * @throws NullPointerException if the file is null.
          * @throws IOException if an error occurs during file deletion.
@@ -81,7 +81,7 @@ public class FileDeleteStrategy {
     /**
      * Restricted constructor.
      *
-     * @param name  the name by which the strategy is known.
+     * @param name  The name by which the strategy is known.
      */
     protected FileDeleteStrategy(final String name) {
         this.name = name;
@@ -94,7 +94,7 @@ public class FileDeleteStrategy {
      * Subclass writers should override {@link #doDelete(File)}, not this method.
      * </p>
      *
-     * @param fileToDelete  the file to delete, not null.
+     * @param fileToDelete  The file to delete, not null.
      * @throws NullPointerException if the file is null.
      * @throws IOException if an error occurs during file deletion.
      */
@@ -112,7 +112,7 @@ public class FileDeleteStrategy {
      * Subclass writers should override {@link #doDelete(File)}, not this method.
      * </p>
      *
-     * @param fileToDelete  the file to delete, null returns true.
+     * @param fileToDelete  The file to delete, null returns true.
      * @return true if the file was deleted, or there was no such file.
      */
     public boolean deleteQuietly(final File fileToDelete) {
@@ -139,7 +139,7 @@ public class FileDeleteStrategy {
      * This implementation uses {@link FileUtils#delete(File)}.
      * </p>
      *
-     * @param file  the file to delete, exists, not null.
+     * @param file  The file to delete, exists, not null.
      * @return true if the file was deleted.
      * @throws NullPointerException if the file is null.
      * @throws IOException if an error occurs during file deletion.

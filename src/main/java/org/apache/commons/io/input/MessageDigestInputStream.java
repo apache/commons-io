@@ -115,7 +115,7 @@ public final class MessageDigestInputStream extends ObservableInputStream {
          * <em>The MD5 cryptographic algorithm is weak and should not be used.</em>
          * </p>
          *
-         * @param messageDigest the message digest.
+         * @param messageDigest The message digest.
          * @return {@code this} instance.
          */
         public Builder setMessageDigest(final MessageDigest messageDigest) {
@@ -129,7 +129,7 @@ public final class MessageDigestInputStream extends ObservableInputStream {
          * <em>The MD5 cryptographic algorithm is weak and should not be used.</em>
          * </p>
          *
-         * @param algorithm the name of the algorithm. See the MessageDigest section in the
+         * @param algorithm The name of the algorithm. See the MessageDigest section in the
          *                  <a href= "https://docs.oracle.com/javase/8/docs/technotes/guides/security/StandardNames.html#MessageDigest"> Java Cryptography
          *                  Architecture Standard Algorithm Name Documentation</a> for information about standard algorithm names.
          * @return {@code this} instance.
@@ -152,7 +152,7 @@ public final class MessageDigestInputStream extends ObservableInputStream {
         /**
          * Constructs an MessageDigestMaintainingObserver for the given MessageDigest.
          *
-         * @param messageDigest the message digest to use.
+         * @param messageDigest The message digest to use.
          * @throws NullPointerException if messageDigest is null.
          */
         public MessageDigestMaintainingObserver(final MessageDigest messageDigest) {

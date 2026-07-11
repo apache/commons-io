@@ -97,7 +97,7 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
     /**
      * Applies the buffer size request.
      *
-     * @param size the size request.
+     * @param size The size request.
      * @return The size to use, usually the input, or can throw an unchecked exception, like {@link IllegalArgumentException}.
      */
     private int checkBufferSize(final int size) {
@@ -299,7 +299,7 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
      * Subclasses may ignore this setting.
      * </p>
      *
-     * @param bufferSize the buffer size, 0 resets to the default from {@link #getBufferSizeDefault()}.
+     * @param bufferSize The buffer size, 0 resets to the default from {@link #getBufferSizeDefault()}.
      * @return {@code this} instance.
      */
     public B setBufferSize(final int bufferSize) {
@@ -313,7 +313,7 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
      * Subclasses may ignore this setting.
      * </p>
      *
-     * @param bufferSize the buffer size, null resets to the default from {@link #getBufferSizeDefault()}.
+     * @param bufferSize The buffer size, null resets to the default from {@link #getBufferSizeDefault()}.
      * @return {@code this} instance.
      */
     public B setBufferSize(final Integer bufferSize) {
@@ -324,7 +324,7 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
     /**
      * Sets the buffer size checker function. Throws a {@link IllegalArgumentException} by default.
      *
-     * @param bufferSizeChecker the buffer size checker function. null resets to the default behavior.
+     * @param bufferSizeChecker The buffer size checker function. null resets to the default behavior.
      * @return {@code this} instance.
      * @since 2.14.0
      */
@@ -339,7 +339,7 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
      * Subclasses may ignore this setting.
      * </p>
      *
-     * @param bufferSizeDefault the buffer size, 0 resets to the default {@link IOUtils#DEFAULT_BUFFER_SIZE}.
+     * @param bufferSizeDefault The buffer size, 0 resets to the default {@link IOUtils#DEFAULT_BUFFER_SIZE}.
      * @return {@code this} instance.
      */
     protected B setBufferSizeDefault(final int bufferSizeDefault) {
@@ -366,7 +366,7 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
      * Subclasses may ignore this setting.
      * </p>
      *
-     * @param charset the Charset, null resets to the default.
+     * @param charset The Charset, null resets to the default.
      * @return {@code this} instance.
      */
     public B setCharset(final Charset charset) {
@@ -380,7 +380,7 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
      * Subclasses may ignore this setting.
      * </p>
      *
-     * @param charset the Charset name, null resets to the default.
+     * @param charset The Charset name, null resets to the default.
      * @return {@code this} instance.
      */
     public B setCharset(final String charset) {
@@ -393,7 +393,7 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
      * Subclasses may ignore this setting.
      * </p>
      *
-     * @param defaultCharset the Charset name, null resets to the default.
+     * @param defaultCharset The Charset name, null resets to the default.
      * @return {@code this} instance.
      */
     protected B setCharsetDefault(final Charset defaultCharset) {
@@ -410,7 +410,7 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
      * Subclasses may ignore this setting.
      * </p>
      *
-     * @param openOptions the OpenOption[] name, null resets to the default, a defensive copy is made.
+     * @param openOptions The OpenOption[] name, null resets to the default, a defensive copy is made.
      * @return {@code this} instance.
      * @since 2.13.0
      * @see #setInputStream(InputStream)

@@ -40,7 +40,7 @@ public class CountingInputStream extends ProxyInputStream {
     /**
      * Constructs a new CountingInputStream.
      *
-     * @param in  the InputStream to delegate to.
+     * @param in  The InputStream to delegate to.
      */
     public CountingInputStream(final InputStream in) {
         super(in);
@@ -147,7 +147,7 @@ public class CountingInputStream extends ProxyInputStream {
      * Skips the stream over the specified number of bytes, adding the skipped
      * amount to the count.
      *
-     * @param length  the number of bytes to skip.
+     * @param length  The number of bytes to skip.
      * @return The actual number of bytes skipped.
      * @throws IOException if an I/O error occurs.
      * @see InputStream#skip(long)

@@ -43,7 +43,7 @@ public class NotFileFilter extends AbstractFileFilter implements Serializable {
     /**
      * Constructs a new file filter that NOTs the result of another filter.
      *
-     * @param filter the filter, must not be null.
+     * @param filter The filter, must not be null.
      * @throws NullPointerException if the filter is null.
      */
     public NotFileFilter(final IOFileFilter filter) {
@@ -54,7 +54,7 @@ public class NotFileFilter extends AbstractFileFilter implements Serializable {
     /**
      * Returns the logical NOT of the underlying filter's return value for the same File.
      *
-     * @param file the File to check.
+     * @param file The File to check.
      * @return true if the filter returns false.
      */
     @Override
@@ -65,8 +65,8 @@ public class NotFileFilter extends AbstractFileFilter implements Serializable {
     /**
      * Returns the logical NOT of the underlying filter's return value for the same arguments.
      *
-     * @param file the File directory.
-     * @param name the file name.
+     * @param file The File directory.
+     * @param name The file name.
      * @return true if the filter returns false.
      */
     @Override
@@ -77,8 +77,8 @@ public class NotFileFilter extends AbstractFileFilter implements Serializable {
     /**
      * Returns the logical NOT of the underlying filter's return value for the same File.
      *
-     * @param file the File to check.
-     * @param attributes the path's basic attributes (may be null).
+     * @param file The File to check.
+     * @param attributes The path's basic attributes (may be null).
      * @return true if the filter returns false.
      * @since 2.9.0
      */

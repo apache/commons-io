@@ -43,7 +43,7 @@ public class ChunkedWriter extends FilterWriter {
     /**
      * Constructs a new writer that uses a chunk size of {@link #DEFAULT_CHUNK_SIZE}
      *
-     * @param writer the writer to wrap.
+     * @param writer The writer to wrap.
      */
     public ChunkedWriter(final Writer writer) {
         this(writer, DEFAULT_CHUNK_SIZE);
@@ -52,8 +52,8 @@ public class ChunkedWriter extends FilterWriter {
     /**
      * Constructs a new writer that uses the specified chunk size.
      *
-     * @param writer    the writer to wrap.
-     * @param chunkSize the chunk size to use; must be a positive number.
+     * @param writer    The writer to wrap.
+     * @param chunkSize The chunk size to use; must be a positive number.
      * @throws IllegalArgumentException if the chunk size is &lt;= 0.
      */
     public ChunkedWriter(final Writer writer, final int chunkSize) {
@@ -68,8 +68,8 @@ public class ChunkedWriter extends FilterWriter {
      * Writes the data buffer in chunks to the underlying writer.
      *
      * @param data      The data.
-     * @param srcOffset the offset.
-     * @param length    the number of bytes to write.
+     * @param srcOffset The offset.
+     * @param length    The number of bytes to write.
      * @throws NullPointerException if the data is {@code null}.
      * @throws IndexOutOfBoundsException if {@code srcOffset} or {@code length} are negative,
      *                                   or if {@code srcOffset + length} is greater than {@code data.length}.

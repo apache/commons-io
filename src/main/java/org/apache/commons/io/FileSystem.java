@@ -360,9 +360,9 @@ public enum FileSystem {
     /**
      * Null-safe replace.
      *
-     * @param path the path to be changed, null ignored.
-     * @param oldChar the old character.
-     * @param newChar the new character.
+     * @param path The path to be changed, null ignored.
+     * @param oldChar The old character.
+     * @param newChar The new character.
      * @return The new path.
      */
     private static String replace(final String path, final char oldChar, final char newChar) {
@@ -656,7 +656,7 @@ public enum FileSystem {
     /**
      * Converts all separators to the Windows separator of backslash.
      *
-     * @param path the path to be changed, null ignored.
+     * @param path The path to be changed, null ignored.
      * @return The updated path.
      * @since 2.12.0
      */

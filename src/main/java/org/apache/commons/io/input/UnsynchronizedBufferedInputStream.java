@@ -234,7 +234,7 @@ public final class UnsynchronizedBufferedInputStream extends UnsynchronizedFilte
      * {@code reset()} will reposition the stream back to the marked position if {@code readLimit} has not been surpassed. The underlying buffer may be
      * increased in size to allow {@code readLimit} number of bytes to be supported.
      *
-     * @param readLimit the number of bytes that can be read before the mark is invalidated.
+     * @param readLimit The number of bytes that can be read before the mark is invalidated.
      * @see #reset()
      */
     @Override
@@ -297,9 +297,9 @@ public final class UnsynchronizedBufferedInputStream extends UnsynchronizedFilte
      * set and the requested number of bytes is larger than the receiver's buffer size, this implementation bypasses the buffer and simply places the results
      * directly into {@code buffer}.
      *
-     * @param dest the byte array in which to store the bytes read.
-     * @param offset the initial position in {@code buffer} to store the bytes read from this stream.
-     * @param length the maximum number of bytes to store in {@code buffer}.
+     * @param dest The byte array in which to store the bytes read.
+     * @param offset The initial position in {@code buffer} to store the bytes read from this stream.
+     * @param length The maximum number of bytes to store in {@code buffer}.
      * @return The number of bytes actually read or -1 if end of stream.
      * @throws IndexOutOfBoundsException if {@code offset < 0} or {@code length < 0}, or if {@code offset + length} is greater than the size of {@code buffer}.
      * @throws IOException               if the stream is already closed or another IOException occurs.
@@ -394,7 +394,7 @@ public final class UnsynchronizedBufferedInputStream extends UnsynchronizedFilte
     /**
      * Skips {@code amount} number of bytes in this stream. Subsequent {@code read()}'s will not return these bytes unless {@code reset()} is used.
      *
-     * @param amount the number of bytes to skip. {@code skip} does nothing and returns 0 if {@code amount} is less than zero.
+     * @param amount The number of bytes to skip. {@code skip} does nothing and returns 0 if {@code amount} is less than zero.
      * @return The number of bytes actually skipped.
      * @throws IOException if this stream is closed or another IOException occurs.
      */

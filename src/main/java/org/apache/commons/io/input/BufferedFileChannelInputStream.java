@@ -114,7 +114,7 @@ public final class BufferedFileChannelInputStream extends InputStream {
          * This setting takes precedence over all others.
          * </p>
          *
-         * @param fileChannel the file channel.
+         * @param fileChannel The file channel.
          * @return {@code this} instance.
          * @since 2.18.0
          */
@@ -164,7 +164,7 @@ public final class BufferedFileChannelInputStream extends InputStream {
      * Constructs a new instance for the given File and buffer size.
      *
      * @param file       The file to stream.
-     * @param bufferSize buffer size.
+     * @param bufferSize Buffer size.
      * @throws IOException If an I/O error occurs.
      * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
      */
@@ -189,7 +189,7 @@ public final class BufferedFileChannelInputStream extends InputStream {
      * Constructs a new instance for the given Path and buffer size.
      *
      * @param path       The path to stream.
-     * @param bufferSize buffer size.
+     * @param bufferSize Buffer size.
      * @throws IOException If an I/O error occurs.
      * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
      */
@@ -217,7 +217,7 @@ public final class BufferedFileChannelInputStream extends InputStream {
      * accessible even with reflection. However {@code sun.misc.Unsafe} added an {@code invokeCleaner()} method in JDK 9+ and this is still accessible with
      * reflection.
      * </p>
-     * @param buffer the buffer to clean.
+     * @param buffer The buffer to clean.
      */
     private void clean(final ByteBuffer buffer) {
         if (!clean && ByteBufferCleaner.isSupported()) {

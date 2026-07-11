@@ -66,7 +66,7 @@ public class TailerListenerAdapter implements TailerListener {
     /**
      * Handles an Exception.
      *
-     * @param ex the exception.
+     * @param ex The exception.
      */
     @Override
     public void handle(final Exception ex) {
@@ -76,7 +76,7 @@ public class TailerListenerAdapter implements TailerListener {
     /**
      * Handles a line from a Tailer.
      *
-     * @param line the line.
+     * @param line The line.
      */
     @Override
     public void handle(final String line) {
@@ -87,7 +87,7 @@ public class TailerListenerAdapter implements TailerListener {
      * The tailer will call this method during construction,
      * giving the listener a method of stopping the tailer.
      *
-     * @param tailer the tailer.
+     * @param tailer The tailer.
      */
     @Override
     public void init(final Tailer tailer) {

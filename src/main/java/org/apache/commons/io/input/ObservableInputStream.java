@@ -144,7 +144,7 @@ public class ObservableInputStream extends ProxyInputStream {
         /**
          * Called to indicate that an error occurred on the underlying stream.
          *
-         * @param exception the exception to throw.
+         * @param exception The exception to throw.
          * @throws IOException if an I/O error occurs.
          */
         public void error(final IOException exception) throws IOException {
@@ -173,7 +173,7 @@ public class ObservableInputStream extends ProxyInputStream {
     /**
      * Constructs a new ObservableInputStream for the given InputStream.
      *
-     * @param inputStream the input stream to observe.
+     * @param inputStream The input stream to observe.
      */
     public ObservableInputStream(final InputStream inputStream) {
         this(inputStream, new ArrayList<>());
@@ -182,7 +182,7 @@ public class ObservableInputStream extends ProxyInputStream {
     /**
      * Constructs a new ObservableInputStream for the given InputStream.
      *
-     * @param inputStream the input stream to observe.
+     * @param inputStream The input stream to observe.
      * @param observers List of observer callbacks.
      */
     private ObservableInputStream(final InputStream inputStream, final List<Observer> observers) {
@@ -193,7 +193,7 @@ public class ObservableInputStream extends ProxyInputStream {
     /**
      * Constructs a new ObservableInputStream for the given InputStream.
      *
-     * @param inputStream the input stream to observe.
+     * @param inputStream The input stream to observe.
      * @param observers List of observer callbacks.
      * @since 2.9.0
      */
@@ -204,7 +204,7 @@ public class ObservableInputStream extends ProxyInputStream {
     /**
      * Adds an Observer.
      *
-     * @param observer the observer to add.
+     * @param observer The observer to add.
      */
     public void add(final Observer observer) {
         observers.add(observer);
@@ -361,7 +361,7 @@ public class ObservableInputStream extends ProxyInputStream {
     /**
      * Removes an Observer.
      *
-     * @param observer the observer to remove.
+     * @param observer The observer to remove.
      */
     public void remove(final Observer observer) {
         observers.remove(observer);

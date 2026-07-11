@@ -86,7 +86,7 @@ public class TaggedIOException extends IOExceptionWithCause {
      * }
      * </pre>
      *
-     * @param throwable an exception.
+     * @param throwable An exception.
      * @param tag tag object.
      * @throws IOException original exception from the tagged decorator, if any.
      */
@@ -105,7 +105,7 @@ public class TaggedIOException extends IOExceptionWithCause {
     /**
      * Constructs a tagged wrapper for the given exception.
      *
-     * @param original the exception to be tagged.
+     * @param original The exception to be tagged.
      * @param tag tag of this exception.
      */
     public TaggedIOException(final IOException original, final Serializable tag) {

@@ -233,7 +233,7 @@ public class ByteOrderMark implements Serializable {
     /**
      * Tests whether the given array starts with the bytes for this BOM.
      *
-     * @param test the array to test.
+     * @param test The array to test.
      * @return whether the given array starts with the bytes for this BOM.
      * @since 2.19.0
      */

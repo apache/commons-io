@@ -74,7 +74,7 @@ public class ByteArrayOutputStream extends AbstractByteArrayOutputStream<ByteArr
      * </p>
      *
      * @param input Stream to be fully buffered.
-     * @param size  the initial buffer size.
+     * @param size  The initial buffer size.
      * @return A fully buffered stream.
      * @throws IOException if an I/O error occurs.
      * @since 2.5
@@ -99,7 +99,7 @@ public class ByteArrayOutputStream extends AbstractByteArrayOutputStream<ByteArr
      * Constructs a new byte array output stream, with a buffer capacity of
      * the specified size, in bytes.
      *
-     * @param size  the initial size.
+     * @param size  The initial size.
      * @throws IllegalArgumentException if size is negative.
      */
     public ByteArrayOutputStream(final int size) {

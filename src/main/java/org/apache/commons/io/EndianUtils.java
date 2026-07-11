@@ -51,7 +51,7 @@ public class EndianUtils {
     /**
      * Reads the next byte from the input stream.
      *
-     * @param input  the stream.
+     * @param input  The stream.
      * @return The byte.
      * @throws IOException if the end of file is reached.
      */
@@ -344,9 +344,9 @@ public class EndianUtils {
     /**
      * Validates if the provided byte array has enough data.
      *
-     * @param data the input byte array.
-     * @param offset the input offset.
-     * @param byteNeeded the needed number of bytes.
+     * @param data The input byte array.
+     * @param offset The input offset.
+     * @param byteNeeded The needed number of bytes.
      * @throws IllegalArgumentException if the byte array does not have enough data.
      */
     private static void validateByteArrayOffset(final byte[] data, final int offset, final int byteNeeded) {

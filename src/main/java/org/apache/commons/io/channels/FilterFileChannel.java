@@ -100,7 +100,7 @@ public class FilterFileChannel extends FileChannel {
     /**
      * Constructs a new instance.
      *
-     * @param fileChannel the file channel to wrap.
+     * @param fileChannel The file channel to wrap.
      */
     public FilterFileChannel(final FileChannel fileChannel) {
         this.fileChannel = Objects.requireNonNull(fileChannel, "fileChannel");

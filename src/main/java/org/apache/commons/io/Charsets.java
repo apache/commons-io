@@ -176,7 +176,7 @@ public class Charsets {
     /**
      * Tests whether the given non-null Charset has an alias of the given name.
      *
-     * @param charset a non-null Charset.
+     * @param charset A non-null Charset.
      * @param charsetName The name to test.
      * @return whether the given non-null charset name is a UTF-8 alias.
      * @since 2.20.0
@@ -199,7 +199,7 @@ public class Charsets {
     /**
      * Tests whether the given non-null charset name is a UTF-8 alias.
      *
-     * @param charsetName a non-null charset name.
+     * @param charsetName A non-null charset name.
      * @return whether the given non-null charset name is a UTF-8 alias.
      */
     private static boolean isUTF8Alias(final String charsetName) {

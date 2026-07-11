@@ -92,7 +92,7 @@ public class TaggedWriter extends ProxyWriter {
     /**
      * Tests if the given exception was caused by this writer.
      *
-     * @param exception an exception.
+     * @param exception An exception.
      * @return {@code true} if the exception was thrown by this writer,
      *         {@code false} otherwise.
      */
@@ -107,7 +107,7 @@ public class TaggedWriter extends ProxyWriter {
      * original wrapped exception. Returns normally if the exception was
      * not thrown by this writer.
      *
-     * @param exception an exception.
+     * @param exception An exception.
      * @throws IOException original exception, if any, thrown by this writer.
      */
     public void throwIfCauseOf(final Exception exception) throws IOException {

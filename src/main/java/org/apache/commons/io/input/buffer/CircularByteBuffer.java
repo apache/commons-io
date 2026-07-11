@@ -46,7 +46,7 @@ public class CircularByteBuffer {
     /**
      * Constructs a new instance with the given buffer size.
      *
-     * @param size the size of buffer to create.
+     * @param size The size of buffer to create.
      */
     public CircularByteBuffer(final int size) {
         buffer = IOUtils.byteArray(size);
@@ -79,7 +79,7 @@ public class CircularByteBuffer {
      * for the bytes at offsets {@code offset+0}, {@code offset+1}, ...,
      * {@code offset+length-1} of byte array {@code targetBuffer}.
      *
-     * @param targetBuffer the buffer to copy.
+     * @param targetBuffer The buffer to copy.
      * @param offset start offset.
      * @param length length to copy.
      * @throws IllegalStateException    The buffer doesn't have sufficient space. Use
@@ -158,7 +158,7 @@ public class CircularByteBuffer {
     /**
      * Tests whether there is currently room for the given number of bytes in the buffer.
      *
-     * @param count the byte count.
+     * @param count The byte count.
      * @return true whether there is currently room for the given number of bytes in the buffer.
      * @see #hasSpace()
      * @see #getSpace()
@@ -173,7 +173,7 @@ public class CircularByteBuffer {
      * removed from the buffer. If the result is true, then the following invocations
      * of {@link #read()} are guaranteed to return exactly those bytes.
      *
-     * @param sourceBuffer the buffer to compare against.
+     * @param sourceBuffer The buffer to compare against.
      * @param offset start offset.
      * @param length length to compare.
      * @return True, if the next invocations of {@link #read()} will return the

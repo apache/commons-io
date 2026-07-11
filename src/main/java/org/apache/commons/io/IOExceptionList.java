@@ -71,7 +71,7 @@ public class IOExceptionList extends IOException implements Iterable<Throwable> 
     /**
      * Constructs a new exception caused by a list of exceptions.
      *
-     * @param causeList a list of cause exceptions.
+     * @param causeList A list of cause exceptions.
      */
     public IOExceptionList(final List<? extends Throwable> causeList) {
         this(toMessage(causeList), causeList);
@@ -81,7 +81,7 @@ public class IOExceptionList extends IOException implements Iterable<Throwable> 
      * Constructs a new exception caused by a list of exceptions.
      *
      * @param message The detail message, see {@link #getMessage()}.
-     * @param causeList a list of cause exceptions.
+     * @param causeList A list of cause exceptions.
      * @since 2.9.0
      */
     public IOExceptionList(final String message, final List<? extends Throwable> causeList) {
@@ -126,7 +126,7 @@ public class IOExceptionList extends IOException implements Iterable<Throwable> 
      * Works around Throwable and Generics, may fail at runtime depending on the argument value.
      *
      * @param <T> type of exception to return.
-     * @param clazz the target type.
+     * @param clazz The target type.
      * @return The list of causes.
      */
     public <T extends Throwable> List<T> getCauseList(final Class<T> clazz) {

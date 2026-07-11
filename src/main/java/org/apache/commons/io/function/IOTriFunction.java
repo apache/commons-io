@@ -45,7 +45,7 @@ public interface IOTriFunction<T, U, V, R> {
      * composed function.
      *
      * @param <W> The type of output of the {@code after} function, and of the composed function.
-     * @param after the function to apply after this function is applied.
+     * @param after The function to apply after this function is applied.
      * @return A composed function that first applies this function and then applies the {@code after} function.
      * @throws NullPointerException if after is null.
      */
@@ -57,9 +57,9 @@ public interface IOTriFunction<T, U, V, R> {
     /**
      * Applies this function to the given arguments.
      *
-     * @param t the first function argument.
-     * @param u the second function argument.
-     * @param v the third function argument.
+     * @param t The first function argument.
+     * @param u The second function argument.
+     * @param v The third function argument.
      * @return The function result.
      * @throws IOException if an I/O error occurs.
      */

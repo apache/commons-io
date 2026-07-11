@@ -48,7 +48,7 @@ public interface TailerListener {
      * <strong>Note:</strong> Called from the tailer thread.
      * </p>
      *
-     * @param e the exception.
+     * @param e The exception.
      */
     void handle(Exception e);
 
@@ -58,14 +58,14 @@ public interface TailerListener {
      * <strong>Note:</strong> Called from the tailer thread.
      * </p>
      *
-     * @param line the line.
+     * @param line The line.
      */
     void handle(String line);
 
     /**
      * Called during construction, giving the listener a method of stopping the tailer.
      *
-     * @param tailer the tailer.
+     * @param tailer The tailer.
      */
     void init(Tailer tailer);
 }
