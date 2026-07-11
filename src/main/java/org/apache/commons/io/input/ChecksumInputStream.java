@@ -238,7 +238,7 @@ public final class ChecksumInputStream extends CountingInputStream {
     /**
      * Gets the current checksum value.
      *
-     * @return the current checksum value.
+     * @return The current checksum value.
      */
     private Checksum getChecksum() {
         return ((CheckedInputStream) in).getChecksum();

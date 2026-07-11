@@ -34,7 +34,7 @@ public final class CharsetDecoders {
      * </p>
      *
      * @param charsetDecoder The CharsetDecoder to test.
-     * @return the given non-null CharsetDecoder or a new default CharsetDecoder.
+     * @return The given non-null CharsetDecoder or a new default CharsetDecoder.
      */
     public static CharsetDecoder toCharsetDecoder(final CharsetDecoder charsetDecoder) {
         return charsetDecoder != null ? charsetDecoder : Charset.defaultCharset().newDecoder();

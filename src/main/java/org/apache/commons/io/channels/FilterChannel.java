@@ -138,7 +138,7 @@ public class FilterChannel<C extends Channel> implements Channel {
      * Use with caution.
      * </p>
      *
-     * @return the underlying channel of type {@code C}.
+     * @return The underlying channel of type {@code C}.
      */
     public C unwrap() {
         return channel;

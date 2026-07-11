@@ -401,7 +401,7 @@ public class ReaderInputStream extends AbstractInputStream {
     /**
      * Gets the CharsetEncoder.
      *
-     * @return the CharsetEncoder.
+     * @return The CharsetEncoder.
      */
     CharsetEncoder getCharsetEncoder() {
         return charsetEncoder;
@@ -431,7 +431,7 @@ public class ReaderInputStream extends AbstractInputStream {
      * Reads the specified number of bytes into an array.
      *
      * @param b the byte array to read into, must not be {@code null}
-     * @return the number of bytes read or {@code -1} if the end of the stream has been reached.
+     * @return The number of bytes read or {@code -1} if the end of the stream has been reached.
      * @throws NullPointerException if the byte array is {@code null}.
      * @throws IOException if an I/O error occurs.
      */
@@ -446,7 +446,7 @@ public class ReaderInputStream extends AbstractInputStream {
      * @param array the byte array to read into.
      * @param off   the offset to start reading bytes into.
      * @param len   the number of bytes to read.
-     * @return the number of bytes read or {@code -1} if the end of the stream has been reached.
+     * @return The number of bytes read or {@code -1} if the end of the stream has been reached.
      * @throws NullPointerException      if the byte array is {@code null}.
      * @throws IndexOutOfBoundsException if {@code off} or {@code len} are negative, or if {@code off + len} is greater than {@code array.length}.
      * @throws IOException if an I/O error occurs.

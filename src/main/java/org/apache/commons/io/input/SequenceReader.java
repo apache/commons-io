@@ -75,7 +75,7 @@ public class SequenceReader extends Reader {
     /**
      * Returns the next available reader or null if done.
      *
-     * @return the next available reader or null.
+     * @return The next available reader or null.
      * @throws IOException IOException  If an I/O error occurs.
      */
     private Reader nextReader() throws IOException {

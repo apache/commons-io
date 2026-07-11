@@ -242,7 +242,7 @@ public class CharSequenceInputStream extends InputStream {
     /**
      * Gets a lower bound on the number of bytes remaining in the byte stream.
      *
-     * @return the count of bytes that can be read without blocking (or returning EOF).
+     * @return The count of bytes that can be read without blocking (or returning EOF).
      * @throws IOException if an error occurs (probably not possible).
      */
     @Override
@@ -273,7 +273,7 @@ public class CharSequenceInputStream extends InputStream {
     /**
      * Gets the CharsetEncoder.
      *
-     * @return the CharsetEncoder.
+     * @return The CharsetEncoder.
      */
     CharsetEncoder getCharsetEncoder() {
         return charsetEncoder;

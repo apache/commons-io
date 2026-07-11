@@ -184,7 +184,7 @@ public class QueueInputStream extends InputStream {
     /**
      * Gets the blocking queue.
      *
-     * @return the blocking queue.
+     * @return The blocking queue.
      */
     BlockingQueue<Integer> getBlockingQueue() {
         return blockingQueue;
@@ -193,7 +193,7 @@ public class QueueInputStream extends InputStream {
     /**
      * Gets the timeout duration.
      *
-     * @return the timeout duration.
+     * @return The timeout duration.
      */
     Duration getTimeout() {
         return Duration.ofNanos(timeoutNanos);
@@ -211,7 +211,7 @@ public class QueueInputStream extends InputStream {
     /**
      * Reads and returns a single byte.
      *
-     * @return the byte read, or {@code -1} if a timeout occurs before a queue element is available.
+     * @return The byte read, or {@code -1} if a timeout occurs before a queue element is available.
      * @throws IllegalStateException if thread is interrupted while waiting.
      */
     @Override

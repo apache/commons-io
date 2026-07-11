@@ -104,7 +104,7 @@ public class XmlStreamReaderException extends IOException {
     /**
      * Gets the BOM encoding found in the InputStream.
      *
-     * @return the BOM encoding, null if none.
+     * @return The BOM encoding, null if none.
      */
     public String getBomEncoding() {
         return bomEncoding;
@@ -114,7 +114,7 @@ public class XmlStreamReaderException extends IOException {
      * Gets the encoding in the content-type used to attempt determining the
      * encoding.
      *
-     * @return the encoding in the content-type, null if there was not
+     * @return The encoding in the content-type, null if there was not
      *         content-type, no encoding in it or the encoding detection did not
      *         involve HTTP.
      */
@@ -126,7 +126,7 @@ public class XmlStreamReaderException extends IOException {
      * Gets the MIME type in the content-type used to attempt determining the
      * encoding.
      *
-     * @return the MIME type in the content-type, null if there was not
+     * @return The MIME type in the content-type, null if there was not
      *         content-type or the encoding detection did not involve HTTP.
      */
     public String getContentTypeMime() {
@@ -136,7 +136,7 @@ public class XmlStreamReaderException extends IOException {
     /**
      * Gets the encoding found in the XML prolog of the input.
      *
-     * @return the encoding of the XML prolog, null if none.
+     * @return The encoding of the XML prolog, null if none.
      */
     public String getXmlEncoding() {
         return xmlEncoding;
@@ -145,7 +145,7 @@ public class XmlStreamReaderException extends IOException {
     /**
      * Gets the encoding guess based on the first bytes of the input.
      *
-     * @return the encoding guess, null if it couldn't be guessed.
+     * @return The encoding guess, null if it couldn't be guessed.
      */
     public String getXmlGuessEncoding() {
         return xmlGuessEncoding;

@@ -1191,7 +1191,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
     /**
      * Gets the origin, never null.
      *
-     * @return the origin, never null.
+     * @return The origin, never null.
      */
     @Override
     public T get() {
@@ -1370,7 +1370,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
     /**
      * Gets the size of the origin, if possible.
      *
-     * @return the size of the origin in bytes or characters.
+     * @return The size of the origin in bytes or characters.
      * @throws IOException if an I/O error occurs.
      * @since 2.13.0
      */

@@ -112,7 +112,7 @@ public class AppendableWriter<T extends Appendable> extends Writer {
     /**
      * Gets the target appendable.
      *
-     * @return the target appendable.
+     * @return The target appendable.
      */
     public T getAppendable() {
         return appendable;

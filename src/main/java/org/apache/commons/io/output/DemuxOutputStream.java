@@ -40,7 +40,7 @@ public class DemuxOutputStream extends OutputStream {
      * Binds the specified stream to the current thread.
      *
      * @param output the stream to bind.
-     * @return the OutputStream that was previously active.
+     * @return The OutputStream that was previously active.
      */
     public OutputStream bindStream(final OutputStream output) {
         final OutputStream stream = outputStreamThreadLocal.get();

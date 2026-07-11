@@ -210,7 +210,7 @@ public abstract class AbstractOriginSupplier<T, B extends AbstractOriginSupplier
     /**
      * Checks whether the origin is null.
      *
-     * @return the origin.
+     * @return The origin.
      * @throws IllegalStateException if the {@code origin} is {@code null}.
      */
     protected AbstractOrigin<?, ?> checkOrigin() {
@@ -223,7 +223,7 @@ public abstract class AbstractOriginSupplier<T, B extends AbstractOriginSupplier
     /**
      * Gets the origin.
      *
-     * @return the origin.
+     * @return The origin.
      */
     protected AbstractOrigin<?, ?> getOrigin() {
         return origin;

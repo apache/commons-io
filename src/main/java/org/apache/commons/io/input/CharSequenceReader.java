@@ -188,7 +188,7 @@ public class CharSequenceReader extends Reader implements Serializable {
     /**
      * Reads a single character.
      *
-     * @return the next character from the character sequence
+     * @return The next character from the character sequence
      * or -1 if the end has been reached.
      */
     @Override

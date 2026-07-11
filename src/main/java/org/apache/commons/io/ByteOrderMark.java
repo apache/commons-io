@@ -196,7 +196,7 @@ public class ByteOrderMark implements Serializable {
     /**
      * Gets the name of the {@link java.nio.charset.Charset} the BOM represents.
      *
-     * @return the character set name.
+     * @return The character set name.
      */
     public String getCharsetName() {
         return charsetName;
@@ -209,7 +209,7 @@ public class ByteOrderMark implements Serializable {
     /**
      * Computes the hash code for this BOM.
      *
-     * @return the hash code for this BOM.
+     * @return The hash code for this BOM.
      * @see Object#hashCode()
      */
     @Override
@@ -224,7 +224,7 @@ public class ByteOrderMark implements Serializable {
     /**
      * Gets the length of the BOM's bytes.
      *
-     * @return the length of the BOM's bytes.
+     * @return The length of the BOM's bytes.
      */
     public int length() {
         return bytes.length;
@@ -260,7 +260,7 @@ public class ByteOrderMark implements Serializable {
     /**
      * Converts this instance to a String representation of the BOM.
      *
-     * @return the length of the BOM's bytes.
+     * @return The length of the BOM's bytes.
      */
     @Override
     public String toString() {

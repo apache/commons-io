@@ -41,7 +41,7 @@ public class DemuxInputStream extends InputStream {
      * Binds the specified stream to the current thread.
      *
      * @param input the stream to bind.
-     * @return the InputStream that was previously active.
+     * @return The InputStream that was previously active.
      */
     public InputStream bindStream(final InputStream input) {
         final InputStream oldValue = inputStreamLocal.get();
@@ -63,7 +63,7 @@ public class DemuxInputStream extends InputStream {
     /**
      * Reads byte from stream associated with current thread.
      *
-     * @return the byte read from stream.
+     * @return The byte read from stream.
      * @throws IOException if an error occurs.
      */
     @Override

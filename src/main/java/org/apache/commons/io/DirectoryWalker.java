@@ -298,7 +298,7 @@ public abstract class DirectoryWalker<T> {
         /**
          * Returns the depth when the operation was canceled.
          *
-         * @return the depth when the operation was canceled.
+         * @return The depth when the operation was canceled.
          */
         public int getDepth() {
             return depth;
@@ -307,7 +307,7 @@ public abstract class DirectoryWalker<T> {
         /**
          * Returns the file when the operation was canceled.
          *
-         * @return the file when the operation was canceled.
+         * @return The file when the operation was canceled.
          */
         public File getFile() {
             return file;
@@ -408,7 +408,7 @@ public abstract class DirectoryWalker<T> {
      * @param directory  the current directory being processed.
      * @param depth  the current directory level (starting directory = 0).
      * @param files the files (possibly filtered) in the directory, may be {@code null}
-     * @return the filtered list of files.
+     * @return The filtered list of files.
      * @throws IOException if an I/O Error occurs.
      * @since 2.0
      */

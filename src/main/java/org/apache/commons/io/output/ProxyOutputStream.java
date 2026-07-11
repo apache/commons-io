@@ -180,7 +180,7 @@ public class ProxyOutputStream extends FilterOutputStream {
      * Use with caution.
      * </p>
      *
-     * @return the underlying {@link OutputStream}.
+     * @return The underlying {@link OutputStream}.
      * @since 2.22.0
      */
     public OutputStream unwrap() {

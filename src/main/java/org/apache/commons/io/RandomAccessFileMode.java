@@ -178,7 +178,7 @@ public enum RandomAccessFileMode {
      * @param <T> The return type of the function.
      * @param file the file specifying the {@link RandomAccessFile} to open.
      * @param function the function to apply.
-     * @return the function's result value.
+     * @return The function's result value.
      * @throws FileNotFoundException See {@link IORandomAccessFile#IORandomAccessFile(File, String)}.
      * @throws IOException Thrown by the given function.
      * @since 2.18.0

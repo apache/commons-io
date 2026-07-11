@@ -197,7 +197,7 @@ public class FilterFileChannel extends FileChannel {
      * Use with caution.
      * </p>
      *
-     * @return the underlying {@link FileChannel}.
+     * @return The underlying {@link FileChannel}.
      */
     public FileChannel unwrap() {
         return fileChannel;

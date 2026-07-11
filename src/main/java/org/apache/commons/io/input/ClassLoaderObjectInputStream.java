@@ -57,7 +57,7 @@ public class ClassLoaderObjectInputStream extends ObjectInputStream {
      * specified ClassLoader or the super ClassLoader.
      *
      * @param objectStreamClass  descriptor of the class.
-     * @return the Class object described by the ObjectStreamClass.
+     * @return The Class object described by the ObjectStreamClass.
      * @throws IOException in case of an I/O error.
      * @throws ClassNotFoundException if the Class cannot be found.
      */

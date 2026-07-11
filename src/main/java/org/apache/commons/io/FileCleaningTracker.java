@@ -126,7 +126,7 @@ public class FileCleaningTracker {
         /**
          * Gets the path.
          *
-         * @return the path.
+         * @return The path.
          */
         public String getPath() {
             return path;
@@ -234,7 +234,7 @@ public class FileCleaningTracker {
      * Gets the number of files currently being tracked, and therefore
      * awaiting deletion.
      *
-     * @return the number of files being tracked.
+     * @return The number of files being tracked.
      */
     public int getTrackCount() {
         return trackers.size();

@@ -211,7 +211,7 @@ public class RandomAccessFileInputStream extends AbstractInputStream {
     /**
      * Gets the underlying file.
      *
-     * @return the underlying file.
+     * @return The underlying file.
      */
     public RandomAccessFile getRandomAccessFile() {
         return randomAccessFile;

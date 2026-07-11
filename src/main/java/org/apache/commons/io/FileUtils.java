@@ -357,7 +357,7 @@ public class FileUtils {
      *
      * @param file the file to checksum, must not be {@code null}
      * @param checksum the checksum object to be used, must not be {@code null}
-     * @return the checksum specified, updated with the content of the file.
+     * @return The checksum specified, updated with the content of the file.
      * @throws NullPointerException if the given {@link File} is {@code null}.
      * @throws NullPointerException if the given {@link Checksum} is {@code null}.
      * @throws IllegalArgumentException if the given {@link File} is not a file.
@@ -379,7 +379,7 @@ public class FileUtils {
      * The value of the checksum is returned.
      *
      * @param file the file to checksum, must not be {@code null}
-     * @return the checksum value.
+     * @return The checksum value.
      * @throws NullPointerException if the {@code file} is {@code null}.
      * @throws IllegalArgumentException if the {@code file} does not exist or is not a file.
      * @throws IOException              if an IO error occurs reading the file.
@@ -917,7 +917,7 @@ public class FileUtils {
      *
      * @param input  the {@link File} to read.
      * @param output the {@link OutputStream} to write.
-     * @return the number of bytes copied.
+     * @return The number of bytes copied.
      * @throws NullPointerException if the File is {@code null}.
      * @throws NullPointerException if the OutputStream is {@code null}.
      * @throws IOException          if an I/O error occurs.
@@ -1175,7 +1175,7 @@ public class FileUtils {
     /**
      * Gets the current directory.
      *
-     * @return the current directory.
+     * @return The current directory.
      * @since 2.12.0
      */
     public static File current() {
@@ -1234,7 +1234,7 @@ public class FileUtils {
      * boolean.
      *
      * @param file The file to delete.
-     * @return the given file.
+     * @return The given file.
      * @throws NullPointerException     if the parameter is {@code null}.
      * @throws IOException              if the file cannot be deleted.
      * @see File#delete()
@@ -1496,7 +1496,7 @@ public class FileUtils {
      *
      * @param directory the parent directory.
      * @param names the name elements.
-     * @return the new file.
+     * @return The new file.
      * @since 2.1
      */
     public static File getFile(final File directory, final String... names) {
@@ -1513,7 +1513,7 @@ public class FileUtils {
      * Constructs a file from the set of name elements.
      *
      * @param names the name elements.
-     * @return the file.
+     * @return The file.
      * @since 2.1
      */
     public static File getFile(final String... names) {
@@ -1542,7 +1542,7 @@ public class FileUtils {
     /**
      * Gets a {@link File} representing the system temporary directory based on the Java system property {@code java.io.tmpdir}.
      *
-     * @return the system temporary directory as a File.
+     * @return The system temporary directory as a File.
      * @since 2.0
      */
     public static File getTempDirectory() {
@@ -1556,7 +1556,7 @@ public class FileUtils {
      * that uses String processing to manipulate pathnames rather than the standard library methods in classes such as {@link File}.
      * </p>
      *
-     * @return the path to the system temporary directory as a String.
+     * @return The path to the system temporary directory as a String.
      * @since 2.0
      */
     public static String getTempDirectoryPath() {
@@ -1566,7 +1566,7 @@ public class FileUtils {
     /**
      * Gets a {@link File} representing the user's home directory based on the Java system property {@code user.home}.
      *
-     * @return the user's home directory.
+     * @return The user's home directory.
      * @since 2.0
      */
     public static File getUserDirectory() {
@@ -1576,7 +1576,7 @@ public class FileUtils {
     /**
      * Gets the path to the user's home directory based on the Java system property {@code user.home}.
      *
-     * @return the path to the user's home directory.
+     * @return The path to the user's home directory.
      * @since 2.0
      */
     public static String getUserDirectoryPath() {
@@ -2450,7 +2450,7 @@ public class FileUtils {
      * </p>
      *
      * @param directory the receiver for {@code mkdirs()}. If the {@code directory} already exists or is null, nothing happens.
-     * @return the given directory.
+     * @return The given directory.
      * @throws IOException       if the directory was not created along with all its parent directories.
      * @throws IOException       if the given file object is not a directory.
      * @throws SecurityException See {@link File#mkdirs()}.
@@ -2742,7 +2742,7 @@ public class FileUtils {
      * The file is always closed.
      *
      * @param file the file to read, must not be {@code null}.
-     * @return the file contents, never {@code null}.
+     * @return The file contents, never {@code null}.
      * @throws NullPointerException if file is {@code null}.
      * @throws IOException if an I/O error occurs, including when the file does not exist, is a directory rather than a
      *         regular file, or for some other reason why the file cannot be opened for reading.
@@ -2758,7 +2758,7 @@ public class FileUtils {
      * file is always closed.
      *
      * @param file the file to read, must not be {@code null}.
-     * @return the file contents, never {@code null}.
+     * @return The file contents, never {@code null}.
      * @throws NullPointerException if file is {@code null}.
      * @throws IOException          if an I/O error occurs, including when the file does not exist, is a directory rather than a regular file, or for some other
      *                              reason why the file cannot be opened for reading.
@@ -2776,7 +2776,7 @@ public class FileUtils {
      *
      * @param file     the file to read, must not be {@code null}.
      * @param charsetName the name of the requested charset, {@code null} means platform default.
-     * @return the file contents, never {@code null}.
+     * @return The file contents, never {@code null}.
      * @throws NullPointerException if file is {@code null}.
      * @throws IOException if an I/O error occurs, including when the file does not exist, is a directory rather than a
      *         regular file, or for some other reason why the file cannot be opened for reading.
@@ -2791,7 +2791,7 @@ public class FileUtils {
      *
      * @param file     the file to read, must not be {@code null}.
      * @param charsetName the name of the requested charset, {@code null} means platform default.
-     * @return the file contents, never {@code null}.
+     * @return The file contents, never {@code null}.
      * @throws NullPointerException if file is {@code null}.
      * @throws IOException if an I/O error occurs, including when the file does not exist, is a directory rather than a
      *         regular file, or for some other reason why the file cannot be opened for reading.
@@ -2807,7 +2807,7 @@ public class FileUtils {
      * The file is always closed.
      *
      * @param file the file to read, must not be {@code null}.
-     * @return the list of Strings representing each line in the file, never {@code null}.
+     * @return The list of Strings representing each line in the file, never {@code null}.
      * @throws NullPointerException if file is {@code null}.
      * @throws IOException          if an I/O error occurs, including when the file does not exist, is a directory rather than a regular file, or for some other
      *                              reason why the file cannot be opened for reading.
@@ -2825,7 +2825,7 @@ public class FileUtils {
      *
      * @param file     the file to read, must not be {@code null}.
      * @param charset the charset to use, {@code null} means platform default.
-     * @return the list of Strings representing each line in the file, never {@code null}.
+     * @return The list of Strings representing each line in the file, never {@code null}.
      * @throws NullPointerException if file is {@code null}.
      * @throws IOException if an I/O error occurs, including when the file does not exist, is a directory rather than a
      *         regular file, or for some other reason why the file cannot be opened for reading.
@@ -2840,7 +2840,7 @@ public class FileUtils {
      *
      * @param file     the file to read, must not be {@code null}.
      * @param charsetName the name of the requested charset, {@code null} means platform default.
-     * @return the list of Strings representing each line in the file, never {@code null}.
+     * @return The list of Strings representing each line in the file, never {@code null}.
      * @throws NullPointerException if file is {@code null}.
      * @throws IOException if an I/O error occurs, including when the file does not exist, is a directory rather than a
      *         regular file, or for some other reason why the file cannot be opened for reading.
@@ -2949,7 +2949,7 @@ public class FileUtils {
      * @param file the regular file or directory to return the size
      *             of (must not be {@code null}).
      *
-     * @return the length of the file, or recursive size of the directory,
+     * @return The length of the file, or recursive size of the directory,
      * provided (in bytes).
      *
      * @throws NullPointerException     if the file is {@code null}.
@@ -2971,7 +2971,7 @@ public class FileUtils {
      * @param file the regular file or directory to return the size
      *             of (must not be {@code null}).
      *
-     * @return the length of the file, or recursive size of the directory,
+     * @return The length of the file, or recursive size of the directory,
      * provided (in bytes).
      *
      * @throws NullPointerException     if the file is {@code null}.
@@ -3058,7 +3058,7 @@ public class FileUtils {
      * </p>
      *
      * @param url the file URL to convert, {@code null} returns {@code null}.
-     * @return the equivalent {@link File} object, or {@code null} if the URL's protocol is not {@code file}.
+     * @return The equivalent {@link File} object, or {@code null} if the URL's protocol is not {@code file}.
      */
     public static File toFile(final URL url) {
         if (url == null || !isFileProtocol(url)) {
@@ -3118,7 +3118,7 @@ public class FileUtils {
      * Converts whether or not to recurse into a recursion max depth.
      *
      * @param recursive whether or not to recurse.
-     * @return the recursion depth.
+     * @return The recursion depth.
      */
     private static int toMaxDepth(final boolean recursive) {
         return recursive ? Integer.MAX_VALUE : 1;

@@ -40,7 +40,7 @@ public class FileSystemProviders { // NOPMD Class will be final in 3.0.
      * Gets the {@link FileSystemProvider} for the given Path.
      *
      * @param path The Path to query.
-     * @return the {@link FileSystemProvider} for the given Path.
+     * @return The {@link FileSystemProvider} for the given Path.
      */
     @SuppressWarnings("resource") // FileSystem is not allocated here.
     public static FileSystemProvider getFileSystemProvider(final Path path) {
@@ -50,7 +50,7 @@ public class FileSystemProviders { // NOPMD Class will be final in 3.0.
     /**
      * Returns the instance for the installed providers.
      *
-     * @return the instance for the installed providers.
+     * @return The instance for the installed providers.
      * @see FileSystemProvider#installedProviders()
      */
     public static FileSystemProviders installed() {
@@ -70,7 +70,7 @@ public class FileSystemProviders { // NOPMD Class will be final in 3.0.
      * Gets the {@link FileSystemProvider} for the given scheme.
      *
      * @param scheme The scheme to query.
-     * @return the {@link FileSystemProvider} for the given URI or null.
+     * @return The {@link FileSystemProvider} for the given URI or null.
      */
     @SuppressWarnings("resource") // FileSystems.getDefault() returns a constant.
     public FileSystemProvider getFileSystemProvider(final String scheme) {
@@ -87,7 +87,7 @@ public class FileSystemProviders { // NOPMD Class will be final in 3.0.
      * Gets the {@link FileSystemProvider} for the given URI.
      *
      * @param uri The URI to query.
-     * @return the {@link FileSystemProvider} for the given URI or null.
+     * @return The {@link FileSystemProvider} for the given URI or null.
      */
     public FileSystemProvider getFileSystemProvider(final URI uri) {
         return getFileSystemProvider(Objects.requireNonNull(uri, "uri").getScheme());
@@ -97,7 +97,7 @@ public class FileSystemProviders { // NOPMD Class will be final in 3.0.
      * Gets the {@link FileSystemProvider} for the given URL.
      *
      * @param url The URL to query.
-     * @return the {@link FileSystemProvider} for the given URI or null.
+     * @return The {@link FileSystemProvider} for the given URI or null.
      */
     public FileSystemProvider getFileSystemProvider(final URL url) {
         return getFileSystemProvider(Objects.requireNonNull(url, "url").getProtocol());

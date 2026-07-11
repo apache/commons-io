@@ -263,7 +263,7 @@ public final class ThrottledInputStream extends CountingInputStream {
      * Package private for testing.
      * </p>
      *
-     * @return the number of milliseconds to sleep to match to the maximum bytes per second.
+     * @return The number of milliseconds to sleep to match to the maximum bytes per second.
      */
     long getSleepMillis() {
         return toSleepMillis(getByteCount(), System.currentTimeMillis() - startTime, maxBytesPerSecond);

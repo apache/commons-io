@@ -54,7 +54,7 @@ public class DirectoryStreamFilter implements DirectoryStream.Filter<Path> {
     /**
      * Gets the path filter.
      *
-     * @return the path filter.
+     * @return The path filter.
      */
     public PathFilter getPathFilter() {
         return pathFilter;

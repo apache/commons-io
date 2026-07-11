@@ -535,7 +535,7 @@ public final class PathUtils {
     /**
      * Gets the current directory.
      *
-     * @return the current directory.
+     * @return The current directory.
      * @since 2.9.0
      */
     public static Path current() {
@@ -1006,7 +1006,7 @@ public final class PathUtils {
      * Will return the file name itself if it doesn't contain any periods. All leading directories of the {@code file name} parameter are skipped.
      * </p>
      *
-     * @return the base name of file name.
+     * @return The base name of file name.
      * @param path the path of the file to obtain the base name of.
      * @since 2.16.0
      */
@@ -1047,7 +1047,7 @@ public final class PathUtils {
      * </p>
      *
      * @param path the path to query.
-     * @return the extension of the file or an empty string if none exists or {@code null} if the fileName is {@code null}.
+     * @return The extension of the file or an empty string if none exists or {@code null} if the fileName is {@code null}.
      * @since 2.16.0
      */
     public static String getExtension(final Path path) {
@@ -1061,7 +1061,7 @@ public final class PathUtils {
      * @param <R>      The function's result type.
      * @param path     the path to query.
      * @param function function to apply to the file name.
-     * @return the Path's file name as a string or null.
+     * @return The Path's file name as a string or null.
      * @see Path#getFileName()
      * @since 2.16.0
      */
@@ -1074,7 +1074,7 @@ public final class PathUtils {
      * Gets the Path's file name as a string.
      *
      * @param path the path to query.
-     * @return the Path's file name as a string or null.
+     * @return The Path's file name as a string or null.
      * @see Path#getFileName()
      * @since 2.16.0
      */
@@ -1090,7 +1090,7 @@ public final class PathUtils {
      * </p>
      *
      * @param file the file to query.
-     * @return the file's last modified time.
+     * @return The file's last modified time.
      * @throws IOException Thrown if an I/O error occurs.
      * @since 2.12.0
      */
@@ -1104,7 +1104,7 @@ public final class PathUtils {
      * @param path            the file to query.
      * @param defaultIfAbsent Returns this file time of the file does not exist, may be null.
      * @param options         options indicating how symbolic links are handled.
-     * @return the file's last modified time.
+     * @return The file's last modified time.
      * @throws IOException Thrown if an I/O error occurs.
      * @since 2.12.0
      */
@@ -1117,7 +1117,7 @@ public final class PathUtils {
      *
      * @param path    the file to query.
      * @param options options indicating how symbolic links are handled.
-     * @return the file's last modified time.
+     * @return The file's last modified time.
      * @throws IOException Thrown if an I/O error occurs.
      * @since 2.12.0
      */
@@ -1129,7 +1129,7 @@ public final class PathUtils {
      * Gets the file's last modified time or null if the file does not exist.
      *
      * @param uri the file to query.
-     * @return the file's last modified time.
+     * @return The file's last modified time.
      * @throws IOException Thrown if an I/O error occurs.
      * @since 2.12.0
      */
@@ -1141,7 +1141,7 @@ public final class PathUtils {
      * Gets the file's last modified time or null if the file does not exist.
      *
      * @param url the file to query.
-     * @return the file's last modified time.
+     * @return The file's last modified time.
      * @throws IOException        Thrown if an I/O error occurs.
      * @throws URISyntaxException if the URL is not formatted strictly according to RFC2396 and cannot be converted to a URI.
      * @since 2.12.0
@@ -1163,7 +1163,7 @@ public final class PathUtils {
      *
      * @param key the name of the system property.
      * @param defaultPath a default path, may be null.
-     * @return the resulting {@code Path}, or the default value as a Path if there is no property with that key.
+     * @return The resulting {@code Path}, or the default value as a Path if there is no property with that key.
      * @since 2.21.0
      */
     public static Path getPath(final String key, final String defaultPath) {
@@ -1186,7 +1186,7 @@ public final class PathUtils {
     /**
      * Gets a {@link Path} representing the system temporary directory.
      *
-     * @return the system temporary directory.
+     * @return The system temporary directory.
      * @since 2.12.0
      */
     public static Path getTempDirectory() {
@@ -1491,7 +1491,7 @@ public final class PathUtils {
      * @param path    The Path to test.
      * @param type    the {@link Class} of the file attributes required to read.
      * @param options options indicating how to handle symbolic links.
-     * @return the file attributes or null if the attributes can't be read.
+     * @return The file attributes or null if the attributes can't be read.
      * @see Files#readAttributes(Path, Class, LinkOption...)
      * @since 2.12.0
      */
@@ -1508,7 +1508,7 @@ public final class PathUtils {
      * Reads the BasicFileAttributes from the given path.
      *
      * @param path the path to read.
-     * @return the path attributes.
+     * @return The path attributes.
      * @throws IOException if an I/O error occurs.
      * @since 2.9.0
      */
@@ -1521,7 +1521,7 @@ public final class PathUtils {
      *
      * @param path    the path to read.
      * @param options options indicating how to handle symbolic links.
-     * @return the path attributes.
+     * @return The path attributes.
      * @since 2.12.0
      */
     public static BasicFileAttributes readBasicFileAttributes(final Path path, final LinkOption... options) {
@@ -1532,7 +1532,7 @@ public final class PathUtils {
      * Reads the BasicFileAttributes from the given path. Returns null if the attributes can't be read.
      *
      * @param path the path to read.
-     * @return the path attributes.
+     * @return The path attributes.
      * @since 2.9.0
      * @deprecated Use {@link #readBasicFileAttributes(Path, LinkOption...)}.
      */
@@ -1546,7 +1546,7 @@ public final class PathUtils {
      *
      * @param path    the path to read.
      * @param options options indicating how to handle symbolic links.
-     * @return the path attributes.
+     * @return The path attributes.
      * @since 2.12.0
      */
     public static DosFileAttributes readDosFileAttributes(final Path path, final LinkOption... options) {
@@ -1562,7 +1562,7 @@ public final class PathUtils {
      *
      * @param path    The Path to read.
      * @param options options indicating how to handle symbolic links.
-     * @return the file attributes.
+     * @return The file attributes.
      * @since 2.12.0
      */
     public static BasicFileAttributes readOsFileAttributes(final Path path, final LinkOption... options) {
@@ -1575,7 +1575,7 @@ public final class PathUtils {
      *
      * @param path    The Path to read.
      * @param options options indicating how to handle symbolic links.
-     * @return the file attributes.
+     * @return The file attributes.
      * @since 2.12.0
      */
     public static PosixFileAttributes readPosixFileAttributes(final Path path, final LinkOption... options) {
@@ -1587,7 +1587,7 @@ public final class PathUtils {
      *
      * @param path    The source path.
      * @param charset How to convert bytes to a String, null uses the default Charset.
-     * @return the file contents as a new String.
+     * @return The file contents as a new String.
      * @throws IOException if an I/O error occurs reading from the stream.
      * @see Files#readAllBytes(Path)
      * @see Charsets#toCharset(Charset)
@@ -1620,7 +1620,7 @@ public final class PathUtils {
      * @param file          The {@link File} to check.
      * @param fileParamName The parameter name to use in the exception message in case of {@code null} input.
      * @param options       options indicating how to handle symbolic links.
-     * @return the given file.
+     * @return The given file.
      * @throws NullPointerException     if the given {@link File} is {@code null}.
      * @throws IllegalArgumentException if the given {@link File} does not exist.
      */
@@ -1799,7 +1799,7 @@ public final class PathUtils {
      * </p>
      *
      * @param path the regular file or directory to return the size of, must not be {@code null}.
-     * @return the length of the file, or recursive size of the directory, in bytes.
+     * @return The length of the file, or recursive size of the directory, in bytes.
      * @throws NullPointerException     if the file is {@code null}.
      * @throws IllegalArgumentException if the file does not exist.
      * @throws IOException              if an I/O error occurs.
@@ -1815,7 +1815,7 @@ public final class PathUtils {
      * directory, then the size of the directory is calculated recursively.
      *
      * @param path the regular file or directory to return the size of (must not be {@code null}).
-     * @return the length of the file, or recursive size of the directory, provided (in bytes).
+     * @return The length of the file, or recursive size of the directory, provided (in bytes).
      * @throws NullPointerException     if the file is {@code null}.
      * @throws IllegalArgumentException if the file does not exist.
      * @throws IOException              if an I/O error occurs.
@@ -1911,7 +1911,7 @@ public final class PathUtils {
      * @param visitor   See {@link Files#walkFileTree(Path,FileVisitor)}.
      * @param directory See {@link Files#walkFileTree(Path,FileVisitor)}.
      * @param <T>       See {@link Files#walkFileTree(Path,FileVisitor)}.
-     * @return the given visitor.
+     * @return The given visitor.
      * @throws NoSuchFileException  if the directory does not exist.
      * @throws IOException          if an I/O error is thrown by a visitor method.
      * @throws NullPointerException if the directory is {@code null}.
@@ -1931,7 +1931,7 @@ public final class PathUtils {
      * @param maxDepth See {@link Files#walkFileTree(Path,Set,int,FileVisitor)}.
      * @param visitor  See {@link Files#walkFileTree(Path,Set,int,FileVisitor)}.
      * @param <T>      See {@link Files#walkFileTree(Path,Set,int,FileVisitor)}.
-     * @return the given visitor.
+     * @return The given visitor.
      * @throws IOException if an I/O error is thrown by a visitor method.
      */
     public static <T extends FileVisitor<? super Path>> T visitFileTree(final T visitor, final Path start, final Set<FileVisitOption> options,
@@ -1949,7 +1949,7 @@ public final class PathUtils {
      * @param first   See {@link Paths#get(String,String[])}.
      * @param more    See {@link Paths#get(String,String[])}.
      * @param <T>     See {@link Files#walkFileTree(Path,FileVisitor)}.
-     * @return the given visitor.
+     * @return The given visitor.
      * @throws IOException if an I/O error is thrown by a visitor method.
      */
     public static <T extends FileVisitor<? super Path>> T visitFileTree(final T visitor, final String first, final String... more) throws IOException {
@@ -1964,7 +1964,7 @@ public final class PathUtils {
      * @param visitor See {@link Files#walkFileTree(Path,FileVisitor)}.
      * @param uri     See {@link Paths#get(URI)}.
      * @param <T>     See {@link Files#walkFileTree(Path,FileVisitor)}.
-     * @return the given visitor.
+     * @return The given visitor.
      * @throws IOException if an I/O error is thrown by a visitor method.
      */
     public static <T extends FileVisitor<? super Path>> T visitFileTree(final T visitor, final URI uri) throws IOException {

@@ -266,7 +266,7 @@ public enum FileSystem {
     /**
      * Gets the current file system.
      *
-     * @return the current file system.
+     * @return The current file system.
      */
     private static FileSystem current() {
         if (IS_OS_LINUX) {
@@ -284,7 +284,7 @@ public enum FileSystem {
     /**
      * Gets the current file system.
      *
-     * @return the current file system.
+     * @return The current file system.
      */
     public static FileSystem getCurrent() {
         return CURRENT;
@@ -310,7 +310,7 @@ public enum FileSystem {
      *
      * @param property
      *            the system property name.
-     * @return the system property value or {@code null} if a security problem occurs.
+     * @return The system property value or {@code null} if a security problem occurs.
      */
     private static String getSystemProperty(final String property) {
         try {
@@ -363,7 +363,7 @@ public enum FileSystem {
      * @param path the path to be changed, null ignored.
      * @param oldChar the old character.
      * @param newChar the new character.
-     * @return the new path.
+     * @return The new path.
      */
     private static String replace(final String path, final char oldChar, final char newChar) {
         return path == null ? null : path.replace(oldChar, newChar);
@@ -459,7 +459,7 @@ public enum FileSystem {
     /**
      * Gets the file allocation block size in bytes.
      *
-     * @return the file allocation block size in bytes.
+     * @return The file allocation block size in bytes.
      * @since 2.12.0
      */
     public int getBlockSize() {
@@ -469,7 +469,7 @@ public enum FileSystem {
     /**
      * Gets a cloned copy of the illegal characters for this file system.
      *
-     * @return the illegal characters for this file system.
+     * @return The illegal characters for this file system.
      */
     public char[] getIllegalFileNameChars() {
         final char[] chars = new char[illegalFileNameChars.length];
@@ -482,7 +482,7 @@ public enum FileSystem {
     /**
      * Gets a cloned copy of the illegal code points for this file system.
      *
-     * @return the illegal code points for this file system.
+     * @return The illegal code points for this file system.
      * @since 2.12.0
      */
     public int[] getIllegalFileNameCodePoints() {
@@ -513,7 +513,7 @@ public enum FileSystem {
      * However, any file name longer than this limit is guaranteed to be invalid on the current file system.
      * </p>
      *
-     * @return the maximum file name length in characters.
+     * @return The maximum file name length in characters.
      */
     public int getMaxFileNameLength() {
         return maxFileNameLength;
@@ -540,7 +540,7 @@ public enum FileSystem {
      * Conversely, any path longer than this limit is guaranteed to fail with at least some operating system API calls.
      * </p>
      *
-     * @return the maximum file path length in characters.
+     * @return The maximum file path length in characters.
      */
     public int getMaxPathLength() {
         return maxPathLength;
@@ -563,7 +563,7 @@ public enum FileSystem {
     /**
      * Gets a cloned copy of the reserved file names.
      *
-     * @return the reserved file names.
+     * @return The reserved file names.
      */
     public String[] getReservedFileNames() {
         return reservedFileNames.clone();
@@ -657,7 +657,7 @@ public enum FileSystem {
      * Converts all separators to the Windows separator of backslash.
      *
      * @param path the path to be changed, null ignored.
-     * @return the updated path.
+     * @return The updated path.
      * @since 2.12.0
      */
     public String normalizeSeparators(final String path) {

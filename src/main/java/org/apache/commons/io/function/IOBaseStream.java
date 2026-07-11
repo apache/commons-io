@@ -139,7 +139,7 @@ public interface IOBaseStream<T, S extends IOBaseStream<T, S, B>, B extends Base
      * Implementations may not have anything to unwrap and that behavior is undefined for now.
      * </p>
      *
-     * @return the underlying stream.
+     * @return The underlying stream.
      */
     B unwrap();
 

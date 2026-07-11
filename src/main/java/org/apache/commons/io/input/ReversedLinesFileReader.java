@@ -202,7 +202,7 @@ public class ReversedLinesFileReader implements Closeable, IOIterable<String> {
         /**
          * Reads a line.
          *
-         * @return the line or null.
+         * @return The line or null.
          */
         private String readLine() { //NOPMD Bug in PMD
 
@@ -279,7 +279,7 @@ public class ReversedLinesFileReader implements Closeable, IOIterable<String> {
         /**
          * Handles block rollover
          *
-         * @return the new FilePart or null.
+         * @return The new FilePart or null.
          * @throws IOException if there was a problem reading the file.
          */
         private FilePart rollOver() throws IOException {
@@ -528,7 +528,7 @@ public class ReversedLinesFileReader implements Closeable, IOIterable<String> {
     /**
      * Returns the lines of the file from bottom to top.
      *
-     * @return the next line or null if the start of the file is reached.
+     * @return The next line or null if the start of the file is reached.
      * @throws IOException if an I/O error occurs.
      */
     public String readLine() throws IOException {

@@ -122,7 +122,7 @@ public final class RandomAccessFileOutputStream extends OutputStream {
     /**
      * Gets the underlying random access file.
      *
-     * @return the underlying random access file.
+     * @return The underlying random access file.
      * @since 2.19.0
      */
     public RandomAccessFile getRandomAccessFile() {

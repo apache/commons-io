@@ -139,7 +139,7 @@ public class UnsynchronizedBufferedReader extends UnsynchronizedReader {
     /**
      * Fills the buffer with characters. It is an error to call this method when the buffer still contains data, that is, if {@code pos < end}.
      *
-     * @return the number of bytes read into the buffer, or -1 if the end of the source stream has been reached.
+     * @return The number of bytes read into the buffer, or -1 if the end of the source stream has been reached.
      */
     private int fillBuf() throws IOException {
         // assert(pos == end);
@@ -186,7 +186,7 @@ public class UnsynchronizedBufferedReader extends UnsynchronizedReader {
      * Since this is a Reader, this is the character position, not the byte position (use an InputStream to count bytes).
      * </p>
      *
-     * @return the character position in the reader.
+     * @return The character position in the reader.
      * @since 2.23.0
      */
     public long getPosition() {
@@ -197,7 +197,7 @@ public class UnsynchronizedBufferedReader extends UnsynchronizedReader {
      * Increments the position by a given value, overflow sets the value to {@link Long#MAX_VALUE};
      *
      * @param v a value.
-     * @return the new position.
+     * @return The new position.
      * @since 2.23.0
      */
     protected long incPos(final long v) {
@@ -243,7 +243,7 @@ public class UnsynchronizedBufferedReader extends UnsynchronizedReader {
     /**
      * Returns the next character in the current reader without consuming it. So the next call to {@link #read()} will still return this value.
      *
-     * @return the next character.
+     * @return The next character.
      * @throws IOException If an I/O error occurs.
      */
     public int peek() throws IOException {
@@ -258,7 +258,7 @@ public class UnsynchronizedBufferedReader extends UnsynchronizedReader {
      * still return the next value.
      *
      * @param buf the buffer to fill for the look ahead.
-     * @return the buffer itself.
+     * @return The buffer itself.
      * @throws IOException If an I/O error occurs.
      */
     public int peek(final char[] buf) throws IOException {
@@ -274,7 +274,7 @@ public class UnsynchronizedBufferedReader extends UnsynchronizedReader {
      * the buffer. If there are no characters available in the buffer, it fills the buffer and then returns a character. It returns -1 if there are no more
      * characters in the source reader.
      *
-     * @return the character read or -1 if the end of the source reader has been reached.
+     * @return The character read or -1 if the end of the source reader has been reached.
      * @throws IOException if this reader is closed or some other I/O error occurs.
      */
     @Override
@@ -359,7 +359,7 @@ public class UnsynchronizedBufferedReader extends UnsynchronizedReader {
      * Returns the next line of text available from this reader. A line is represented by zero or more characters followed by {@code LF}, {@code CR},
      * {@code "\r\n"}, or the end of the reader. The string does not include the newline sequence.
      *
-     * @return the contents of the line or {@code null} if no characters were read before the end of the reader has been reached.
+     * @return The contents of the line or {@code null} if no characters were read before the end of the reader has been reached.
      * @throws IOException if this reader is closed or some other I/O error occurs.
      */
     public String readLine() throws IOException {
@@ -470,7 +470,7 @@ public class UnsynchronizedBufferedReader extends UnsynchronizedReader {
      * characters may invalidate a mark if {@code markLimit} is surpassed.
      *
      * @param amount the maximum number of characters to skip.
-     * @return the number of characters actually skipped.
+     * @return The number of characters actually skipped.
      * @throws IllegalArgumentException if {@code amount < 0}.
      * @throws IOException              if this reader is closed or some other I/O error occurs.
      * @see #mark(int)
@@ -514,7 +514,7 @@ public class UnsynchronizedBufferedReader extends UnsynchronizedReader {
      * Use with caution.
      * </p>
      *
-     * @return the underlying {@link Reader}.
+     * @return The underlying {@link Reader}.
      * @since 2.23.0
      */
     public Reader unwrap() {

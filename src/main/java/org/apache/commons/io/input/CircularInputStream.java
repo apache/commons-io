@@ -38,7 +38,7 @@ public class CircularInputStream extends AbstractInputStream {
      * Throws an {@link IllegalArgumentException} if the input contains -1.
      *
      * @param repeatContent input to validate.
-     * @return the input.
+     * @return The input.
      */
     private static byte[] validate(final byte[] repeatContent) {
         Objects.requireNonNull(repeatContent, "repeatContent");

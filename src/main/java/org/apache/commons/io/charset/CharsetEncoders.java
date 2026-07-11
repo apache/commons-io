@@ -35,7 +35,7 @@ public final class CharsetEncoders {
      * </p>
      *
      * @param charsetEncoder The CharsetEncoder to test.
-     * @return the given non-null CharsetEncoder or a new default CharsetEncoder.
+     * @return The given non-null CharsetEncoder or a new default CharsetEncoder.
      */
     public static CharsetEncoder toCharsetEncoder(final CharsetEncoder charsetEncoder) {
         return toCharsetEncoder(charsetEncoder, () -> Charset.defaultCharset().newEncoder());
@@ -46,7 +46,7 @@ public final class CharsetEncoders {
      *
      * @param charsetEncoder The CharsetEncoder to test.
      * @param defaultSupplier The CharsetEncoder supplier to get when charsetEncoder is null.
-     * @return the given non-null CharsetEncoder or a new default CharsetEncoder.
+     * @return The given non-null CharsetEncoder or a new default CharsetEncoder.
      * @since 2.13.0
      */
     public static CharsetEncoder toCharsetEncoder(final CharsetEncoder charsetEncoder, final Supplier<CharsetEncoder> defaultSupplier) {

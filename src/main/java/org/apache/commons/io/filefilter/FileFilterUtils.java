@@ -500,7 +500,7 @@ public class FileFilterUtils {
      * except CVS directories.
      *
      * @param filter  the filter to decorate, null means an unrestricted filter.
-     * @return the decorated filter, never null.
+     * @return The decorated filter, never null.
      * @since 1.1 (method existed but had a bug in 1.0)
      */
     public static IOFileFilter makeCVSAware(final IOFileFilter filter) {
@@ -511,7 +511,7 @@ public class FileFilterUtils {
      * Decorates a filter so that it only applies to directories and not to files.
      *
      * @param filter  the filter to decorate, null means an unrestricted filter.
-     * @return the decorated filter, never null.
+     * @return The decorated filter, never null.
      * @see DirectoryFileFilter#DIRECTORY
      * @since 1.3
      */
@@ -526,7 +526,7 @@ public class FileFilterUtils {
      * Decorates a filter so that it only applies to files and not to directories.
      *
      * @param filter  the filter to decorate, null means an unrestricted filter.
-     * @return the decorated filter, never null.
+     * @return The decorated filter, never null.
      * @see FileFileFilter#INSTANCE
      * @since 1.3
      */
@@ -543,7 +543,7 @@ public class FileFilterUtils {
      * except SVN directories.
      *
      * @param filter  the filter to decorate, null means an unrestricted filter.
-     * @return the decorated filter, never null.
+     * @return The decorated filter, never null.
      * @since 1.1
      */
     public static IOFileFilter makeSVNAware(final IOFileFilter filter) {

@@ -117,7 +117,7 @@ public class FileEntry implements Serializable {
     /**
      * Gets the file being monitored.
      *
-     * @return the file being monitored.
+     * @return The file being monitored.
      */
     public File getFile() {
         return file;
@@ -127,7 +127,7 @@ public class FileEntry implements Serializable {
      * Gets the last modified time from the last time it
      * was checked.
      *
-     * @return the last modified time in milliseconds.
+     * @return The last modified time in milliseconds.
      */
     public long getLastModified() {
         return lastModified.toMillis();
@@ -136,7 +136,7 @@ public class FileEntry implements Serializable {
     /**
      * Gets the last modified time from the last time it was checked.
      *
-     * @return the last modified time.
+     * @return The last modified time.
      * @since 2.12.0
      */
     public FileTime getLastModifiedFileTime() {
@@ -146,7 +146,7 @@ public class FileEntry implements Serializable {
     /**
      * Gets the length.
      *
-     * @return the length.
+     * @return The length.
      */
     public long getLength() {
         return length;
@@ -155,7 +155,7 @@ public class FileEntry implements Serializable {
     /**
      * Gets the level
      *
-     * @return the level.
+     * @return The level.
      */
     public int getLevel() {
         return parent == null ? 0 : parent.getLevel() + 1;
@@ -164,7 +164,7 @@ public class FileEntry implements Serializable {
     /**
      * Gets the file name.
      *
-     * @return the file name.
+     * @return The file name.
      */
     public String getName() {
         return name;
@@ -173,7 +173,7 @@ public class FileEntry implements Serializable {
     /**
      * Gets the parent entry.
      *
-     * @return the parent entry.
+     * @return The parent entry.
      */
     public FileEntry getParent() {
         return parent;

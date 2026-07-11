@@ -372,7 +372,7 @@ public class Tailer implements Runnable, AutoCloseable {
         /**
          * Gets the current offset in this tailable.
          *
-         * @return the offset from the beginning of the tailable, in bytes, at which the next read or write occurs.
+         * @return The offset from the beginning of the tailable, in bytes, at which the next read or write occurs.
          * @throws IOException if an I/O error occurs.
          */
         long getPointer() throws IOException;
@@ -382,7 +382,7 @@ public class Tailer implements Runnable, AutoCloseable {
          * least one byte of input is available.
          *
          * @param b the buffer into which the data is read.
-         * @return the total number of bytes read into the buffer, or {@code -1} if there is no more data because the end of
+         * @return The total number of bytes read into the buffer, or {@code -1} if there is no more data because the end of
          *         this tailable has been reached.
          * @throws IOException If the first byte cannot be read for any reason other than end of tailable, or if the random
          *         access tailable has been closed, or if some other I/O error occurs.
@@ -876,7 +876,7 @@ public class Tailer implements Runnable, AutoCloseable {
     /**
      * Gets the delay in milliseconds.
      *
-     * @return the delay in milliseconds.
+     * @return The delay in milliseconds.
      * @deprecated Use {@link #getDelayDuration()}.
      */
     @Deprecated
@@ -887,7 +887,7 @@ public class Tailer implements Runnable, AutoCloseable {
     /**
      * Gets the delay Duration.
      *
-     * @return the delay Duration.
+     * @return The delay Duration.
      * @since 2.12.0
      */
     public Duration getDelayDuration() {
@@ -897,7 +897,7 @@ public class Tailer implements Runnable, AutoCloseable {
     /**
      * Gets the file.
      *
-     * @return the file.
+     * @return The file.
      * @throws IllegalStateException if constructed using a user provided {@link Tailable} implementation.
      */
     public File getFile() {
@@ -920,7 +920,7 @@ public class Tailer implements Runnable, AutoCloseable {
     /**
      * Gets the Tailable.
      *
-     * @return the Tailable.
+     * @return The Tailable.
      * @since 2.12.0
      */
     public Tailable getTailable() {

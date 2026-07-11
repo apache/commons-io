@@ -164,7 +164,7 @@ public class CopyUtils {
      *
      * @param input the {@link InputStream} to read from.
      * @param output the {@link OutputStream} to write to.
-     * @return the number of bytes copied.
+     * @return The number of bytes copied.
      * @throws IOException In case of an I/O problem.
      */
     public static int copy(final InputStream input, final OutputStream output) throws IOException {
@@ -274,7 +274,7 @@ public class CopyUtils {
      *
      * @param input the {@link Reader} to read from.
      * @param output the {@link Writer} to write to.
-     * @return the number of characters copied.
+     * @return The number of characters copied.
      * @throws IOException In case of an I/O problem.
      */
     public static int copy(

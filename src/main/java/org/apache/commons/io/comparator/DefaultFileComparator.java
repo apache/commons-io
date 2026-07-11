@@ -71,7 +71,7 @@ public class DefaultFileComparator extends AbstractFileComparator implements Ser
      *
      * @param file1 The first file to compare.
      * @param file2 The second file to compare.
-     * @return the result of calling file1's
+     * @return The result of calling file1's
      * {@link File#compareTo(File)} with file2 as the parameter.
      */
     @Override

@@ -281,7 +281,7 @@ public class XmlStreamWriter extends Writer {
     /**
      * Returns the default encoding.
      *
-     * @return the default encoding.
+     * @return The default encoding.
      */
     public String getDefaultEncoding() {
         return defaultCharset.name();
@@ -290,7 +290,7 @@ public class XmlStreamWriter extends Writer {
     /**
      * Returns the detected encoding.
      *
-     * @return the detected encoding.
+     * @return The detected encoding.
      */
     public String getEncoding() {
         return charset.name();

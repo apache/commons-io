@@ -203,7 +203,7 @@ public class ProxyWriter extends FilterWriter {
      * Use with caution.
      * </p>
      *
-     * @return the underlying {@link Writer}.
+     * @return The underlying {@link Writer}.
      * @since 2.22.0
      */
     public Writer unwrap() {

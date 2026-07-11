@@ -483,7 +483,7 @@ public class FileAlterationObserver implements Serializable {
     /**
      * Gets the directory being observed.
      *
-     * @return the directory being observed.
+     * @return The directory being observed.
      */
     public File getDirectory() {
         return rootEntry.getFile();
@@ -492,7 +492,7 @@ public class FileAlterationObserver implements Serializable {
     /**
      * Gets the fileFilter.
      *
-     * @return the fileFilter.
+     * @return The fileFilter.
      * @since 2.1
      */
     public FileFilter getFileFilter() {
@@ -534,7 +534,7 @@ public class FileAlterationObserver implements Serializable {
      * Lists the contents of a directory.
      *
      * @param directory The directory to list.
-     * @return the directory contents or a zero length array if the empty or the file is not a directory.
+     * @return The directory contents or a zero length array if the empty or the file is not a directory.
      */
     private File[] listFiles(final File directory) {
         return directory.isDirectory() ? sort(directory.listFiles(fileFilter)) : FileUtils.EMPTY_FILE_ARRAY;

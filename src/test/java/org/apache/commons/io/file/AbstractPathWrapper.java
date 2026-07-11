@@ -99,7 +99,7 @@ public abstract class AbstractPathWrapper implements Path {
     /**
      * Gets the delegate Path.
      *
-     * @return the delegate Path.
+     * @return The delegate Path.
      */
     public Path get() {
         return path;

@@ -98,7 +98,7 @@ public class BoundedReader extends ProxyReader {
      * @param cbuf The buffer to fill.
      * @param off  The offset.
      * @param len  The number of chars to read.
-     * @return the number of chars read.
+     * @return The number of chars read.
      * @throws NullPointerException if the buffer is {@code null}.
      * @throws IndexOutOfBoundsException if {@code off} or {@code len} are negative, or if {@code off + len} is greater than {@code cbuf.length}.
      * @throws IOException If an I/O error occurs while calling the underlying reader's read method.

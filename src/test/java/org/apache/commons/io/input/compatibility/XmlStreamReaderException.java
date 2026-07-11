@@ -76,7 +76,7 @@ public class XmlStreamReaderException extends org.apache.commons.io.input.XmlStr
      * Returns the unconsumed InputStream to allow the application to do an
      * alternate encoding detection on the InputStream.
      *
-     * @return the unconsumed InputStream.
+     * @return The unconsumed InputStream.
      */
     public InputStream getInputStream() {
         return inputStream;

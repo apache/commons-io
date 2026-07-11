@@ -55,7 +55,7 @@ final class IOStreams {
      *
      * @param <T> The type of stream elements.
      * @param values the elements of the new stream, may be {@code null}.
-     * @return the new stream on {@code values} or {@link Stream#empty()}.
+     * @return The new stream on {@code values} or {@link Stream#empty()}.
      */
     static <T> Stream<T> of(final Iterable<T> values) {
         return values == null ? Stream.empty() : StreamSupport.stream(values.spliterator(), false);
@@ -72,7 +72,7 @@ final class IOStreams {
      *
      * @param <T> The type of stream elements.
      * @param values the elements of the new stream, may be {@code null}.
-     * @return the new stream on {@code values} or {@link Stream#empty()}.
+     * @return The new stream on {@code values} or {@link Stream#empty()}.
      */
     @SafeVarargs // Creating a stream from an array is safe
     static <T> Stream<T> of(final T... values) {

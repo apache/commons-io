@@ -57,7 +57,7 @@ public enum StandardLineSeparator {
      * Gets the bytes for this instance encoded using the given Charset.
      *
      * @param charset the encoding Charset.
-     * @return the bytes for this instance encoded using the given Charset.
+     * @return The bytes for this instance encoded using the given Charset.
      */
     public byte[] getBytes(final Charset charset) {
         return lineSeparator.getBytes(charset);
@@ -66,7 +66,7 @@ public enum StandardLineSeparator {
     /**
      * Gets the String value of this instance.
      *
-     * @return the String value of this instance.
+     * @return The String value of this instance.
      */
     public String getString() {
         return lineSeparator;

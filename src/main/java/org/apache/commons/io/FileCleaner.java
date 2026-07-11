@@ -82,7 +82,7 @@ public class FileCleaner {
      * {@link FileCleaningTracker} class while maintain compatibility with the
      * deprecated {@link FileCleaner}.
      *
-     * @return the singleton instance.
+     * @return The singleton instance.
      */
     public static FileCleaningTracker getInstance() {
         return INSTANCE;
@@ -92,7 +92,7 @@ public class FileCleaner {
      * Gets the number of files currently being tracked, and therefore
      * awaiting deletion.
      *
-     * @return the number of files being tracked.
+     * @return The number of files being tracked.
      * @deprecated Use {@link FileCleaningTracker#getTrackCount()}.
      */
     @Deprecated

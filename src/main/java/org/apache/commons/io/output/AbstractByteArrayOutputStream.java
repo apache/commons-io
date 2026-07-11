@@ -75,7 +75,7 @@ public abstract class AbstractByteArrayOutputStream<T extends AbstractByteArrayO
          * @param buffer the buffer.
          * @param offset the offset into the buffer.
          * @param length the length of the buffer.
-         * @return the InputStream subclass.
+         * @return The InputStream subclass.
          */
         T construct(byte[] buffer, int offset, int length);
     }
@@ -190,7 +190,7 @@ public abstract class AbstractByteArrayOutputStream<T extends AbstractByteArrayO
     /**
      * Returns the current size of the byte array.
      *
-     * @return the current size of the byte array.
+     * @return The current size of the byte array.
      */
     public abstract int size();
 
@@ -198,7 +198,7 @@ public abstract class AbstractByteArrayOutputStream<T extends AbstractByteArrayO
      * Gets the current contents of this byte stream as a byte array.
      * The result is independent of this stream.
      *
-     * @return the current contents of this output stream, as a byte array.
+     * @return The current contents of this output stream, as a byte array.
      * @see java.io.ByteArrayOutputStream#toByteArray()
      */
     public abstract byte[] toByteArray();
@@ -207,7 +207,7 @@ public abstract class AbstractByteArrayOutputStream<T extends AbstractByteArrayO
      * Gets the current contents of this byte stream as a byte array.
      * The result is independent of this stream.
      *
-     * @return the current contents of this output stream, as a byte array.
+     * @return The current contents of this output stream, as a byte array.
      * @see java.io.ByteArrayOutputStream#toByteArray()
      */
     protected byte[] toByteArrayImpl() {
@@ -234,7 +234,7 @@ public abstract class AbstractByteArrayOutputStream<T extends AbstractByteArrayO
      * returned stream is backed by buffers of {@code this} stream,
      * avoiding memory allocation and copy, thus saving space and time.
      *
-     * @return the current contents of this output stream.
+     * @return The current contents of this output stream.
      * @see java.io.ByteArrayOutputStream#toByteArray()
      * @see #reset()
      * @since 2.5
@@ -251,7 +251,7 @@ public abstract class AbstractByteArrayOutputStream<T extends AbstractByteArrayO
      * @param isConstructor A constructor for an InputStream which makes
      *                     up the {@link SequenceInputStream}.
      *
-     * @return the current contents of this output stream.
+     * @return The current contents of this output stream.
      * @see java.io.ByteArrayOutputStream#toByteArray()
      * @see #reset()
      * @since 2.7
@@ -278,7 +278,7 @@ public abstract class AbstractByteArrayOutputStream<T extends AbstractByteArrayO
     /**
      * Gets the current contents of this byte stream as a string using the virtual machine's {@linkplain Charset#defaultCharset() default charset}.
      *
-     * @return the contents of the byte array as a String.
+     * @return The contents of the byte array as a String.
      * @see java.io.ByteArrayOutputStream#toString()
      * @see Charset#defaultCharset()
      * @deprecated Use {@link #toString(String)} instead.
@@ -295,7 +295,7 @@ public abstract class AbstractByteArrayOutputStream<T extends AbstractByteArrayO
      * using the specified encoding.
      *
      * @param charset  the character encoding.
-     * @return the string converted from the byte array.
+     * @return The string converted from the byte array.
      * @see java.io.ByteArrayOutputStream#toString(String)
      * @since 2.5
      */
@@ -308,7 +308,7 @@ public abstract class AbstractByteArrayOutputStream<T extends AbstractByteArrayO
      * using the specified encoding.
      *
      * @param enc  the name of the character encoding.
-     * @return the string converted from the byte array.
+     * @return The string converted from the byte array.
      * @throws UnsupportedEncodingException if the encoding is not supported.
      * @see java.io.ByteArrayOutputStream#toString(String)
      */

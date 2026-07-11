@@ -502,7 +502,7 @@ public class ReadAheadInputStream extends FilterInputStream {
      * calling this function.
      *
      * @param n the number of bytes to be skipped.
-     * @return the actual number of bytes skipped.
+     * @return The actual number of bytes skipped.
      * @throws IOException if an I/O error occurs.
      */
     private long skipInternal(final long n) throws IOException {

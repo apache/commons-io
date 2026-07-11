@@ -86,7 +86,7 @@ public final class IORandomAccessFile extends RandomAccessFile {
     /**
      * Gets the file passed to {@link #IORandomAccessFile(File, String)}.
      *
-     * @return the file passed to {@link #IORandomAccessFile(File, String)}.
+     * @return The file passed to {@link #IORandomAccessFile(File, String)}.
      */
     public File getFile() {
         return file;
@@ -95,7 +95,7 @@ public final class IORandomAccessFile extends RandomAccessFile {
     /**
      * Gets the mode passed to {@link #IORandomAccessFile(File, String)}.
      *
-     * @return the mode passed to {@link #IORandomAccessFile(File, String)}.
+     * @return The mode passed to {@link #IORandomAccessFile(File, String)}.
      */
     public String getMode() {
         return mode;

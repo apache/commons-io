@@ -109,7 +109,7 @@ public final class FileAlterationMonitor implements Runnable {
     /**
      * Gets the interval.
      *
-     * @return the interval.
+     * @return The interval.
      */
     public long getInterval() {
         return intervalMillis;

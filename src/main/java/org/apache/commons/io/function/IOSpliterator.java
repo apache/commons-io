@@ -65,7 +65,7 @@ public interface IOSpliterator<T> {
      * Like {@link Spliterator#estimateSize()}.
      *
      *
-     * @return the estimated size, or {@code Long.MAX_VALUE} if infinite, unknown, or too expensive to compute.
+     * @return The estimated size, or {@code Long.MAX_VALUE} if infinite, unknown, or too expensive to compute.
      */
     default long estimateSize() {
         return unwrap().estimateSize();
@@ -96,7 +96,7 @@ public interface IOSpliterator<T> {
     /**
      * Like {@link Spliterator#getExactSizeIfKnown()}.
      *
-     * @return the exact size, if known, else {@code -1}.
+     * @return The exact size, if known, else {@code -1}.
      */
     default long getExactSizeIfKnown() {
         return unwrap().getExactSizeIfKnown();
@@ -139,7 +139,7 @@ public interface IOSpliterator<T> {
      * Implementations may not have anything to unwrap and that behavior is undefined for now.
      * </p>
      *
-     * @return the underlying Spliterator.
+     * @return The underlying Spliterator.
      */
     Spliterator<T> unwrap();
 

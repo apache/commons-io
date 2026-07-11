@@ -73,7 +73,7 @@ public enum IOCase {
      * Looks up an IOCase by name.
      *
      * @param name  the name to find.
-     * @return the IOCase object.
+     * @return The IOCase object.
      * @throws IllegalArgumentException if the name is invalid.
      */
     public static IOCase forName(final String name) {
@@ -97,7 +97,7 @@ public enum IOCase {
      *
      * @param value the value to test, may be null.
      * @param defaultValue the default value.
-     * @return the given value if not-null, the defaultValue if null.
+     * @return The given value if not-null, the defaultValue if null.
      * @since 2.12.0
      */
     public static IOCase value(final IOCase value, final IOCase defaultValue) {
@@ -184,7 +184,7 @@ public enum IOCase {
      * @param str  the string to check.
      * @param strStartIndex  the index to start at in str.
      * @param search  the start to search for.
-     * @return the first index of the search String,
+     * @return The first index of the search String,
      *  -1 if no match or {@code null} string input.
      * @since 2.0
      */
@@ -236,7 +236,7 @@ public enum IOCase {
     /**
      * Gets the name of the constant.
      *
-     * @return the name of the constant.
+     * @return The name of the constant.
      */
     public String getName() {
         return name;
@@ -255,7 +255,7 @@ public enum IOCase {
      * Replaces the enumeration from the stream with a real one.
      * This ensures that the correct flag is set for SYSTEM.
      *
-     * @return the resolved object.
+     * @return The resolved object.
      */
     private Object readResolve() {
         return forName(name);

@@ -107,7 +107,7 @@ public final class Uncheck {
      * @param function the function.
      * @param t the first function argument.
      * @param u the second function argument.
-     * @return the function result.
+     * @return The function result.
      * @throws UncheckedIOException if an I/O error occurs.
      */
     public static <T, U, R> R apply(final IOBiFunction<T, U, R> function, final T t, final U u) {
@@ -125,7 +125,7 @@ public final class Uncheck {
      * @param <T> The first function argument type.
      * @param <R> The return type.
      * @param t the first function argument.
-     * @return the function result.
+     * @return The function result.
      * @throws UncheckedIOException if an I/O error occurs.
      */
     public static <T, R> R apply(final IOFunction<T, R> function, final T t) {
@@ -149,7 +149,7 @@ public final class Uncheck {
      * @param u the second function argument.
      * @param v the third function argument.
      * @param w the fourth function argument.
-     * @return the function result.
+     * @return The function result.
      * @throws UncheckedIOException if an I/O error occurs.
      */
     public static <T, U, V, W, R> R apply(final IOQuadFunction<T, U, V, W, R> function, final T t, final U u, final V v, final W w) {
@@ -171,7 +171,7 @@ public final class Uncheck {
      * @param t the first function argument.
      * @param u the second function argument.
      * @param v the third function argument.
-     * @return the function result.
+     * @return The function result.
      * @throws UncheckedIOException if an I/O error occurs.
      */
     public static <T, U, V, R> R apply(final IOTriFunction<T, U, V, R> function, final T t, final U u, final V v) {
@@ -189,7 +189,7 @@ public final class Uncheck {
      * @param comparator the function.
      * @param t the first function argument.
      * @param u the second function argument.
-     * @return the comparator result.
+     * @return The comparator result.
      * @throws UncheckedIOException if an I/O error occurs.
      */
     public static <T> int compare(final IOComparator<T> comparator, final T t, final T u) {

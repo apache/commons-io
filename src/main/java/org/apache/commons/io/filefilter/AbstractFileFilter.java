@@ -129,7 +129,7 @@ public abstract class AbstractFileFilter implements IOFileFilter, PathVisitor {
      * Handles exceptions caught while accepting.
      *
      * @param t the caught Throwable.
-     * @return the given Throwable.
+     * @return The given Throwable.
      * @since 2.9.0
      */
     protected FileVisitResult handle(final Throwable t) {

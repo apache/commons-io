@@ -263,7 +263,7 @@ public class CountingPathVisitor extends SimplePathVisitor {
     /**
      * Gets the visitation counts.
      *
-     * @return the visitation counts.
+     * @return The visitation counts.
      */
     public PathCounters getPathCounters() {
         return pathCounters;

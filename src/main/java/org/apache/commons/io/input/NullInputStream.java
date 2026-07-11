@@ -159,7 +159,7 @@ public class NullInputStream extends AbstractInputStream {
     /**
      * Gets the current position.
      *
-     * @return the current position.
+     * @return The current position.
      */
     public long getPosition() {
         return position;

@@ -109,7 +109,7 @@ public class CopyDirectoryVisitor extends CountingPathVisitor {
     /**
      * Gets the copy options.
      *
-     * @return the copy options.
+     * @return The copy options.
      * @since 2.8.0
      */
     public CopyOption[] getCopyOptions() {
@@ -119,7 +119,7 @@ public class CopyDirectoryVisitor extends CountingPathVisitor {
     /**
      * Gets the source directory.
      *
-     * @return the source directory.
+     * @return The source directory.
      * @since 2.8.0
      */
     public Path getSourceDirectory() {
@@ -129,7 +129,7 @@ public class CopyDirectoryVisitor extends CountingPathVisitor {
     /**
      * Gets the target directory.
      *
-     * @return the target directory.
+     * @return The target directory.
      * @since 2.8.0
      */
     public Path getTargetDirectory() {

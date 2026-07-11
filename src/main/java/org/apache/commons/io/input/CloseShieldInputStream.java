@@ -70,7 +70,7 @@ public class CloseShieldInputStream extends ProxyInputStream {
     /**
      * Constructs a new builder for {@link CloseShieldInputStream}.
      *
-     * @return the new builder.
+     * @return The new builder.
      * @since 2.22.0
      */
     public static Builder builder() {
@@ -81,7 +81,7 @@ public class CloseShieldInputStream extends ProxyInputStream {
      * Constructs a proxy that only shields {@link System#in} from closing.
      *
      * @param inputStream the candidate input stream.
-     * @return the given stream or a proxy on {@link System#in}.
+     * @return The given stream or a proxy on {@link System#in}.
      * @since 2.17.0
      */
     public static InputStream systemIn(final InputStream inputStream) {
@@ -92,7 +92,7 @@ public class CloseShieldInputStream extends ProxyInputStream {
      * Constructs a proxy that shields the given input stream from being closed.
      *
      * @param inputStream the input stream to wrap.
-     * @return the created proxy.
+     * @return The created proxy.
      * @since 2.9.0
      */
     public static CloseShieldInputStream wrap(final InputStream inputStream) {

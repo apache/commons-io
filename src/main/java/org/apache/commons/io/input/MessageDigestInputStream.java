@@ -205,7 +205,7 @@ public final class MessageDigestInputStream extends ObservableInputStream {
      * data has been read, if that is what you want. The easiest way to do so is by invoking {@link #consume()}.
      * </p>
      *
-     * @return the message digest used, never null.
+     * @return The message digest used, never null.
      */
     public MessageDigest getMessageDigest() {
         return messageDigest;

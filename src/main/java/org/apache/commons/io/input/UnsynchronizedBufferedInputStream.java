@@ -165,7 +165,7 @@ public final class UnsynchronizedBufferedInputStream extends UnsynchronizedFilte
      * Returns the number of bytes that are available before this stream will block. This method returns the number of bytes available in the buffer plus those
      * available in the source stream.
      *
-     * @return the number of bytes available before blocking.
+     * @return The number of bytes available before blocking.
      * @throws IOException if this stream is closed.
      */
     @Override
@@ -259,7 +259,7 @@ public final class UnsynchronizedBufferedInputStream extends UnsynchronizedFilte
      * Reads a single byte from this stream and returns it as an integer in the range from 0 to 255. Returns -1 if the end of the source string has been
      * reached. If the internal buffer does not contain any available bytes then it is filled from the source stream and the first byte is returned.
      *
-     * @return the byte read or -1 if the end of the source stream has been reached.
+     * @return The byte read or -1 if the end of the source stream has been reached.
      * @throws IOException if this stream is closed or another IOException occurs.
      */
     @Override
@@ -300,7 +300,7 @@ public final class UnsynchronizedBufferedInputStream extends UnsynchronizedFilte
      * @param dest the byte array in which to store the bytes read.
      * @param offset the initial position in {@code buffer} to store the bytes read from this stream.
      * @param length the maximum number of bytes to store in {@code buffer}.
-     * @return the number of bytes actually read or -1 if end of stream.
+     * @return The number of bytes actually read or -1 if end of stream.
      * @throws IndexOutOfBoundsException if {@code offset < 0} or {@code length < 0}, or if {@code offset + length} is greater than the size of {@code buffer}.
      * @throws IOException               if the stream is already closed or another IOException occurs.
      */
@@ -395,7 +395,7 @@ public final class UnsynchronizedBufferedInputStream extends UnsynchronizedFilte
      * Skips {@code amount} number of bytes in this stream. Subsequent {@code read()}'s will not return these bytes unless {@code reset()} is used.
      *
      * @param amount the number of bytes to skip. {@code skip} does nothing and returns 0 if {@code amount} is less than zero.
-     * @return the number of bytes actually skipped.
+     * @return The number of bytes actually skipped.
      * @throws IOException if this stream is closed or another IOException occurs.
      */
     @Override

@@ -151,7 +151,7 @@ public abstract class ProxyReader extends FilterReader {
     /**
      * Reads characters into an array by invoking the delegate's {@link Reader#read()} method.
      *
-     * @return the character read or -1 if the end of stream.
+     * @return The character read or -1 if the end of stream.
      * @throws IOException if an I/O error occurs.
      */
     @Override
@@ -171,7 +171,7 @@ public abstract class ProxyReader extends FilterReader {
      * Invokes the delegate's {@code read(char[])} method.
      *
      * @param chr the buffer to read the characters into.
-     * @return the number of characters read or -1 if the end of stream.
+     * @return The number of characters read or -1 if the end of stream.
      * @throws IOException if an I/O error occurs.
      */
     @Override
@@ -193,7 +193,7 @@ public abstract class ProxyReader extends FilterReader {
      * @param chr the buffer to read the characters into.
      * @param st The start offset.
      * @param len The number of bytes to read.
-     * @return the number of characters read or -1 if the end of stream.
+     * @return The number of characters read or -1 if the end of stream.
      * @throws IOException if an I/O error occurs.
      */
     @Override
@@ -213,7 +213,7 @@ public abstract class ProxyReader extends FilterReader {
      * Attempts to read characters into the specified character buffer by invoking the delegate's {@link Reader#read(CharBuffer)} method.
      *
      * @param target the char buffer to read the characters into.
-     * @return the number of characters read or -1 if the end of stream.
+     * @return The number of characters read or -1 if the end of stream.
      * @throws IOException if an I/O error occurs.
      * @since 2.0
      */
@@ -280,7 +280,7 @@ public abstract class ProxyReader extends FilterReader {
      * Skips characters by invoking the delegate's {@link Reader#skip(long)} method.
      *
      * @param ln the number of bytes to skip.
-     * @return the number of bytes to skipped or EOF if the end of stream.
+     * @return The number of bytes to skipped or EOF if the end of stream.
      * @throws IOException if an I/O error occurs.
      */
     @Override
@@ -299,7 +299,7 @@ public abstract class ProxyReader extends FilterReader {
      * Use with caution.
      * </p>
      *
-     * @return the underlying {@link Reader}.
+     * @return The underlying {@link Reader}.
      * @since 2.22.0
      */
     public Reader unwrap() {

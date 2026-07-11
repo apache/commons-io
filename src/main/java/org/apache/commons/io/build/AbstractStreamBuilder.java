@@ -98,7 +98,7 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
      * Applies the buffer size request.
      *
      * @param size the size request.
-     * @return the size to use, usually the input, or can throw an unchecked exception, like {@link IllegalArgumentException}.
+     * @return The size to use, usually the input, or can throw an unchecked exception, like {@link IllegalArgumentException}.
      */
     private int checkBufferSize(final int size) {
         return bufferSizeChecker.applyAsInt(size);
@@ -107,7 +107,7 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
     /**
      * Gets the buffer size, defaults to {@link IOUtils#DEFAULT_BUFFER_SIZE} ({@value IOUtils#DEFAULT_BUFFER_SIZE}).
      *
-     * @return the buffer size, defaults to {@link IOUtils#DEFAULT_BUFFER_SIZE} ({@value IOUtils#DEFAULT_BUFFER_SIZE}).
+     * @return The buffer size, defaults to {@link IOUtils#DEFAULT_BUFFER_SIZE} ({@value IOUtils#DEFAULT_BUFFER_SIZE}).
      */
     public int getBufferSize() {
         return bufferSize;
@@ -116,7 +116,7 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
     /**
      * Gets the buffer size default, defaults to {@link IOUtils#DEFAULT_BUFFER_SIZE} ({@value IOUtils#DEFAULT_BUFFER_SIZE}).
      *
-     * @return the buffer size default, defaults to {@link IOUtils#DEFAULT_BUFFER_SIZE} ({@value IOUtils#DEFAULT_BUFFER_SIZE}).
+     * @return The buffer size default, defaults to {@link IOUtils#DEFAULT_BUFFER_SIZE} ({@value IOUtils#DEFAULT_BUFFER_SIZE}).
      */
     public int getBufferSizeDefault() {
         return bufferSizeDefault;
@@ -170,7 +170,7 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
     /**
      * Gets the Charset, defaults to {@link Charset#defaultCharset()}.
      *
-     * @return the Charset, defaults to {@link Charset#defaultCharset()}.
+     * @return The Charset, defaults to {@link Charset#defaultCharset()}.
      */
     public Charset getCharset() {
         return charset;
@@ -179,7 +179,7 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
     /**
      * Gets the Charset default, defaults to {@link Charset#defaultCharset()}.
      *
-     * @return the Charset default, defaults to {@link Charset#defaultCharset()}.
+     * @return The Charset default, defaults to {@link Charset#defaultCharset()}.
      */
     public Charset getCharsetDefault() {
         return charsetDefault;
@@ -216,7 +216,7 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
     /**
      * Gets the OpenOption array.
      *
-     * @return the OpenOption array, this is not a defensive copy, modify at your own risk.
+     * @return The OpenOption array, this is not a defensive copy, modify at your own risk.
      */
     public OpenOption[] getOpenOptions() {
         return openOptions;

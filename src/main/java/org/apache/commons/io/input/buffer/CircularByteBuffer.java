@@ -119,7 +119,7 @@ public class CircularByteBuffer {
     /**
      * Gets the number of bytes, that are currently present in the buffer.
      *
-     * @return the number of bytes.
+     * @return The number of bytes.
      */
     public int getCurrentNumberOfBytes() {
         return currentNumberOfBytes;
@@ -128,7 +128,7 @@ public class CircularByteBuffer {
     /**
      * Gets the number of bytes, that can currently be added to the buffer.
      *
-     * @return the number of bytes that can be added.
+     * @return The number of bytes that can be added.
      */
     public int getSpace() {
         return buffer.length - currentNumberOfBytes;

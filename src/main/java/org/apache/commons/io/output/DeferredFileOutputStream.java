@@ -497,7 +497,7 @@ public class DeferredFileOutputStream extends ThresholdingOutputStream {
      * Otherwise, the returned stream will be one that is created from the data that has been committed to disk.
      * </p>
      *
-     * @return the current contents of this output stream.
+     * @return The current contents of this output stream.
      * @throws IOException if this stream is not yet closed or an error occurs.
      * @see org.apache.commons.io.output.ByteArrayOutputStream#toInputStream()
      * @since 2.9.0

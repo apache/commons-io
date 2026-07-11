@@ -251,7 +251,7 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
         /**
          * Gets the predicate.
          *
-         * @return the predicate.
+         * @return The predicate.
          * @since 2.18.0
          */
         public ObjectStreamClassPredicate getPredicate() {

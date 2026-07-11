@@ -114,7 +114,7 @@ public interface IOStream<T> extends IOBaseStream<T, IOStream<T>, Stream<T>> {
      *
      * @param <T> The type of stream elements.
      * @param values the elements of the new stream, may be {@code null}.
-     * @return the new stream on {@code values} or {@link Stream#empty()}.
+     * @return The new stream on {@code values} or {@link Stream#empty()}.
      */
     static <T> IOStream<T> of(final Iterable<T> values) {
         return values == null ? empty() : adapt(StreamSupport.stream(values.spliterator(), false));
@@ -125,7 +125,7 @@ public interface IOStream<T> extends IOBaseStream<T, IOStream<T>, Stream<T>> {
      *
      * @param <T> The type of stream elements.
      * @param values the elements of the new stream, may be {@code null}.
-     * @return the new stream on {@code values} or {@link Stream#empty()}.
+     * @return The new stream on {@code values} or {@link Stream#empty()}.
      */
     @SafeVarargs // Creating a stream from an array is safe
     static <T> IOStream<T> of(final T... values) {

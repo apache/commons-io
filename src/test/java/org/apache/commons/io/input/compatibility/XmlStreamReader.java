@@ -174,7 +174,7 @@ public class XmlStreamReader extends Reader {
      * <p>
      * If it is null the content-type based rules are used.
      *
-     * @return the default encoding to use.
+     * @return The default encoding to use.
      */
     public static String getDefaultEncoding() {
         return staticDefaultEncoding;

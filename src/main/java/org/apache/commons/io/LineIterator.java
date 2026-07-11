@@ -148,7 +148,7 @@ public class LineIterator implements Iterator<String>, Closeable {
     /**
      * Returns the next line in the wrapped {@link Reader}.
      *
-     * @return the next line from the input.
+     * @return The next line from the input.
      * @throws NoSuchElementException if there is no line to return.
      */
     @Override
@@ -159,7 +159,7 @@ public class LineIterator implements Iterator<String>, Closeable {
     /**
      * Returns the next line in the wrapped {@link Reader}.
      *
-     * @return the next line from the input.
+     * @return The next line from the input.
      * @throws NoSuchElementException if there is no line to return.
      * @deprecated Use {@link #next()}.
      */

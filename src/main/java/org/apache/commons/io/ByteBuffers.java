@@ -47,7 +47,7 @@ public final class ByteBuffers {
      * Sets the give buffer to little-endian.
      *
      * @param allocate The buffer to set to little-endian.
-     * @return the given buffer.
+     * @return The given buffer.
      */
     public static ByteBuffer littleEndian(final ByteBuffer allocate) {
         return allocate.order(ByteOrder.LITTLE_ENDIAN);

@@ -153,7 +153,7 @@ public class IOUtils {
         /**
          * Gets the internal byte array buffer.
          *
-         * @return the internal byte array buffer.
+         * @return The internal byte array buffer.
          */
         static ScratchBytes get() {
             final Object[] holder = LOCAL.get();
@@ -221,7 +221,7 @@ public class IOUtils {
         /**
          * Gets the internal char array buffer.
          *
-         * @return the internal char array buffer.
+         * @return The internal char array buffer.
          */
         static ScratchChars get() {
             final Object[] holder = LOCAL.get();
@@ -343,7 +343,7 @@ public class IOUtils {
      * Returns the given InputStream if it is already a {@link BufferedInputStream}, otherwise creates a BufferedInputStream from the given InputStream.
      *
      * @param inputStream the InputStream to wrap or return (not null).
-     * @return the given InputStream or a new {@link BufferedInputStream} for the given InputStream.
+     * @return The given InputStream or a new {@link BufferedInputStream} for the given InputStream.
      * @throws NullPointerException if the input parameter is null.
      * @since 2.5
      */
@@ -360,7 +360,7 @@ public class IOUtils {
      *
      * @param inputStream the InputStream to wrap or return (not null).
      * @param size        the buffer size, if a new BufferedInputStream is created.
-     * @return the given InputStream or a new {@link BufferedInputStream} for the given InputStream.
+     * @return The given InputStream or a new {@link BufferedInputStream} for the given InputStream.
      * @throws NullPointerException if the input parameter is null.
      * @since 2.5
      */
@@ -376,7 +376,7 @@ public class IOUtils {
      * Returns the given OutputStream if it is already a {@link BufferedOutputStream}, otherwise creates a BufferedOutputStream from the given OutputStream.
      *
      * @param outputStream the OutputStream to wrap or return (not null).
-     * @return the given OutputStream or a new {@link BufferedOutputStream} for the given OutputStream.
+     * @return The given OutputStream or a new {@link BufferedOutputStream} for the given OutputStream.
      * @throws NullPointerException if the input parameter is null.
      * @since 2.5
      */
@@ -393,7 +393,7 @@ public class IOUtils {
      *
      * @param outputStream the OutputStream to wrap or return (not null).
      * @param size         the buffer size, if a new BufferedOutputStream is created.
-     * @return the given OutputStream or a new {@link BufferedOutputStream} for the given OutputStream.
+     * @return The given OutputStream or a new {@link BufferedOutputStream} for the given OutputStream.
      * @throws NullPointerException if the input parameter is null.
      * @since 2.5
      */
@@ -409,7 +409,7 @@ public class IOUtils {
      * Returns the given reader if it is already a {@link BufferedReader}, otherwise creates a BufferedReader from the given reader.
      *
      * @param reader the reader to wrap or return (not null).
-     * @return the given reader or a new {@link BufferedReader} for the given reader.
+     * @return The given reader or a new {@link BufferedReader} for the given reader.
      * @throws NullPointerException if the input parameter is null.
      * @since 2.5
      */
@@ -422,7 +422,7 @@ public class IOUtils {
      *
      * @param reader the reader to wrap or return (not null).
      * @param size   the buffer size, if a new BufferedReader is created.
-     * @return the given reader or a new {@link BufferedReader} for the given reader.
+     * @return The given reader or a new {@link BufferedReader} for the given reader.
      * @throws NullPointerException if the input parameter is null.
      * @since 2.5
      */
@@ -434,7 +434,7 @@ public class IOUtils {
      * Returns the given Writer if it is already a {@link BufferedWriter}, otherwise creates a BufferedWriter from the given Writer.
      *
      * @param writer the Writer to wrap or return (not null).
-     * @return the given Writer or a new {@link BufferedWriter} for the given Writer.
+     * @return The given Writer or a new {@link BufferedWriter} for the given Writer.
      * @throws NullPointerException if the input parameter is null.
      * @since 2.5
      */
@@ -447,7 +447,7 @@ public class IOUtils {
      *
      * @param writer the Writer to wrap or return (not null).
      * @param size   the buffer size, if a new BufferedWriter is created.
-     * @return the given Writer or a new {@link BufferedWriter} for the given Writer.
+     * @return The given Writer or a new {@link BufferedWriter} for the given Writer.
      * @throws NullPointerException if the input parameter is null.
      * @since 2.5
      */
@@ -1191,7 +1191,7 @@ public class IOUtils {
      * </p>
      *
      * @param input the {@link InputStream} to read.
-     * @return the number of bytes copied. or {@code 0} if {@code input is null}.
+     * @return The number of bytes copied. or {@code 0} if {@code input is null}.
      * @throws NullPointerException if the InputStream is {@code null}.
      * @throws IOException          if an I/O error occurs.
      * @since 2.8.0
@@ -1207,7 +1207,7 @@ public class IOUtils {
      * </p>
      *
      * @param input the {@link Reader} to read.
-     * @return the number of bytes copied. or {@code 0} if {@code input is null}.
+     * @return The number of bytes copied. or {@code 0} if {@code input is null}.
      * @throws NullPointerException if the Reader is {@code null}.
      * @throws IOException          if an I/O error occurs.
      * @since 2.12.0
@@ -1365,7 +1365,7 @@ public class IOUtils {
      *
      * @param inputStream  the {@link InputStream} to read.
      * @param outputStream the {@link OutputStream} to write.
-     * @return the number of bytes copied, or -1 if greater than {@link Integer#MAX_VALUE}.
+     * @return The number of bytes copied, or -1 if greater than {@link Integer#MAX_VALUE}.
      * @throws NullPointerException if the InputStream is {@code null}.
      * @throws NullPointerException if the OutputStream is {@code null}.
      * @throws IOException          if an I/O error occurs.
@@ -1385,7 +1385,7 @@ public class IOUtils {
      * @param inputStream  the {@link InputStream} to read.
      * @param outputStream the {@link OutputStream} to write to.
      * @param bufferSize   the bufferSize used to copy from the input to the output.
-     * @return the number of bytes copied.
+     * @return The number of bytes copied.
      * @throws NullPointerException if the InputStream is {@code null}.
      * @throws NullPointerException if the OutputStream is {@code null}.
      * @throws IOException          if an I/O error occurs.
@@ -1476,7 +1476,7 @@ public class IOUtils {
      * </pre>
      *
      * @param outputStream the {@link ByteArrayOutputStream} to read.
-     * @return the {@link QueueInputStream} filled with the content of the outputStream.
+     * @return The {@link QueueInputStream} filled with the content of the outputStream.
      * @throws NullPointerException if the {@link ByteArrayOutputStream} is {@code null}.
      * @throws IOException          if an I/O error occurs.
      * @since 2.12
@@ -1501,7 +1501,7 @@ public class IOUtils {
      *
      * @param reader the {@link Reader} to read.
      * @param output the {@link Appendable} to write to.
-     * @return the number of characters copied, or -1 if &gt; Integer.MAX_VALUE.
+     * @return The number of characters copied, or -1 if &gt; Integer.MAX_VALUE.
      * @throws NullPointerException if the input or output is null.
      * @throws IOException          if an I/O error occurs.
      * @since 2.7
@@ -1519,7 +1519,7 @@ public class IOUtils {
      * @param reader the {@link Reader} to read.
      * @param output the {@link Appendable} to write to.
      * @param buffer the buffer to be used for the copy.
-     * @return the number of characters copied.
+     * @return The number of characters copied.
      * @throws NullPointerException if the input or output is null.
      * @throws IOException          if an I/O error occurs.
      * @since 2.7
@@ -1626,7 +1626,7 @@ public class IOUtils {
      *
      * @param reader the {@link Reader} to read.
      * @param writer the {@link Writer} to write.
-     * @return the number of characters copied, or -1 if &gt; Integer.MAX_VALUE.
+     * @return The number of characters copied, or -1 if &gt; Integer.MAX_VALUE.
      * @throws NullPointerException if the input or output is null.
      * @throws IOException          if an I/O error occurs.
      * @since 1.1
@@ -1650,7 +1650,7 @@ public class IOUtils {
      *
      * @param url  the {@link URL} to read.
      * @param file the {@link OutputStream} to write.
-     * @return the number of bytes copied.
+     * @return The number of bytes copied.
      * @throws NullPointerException if the URL is {@code null}.
      * @throws NullPointerException if the OutputStream is {@code null}.
      * @throws IOException          if an I/O error occurs.
@@ -1673,7 +1673,7 @@ public class IOUtils {
      *
      * @param url          the {@link URL} to read.
      * @param outputStream the {@link OutputStream} to write.
-     * @return the number of bytes copied.
+     * @return The number of bytes copied.
      * @throws NullPointerException if the URL is {@code null}.
      * @throws NullPointerException if the OutputStream is {@code null}.
      * @throws IOException          if an I/O error occurs.
@@ -1696,7 +1696,7 @@ public class IOUtils {
      *
      * @param inputStream  the {@link InputStream} to read.
      * @param outputStream the {@link OutputStream} to write.
-     * @return the number of bytes copied.
+     * @return The number of bytes copied.
      * @throws NullPointerException if the InputStream is {@code null}.
      * @throws NullPointerException if the OutputStream is {@code null}.
      * @throws IOException          if an I/O error occurs.
@@ -1715,7 +1715,7 @@ public class IOUtils {
      * @param inputStream  the {@link InputStream} to read.
      * @param outputStream the {@link OutputStream} to write.
      * @param buffer       the buffer to use for the copy.
-     * @return the number of bytes copied.
+     * @return The number of bytes copied.
      * @throws NullPointerException if the InputStream is {@code null}.
      * @throws NullPointerException if the OutputStream is {@code null}.
      * @throws IOException          if an I/O error occurs.
@@ -1749,7 +1749,7 @@ public class IOUtils {
      * @param output      the {@link OutputStream} to write.
      * @param inputOffset number of bytes to skip from input before copying, these bytes are ignored.
      * @param length      number of bytes to copy.
-     * @return the number of bytes copied.
+     * @return The number of bytes copied.
      * @throws NullPointerException if the input or output is null.
      * @throws IOException          if an I/O error occurs.
      * @since 2.2
@@ -1775,7 +1775,7 @@ public class IOUtils {
      * @param inputOffset number of bytes to skip from input before copying, these bytes are ignored.
      * @param length      number of bytes to copy.
      * @param buffer      the buffer to use for the copy.
-     * @return the number of bytes copied.
+     * @return The number of bytes copied.
      * @throws NullPointerException if the input or output is null.
      * @throws IOException          if an I/O error occurs.
      * @since 2.2
@@ -1817,7 +1817,7 @@ public class IOUtils {
      *
      * @param reader the {@link Reader} to source.
      * @param writer the {@link Writer} to target.
-     * @return the number of characters copied.
+     * @return The number of characters copied.
      * @throws NullPointerException if the input or output is null.
      * @throws IOException          if an I/O error occurs.
      * @since 1.3
@@ -1837,7 +1837,7 @@ public class IOUtils {
      * @param reader the {@link Reader} to source.
      * @param writer the {@link Writer} to target.
      * @param buffer the buffer to be used for the copy.
-     * @return the number of characters copied.
+     * @return The number of characters copied.
      * @throws NullPointerException if the input or output is null.
      * @throws IOException          if an I/O error occurs.
      * @since 2.2
@@ -1865,7 +1865,7 @@ public class IOUtils {
      * @param writer      the {@link Writer} to write to.
      * @param inputOffset number of chars to skip from input before copying -ve values are ignored.
      * @param length      number of chars to copy. -ve means all.
-     * @return the number of chars copied.
+     * @return The number of chars copied.
      * @throws NullPointerException if the input or output is null.
      * @throws IOException          if an I/O error occurs.
      * @since 2.2
@@ -1887,7 +1887,7 @@ public class IOUtils {
      * @param inputOffset number of chars to skip from input before copying -ve values are ignored.
      * @param length      number of chars to copy. -ve means all.
      * @param buffer      the buffer to be used for the copy.
-     * @return the number of chars copied.
+     * @return The number of chars copied.
      * @throws NullPointerException if the input or output is null.
      * @throws IOException          if an I/O error occurs.
      * @since 2.2
@@ -1936,7 +1936,7 @@ public class IOUtils {
      * Returns the length of the given array in a null-safe manner.
      *
      * @param array an array or null.
-     * @return the array length, or 0 if the given array is null.
+     * @return The array length, or 0 if the given array is null.
      * @since 2.7
      */
     public static int length(final byte[] array) {
@@ -1947,7 +1947,7 @@ public class IOUtils {
      * Returns the length of the given array in a null-safe manner.
      *
      * @param array an array or null.
-     * @return the array length, or 0 if the given array is null.
+     * @return The array length, or 0 if the given array is null.
      * @since 2.7
      */
     public static int length(final char[] array) {
@@ -1958,7 +1958,7 @@ public class IOUtils {
      * Returns the length of the given CharSequence in a null-safe manner.
      *
      * @param csq a CharSequence or null.
-     * @return the CharSequence length, or 0 if the given CharSequence is null.
+     * @return The CharSequence length, or 0 if the given CharSequence is null.
      * @since 2.7
      */
     public static int length(final CharSequence csq) {
@@ -1969,7 +1969,7 @@ public class IOUtils {
      * Returns the length of the given array in a null-safe manner.
      *
      * @param array an array or null.
-     * @return the array length, or 0 if the given array is null.
+     * @return The array length, or 0 if the given array is null.
      * @since 2.7
      */
     public static int length(final Object[] array) {
@@ -2132,7 +2132,7 @@ public class IOUtils {
      *
      * @param input  the byte channel to read.
      * @param buffer byte buffer destination.
-     * @return the actual length read; may be less than requested if EOF was reached.
+     * @return The actual length read; may be less than requested if EOF was reached.
      * @throws IOException if a read error occurs.
      * @since 2.5
      */
@@ -2246,7 +2246,7 @@ public class IOUtils {
      *
      * @param input  where to read input from.
      * @param length length to read, must be &gt;= 0.
-     * @return the bytes read from input.
+     * @return The bytes read from input.
      * @throws IOException              if there is a problem reading the file.
      * @throws IllegalArgumentException if length is negative.
      * @throws EOFException             if the number of bytes read was incorrect.
@@ -2325,7 +2325,7 @@ public class IOUtils {
      * Gets the contents of a {@link CharSequence} as a list of Strings, one entry per line.
      *
      * @param csq the {@link CharSequence} to read, not null.
-     * @return the list of Strings, never null.
+     * @return The list of Strings, never null.
      * @throws UncheckedIOException if an I/O error occurs.
      * @since 2.18.0
      */
@@ -2343,7 +2343,7 @@ public class IOUtils {
      * </p>
      *
      * @param input the {@link InputStream} to read, not null.
-     * @return the list of Strings, never null.
+     * @return The list of Strings, never null.
      * @throws NullPointerException if the input is null.
      * @throws UncheckedIOException if an I/O error occurs.
      * @since 1.1
@@ -2362,7 +2362,7 @@ public class IOUtils {
      *
      * @param input   the {@link InputStream} to read, not null.
      * @param charset the charset to use, null means platform default.
-     * @return the list of Strings, never null.
+     * @return The list of Strings, never null.
      * @throws NullPointerException if the input is null.
      * @throws UncheckedIOException if an I/O error occurs.
      * @since 2.3
@@ -2382,7 +2382,7 @@ public class IOUtils {
      *
      * @param input       the {@link InputStream} to read, not null.
      * @param charsetName the name of the requested charset, null means platform default.
-     * @return the list of Strings, never null.
+     * @return The list of Strings, never null.
      * @throws NullPointerException                         if the input is null.
      * @throws UncheckedIOException                         if an I/O error occurs.
      * @throws java.nio.charset.UnsupportedCharsetException if the encoding is not supported.
@@ -2399,7 +2399,7 @@ public class IOUtils {
      * </p>
      *
      * @param reader the {@link Reader} to read, not null.
-     * @return the list of Strings, never null.
+     * @return The list of Strings, never null.
      * @throws NullPointerException if the input is null.
      * @throws UncheckedIOException if an I/O error occurs.
      * @since 1.1
@@ -2416,7 +2416,7 @@ public class IOUtils {
      * </p>
      *
      * @param name The resource name.
-     * @return the requested byte array.
+     * @return The requested byte array.
      * @throws IOException if an I/O error occurs or the resource is not found.
      * @see #resourceToByteArray(String, ClassLoader)
      * @since 2.6
@@ -2433,7 +2433,7 @@ public class IOUtils {
      *
      * @param name        The resource name.
      * @param classLoader the class loader that the resolution of the resource is delegated to.
-     * @return the requested byte array.
+     * @return The requested byte array.
      * @throws IOException if an I/O error occurs or the resource is not found.
      * @see #resourceToURL(String, ClassLoader)
      * @since 2.6
@@ -2450,7 +2450,7 @@ public class IOUtils {
      *
      * @param name    The resource name.
      * @param charset the charset to use, null means platform default.
-     * @return the requested String.
+     * @return The requested String.
      * @throws IOException if an I/O error occurs or the resource is not found.
      * @see #resourceToString(String, Charset, ClassLoader)
      * @since 2.6
@@ -2468,7 +2468,7 @@ public class IOUtils {
      * @param name        The resource name.
      * @param charset     the Charset to use, null means platform default.
      * @param classLoader the class loader that the resolution of the resource is delegated to.
-     * @return the requested String.
+     * @return The requested String.
      * @throws IOException if an I/O error occurs.
      * @see #resourceToURL(String, ClassLoader)
      * @since 2.6
@@ -2815,7 +2815,7 @@ public class IOUtils {
      * Returns the given reader if it is a {@link BufferedReader}, otherwise creates a BufferedReader from the given reader.
      *
      * @param reader the reader to wrap or return (not null).
-     * @return the given reader or a new {@link BufferedReader} for the given reader.
+     * @return The given reader or a new {@link BufferedReader} for the given reader.
      * @throws NullPointerException if the input parameter is null.
      * @see #buffer(Reader)
      * @since 2.2
@@ -2829,7 +2829,7 @@ public class IOUtils {
      *
      * @param reader the reader to wrap or return (not null).
      * @param size   the buffer size, if a new BufferedReader is created.
-     * @return the given reader or a new {@link BufferedReader} for the given reader.
+     * @return The given reader or a new {@link BufferedReader} for the given reader.
      * @throws NullPointerException if the input parameter is null.
      * @see #buffer(Reader)
      * @since 2.5
@@ -2976,7 +2976,7 @@ public class IOUtils {
      * </p>
      *
      * @param reader the {@link Reader} to read.
-     * @return the requested byte array.
+     * @return The requested byte array.
      * @throws NullPointerException if the input is null.
      * @throws IOException          if an I/O error occurs.
      * @deprecated Use {@link #toByteArray(Reader, Charset)} instead.
@@ -2994,7 +2994,7 @@ public class IOUtils {
      *
      * @param reader  the {@link Reader} to read.
      * @param charset the charset to use, null means platform default.
-     * @return the requested byte array.
+     * @return The requested byte array.
      * @throws NullPointerException if the input is null.
      * @throws IOException          if an I/O error occurs.
      * @since 2.3
@@ -3017,7 +3017,7 @@ public class IOUtils {
      *
      * @param reader      the {@link Reader} to read.
      * @param charsetName the name of the requested charset, null means platform default.
-     * @return the requested byte array.
+     * @return The requested byte array.
      * @throws NullPointerException                         if the input is null.
      * @throws IOException                                  if an I/O error occurs.
      * @throws java.nio.charset.UnsupportedCharsetException if the encoding is not supported.
@@ -3034,7 +3034,7 @@ public class IOUtils {
      * </p>
      *
      * @param input the {@link String} to convert.
-     * @return the requested byte array.
+     * @return The requested byte array.
      * @throws NullPointerException if the input is null.
      * @deprecated Use {@link String#getBytes()} instead.
      */
@@ -3048,7 +3048,7 @@ public class IOUtils {
      * Gets the contents of a {@link URI} as a {@code byte[]}.
      *
      * @param uri the {@link URI} to read.
-     * @return the requested byte array.
+     * @return The requested byte array.
      * @throws NullPointerException if the uri is null.
      * @throws IOException          if an I/O exception occurs.
      * @since 2.4
@@ -3061,7 +3061,7 @@ public class IOUtils {
      * Gets the contents of a {@link URL} as a {@code byte[]}.
      *
      * @param url the {@link URL} to read.
-     * @return the requested byte array.
+     * @return The requested byte array.
      * @throws NullPointerException if the input is null.
      * @throws IOException          if an I/O exception occurs.
      * @since 2.4
@@ -3076,7 +3076,7 @@ public class IOUtils {
      * Gets the contents of a {@link URLConnection} as a {@code byte[]}.
      *
      * @param urlConnection the {@link URLConnection} to read.
-     * @return the requested byte array.
+     * @return The requested byte array.
      * @throws NullPointerException if the urlConn is null.
      * @throws IOException          if an I/O exception occurs.
      * @since 2.4
@@ -3094,7 +3094,7 @@ public class IOUtils {
      * </p>
      *
      * @param inputStream the {@link InputStream} to read.
-     * @return the requested character array.
+     * @return The requested character array.
      * @throws NullPointerException if the input is null.
      * @throws IOException          if an I/O error occurs.
      * @since 1.1
@@ -3113,7 +3113,7 @@ public class IOUtils {
      *
      * @param inputStream the {@link InputStream} to read.
      * @param charset     the charset to use, null means platform default.
-     * @return the requested character array.
+     * @return The requested character array.
      * @throws NullPointerException if the input is null.
      * @throws IOException          if an I/O error occurs.
      * @since 2.3
@@ -3135,7 +3135,7 @@ public class IOUtils {
      *
      * @param inputStream the {@link InputStream} to read.
      * @param charsetName the name of the requested charset, null means platform default.
-     * @return the requested character array.
+     * @return The requested character array.
      * @throws NullPointerException                         if the input is null.
      * @throws IOException                                  if an I/O error occurs.
      * @throws java.nio.charset.UnsupportedCharsetException if the encoding is not supported.
@@ -3152,7 +3152,7 @@ public class IOUtils {
      * </p>
      *
      * @param reader the {@link Reader} to read.
-     * @return the requested character array.
+     * @return The requested character array.
      * @throws NullPointerException if the input is null.
      * @throws IOException          if an I/O error occurs.
      * @since 1.1
@@ -3250,7 +3250,7 @@ public class IOUtils {
      * Gets the contents of a {@code byte[]} as a String using the virtual machine's {@linkplain Charset#defaultCharset() default charset}.
      *
      * @param input the byte array to read.
-     * @return the requested String.
+     * @return The requested String.
      * @throws NullPointerException if the input is null.
      * @deprecated Use {@link String#String(byte[])} instead.
      */
@@ -3268,7 +3268,7 @@ public class IOUtils {
      *
      * @param input       the byte array to read.
      * @param charsetName the name of the requested charset, null means platform default.
-     * @return the requested String.
+     * @return The requested String.
      * @throws NullPointerException if the input is null.
      */
     public static String toString(final byte[] input, final String charsetName) {
@@ -3282,7 +3282,7 @@ public class IOUtils {
      * </p>
      *
      * @param input the {@link InputStream} to read.
-     * @return the requested String.
+     * @return The requested String.
      * @throws NullPointerException if the input is null.
      * @throws IOException          if an I/O error occurs.
      * @deprecated Use {@link #toString(InputStream, Charset)} instead.
@@ -3300,7 +3300,7 @@ public class IOUtils {
      *
      * @param input   the {@link InputStream} to read.
      * @param charset the charset to use, null means platform default.
-     * @return the requested String.
+     * @return The requested String.
      * @throws NullPointerException if the input is null.
      * @throws IOException          if an I/O error occurs.
      * @since 2.3
@@ -3323,7 +3323,7 @@ public class IOUtils {
      *
      * @param input       the {@link InputStream} to read.
      * @param charsetName the name of the requested charset, null means platform default.
-     * @return the requested String.
+     * @return The requested String.
      * @throws NullPointerException                         if the input is null.
      * @throws IOException                                  if an I/O error occurs.
      * @throws java.nio.charset.UnsupportedCharsetException if the encoding is not supported.
@@ -3340,7 +3340,7 @@ public class IOUtils {
      *
      * @param input   supplies the {@link InputStream} to read.
      * @param charset the charset to use, null means platform default.
-     * @return the requested String.
+     * @return The requested String.
      * @throws NullPointerException if the input is null.
      * @throws IOException          if an I/O error occurs.
      * @since 2.12.0
@@ -3360,7 +3360,7 @@ public class IOUtils {
      * @param input         supplies the {@link InputStream} to read.
      * @param charset       the charset to use, null means platform default.
      * @param defaultString the default return value if the supplier or its value is null.
-     * @return the requested String.
+     * @return The requested String.
      * @throws NullPointerException if the input is null.
      * @throws IOException          if an I/O error occurs.
      * @since 2.12.0
@@ -3381,7 +3381,7 @@ public class IOUtils {
      * </p>
      *
      * @param reader the {@link Reader} to read.
-     * @return the requested String.
+     * @return The requested String.
      * @throws NullPointerException if the input is null.
      * @throws IOException          if an I/O error occurs.
      */
@@ -3981,7 +3981,7 @@ public class IOUtils {
      * Returns the given Appendable if it is already a {@link Writer}, otherwise creates a Writer wrapper around the given Appendable.
      *
      * @param appendable the Appendable to wrap or return (not null).
-     * @return the given Appendable or a Writer wrapper around the given Appendable.
+     * @return The given Appendable or a Writer wrapper around the given Appendable.
      * @throws NullPointerException if the input parameter is null.
      * @since 2.7
      */

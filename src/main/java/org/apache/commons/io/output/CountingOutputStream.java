@@ -59,7 +59,7 @@ public class CountingOutputStream extends ProxyOutputStream {
      * result in incorrect count for files over 2GB.
      * </p>
      *
-     * @return the number of bytes accumulated.
+     * @return The number of bytes accumulated.
      * @since 1.3
      */
     public synchronized long getByteCount() {
@@ -74,7 +74,7 @@ public class CountingOutputStream extends ProxyOutputStream {
      * See {@link #getByteCount()} for a method using a {@code long}.
      * </p>
      *
-     * @return the number of bytes accumulated.
+     * @return The number of bytes accumulated.
      * @throws ArithmeticException if the byte count is too large.
      */
     public int getCount() {
@@ -93,7 +93,7 @@ public class CountingOutputStream extends ProxyOutputStream {
      * result in incorrect count for files over 2GB.
      * </p>
      *
-     * @return the count previous to resetting.
+     * @return The count previous to resetting.
      * @since 1.3
      */
     public synchronized long resetByteCount() {
@@ -110,7 +110,7 @@ public class CountingOutputStream extends ProxyOutputStream {
      * See {@link #resetByteCount()} for a method using a {@code long}.
      * </p>
      *
-     * @return the count previous to resetting.
+     * @return The count previous to resetting.
      * @throws ArithmeticException if the byte count is too large.
      */
     public int resetCount() {

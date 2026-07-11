@@ -495,7 +495,7 @@ public class BoundedInputStream extends ProxyInputStream {
     /**
      * Invokes the delegate's {@link InputStream#read()} method if the current position is less than the limit.
      *
-     * @return the byte read or -1 if the end of stream or the limit has been reached.
+     * @return The byte read or -1 if the end of stream or the limit has been reached.
      * @throws IOException if an I/O error occurs.
      */
     @Override
@@ -511,7 +511,7 @@ public class BoundedInputStream extends ProxyInputStream {
      * Invokes the delegate's {@link InputStream#read(byte[])} method.
      *
      * @param b the buffer to read the bytes into.
-     * @return the number of bytes read or -1 if the end of stream or the limit has been reached.
+     * @return The number of bytes read or -1 if the end of stream or the limit has been reached.
      * @throws IOException if an I/O error occurs.
      */
     @Override
@@ -525,7 +525,7 @@ public class BoundedInputStream extends ProxyInputStream {
      * @param b   the buffer to read the bytes into.
      * @param off The start offset.
      * @param len The number of bytes to read.
-     * @return the number of bytes read or -1 if the end of stream or the limit has been reached.
+     * @return The number of bytes read or -1 if the end of stream or the limit has been reached.
      * @throws IOException if an I/O error occurs.
      */
     @Override
@@ -564,7 +564,7 @@ public class BoundedInputStream extends ProxyInputStream {
      * Invokes the delegate's {@link InputStream#skip(long)} method.
      *
      * @param n the number of bytes to skip.
-     * @return the actual number of bytes skipped.
+     * @return The actual number of bytes skipped.
      * @throws IOException if an I/O error occurs.
      */
     @Override
@@ -590,7 +590,7 @@ public class BoundedInputStream extends ProxyInputStream {
     /**
      * Invokes the delegate's {@link InputStream#toString()} method.
      *
-     * @return the delegate's {@link InputStream#toString()}.
+     * @return The delegate's {@link InputStream#toString()}.
      */
     @Override
     public String toString() {
