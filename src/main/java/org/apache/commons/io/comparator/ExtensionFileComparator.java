@@ -104,7 +104,7 @@ public class ExtensionFileComparator extends AbstractFileComparator implements S
      *
      * @param file1 The first file to compare.
      * @param file2 The second file to compare.
-     * @return a negative value if the first file's extension
+     * @return A negative value if the first file's extension
      * is less than the second, zero if the extensions are the
      * same and a positive value if the first files extension
      * is greater than the second file.

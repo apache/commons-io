@@ -104,7 +104,7 @@ public class QueueInputStream extends InputStream {
          * <li>timeout</li>
          * </ul>
          *
-         * @return a new instance.
+         * @return A new instance.
          * @see #getUnchecked()
          */
         @Override
@@ -142,7 +142,7 @@ public class QueueInputStream extends InputStream {
     /**
      * Constructs a new {@link Builder}.
      *
-     * @return a new {@link Builder}.
+     * @return A new {@link Builder}.
      * @since 2.12.0
      */
     public static Builder builder() {

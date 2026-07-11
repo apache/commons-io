@@ -252,7 +252,7 @@ public final class FileTimes {
      * Converts a {@link FileTime} to a {@link Date}. If the provided FileTime is {@code null}, the returned Date is also {@code null}.
      *
      * @param fileTime the file time to be converted.
-     * @return a {@link Date} which corresponds to the supplied time, or {@code null} if the time is {@code null}.
+     * @return A {@link Date} which corresponds to the supplied time, or {@code null} if the time is {@code null}.
      * @see #toFileTime(Date)
      */
     public static Date toDate(final FileTime fileTime) {
@@ -263,7 +263,7 @@ public final class FileTimes {
      * Converts a {@link Date} to a {@link FileTime}. If the provided Date is {@code null}, the returned FileTime is also {@code null}.
      *
      * @param date the date to be converted.
-     * @return a {@link FileTime} which corresponds to the supplied date, or {@code null} if the date is {@code null}.
+     * @return A {@link FileTime} which corresponds to the supplied date, or {@code null} if the date is {@code null}.
      * @see #toDate(FileTime)
      */
     public static FileTime toFileTime(final Date date) {

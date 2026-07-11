@@ -458,7 +458,7 @@ public class IOUtils {
     /**
      * Returns a new byte array of size {@link #DEFAULT_BUFFER_SIZE}.
      *
-     * @return a new byte array of size {@link #DEFAULT_BUFFER_SIZE}.
+     * @return A new byte array of size {@link #DEFAULT_BUFFER_SIZE}.
      * @since 2.9.0
      */
     public static byte[] byteArray() {
@@ -469,7 +469,7 @@ public class IOUtils {
      * Returns a new byte array of the given size. TODO Consider guarding or warning against large allocations.
      *
      * @param size array size.
-     * @return a new byte array of the given size.
+     * @return A new byte array of the given size.
      * @throws NegativeArraySizeException if the size is negative.
      * @since 2.9.0
      */
@@ -480,7 +480,7 @@ public class IOUtils {
     /**
      * Returns a new char array of size {@link #DEFAULT_BUFFER_SIZE}.
      *
-     * @return a new char array of size {@link #DEFAULT_BUFFER_SIZE}.
+     * @return A new char array of size {@link #DEFAULT_BUFFER_SIZE}.
      * @since 2.9.0
      */
     private static char[] charArray() {
@@ -491,7 +491,7 @@ public class IOUtils {
      * Returns a new char array of the given size. TODO Consider guarding or warning against large allocations.
      *
      * @param size array size.
-     * @return a new char array of the given size.
+     * @return A new char array of the given size.
      * @since 2.9.0
      */
     private static char[] charArray(final int size) {
@@ -1922,7 +1922,7 @@ public class IOUtils {
      * @param input      The {@link InputStream} to read; must not be {@code null}.
      * @param limit      The maximum number of bytes to read; must be {@code >= 0}. The actual bytes read are validated to equal {@code size}.
      * @param bufferSize The buffer size of the output stream; must be {@code > 0}.
-     * @return a ByteArrayOutputStream containing the read bytes.
+     * @return A ByteArrayOutputStream containing the read bytes.
      */
     static UnsynchronizedByteArrayOutputStream copyToOutputStream(final InputStream input, final long limit, final int bufferSize) throws IOException {
         try (UnsynchronizedByteArrayOutputStream output = UnsynchronizedByteArrayOutputStream.builder().setBufferSize(bufferSize).get();
@@ -2001,7 +2001,7 @@ public class IOUtils {
      *
      * @param input   the {@link InputStream} to read, not null.
      * @param charset the charset to use, null means platform default.
-     * @return an Iterator of the lines in the reader, never null.
+     * @return An Iterator of the lines in the reader, never null.
      * @throws IllegalArgumentException if the input is null.
      * @since 2.3
      */
@@ -2034,7 +2034,7 @@ public class IOUtils {
      *
      * @param input       the {@link InputStream} to read, not null.
      * @param charsetName the encoding to use, null means platform default.
-     * @return an Iterator of the lines in the reader, never null.
+     * @return An Iterator of the lines in the reader, never null.
      * @throws IllegalArgumentException                     if the input is null.
      * @throws java.nio.charset.UnsupportedCharsetException if the encoding is not supported.
      * @since 1.2
@@ -2066,7 +2066,7 @@ public class IOUtils {
      * </pre>
      *
      * @param reader the {@link Reader} to read, not null.
-     * @return an Iterator of the lines in the reader, never null.
+     * @return An Iterator of the lines in the reader, never null.
      * @throws NullPointerException if the reader is null.
      * @since 1.2
      */
@@ -2868,7 +2868,7 @@ public class IOUtils {
      *
      * @param input the {@link InputStream} to read; must not be {@code null}.
      * @param size  the exact number of bytes to read; must be {@code >= 0}.
-     * @return a new byte array of length {@code size}.
+     * @return A new byte array of length {@code size}.
      * @throws IllegalArgumentException if {@code size} is negative.
      * @throws EOFException             if the stream ends before {@code size} bytes are read.
      * @throws IOException              if an I/O error occurs while reading.
@@ -2892,7 +2892,7 @@ public class IOUtils {
      * @param input     the {@link InputStream} to read; must not be {@code null}.
      * @param size      the exact number of bytes to read; must be {@code >= 0}. The actual bytes read are validated to equal {@code size}.
      * @param chunkSize The chunk size for incremental reading; must be {@code > 0}.
-     * @return a new byte array of length {@code size}.
+     * @return A new byte array of length {@code size}.
      * @throws IllegalArgumentException if {@code size} is negative or {@code chunkSize <= 0}.
      * @throws EOFException             if the stream ends before {@code size} bytes are read.
      * @throws IOException              if an I/O error occurs while reading.
@@ -2925,7 +2925,7 @@ public class IOUtils {
      *
      * @param input the {@link InputStream} to read; must not be {@code null}.
      * @param size  the exact number of bytes to read; must be {@code >= 0} and {@code <= Integer.MAX_VALUE}.
-     * @return a new byte array of length {@code size}.
+     * @return A new byte array of length {@code size}.
      * @throws IllegalArgumentException if {@code size} is negative or does not fit into an int.
      * @throws EOFException             if the stream ends before {@code size} bytes are read.
      * @throws IOException              if an I/O error occurs while reading.
@@ -3168,7 +3168,7 @@ public class IOUtils {
      * charset}.
      *
      * @param input the CharSequence to convert.
-     * @return an input stream.
+     * @return An input stream.
      * @since 2.0
      * @deprecated Use {@link #toInputStream(CharSequence, Charset)} instead.
      */
@@ -3182,7 +3182,7 @@ public class IOUtils {
      *
      * @param input   the CharSequence to convert.
      * @param charset the charset to use, null means platform default.
-     * @return an input stream.
+     * @return An input stream.
      * @since 2.3
      */
     public static InputStream toInputStream(final CharSequence input, final Charset charset) {
@@ -3197,7 +3197,7 @@ public class IOUtils {
      *
      * @param input       the CharSequence to convert.
      * @param charsetName the name of the requested charset, null means platform default.
-     * @return an input stream.
+     * @return An input stream.
      * @throws java.nio.charset.UnsupportedCharsetException if the encoding is not supported.
      * @since 2.0
      */
@@ -3209,7 +3209,7 @@ public class IOUtils {
      * Converts the specified string to an input stream, encoded as bytes using the virtual machine's {@linkplain Charset#defaultCharset() default charset}.
      *
      * @param input the string to convert.
-     * @return an input stream.
+     * @return An input stream.
      * @since 1.1
      * @deprecated Use {@link #toInputStream(String, Charset)} instead.
      */
@@ -3223,7 +3223,7 @@ public class IOUtils {
      *
      * @param input   the string to convert.
      * @param charset the charset to use, null means platform default.
-     * @return an input stream.
+     * @return An input stream.
      * @since 2.3
      */
     public static InputStream toInputStream(final String input, final Charset charset) {
@@ -3238,7 +3238,7 @@ public class IOUtils {
      *
      * @param input       the string to convert.
      * @param charsetName the name of the requested charset, null means platform default.
-     * @return an input stream.
+     * @return An input stream.
      * @throws java.nio.charset.UnsupportedCharsetException if the encoding is not supported.
      * @since 1.1
      */

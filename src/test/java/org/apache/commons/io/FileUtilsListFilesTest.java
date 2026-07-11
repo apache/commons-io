@@ -361,7 +361,7 @@ class FileUtilsListFilesTest {
      * Consumes and closes the underlying stream.
      *
      * @param files The iterator to consume.
-     * @return a new collection.
+     * @return A new collection.
      */
     private Collection<String> toFileNames(final Iterator<File> files) {
         final Collection<String> fileNames = new ArrayList<>();

@@ -91,7 +91,7 @@ class LineIteratorTest {
      * Creates String data lines.
      *
      * @param lineCount number of lines to create.
-     * @return a new lines list.
+     * @return A new lines list.
      */
     private List<String> createStringLines(final int lineCount) {
         final List<String> lines = new ArrayList<>();

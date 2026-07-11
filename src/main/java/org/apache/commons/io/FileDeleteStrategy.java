@@ -152,7 +152,7 @@ public class FileDeleteStrategy {
     /**
      * Gets a string describing the delete strategy.
      *
-     * @return a string describing the delete strategy.
+     * @return A string describing the delete strategy.
      */
     @Override
     public String toString() {

@@ -271,7 +271,7 @@ public class BoundedInputStream extends ProxyInputStream {
          * <li>{@code #isPropagateClose()}</li>
          * </ul>
          *
-         * @return a new instance.
+         * @return A new instance.
          * @throws IllegalStateException         if the {@code origin} is {@code null}.
          * @throws UnsupportedOperationException if the origin cannot be converted to an {@link InputStream}.
          * @throws IOException                   if an I/O error occurs converting to an {@link InputStream} using {@link #getInputStream()}.
@@ -288,7 +288,7 @@ public class BoundedInputStream extends ProxyInputStream {
     /**
      * Constructs a new {@link AbstractBuilder}.
      *
-     * @return a new {@link AbstractBuilder}.
+     * @return A new {@link AbstractBuilder}.
      * @since 2.16.0
      */
     public static Builder builder() {

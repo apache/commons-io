@@ -62,7 +62,7 @@ public interface IOTriConsumer<T, U, V> {
      * If performing this operation throws an exception, the {@code after} operation will not be performed.
      *
      * @param after the operation to perform after this operation.
-     * @return a composed {@link IOTriConsumer} that performs in sequence this operation followed by the {@code after}
+     * @return A composed {@link IOTriConsumer} that performs in sequence this operation followed by the {@code after}
      *         operation.
      * @throws NullPointerException if {@code after} is null.
      */

@@ -171,7 +171,7 @@ public class Tailer implements Runnable, AutoCloseable {
          * Creates a new daemon thread.
          *
          * @param runnable the thread's runnable.
-         * @return a new daemon thread.
+         * @return A new daemon thread.
          */
         private static Thread newDaemonThread(final Runnable runnable) {
             final Thread thread = new Thread(runnable, "commons-io-tailer");
@@ -211,7 +211,7 @@ public class Tailer implements Runnable, AutoCloseable {
          * <li>reOpen</li>
          * </ul>
          *
-         * @return a new instance.
+         * @return A new instance.
          * @see #getUnchecked()
          */
         @Override
@@ -413,7 +413,7 @@ public class Tailer implements Runnable, AutoCloseable {
          * Creates a random access file stream to read.
          *
          * @param mode the access mode, by default this is for {@link RandomAccessFile}.
-         * @return a random access file stream to read.
+         * @return A random access file stream to read.
          * @throws FileNotFoundException if the tailable object does not exist.
          */
         RandomAccessResourceBridge getRandomAccess(String mode) throws FileNotFoundException;

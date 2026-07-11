@@ -84,7 +84,7 @@ public final class UncheckedFilterWriter extends FilterWriter {
          * <li>{@link #getWriter()}</li>
          * </ul>
          *
-         * @return a new instance.
+         * @return A new instance.
          * @throws UnsupportedOperationException if the origin cannot provide a {@link Writer}.
          * @throws IOException                   if an I/O error occurs converting to an {@link Writer} using {@link #getWriter()}.
          * @see #getWriter()
@@ -100,7 +100,7 @@ public final class UncheckedFilterWriter extends FilterWriter {
     /**
      * Constructs a new {@link Builder}.
      *
-     * @return a new {@link Builder}.
+     * @return A new {@link Builder}.
      */
     public static Builder builder() {
         return new Builder();

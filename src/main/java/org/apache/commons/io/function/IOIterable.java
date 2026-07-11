@@ -33,7 +33,7 @@ public interface IOIterable<T> {
      * Creates an {@link Iterable} for this instance that throws {@link UncheckedIOException} instead of
      * {@link IOException}.
      *
-     * @return an {@link UncheckedIOException} {@link Iterable}.
+     * @return An {@link UncheckedIOException} {@link Iterable}.
      * @since 2.21.0
      */
     default Iterable<T> asIterable() {

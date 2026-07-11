@@ -264,7 +264,7 @@ public enum IOCase {
     /**
      * Gets a string describing the sensitivity.
      *
-     * @return a string describing the sensitivity.
+     * @return A string describing the sensitivity.
      */
     @Override
     public String toString() {

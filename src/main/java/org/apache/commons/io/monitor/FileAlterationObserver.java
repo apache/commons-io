@@ -198,7 +198,7 @@ public class FileAlterationObserver implements Serializable {
     /**
      * Creates a new builder.
      *
-     * @return a new builder.
+     * @return A new builder.
      * @since 2.18.0
      */
     public static Builder builder() {
@@ -564,7 +564,7 @@ public class FileAlterationObserver implements Serializable {
     /**
      * Returns a String representation of this observer.
      *
-     * @return a String representation of this observer.
+     * @return A String representation of this observer.
      */
     @Override
     public String toString() {

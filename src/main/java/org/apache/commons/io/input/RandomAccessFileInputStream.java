@@ -82,7 +82,7 @@ public class RandomAccessFileInputStream extends AbstractInputStream {
          * <li>closeOnClose</li>
          * </ul>
          *
-         * @return a new instance.
+         * @return A new instance.
          * @throws IllegalStateException         if the {@code origin} is {@code null}.
          * @throws IllegalStateException         if both RandomAccessFile and origin are set.
          * @throws UnsupportedOperationException if the origin cannot be converted to a {@link RandomAccessFile}.
@@ -122,7 +122,7 @@ public class RandomAccessFileInputStream extends AbstractInputStream {
     /**
      * Constructs a new {@link Builder}.
      *
-     * @return a new {@link Builder}.
+     * @return A new {@link Builder}.
      * @since 2.12.0
      */
     public static Builder builder() {

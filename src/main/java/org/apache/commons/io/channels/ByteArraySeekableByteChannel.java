@@ -94,7 +94,7 @@ public class ByteArraySeekableByteChannel implements SeekableByteChannel {
     /**
      * Constructs a new builder for {@link ByteArraySeekableByteChannel}.
      *
-     * @return a new builder for {@link ByteArraySeekableByteChannel}.
+     * @return A new builder for {@link ByteArraySeekableByteChannel}.
      * @since 2.22.0
      */
     public static Builder builder() {
@@ -303,7 +303,7 @@ public class ByteArraySeekableByteChannel implements SeekableByteChannel {
      * The returned array is a copy of the internal buffer, sized to the actual data stored in this channel.
      * </p>
      *
-     * @return a new byte array containing the data stored in this channel.
+     * @return A new byte array containing the data stored in this channel.
      */
     public byte[] toByteArray() {
         return Arrays.copyOf(data, size);

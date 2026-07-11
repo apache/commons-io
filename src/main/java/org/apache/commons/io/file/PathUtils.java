@@ -144,7 +144,7 @@ public final class PathUtils {
          *
          * @param separator the file separator.
          * @param string a path.
-         * @return a key.
+         * @return A key.
          */
         static String extractKey(final String separator, final String string) {
             return string.replace(separator, ">");
@@ -947,7 +947,7 @@ public final class PathUtils {
      *
      * @param filter the filter to apply to the set of files.
      * @param paths  the array of files to apply the filter to.
-     * @return a subset of {@code files} that is accepted by the file filter.
+     * @return A subset of {@code files} that is accepted by the file filter.
      * @throws NullPointerException     if the filter is {@code null}
      * @throws IllegalArgumentException if {@code files} contains a {@code null} value.
      * @since 2.9.0
@@ -979,7 +979,7 @@ public final class PathUtils {
      * Reads the access control list from a file attribute view.
      *
      * @param sourcePath the path to the file.
-     * @return a file attribute view of the given type, or null if the attribute view type is not available.
+     * @return A file attribute view of the given type, or null if the attribute view type is not available.
      * @throws IOException if an I/O error occurs.
      * @since 2.8.0
      */
@@ -993,7 +993,7 @@ public final class PathUtils {
      *
      * @param path    the path to the file.
      * @param options how to handle symbolic links.
-     * @return a AclFileAttributeView, or {@code null} if the attribute view type is not available.
+     * @return A AclFileAttributeView, or {@code null} if the attribute view type is not available.
      * @since 2.12.0
      */
     public static AclFileAttributeView getAclFileAttributeView(final Path path, final LinkOption... options) {
@@ -1023,7 +1023,7 @@ public final class PathUtils {
      *
      * @param path    the path to the file.
      * @param options how to handle symbolic links.
-     * @return a DosFileAttributeView, or {@code null} if the attribute view type is not available.
+     * @return A DosFileAttributeView, or {@code null} if the attribute view type is not available.
      * @since 2.12.0
      */
     public static DosFileAttributeView getDosFileAttributeView(final Path path, final LinkOption... options) {
@@ -1176,7 +1176,7 @@ public final class PathUtils {
      *
      * @param path    the path to the file.
      * @param options how to handle symbolic links.
-     * @return a PosixFileAttributeView, or {@code null} if the attribute view type is not available.
+     * @return A PosixFileAttributeView, or {@code null} if the attribute view type is not available.
      * @since 2.12.0
      */
     public static PosixFileAttributeView getPosixFileAttributeView(final Path path, final LinkOption... options) {
@@ -1428,7 +1428,7 @@ public final class PathUtils {
      *
      * @param dir        the path to the directory to stream.
      * @param pathFilter the directory stream filter.
-     * @return a new instance.
+     * @return A new instance.
      * @throws IOException if an I/O error occurs.
      */
     public static DirectoryStream<Path> newDirectoryStream(final Path dir, final PathFilter pathFilter) throws IOException {
@@ -1440,7 +1440,7 @@ public final class PathUtils {
      *
      * @param path   the Path.
      * @param append Whether or not to append.
-     * @return a new OutputStream.
+     * @return A new OutputStream.
      * @throws IOException if an I/O error occurs.
      * @see Files#newOutputStream(Path, OpenOption...)
      * @since 2.12.0
@@ -1866,7 +1866,7 @@ public final class PathUtils {
      * Converts an array of {@link FileVisitOption} to a {@link Set}.
      *
      * @param fileVisitOptions input array.
-     * @return a new Set.
+     * @return A new Set.
      */
     static Set<FileVisitOption> toFileVisitOptionSet(final FileVisitOption... fileVisitOptions) {
         return fileVisitOptions == null ? EnumSet.noneOf(FileVisitOption.class) : Stream.of(fileVisitOptions).collect(Collectors.toSet());
@@ -2024,7 +2024,7 @@ public final class PathUtils {
      * @param maxDepth       the maximum depth of directories to walk.
      * @param readAttributes whether to call the filters with file attributes (false passes null).
      * @param options        the options to configure the walk.
-     * @return a filtered stream of paths.
+     * @return A filtered stream of paths.
      * @throws IOException if an I/O error is thrown when accessing the starting file.
      * @since 2.9.0
      */

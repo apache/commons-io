@@ -695,7 +695,7 @@ public enum FileSystem {
      *            Illegal characters in the candidate name are replaced by this character.
      * @param charset
      *            The charset to use when the file name length is measured in bytes.
-     * @return a String without illegal characters.
+     * @return A String without illegal characters.
      * @since 2.21.0
      */
     public String toLegalFileName(final CharSequence candidate, final char replacement, final Charset charset) {
@@ -727,7 +727,7 @@ public enum FileSystem {
      *            A candidate file name (without a path) like {@code "filename.ext"} or {@code "filename"}.
      * @param replacement
      *            Illegal characters in the candidate name are replaced by this character.
-     * @return a String without illegal characters.
+     * @return A String without illegal characters.
      */
     public String toLegalFileName(final String candidate, final char replacement) {
         return toLegalFileName(candidate, replacement, Charset.defaultCharset());

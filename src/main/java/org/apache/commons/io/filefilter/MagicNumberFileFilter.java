@@ -301,7 +301,7 @@ public class MagicNumberFileFilter extends AbstractFileFilter implements Seriali
      * Returns a String representation of the file filter, which includes the
      * magic number bytes and byte offset.
      *
-     * @return a String representation of the file filter.
+     * @return A String representation of the file filter.
      */
     @Override
     public String toString() {

@@ -84,7 +84,7 @@ public final class UncheckedFilterInputStream extends FilterInputStream {
          * <li>{@link #getInputStream()} gets the target aspect.</li>
          * </ul>
          *
-         * @return a new instance.
+         * @return A new instance.
          * @throws UnsupportedOperationException if the origin cannot provide an {@link #getInputStream()}.
          * @see #getInputStream()
          * @see #getUnchecked()
@@ -100,7 +100,7 @@ public final class UncheckedFilterInputStream extends FilterInputStream {
     /**
      * Constructs a new {@link Builder}.
      *
-     * @return a new {@link Builder}.
+     * @return A new {@link Builder}.
      */
     public static Builder builder() {
         return new Builder();

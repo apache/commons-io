@@ -158,7 +158,7 @@ public abstract class AbstractFileFilter implements IOFileFilter, PathVisitor {
      * Converts a boolean into a FileVisitResult.
      *
      * @param accept accepted or rejected.
-     * @return a FileVisitResult.
+     * @return A FileVisitResult.
      */
     FileVisitResult toFileVisitResult(final boolean accept) {
         return accept ? onAccept : onReject;
@@ -167,7 +167,7 @@ public abstract class AbstractFileFilter implements IOFileFilter, PathVisitor {
     /**
      * Provides a String representation of this file filter.
      *
-     * @return a String representation.
+     * @return A String representation.
      */
     @Override
     public String toString() {

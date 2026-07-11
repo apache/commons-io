@@ -106,7 +106,7 @@ public class UnsynchronizedByteArrayInputStream extends InputStream {
          * <li>length</li>
          * </ul>
          *
-         * @return a new instance.
+         * @return A new instance.
          * @throws UnsupportedOperationException if the origin cannot provide a {@code byte[]}.
          * @throws IllegalStateException         if the {@code origin} is {@code null}.
          * @throws IOException                   if an I/O error occurs converting to an {@code byte[]} using {@link AbstractOrigin#getByteArray()}.
@@ -162,7 +162,7 @@ public class UnsynchronizedByteArrayInputStream extends InputStream {
     /**
      * Constructs a new {@link Builder}.
      *
-     * @return a new {@link Builder}.
+     * @return A new {@link Builder}.
      */
     public static Builder builder() {
         return new Builder();

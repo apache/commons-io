@@ -161,7 +161,7 @@ public class CountingPathVisitor extends SimplePathVisitor {
     /**
      * Constructs a new instance configured with a {@link BigInteger} {@link PathCounters}.
      *
-     * @return a new instance configured with a {@link BigInteger} {@link PathCounters}.
+     * @return A new instance configured with a {@link BigInteger} {@link PathCounters}.
      */
     public static CountingPathVisitor withBigIntegerCounters() {
         return new Builder().setPathCounters(Counters.bigIntegerPathCounters()).get();
@@ -170,7 +170,7 @@ public class CountingPathVisitor extends SimplePathVisitor {
     /**
      * Constructs a new instance configured with a {@code long} {@link PathCounters}.
      *
-     * @return a new instance configured with a {@code long} {@link PathCounters}.
+     * @return A new instance configured with a {@code long} {@link PathCounters}.
      */
     public static CountingPathVisitor withLongCounters() {
         return new Builder().setPathCounters(Counters.longPathCounters()).get();

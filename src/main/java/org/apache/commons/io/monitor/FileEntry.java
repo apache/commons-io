@@ -206,7 +206,7 @@ public class FileEntry implements Serializable {
      * </p>
      *
      * @param file The child file.
-     * @return a new child instance.
+     * @return A new child instance.
      */
     public FileEntry newChildInstance(final File file) {
         return new FileEntry(this, file);

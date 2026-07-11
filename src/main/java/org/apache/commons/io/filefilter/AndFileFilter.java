@@ -187,7 +187,7 @@ public class AndFileFilter extends AbstractFileFilter implements ConditionalFile
     /**
      * Builds a String representation of this file filter.
      *
-     * @return a String representation.
+     * @return A String representation.
      */
     @Override
     public String toString() {

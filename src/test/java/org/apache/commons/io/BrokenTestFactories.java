@@ -61,7 +61,7 @@ public class BrokenTestFactories {
     /**
      * Creates a stream of all throwable types used in testing broken streams.
      *
-     * @return a stream of all throwable types used in testing broken streams.
+     * @return A stream of all throwable types used in testing broken streams.
      */
     public static Stream<Class<? extends Throwable>> parameters() {
         // @formatter:off

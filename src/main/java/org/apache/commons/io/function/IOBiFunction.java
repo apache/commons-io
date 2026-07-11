@@ -46,7 +46,7 @@ public interface IOBiFunction<T, U, R> {
      *
      * @param <V> The type of output of the {@code after} function, and of the composed function.
      * @param after the function to apply after this function is applied.
-     * @return a composed function that first applies this function and then applies the {@code after} function.
+     * @return A composed function that first applies this function and then applies the {@code after} function.
      * @throws NullPointerException if after is null.
      */
     default <V> IOBiFunction<T, U, V> andThen(final IOFunction<? super R, ? extends V> after) {
@@ -68,7 +68,7 @@ public interface IOBiFunction<T, U, R> {
      * Creates a {@link BiFunction} for this instance that throws {@link UncheckedIOException} instead of
      * {@link IOException}.
      *
-     * @return an UncheckedIOException BiFunction.
+     * @return An UncheckedIOException BiFunction.
      */
     default BiFunction<T, U, R> asBiFunction() {
         return (t, u) -> Uncheck.apply(this, t, u);

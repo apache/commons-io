@@ -59,7 +59,7 @@ public interface IOIterator<E> {
      * Creates an {@link Iterator} for this instance that throws {@link UncheckedIOException} instead of
      * {@link IOException}.
      *
-     * @return an {@link UncheckedIOException} {@link Iterator}.
+     * @return An {@link UncheckedIOException} {@link Iterator}.
      */
     default Iterator<E> asIterator() {
         return new UncheckedIOIterator<>(this);

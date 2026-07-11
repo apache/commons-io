@@ -39,7 +39,7 @@ public interface IOBinaryOperator<T> extends IOBiFunction<T, T, T> {
      *
      * @param <T> The type of the input arguments of the comparator.
      * @param comparator a {@code Comparator} for comparing the two values.
-     * @return a {@code BinaryOperator} which returns the greater of its operands, according to the supplied
+     * @return A {@code BinaryOperator} which returns the greater of its operands, according to the supplied
      *         {@code Comparator}
      * @throws NullPointerException if the argument is null.
      */
@@ -54,7 +54,7 @@ public interface IOBinaryOperator<T> extends IOBiFunction<T, T, T> {
      *
      * @param <T> The type of the input arguments of the comparator.
      * @param comparator a {@code Comparator} for comparing the two values.
-     * @return a {@code BinaryOperator} which returns the lesser of its operands, according to the supplied
+     * @return A {@code BinaryOperator} which returns the lesser of its operands, according to the supplied
      *         {@code Comparator}
      * @throws NullPointerException if the argument is null.
      */
@@ -67,7 +67,7 @@ public interface IOBinaryOperator<T> extends IOBiFunction<T, T, T> {
      * Creates a {@link BinaryOperator} for this instance that throws {@link UncheckedIOException} instead of
      * {@link IOException}.
      *
-     * @return an unchecked BiFunction.
+     * @return An unchecked BiFunction.
      */
     default BinaryOperator<T> asBinaryOperator() {
         return (t, u) -> Uncheck.apply(this, t, u);

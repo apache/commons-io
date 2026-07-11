@@ -150,7 +150,7 @@ public class WildcardFileFilter extends AbstractFileFilter implements Serializab
     /**
      * Constructs a new {@link Builder}.
      *
-     * @return a new {@link Builder}.
+     * @return A new {@link Builder}.
      * @since 2.12.0
      */
     public static Builder builder() {
@@ -303,7 +303,7 @@ public class WildcardFileFilter extends AbstractFileFilter implements Serializab
     /**
      * Provide a String representation of this file filter.
      *
-     * @return a String representation.
+     * @return A String representation.
      */
     @Override
     public String toString() {

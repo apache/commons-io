@@ -60,7 +60,7 @@ public interface IOBiConsumer<T, U> {
      * If performing this operation throws an exception, the {@code after} operation will not be performed.
      *
      * @param after the operation to perform after this operation.
-     * @return a composed {@link IOBiConsumer} that performs in sequence this operation followed by the {@code after}
+     * @return A composed {@link IOBiConsumer} that performs in sequence this operation followed by the {@code after}
      *         operation.
      * @throws NullPointerException if {@code after} is null.
      */
@@ -76,7 +76,7 @@ public interface IOBiConsumer<T, U> {
      * Creates a {@link BiConsumer} for this instance that throws {@link UncheckedIOException} instead of
      * {@link IOException}.
      *
-     * @return an UncheckedIOException BiConsumer.
+     * @return An UncheckedIOException BiConsumer.
      * @throws UncheckedIOException Wraps an {@link IOException}.
      * @since 2.12.0
      */

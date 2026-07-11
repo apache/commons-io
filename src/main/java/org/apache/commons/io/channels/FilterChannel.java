@@ -94,7 +94,7 @@ public class FilterChannel<C extends Channel> implements Channel {
     /**
      * Creates a new {@link Builder}.
      *
-     * @return a new {@link Builder}.
+     * @return A new {@link Builder}.
      */
     public static Builder forChannel() {
         return new Builder();

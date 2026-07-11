@@ -129,7 +129,7 @@ public class WriterOutputStream extends OutputStream {
          * <li>writeImmediately</li>
          * </ul>
          *
-         * @return a new instance.
+         * @return A new instance.
          * @throws UnsupportedOperationException if the origin cannot provide a {@link Writer}.
          * @throws IOException                   if an I/O error occurs converting to an {@link Writer} using {@link #getWriter()}.
          * @see #getWriter()
@@ -188,7 +188,7 @@ public class WriterOutputStream extends OutputStream {
     /**
      * Constructs a new {@link Builder}.
      *
-     * @return a new {@link Builder}.
+     * @return A new {@link Builder}.
      * @since 2.12.0
      */
     public static Builder builder() {

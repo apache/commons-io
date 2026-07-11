@@ -57,7 +57,7 @@ public interface IOStream<T> extends IOBaseStream<T, IOStream<T>, Stream<T>> {
      *
      * @param <T> The type of the stream elements.
      * @param stream The stream to delegate.
-     * @return a new IOStream.
+     * @return A new IOStream.
      */
     static <T> IOStream<T> adapt(final Stream<T> stream) {
         return IOStreamAdapter.adapt(stream);
@@ -67,7 +67,7 @@ public interface IOStream<T> extends IOBaseStream<T, IOStream<T>, Stream<T>> {
      * This class' version of {@link Stream#empty()}.
      *
      * @param <T> The type of the stream elements.
-     * @return an empty sequential {@code IOStreamImpl}.
+     * @return An empty sequential {@code IOStreamImpl}.
      * @see Stream#empty()
      */
     static <T> IOStream<T> empty() {
@@ -80,7 +80,7 @@ public interface IOStream<T> extends IOBaseStream<T, IOStream<T>, Stream<T>> {
      * @param <T> The type of stream elements.
      * @param seed the initial element.
      * @param f a function to be applied to the previous element to produce a new element.
-     * @return a new sequential {@code IOStream}.
+     * @return A new sequential {@code IOStream}.
      */
     static <T> IOStream<T> iterate(final T seed, final IOUnaryOperator<T> f) {
         Objects.requireNonNull(f);
@@ -137,7 +137,7 @@ public interface IOStream<T> extends IOBaseStream<T, IOStream<T>, Stream<T>> {
      *
      * @param t the single element.
      * @param <T> The type of stream elements.
-     * @return a singleton sequential stream.
+     * @return A singleton sequential stream.
      */
     static <T> IOStream<T> of(final T t) {
         return adapt(Stream.of(t));

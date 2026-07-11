@@ -74,7 +74,7 @@ public class LastModifiedFileComparator extends AbstractFileComparator implement
      *
      * @param file1 The first file to compare.
      * @param file2 The second file to compare.
-     * @return a negative value if the first file's last modified date/time is less than the second, zero if the last
+     * @return A negative value if the first file's last modified date/time is less than the second, zero if the last
      *         modified date/time are the same and a positive value if the first files last modified date/time is
      *         greater than the second file.
      */

@@ -196,7 +196,7 @@ public enum RandomAccessFileMode {
      * </p>
      *
      * @param file the file object.
-     * @return a random access file.
+     * @return A random access file.
      * @throws FileNotFoundException See {@link IORandomAccessFile#IORandomAccessFile(File, String)}.
      */
     public RandomAccessFile create(final File file) throws FileNotFoundException {
@@ -207,7 +207,7 @@ public enum RandomAccessFileMode {
      * Constructs a random access file to read from, and optionally to write to, the file specified by the {@link File} argument.
      *
      * @param file the file object.
-     * @return a random access file.
+     * @return A random access file.
      * @throws FileNotFoundException See {@link IORandomAccessFile#IORandomAccessFile(File, String)}.
      */
     public RandomAccessFile create(final Path file) throws FileNotFoundException {
@@ -221,7 +221,7 @@ public enum RandomAccessFileMode {
      * </p>
      *
      * @param name the file object.
-     * @return a random access file.
+     * @return A random access file.
      * @throws FileNotFoundException See {@link IORandomAccessFile#IORandomAccessFile(File, String)}.
      */
     public RandomAccessFile create(final String name) throws FileNotFoundException {
@@ -283,7 +283,7 @@ public enum RandomAccessFileMode {
      * Constructs a random access file to read from, and optionally to write to, the file specified by the {@link File} argument.
      *
      * @param name the system-dependent file name.
-     * @return a random access file.
+     * @return A random access file.
      * @throws FileNotFoundException See {@link IORandomAccessFile#IORandomAccessFile(File, String)}.
      * @since 2.18.0
      */

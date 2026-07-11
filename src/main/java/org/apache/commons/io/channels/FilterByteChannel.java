@@ -94,7 +94,7 @@ public class FilterByteChannel<C extends ByteChannel> extends FilterChannel<C> i
     /**
      * Creates a new {@link Builder}.
      *
-     * @return a new {@link Builder}.
+     * @return A new {@link Builder}.
      */
     public static Builder forByteChannel() {
         return new Builder();

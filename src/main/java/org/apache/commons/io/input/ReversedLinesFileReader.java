@@ -109,7 +109,7 @@ public class ReversedLinesFileReader implements Closeable, IOIterable<String> {
          * <li>{@link #getCharset()}</li>
          * </ul>
          *
-         * @return a new instance.
+         * @return A new instance.
          * @throws IllegalStateException         if the {@code origin} is {@code null}.
          * @throws UnsupportedOperationException if the origin cannot be converted to a {@link Path}.
          * @throws IOException                   if an I/O error occurs converting to a {@link Path} using {@link #getPath()}.
@@ -308,7 +308,7 @@ public class ReversedLinesFileReader implements Closeable, IOIterable<String> {
     /**
      * Constructs a new {@link Builder}.
      *
-     * @return a new {@link Builder}.
+     * @return A new {@link Builder}.
      * @since 2.12.0
      */
     public static Builder builder() {

@@ -81,7 +81,7 @@ public class RegexFileFilter extends AbstractFileFilter implements Serializable 
      *
      * @param pattern the source pattern.
      * @param flags the compilation flags.
-     * @return a new Pattern.
+     * @return A new Pattern.
      */
     private static Pattern compile(final String pattern, final int flags) {
         Objects.requireNonNull(pattern, "pattern");

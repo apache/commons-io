@@ -100,7 +100,7 @@ public class NameFileComparator extends AbstractFileComparator implements Serial
      *
      * @param file1 The first file to compare.
      * @param file2 The second file to compare.
-     * @return a negative value if the first file's name
+     * @return A negative value if the first file's name
      * is less than the second, zero if the names are the
      * same and a positive value if the first files name
      * is greater than the second file.

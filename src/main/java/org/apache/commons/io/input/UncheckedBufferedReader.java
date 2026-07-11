@@ -91,7 +91,7 @@ public final class UncheckedBufferedReader extends BufferedReader {
          * <li>{@link #getBufferSize()}</li>
          * </ul>
          *
-         * @return a new instance.
+         * @return A new instance.
          * @throws UnsupportedOperationException if the origin cannot provide a {@link Reader}.
          * @throws IllegalStateException if the {@code origin} is {@code null}.
          * @see #getReader()
@@ -109,7 +109,7 @@ public final class UncheckedBufferedReader extends BufferedReader {
     /**
      * Constructs a new {@link Builder}.
      *
-     * @return a new {@link Builder}.
+     * @return A new {@link Builder}.
      */
     public static Builder builder() {
         return new Builder();

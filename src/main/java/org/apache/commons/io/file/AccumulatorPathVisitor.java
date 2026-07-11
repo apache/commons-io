@@ -84,7 +84,7 @@ public class AccumulatorPathVisitor extends CountingPathVisitor {
     /**
      * Builds instances of {@link AccumulatorPathVisitor}.
      *
-     * @return a new builder.
+     * @return A new builder.
      * @since 2.19.0
      */
     public static Builder builder() {
@@ -94,7 +94,7 @@ public class AccumulatorPathVisitor extends CountingPathVisitor {
     /**
      * Constructs a new instance configured with a BigInteger {@link PathCounters}.
      *
-     * @return a new instance configured with a BigInteger {@link PathCounters}.
+     * @return A new instance configured with a BigInteger {@link PathCounters}.
      * @see #builder()
      * @see Builder
      */
@@ -107,7 +107,7 @@ public class AccumulatorPathVisitor extends CountingPathVisitor {
      *
      * @param fileFilter Filters files to accumulate and count.
      * @param dirFilter Filters directories to accumulate and count.
-     * @return a new instance configured with a long {@link PathCounters}.
+     * @return A new instance configured with a long {@link PathCounters}.
      * @see #builder()
      * @see Builder
      * @since 2.9.0
@@ -119,7 +119,7 @@ public class AccumulatorPathVisitor extends CountingPathVisitor {
     /**
      * Constructs a new instance configured with a long {@link PathCounters}.
      *
-     * @return a new instance configured with a long {@link PathCounters}.
+     * @return A new instance configured with a long {@link PathCounters}.
      * @see #builder()
      * @see Builder
      */
@@ -132,7 +132,7 @@ public class AccumulatorPathVisitor extends CountingPathVisitor {
      *
      * @param fileFilter Filters files to accumulate and count.
      * @param dirFilter Filters directories to accumulate and count.
-     * @return a new instance configured with a long {@link PathCounters}.
+     * @return A new instance configured with a long {@link PathCounters}.
      * @see #builder()
      * @see Builder
      * @since 2.9.0
@@ -223,7 +223,7 @@ public class AccumulatorPathVisitor extends CountingPathVisitor {
     /**
      * Gets a copy of the list of visited directories.
      *
-     * @return a copy of the list of visited directories.
+     * @return A copy of the list of visited directories.
      */
     public List<Path> getDirList() {
         return new ArrayList<>(dirList);
@@ -232,7 +232,7 @@ public class AccumulatorPathVisitor extends CountingPathVisitor {
     /**
      * Gets a copy of the list of visited files.
      *
-     * @return a copy of the list of visited files.
+     * @return A copy of the list of visited files.
      */
     public List<Path> getFileList() {
         return new ArrayList<>(fileList);

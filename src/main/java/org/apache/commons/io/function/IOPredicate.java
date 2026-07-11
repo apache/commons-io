@@ -35,7 +35,7 @@ public interface IOPredicate<T> {
      * Always false.
      *
      * @param <T> The type of the input to the predicate.
-     * @return a constant predicate that tests always false.
+     * @return A constant predicate that tests always false.
      */
     @SuppressWarnings("unchecked")
     static <T> IOPredicate<T> alwaysFalse() {
@@ -46,7 +46,7 @@ public interface IOPredicate<T> {
      * Always true.
      *
      * @param <T> The type of the input to the predicate.
-     * @return a constant predicate that tests always true.
+     * @return A constant predicate that tests always true.
      */
     @SuppressWarnings("unchecked")
     static <T> IOPredicate<T> alwaysTrue() {
@@ -58,7 +58,7 @@ public interface IOPredicate<T> {
      *
      * @param <T> The type of arguments to the predicate.
      * @param target the object to compare for equality, may be {@code null}
-     * @return a predicate that tests if two arguments are equal using {@link Objects#equals(Object, Object)}
+     * @return A predicate that tests if two arguments are equal using {@link Objects#equals(Object, Object)}
      */
     static <T> IOPredicate<T> isEqual(final Object target) {
         return target == null ? Objects::isNull : object -> target.equals(object);
@@ -75,7 +75,7 @@ public interface IOPredicate<T> {
      * </p>
      *
      * @param other a predicate that will be logically-ANDed with this predicate.
-     * @return a composed predicate that represents the short-circuiting logical AND of this predicate and the {@code other}
+     * @return A composed predicate that represents the short-circuiting logical AND of this predicate and the {@code other}
      *         predicate.
      * @throws NullPointerException if other is null.
      */
@@ -88,7 +88,7 @@ public interface IOPredicate<T> {
      * Creates a {@link Predicate} for this instance that throws {@link UncheckedIOException} instead of
      * {@link IOException}.
      *
-     * @return an UncheckedIOException Predicate.
+     * @return An UncheckedIOException Predicate.
      */
     default Predicate<T> asPredicate() {
         return t -> Uncheck.test(this, t);
@@ -97,7 +97,7 @@ public interface IOPredicate<T> {
     /**
      * Creates a predicate that represents the logical negation of this predicate.
      *
-     * @return a predicate that represents the logical negation of this predicate.
+     * @return A predicate that represents the logical negation of this predicate.
      */
     default IOPredicate<T> negate() {
         return t -> !test(t);
@@ -114,7 +114,7 @@ public interface IOPredicate<T> {
      * </p>
      *
      * @param other a predicate that will be logically-ORed with this predicate.
-     * @return a composed predicate that represents the short-circuiting logical OR of this predicate and the {@code other}
+     * @return A composed predicate that represents the short-circuiting logical OR of this predicate and the {@code other}
      *         predicate.
      * @throws NullPointerException if other is null.
      */

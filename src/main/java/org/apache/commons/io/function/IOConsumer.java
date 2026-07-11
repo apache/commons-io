@@ -140,7 +140,7 @@ public interface IOConsumer<T> {
      * Returns the constant no-op consumer.
      *
      * @param <T> Type consumer type.
-     * @return a constant no-op consumer.
+     * @return A constant no-op consumer.
      * @since 2.9.0
      */
     @SuppressWarnings("unchecked")
@@ -162,7 +162,7 @@ public interface IOConsumer<T> {
      * If performing this operation throws an exception, the {@code after} operation will not be performed.
      *
      * @param after the operation to perform after this operation.
-     * @return a composed {@link Consumer} that performs in sequence this operation followed by the {@code after} operation.
+     * @return A composed {@link Consumer} that performs in sequence this operation followed by the {@code after} operation.
      * @throws NullPointerException if {@code after} is null.
      */
     default IOConsumer<T> andThen(final IOConsumer<? super T> after) {
@@ -176,7 +176,7 @@ public interface IOConsumer<T> {
     /**
      * Creates a {@link Consumer} for this instance that throws {@link UncheckedIOException} instead of {@link IOException}.
      *
-     * @return an UncheckedIOException Consumer.
+     * @return An UncheckedIOException Consumer.
      * @since 2.12.0
      */
     default Consumer<T> asConsumer() {

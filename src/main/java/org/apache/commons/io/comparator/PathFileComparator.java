@@ -100,7 +100,7 @@ public class PathFileComparator extends AbstractFileComparator implements Serial
      *
      * @param file1 The first file to compare.
      * @param file2 The second file to compare.
-     * @return a negative value if the first file's path
+     * @return A negative value if the first file's path
      * is less than the second, zero if the paths are the
      * same and a positive value if the first files path
      * is greater than the second file.

@@ -109,7 +109,7 @@ public class SizeFileComparator extends AbstractFileComparator implements Serial
      *
      * @param file1 The first file to compare.
      * @param file2 The second file to compare.
-     * @return a negative value if the first file's length
+     * @return A negative value if the first file's length
      * is less than the second, zero if the lengths are the
      * same and a positive value if the first files length
      * is greater than the second file.

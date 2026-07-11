@@ -131,7 +131,7 @@ public class ReaderInputStream extends AbstractInputStream {
          * <li>{@link CharsetEncoder}</li>
          * </ul>
          *
-         * @return a new instance.
+         * @return A new instance.
          * @throws UnsupportedOperationException if the origin cannot provide a {@link Reader}.
          * @throws IllegalStateException         if the {@code origin} is {@code null}.
          * @throws IOException                   if an I/O error occurs converting to a {@link Reader} using {@link #getReader()}.
@@ -173,7 +173,7 @@ public class ReaderInputStream extends AbstractInputStream {
     /**
      * Constructs a new {@link Builder}.
      *
-     * @return a new {@link Builder}.
+     * @return A new {@link Builder}.
      * @since 2.12.0
      */
     public static Builder builder() {

@@ -37,7 +37,7 @@ public interface IOBaseStream<T, S extends IOBaseStream<T, S, B>, B extends Base
      * Constructs a {@link BaseStream} for this instance that throws {@link UncheckedIOException} instead of
      * {@link IOException}.
      *
-     * @return an {@link UncheckedIOException} {@link BaseStream}.
+     * @return An {@link UncheckedIOException} {@link BaseStream}.
      */
     @SuppressWarnings("unchecked")
     default BaseStream<T, B> asBaseStream() {

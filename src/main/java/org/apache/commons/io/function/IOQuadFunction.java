@@ -47,7 +47,7 @@ public interface IOQuadFunction<T, U, V, W, R> {
      *
      * @param <X> The type of output of the {@code after} function, and of the composed function.
      * @param after the function to apply after this function is applied.
-     * @return a composed function that first applies this function and then applies the {@code after} function.
+     * @return A composed function that first applies this function and then applies the {@code after} function.
      * @throws NullPointerException if after is null.
      */
     default <X> IOQuadFunction<T, U, V, W, X> andThen(final IOFunction<? super R, ? extends X> after) {

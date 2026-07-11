@@ -365,7 +365,7 @@ public final class Uncheck {
      * Constructs a new {@link UncheckedIOException} for the given exception.
      *
      * @param e The exception to wrap.
-     * @return a new {@link UncheckedIOException}.
+     * @return A new {@link UncheckedIOException}.
      */
     private static UncheckedIOException wrap(final IOException e) {
         return new UncheckedIOException(e);
@@ -376,7 +376,7 @@ public final class Uncheck {
      *
      * @param e The exception to wrap.
      * @param message The UncheckedIOException message if an I/O error occurs.
-     * @return a new {@link UncheckedIOException}.
+     * @return A new {@link UncheckedIOException}.
      */
     private static UncheckedIOException wrap(final IOException e, final Supplier<String> message) {
         return new UncheckedIOException(message.get(), e);

@@ -82,7 +82,7 @@ public final class UnsynchronizedByteArrayOutputStream extends AbstractByteArray
          * <li>{@link #getBufferSize()}</li>
          * </ul>
          *
-         * @return a new instance.
+         * @return A new instance.
          * @see AbstractOrigin#getByteArray()
          * @see #getUnchecked()
          */
@@ -96,7 +96,7 @@ public final class UnsynchronizedByteArrayOutputStream extends AbstractByteArray
     /**
      * Constructs a new {@link Builder}.
      *
-     * @return a new {@link Builder}.
+     * @return A new {@link Builder}.
      */
     public static Builder builder() {
         return new Builder();

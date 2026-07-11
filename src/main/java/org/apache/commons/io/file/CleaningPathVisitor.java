@@ -38,7 +38,7 @@ public class CleaningPathVisitor extends CountingPathVisitor {
     /**
      * Constructs a new instance configured with a BigInteger {@link PathCounters}.
      *
-     * @return a new instance configured with a BigInteger {@link PathCounters}.
+     * @return A new instance configured with a BigInteger {@link PathCounters}.
      */
     public static CountingPathVisitor withBigIntegerCounters() {
         return new CleaningPathVisitor(Counters.bigIntegerPathCounters());
@@ -47,7 +47,7 @@ public class CleaningPathVisitor extends CountingPathVisitor {
     /**
      * Constructs a new instance configured with a long {@link PathCounters}.
      *
-     * @return a new instance configured with a long {@link PathCounters}.
+     * @return A new instance configured with a long {@link PathCounters}.
      */
     public static CountingPathVisitor withLongCounters() {
         return new CleaningPathVisitor(Counters.longPathCounters());

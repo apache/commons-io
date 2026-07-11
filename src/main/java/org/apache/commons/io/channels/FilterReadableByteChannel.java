@@ -94,7 +94,7 @@ public class FilterReadableByteChannel<C extends ReadableByteChannel> extends Fi
     /**
      * Creates a new {@link Builder}.
      *
-     * @return a new {@link Builder}.
+     * @return A new {@link Builder}.
      */
     public static Builder forReadableByteChannel() {
         return new Builder();

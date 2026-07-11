@@ -93,7 +93,7 @@ public class FilterSeekableByteChannel<C extends SeekableByteChannel> extends Fi
     /**
      * Creates a new {@link Builder}.
      *
-     * @return a new {@link Builder}.
+     * @return A new {@link Builder}.
      */
     public static Builder forSeekableByteChannel() {
         return new Builder();

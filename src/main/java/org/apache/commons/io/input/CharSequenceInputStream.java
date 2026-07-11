@@ -105,7 +105,7 @@ public class CharSequenceInputStream extends InputStream {
          * <li>{@link CharsetEncoder}</li>
          * </ul>
          *
-         * @return a new instance.
+         * @return A new instance.
          * @throws IllegalArgumentException if the buffer is not large enough to hold a complete character.
          * @see #getUnchecked()
          */
@@ -145,7 +145,7 @@ public class CharSequenceInputStream extends InputStream {
     /**
      * Constructs a new {@link Builder}.
      *
-     * @return a new {@link Builder}.
+     * @return A new {@link Builder}.
      * @since 2.12.0
      */
     public static Builder builder() {

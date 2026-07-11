@@ -95,7 +95,7 @@ public final class MessageDigestInputStream extends ObservableInputStream {
          * <li>{@link MessageDigest}</li>
          * </ul>
          *
-         * @return a new instance.
+         * @return A new instance.
          * @throws NullPointerException if messageDigest is null.
          * @throws IllegalStateException         if the {@code origin} is {@code null}.
          * @throws UnsupportedOperationException if the origin cannot be converted to an {@link InputStream}.
@@ -173,7 +173,7 @@ public final class MessageDigestInputStream extends ObservableInputStream {
     /**
      * Constructs a new {@link Builder}.
      *
-     * @return a new {@link Builder}.
+     * @return A new {@link Builder}.
      */
     public static Builder builder() {
         return new Builder();

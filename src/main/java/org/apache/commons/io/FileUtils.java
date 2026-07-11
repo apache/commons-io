@@ -231,7 +231,7 @@ public class FileUtils {
      * </p>
      *
      * @param size the number of bytes.
-     * @return a human-readable display value (includes units - QB, RB, YB, ZB, EB, PB, TB, GB, MB, KB or bytes).
+     * @return A human-readable display value (includes units - QB, RB, YB, ZB, EB, PB, TB, GB, MB, KB or bytes).
      * @throws NullPointerException if the given {@link BigInteger} is {@code null}.
      * @see <a href="https://issues.apache.org/jira/browse/IO-226">IO-226 - should the rounding be changed?</a>
      * @since 2.4
@@ -277,7 +277,7 @@ public class FileUtils {
      * </p>
      *
      * @param size the number of bytes.
-     * @return a human-readable display value (includes units - EB, PB, TB, GB, MB, KB or bytes).
+     * @return A human-readable display value (includes units - EB, PB, TB, GB, MB, KB or bytes).
      * @see <a href="https://issues.apache.org/jira/browse/IO-226">IO-226 - should the rounding be changed?</a>
      */
     // See https://issues.apache.org/jira/browse/IO-226 - should the rounding be changed?
@@ -296,7 +296,7 @@ public class FileUtils {
      * </p>
      *
      * @param size the number of bytes.
-     * @return a human-readable display value (includes units - EB, PB, TB, GB, MB, KB or bytes).
+     * @return A human-readable display value (includes units - EB, PB, TB, GB, MB, KB or bytes).
      * @see <a href="https://issues.apache.org/jira/browse/IO-226">IO-226 - should the rounding be changed?</a>
      * @since 2.12.0
      */
@@ -510,7 +510,7 @@ public class FileUtils {
      * File.listFiles() and FileUtils.listFiles().
      *
      * @param files a Collection containing {@link File} instances.
-     * @return an array of {@link File}
+     * @return An array of {@link File}
      */
     public static File[] convertFileCollectionToFileArray(final Collection<File> files) {
         return files.toArray(EMPTY_FILE_ARRAY);
@@ -2107,7 +2107,7 @@ public class FileUtils {
      * @param dirFilter  optional filter to apply when finding subdirectories.
      *                   If this parameter is {@code null}, subdirectories will not be included in the
      *                   search. Use TrueFileFilter.INSTANCE to match all directories.
-     * @return an iterator of {@link File} for the matching files.
+     * @return An iterator of {@link File} for the matching files.
      * @see org.apache.commons.io.filefilter.FileFilterUtils
      * @see org.apache.commons.io.filefilter.NameFileFilter
      * @since 1.2
@@ -2127,7 +2127,7 @@ public class FileUtils {
      * @param extensions an array of extensions, for example, <code>{"java", "xml"}</code>. If this
      *                   parameter is {@code null}, all files are returned.
      * @param recursive  if true all subdirectories are searched as well.
-     * @return an iterator of {@link File} with the matching files.
+     * @return An iterator of {@link File} with the matching files.
      * @since 1.2
      */
     public static Iterator<File> iterateFiles(final File directory, final String[] extensions, final boolean recursive) {
@@ -2152,7 +2152,7 @@ public class FileUtils {
      * @param dirFilter  optional filter to apply when finding subdirectories.
      *                   If this parameter is {@code null}, subdirectories will not be included in the
      *                   search. Use TrueFileFilter.INSTANCE to match all directories.
-     * @return an iterator of {@link File} for the matching files.
+     * @return An iterator of {@link File} for the matching files.
      * @see org.apache.commons.io.filefilter.FileFilterUtils
      * @see org.apache.commons.io.filefilter.NameFileFilter
      * @since 2.2
@@ -2234,7 +2234,7 @@ public class FileUtils {
      * Returns an Iterator for the lines in a {@link File} using the default encoding for the VM.
      *
      * @param file the file to open for input, must not be {@code null}.
-     * @return an Iterator of the lines in the file, never {@code null}.
+     * @return An Iterator of the lines in the file, never {@code null}.
      * @throws NullPointerException if file is {@code null}.
      * @throws FileNotFoundException if the file does not exist, is a directory rather than a regular file, or for some
      *         other reason cannot be opened for reading.
@@ -2275,7 +2275,7 @@ public class FileUtils {
      *
      * @param file     the file to open for input, must not be {@code null}.
      * @param charsetName the name of the requested charset, {@code null} means platform default.
-     * @return a LineIterator for lines in the file, never {@code null}; MUST be closed by the caller.
+     * @return A LineIterator for lines in the file, never {@code null}; MUST be closed by the caller.
      * @throws NullPointerException if file is {@code null}.
      * @throws FileNotFoundException if the file does not exist, is a directory rather than a regular file, or for some
      *         other reason cannot be opened for reading.
@@ -2362,7 +2362,7 @@ public class FileUtils {
      * @param dirFilter  optional filter to apply when finding subdirectories.
      *                   If this parameter is {@code null}, subdirectories will not be included in the
      *                   search. Use {@link TrueFileFilter#INSTANCE} to match all directories.
-     * @return a collection of {@link File} with the matching files.
+     * @return A collection of {@link File} with the matching files.
      * @see org.apache.commons.io.filefilter.FileFilterUtils
      * @see org.apache.commons.io.filefilter.NameFileFilter
      */
@@ -2409,7 +2409,7 @@ public class FileUtils {
      * @param extensions an array of extensions, for example, <code>{"java", "xml"}</code>. If this
      *                   parameter is {@code null}, all files are returned.
      * @param recursive  if true all subdirectories are searched as well.
-     * @return a collection of {@link File} with the matching files.
+     * @return A collection of {@link File} with the matching files.
      */
     public static Collection<File> listFiles(final File directory, final String[] extensions, final boolean recursive) {
         return listFiles(directory, new ArrayList<>(), recursive, extensions != null ? toSuffixFileFilter(extensions) : TrueFileFilter.INSTANCE);
@@ -2428,7 +2428,7 @@ public class FileUtils {
      * @param dirFilter  optional filter to apply when finding subdirectories.
      *                   If this parameter is {@code null}, subdirectories will not be included in the
      *                   search. Use TrueFileFilter.INSTANCE to match all directories.
-     * @return a collection of {@link File} with the matching files.
+     * @return A collection of {@link File} with the matching files.
      * @see org.apache.commons.io.FileUtils#listFiles
      * @see org.apache.commons.io.filefilter.FileFilterUtils
      * @see org.apache.commons.io.filefilter.NameFileFilter
@@ -2643,7 +2643,7 @@ public class FileUtils {
      *
      * @param append Whether or not to append.
      * @param file the File.
-     * @return a new OutputStream.
+     * @return A new OutputStream.
      * @throws IOException if an I/O error occurs.
      * @see PathUtils#newOutputStream(Path, boolean)
      * @since 2.12.0
@@ -2664,7 +2664,7 @@ public class FileUtils {
      * </p>
      *
      * @param file the file to open for input, must not be {@code null}.
-     * @return a new {@link FileInputStream} for the specified file.
+     * @return A new {@link FileInputStream} for the specified file.
      * @throws NullPointerException if file is {@code null}.
      * @throws FileNotFoundException if the file does not exist, is a directory rather than a regular file, or for some
      *         other reason cannot be opened for reading.
@@ -2692,7 +2692,7 @@ public class FileUtils {
      * </p>
      *
      * @param file the file to open for output, must not be {@code null}.
-     * @return a new {@link FileOutputStream} for the specified file.
+     * @return A new {@link FileOutputStream} for the specified file.
      * @throws NullPointerException if the file object is {@code null}.
      * @throws IllegalArgumentException if the file object is a directory.
      * @throws IllegalArgumentException if the file is not writable.
@@ -2721,7 +2721,7 @@ public class FileUtils {
      * @param file   the file to open for output, must not be {@code null}.
      * @param append if {@code true}, then bytes will be added to the
      *               end of the file rather than overwriting.
-     * @return a new {@link FileOutputStream} for the specified file.
+     * @return A new {@link FileOutputStream} for the specified file.
      * @throws NullPointerException if the file object is {@code null}.
      * @throws IllegalArgumentException if the file object is a directory.
      * @throws IOException if the directories could not be created, or the file is not writable.
@@ -3037,7 +3037,7 @@ public class FileUtils {
      * @param directory  The directory to search.
      * @param recursive  if true all subdirectories are searched as well.
      * @param extensions an array of extensions, for example, <code>{"java", "xml"}</code>. If this parameter is {@code null}, all files are returned.
-     * @return a Stream of {@link File} for matching files.
+     * @return A Stream of {@link File} for matching files.
      * @throws IOException if an I/O error is thrown when accessing the starting file.
      * @since 2.9.0
      */
@@ -3079,7 +3079,7 @@ public class FileUtils {
      * </p>
      *
      * @param urls the file URLs to convert, {@code null} returns empty array.
-     * @return a non-{@code null} array of Files matching the input, with a {@code null} item if there was a {@code null} at that index in the input array.
+     * @return A non-{@code null} array of Files matching the input, with a {@code null} item if there was a {@code null} at that index in the input array.
      * @throws IllegalArgumentException if any file is not a URL file.
      * @throws IllegalArgumentException if any file is incorrectly encoded.
      * @since 1.1
@@ -3108,7 +3108,7 @@ public class FileUtils {
      * </p>
      *
      * @param stream The stream to consume.
-     * @return a new List.
+     * @return A new List.
      */
     private static List<File> toList(final Stream<File> stream) {
         return stream.collect(Collectors.toList());
@@ -3128,7 +3128,7 @@ public class FileUtils {
      * Converts an array of file extensions to suffixes.
      *
      * @param extensions an array of extensions, for example: {@code ["java", "xml"]}.
-     * @return an array of suffixes, for example: {@code [".java", ".xml"]}.
+     * @return An array of suffixes, for example: {@code [".java", ".xml"]}.
      * @throws NullPointerException if the parameter is null.
      */
     private static String[] toSuffixes(final String... extensions) {
@@ -3159,7 +3159,7 @@ public class FileUtils {
      * </p>
      *
      * @param files the files to convert, must not be {@code null}.
-     * @return an array of URLs matching the input.
+     * @return An array of URLs matching the input.
      * @throws IOException          if a file cannot be converted.
      * @throws NullPointerException if any argument is null.
      */

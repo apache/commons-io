@@ -59,7 +59,7 @@ abstract class AbstractSeekableByteChannelTest {
     /**
      * Creates the SeekableByteChannel to test.
      *
-     * @return a new SeekableByteChannel.
+     * @return A new SeekableByteChannel.
      * @throws IOException Thrown when the SeekableByteChannel cannot be created.
      */
     protected abstract SeekableByteChannel createChannel() throws IOException;

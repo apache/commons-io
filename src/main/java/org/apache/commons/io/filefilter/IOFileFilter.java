@@ -80,7 +80,7 @@ public interface IOFileFilter extends FileFilter, FilenameFilter, PathFilter, Pa
      * Constructs a new "and" filter with this filter.
      *
      * @param fileFilter the filter to "and".
-     * @return a new filter.
+     * @return A new filter.
      * @since 2.9.0
      */
     default IOFileFilter and(final IOFileFilter fileFilter) {
@@ -102,7 +102,7 @@ public interface IOFileFilter extends FileFilter, FilenameFilter, PathFilter, Pa
     /**
      * Constructs a new "not" filter with this filter.
      *
-     * @return a new filter.
+     * @return A new filter.
      * @since 2.9.0
      */
     default IOFileFilter negate() {
@@ -113,7 +113,7 @@ public interface IOFileFilter extends FileFilter, FilenameFilter, PathFilter, Pa
      * Constructs a new "or" filter with this filter.
      *
      * @param fileFilter the filter to "or".
-     * @return a new filter.
+     * @return A new filter.
      * @since 2.9.0
      */
     default IOFileFilter or(final IOFileFilter fileFilter) {

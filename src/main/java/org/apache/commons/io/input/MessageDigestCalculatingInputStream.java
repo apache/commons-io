@@ -96,7 +96,7 @@ public class MessageDigestCalculatingInputStream extends ObservableInputStream {
          * <li>{@link MessageDigest}</li>
          * </ul>
          *
-         * @return a new instance.
+         * @return A new instance.
          * @throws NullPointerException if messageDigest is null.
          * @throws IllegalStateException         if the {@code origin} is {@code null}.
          * @throws UnsupportedOperationException if the origin cannot be converted to an {@link InputStream}.
@@ -177,7 +177,7 @@ public class MessageDigestCalculatingInputStream extends ObservableInputStream {
     /**
      * Constructs a new {@link Builder}.
      *
-     * @return a new {@link Builder}.
+     * @return A new {@link Builder}.
      * @since 2.12.0
      */
     public static Builder builder() {
@@ -190,7 +190,7 @@ public class MessageDigestCalculatingInputStream extends ObservableInputStream {
      * The MD5 cryptographic algorithm is weak and should not be used.
      * </p>
      *
-     * @return a Message Digest object that implements the default algorithm.
+     * @return A Message Digest object that implements the default algorithm.
      * @throws NoSuchAlgorithmException if no Provider supports a MessageDigestSpi implementation.
      * @see Provider
      */

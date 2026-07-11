@@ -106,7 +106,7 @@ public class DeferredFileOutputStream extends ThresholdingOutputStream {
          * <li>directory</li>
          * </ul>
          *
-         * @return a new instance.
+         * @return A new instance.
          * @see #getUnchecked()
          */
         @Override
@@ -216,7 +216,7 @@ public class DeferredFileOutputStream extends ThresholdingOutputStream {
     /**
      * Constructs a new {@link Builder}.
      *
-     * @return a new {@link Builder}.
+     * @return A new {@link Builder}.
      * @since 2.12.0
      */
     public static Builder builder() {

@@ -46,7 +46,7 @@ public interface IOSpliterator<T> {
      * Constructs a {@link Spliterator} for this instance that throws {@link UncheckedIOException} instead of
      * {@link IOException}.
      *
-     * @return an {@link UncheckedIOException} {@link Spliterator}.
+     * @return An {@link UncheckedIOException} {@link Spliterator}.
      */
     default Spliterator<T> asSpliterator() {
         return new UncheckedIOSpliterator<>(this);
@@ -55,7 +55,7 @@ public interface IOSpliterator<T> {
     /**
      * Like {@link Spliterator#characteristics()}.
      *
-     * @return a representation of characteristics.
+     * @return A representation of characteristics.
      */
     default int characteristics() {
         return unwrap().characteristics();
@@ -85,7 +85,7 @@ public interface IOSpliterator<T> {
     /**
      * Like {@link Spliterator#getComparator()}.
      *
-     * @return a Comparator, or {@code null} if the elements are sorted in the natural order.
+     * @return A Comparator, or {@code null} if the elements are sorted in the natural order.
      * @throws IllegalStateException if the spliterator does not report a characteristic of {@code SORTED}.
      */
     @SuppressWarnings("unchecked")
@@ -126,7 +126,7 @@ public interface IOSpliterator<T> {
     /**
      * Like {@link Spliterator#trySplit()}.
      *
-     * @return a {@code Spliterator} covering some portion of the elements, or {@code null} if this spliterator cannot be
+     * @return A {@code Spliterator} covering some portion of the elements, or {@code null} if this spliterator cannot be
      *         split.
      */
     default IOSpliterator<T> trySplit() {

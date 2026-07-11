@@ -97,7 +97,7 @@ public class DelegateFileFilter extends AbstractFileFilter implements Serializab
     /**
      * Provide a String representation of this file filter.
      *
-     * @return a String representation.
+     * @return A String representation.
      */
     @Override
     public String toString() {

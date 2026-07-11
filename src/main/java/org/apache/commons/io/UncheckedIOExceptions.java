@@ -35,7 +35,7 @@ final class UncheckedIOExceptions {
      * </p>
      *
      * @param message the detail message.
-     * @return a new {@link UncheckedIOException}.
+     * @return A new {@link UncheckedIOException}.
      */
     public static UncheckedIOException create(final Object message) {
         final String string = Objects.toString(message);
@@ -50,7 +50,7 @@ final class UncheckedIOExceptions {
      *
      * @param e cause the {@link IOException}.
      * @param message the detail message.
-     * @return a new {@link UncheckedIOException}.
+     * @return A new {@link UncheckedIOException}.
      */
     public static UncheckedIOException wrap(final IOException e, final Object message) {
         return new UncheckedIOException(Objects.toString(message), e);

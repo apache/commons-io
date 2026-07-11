@@ -71,7 +71,7 @@ public class RandomAccessFiles {
      * @param input    The source RandomAccessFile.
      * @param position The offset position, measured in bytes from the beginning of the file, at which to set the file pointer.
      * @param length   How many bytes to read.
-     * @return a new byte array.
+     * @return A new byte array.
      * @throws IOException If the first byte cannot be read for any reason other than end of file, or if the random access file has been closed, or if some
      *                     other I/O error occurs.
      */

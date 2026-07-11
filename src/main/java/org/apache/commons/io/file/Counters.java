@@ -399,7 +399,7 @@ public class Counters {
     /**
      * Returns a new BigInteger Counter.
      *
-     * @return a new BigInteger Counter.
+     * @return A new BigInteger Counter.
      */
     public static Counter bigIntegerCounter() {
         return new BigIntegerCounter();
@@ -408,7 +408,7 @@ public class Counters {
     /**
      * Returns a new BigInteger PathCounters.
      *
-     * @return a new BigInteger PathCounters.
+     * @return A new BigInteger PathCounters.
      */
     public static PathCounters bigIntegerPathCounters() {
         return new BigIntegerPathCounters();
@@ -417,7 +417,7 @@ public class Counters {
     /**
      * Returns a new long Counter.
      *
-     * @return a new long Counter.
+     * @return A new long Counter.
      */
     public static Counter longCounter() {
         return new LongCounter();
@@ -426,7 +426,7 @@ public class Counters {
     /**
      * Returns a new BigInteger PathCounters.
      *
-     * @return a new BigInteger PathCounters.
+     * @return A new BigInteger PathCounters.
      */
     public static PathCounters longPathCounters() {
         return new LongPathCounters();

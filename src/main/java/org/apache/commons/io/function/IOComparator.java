@@ -35,7 +35,7 @@ public interface IOComparator<T> {
      * Creates a {@link Comparator} for this instance that throws {@link UncheckedIOException} instead of
      * {@link IOException}.
      *
-     * @return an UncheckedIOException BiFunction.
+     * @return An UncheckedIOException BiFunction.
      */
     default Comparator<T> asComparator() {
         return (t, u) -> Uncheck.compare(this, t, u);
@@ -46,7 +46,7 @@ public interface IOComparator<T> {
      *
      * @param o1 the first object to be compared.
      * @param o2 the second object to be compared.
-     * @return a negative integer, zero, or a positive integer as the first argument is less than, equal to, or greater than
+     * @return A negative integer, zero, or a positive integer as the first argument is less than, equal to, or greater than
      *         the second.
      * @throws NullPointerException if an argument is null and this comparator does not permit null arguments.
      * @throws ClassCastException if the arguments' types prevent them from being compared by this comparator.

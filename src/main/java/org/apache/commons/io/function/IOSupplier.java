@@ -36,7 +36,7 @@ public interface IOSupplier<T> {
     /**
      * Creates a {@link Supplier} for this instance that throws {@link UncheckedIOException} instead of {@link IOException}.
      *
-     * @return an UncheckedIOException Supplier.
+     * @return An UncheckedIOException Supplier.
      * @since 2.12.0
      */
     default Supplier<T> asSupplier() {
@@ -46,7 +46,7 @@ public interface IOSupplier<T> {
     /**
      * Gets a result.
      *
-     * @return a result.
+     * @return A result.
      * @throws IOException if an I/O error occurs.
      * @see #getUnchecked()
      */
@@ -55,7 +55,7 @@ public interface IOSupplier<T> {
     /**
      * Gets a result.
      *
-     * @return a result.
+     * @return A result.
      * @throws UncheckedIOException if an I/O error occurs.
      * @see #get()
      * @since 2.17.0

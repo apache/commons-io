@@ -112,7 +112,7 @@ public class FileWriterWithEncoding extends ProxyWriter {
          * <li>append</li>
          * </ul>
          *
-         * @return a new instance.
+         * @return A new instance.
          * @throws UnsupportedOperationException if the origin cannot provide a File.
          * @throws IllegalStateException         if the {@code origin} is {@code null}.
          * @throws IOException                   if an I/O error occurs converting to an {@link File} using {@link #getFile()}.
@@ -171,7 +171,7 @@ public class FileWriterWithEncoding extends ProxyWriter {
      * @param file     the file to be accessed.
      * @param encoding the encoding to use - may be Charset, CharsetEncoder or String, null uses the default Charset.
      * @param append   true to append.
-     * @return a new initialized OutputStreamWriter.
+     * @return A new initialized OutputStreamWriter.
      * @throws IOException if an I/O error occurs.
      */
     private static OutputStreamWriter initWriter(final File file, final Object encoding, final boolean append) throws IOException {

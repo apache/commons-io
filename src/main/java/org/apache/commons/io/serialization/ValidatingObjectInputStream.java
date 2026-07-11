@@ -237,7 +237,7 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
          * <li>writeImmediately</li>
          * </ul>
          *
-         * @return a new instance.
+         * @return A new instance.
          * @throws UnsupportedOperationException if the origin cannot provide a {@link InputStream}.
          * @throws IOException                   if an I/O error occurs converting to an {@link InputStream} using {@link #getInputStream()}.
          * @see #getWriter()
@@ -368,7 +368,7 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
      * The reject list takes precedence over the accept list.
      * </p>
      *
-     * @return a new {@link Builder}.
+     * @return A new {@link Builder}.
      * @since 2.18.0
      */
     public static Builder builder() {

@@ -46,7 +46,7 @@ public interface IOTriFunction<T, U, V, R> {
      *
      * @param <W> The type of output of the {@code after} function, and of the composed function.
      * @param after the function to apply after this function is applied.
-     * @return a composed function that first applies this function and then applies the {@code after} function.
+     * @return A composed function that first applies this function and then applies the {@code after} function.
      * @throws NullPointerException if after is null.
      */
     default <W> IOTriFunction<T, U, V, W> andThen(final IOFunction<? super R, ? extends W> after) {

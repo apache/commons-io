@@ -33,7 +33,7 @@ public interface IOLongSupplier {
     /**
      * Creates a {@link Supplier} for this instance that throws {@link UncheckedIOException} instead of {@link IOException}.
      *
-     * @return an UncheckedIOException Supplier.
+     * @return An UncheckedIOException Supplier.
      */
     default LongSupplier asSupplier() {
         return () -> Uncheck.getAsLong(this);
@@ -42,7 +42,7 @@ public interface IOLongSupplier {
     /**
      * Gets a result.
      *
-     * @return a result.
+     * @return A result.
      * @throws IOException if an I/O error occurs.
      */
     long getAsLong() throws IOException;

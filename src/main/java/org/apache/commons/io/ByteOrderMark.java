@@ -183,7 +183,7 @@ public class ByteOrderMark implements Serializable {
     /**
      * Gets a copy of the BOM's bytes.
      *
-     * @return a copy of the BOM's bytes.
+     * @return A copy of the BOM's bytes.
      */
     public byte[] getBytes() {
         final byte[] copy = IOUtils.byteArray(bytes.length);

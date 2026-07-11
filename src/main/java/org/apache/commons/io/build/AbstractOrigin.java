@@ -1017,7 +1017,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
             /**
              * Creates a new builder.
              *
-             * @return a new builder.
+             * @return A new builder.
              */
             public static Builder builder() {
                 return new Builder();
@@ -1338,7 +1338,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
      * Gets a new Reader on the origin, buffered by default.
      *
      * @param charset the charset to use for decoding, null maps to the default Charset.
-     * @return a new Reader on the origin.
+     * @return A new Reader on the origin.
      * @throws IOException if an I/O error occurs opening the file.
      */
     public Reader getReader(final Charset charset) throws IOException {
@@ -1359,7 +1359,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
      *
      * @param charset the charset to use for encoding.
      * @param options options specifying how the file is opened.
-     * @return a new Writer on the origin.
+     * @return A new Writer on the origin.
      * @throws IOException                   if an I/O error occurs opening or creating the file.
      * @throws UnsupportedOperationException if the origin cannot be converted to a Path.
      */

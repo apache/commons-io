@@ -52,7 +52,7 @@ public interface IOIntConsumer {
      * operation will not be performed.
      *
      * @param after the operation to perform after this operation.
-     * @return a composed {@code IOIntConsumer} that performs in sequence this operation followed by the {@code after} operation.
+     * @return A composed {@code IOIntConsumer} that performs in sequence this operation followed by the {@code after} operation.
      * @throws NullPointerException if {@code after} is null.
      */
     default IOIntConsumer andThen(final IOIntConsumer after) {
@@ -66,7 +66,7 @@ public interface IOIntConsumer {
     /**
      * Creates a {@link Consumer} for this instance that throws {@link UncheckedIOException} instead of {@link IOException}.
      *
-     * @return an UncheckedIOException IntConsumer.
+     * @return An UncheckedIOException IntConsumer.
      */
     default Consumer<Integer> asConsumer() {
         return i -> Uncheck.accept(this, i);
@@ -75,7 +75,7 @@ public interface IOIntConsumer {
     /**
      * Creates an {@link IntConsumer} for this instance that throws {@link UncheckedIOException} instead of {@link IOException}.
      *
-     * @return an UncheckedIOException IntConsumer.
+     * @return An UncheckedIOException IntConsumer.
      */
     default IntConsumer asIntConsumer() {
         return i -> Uncheck.accept(this, i);

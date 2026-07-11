@@ -162,7 +162,7 @@ public class CopyDirectoryVisitor extends CountingPathVisitor {
      * </p>
      *
      * @param directory the directory to relativize.
-     * @return a new path, relativized against sourceDirectory, then resolved against targetDirectory.
+     * @return A new path, relativized against sourceDirectory, then resolved against targetDirectory.
      */
     private Path resolveRelativeAsString(final Path directory) {
         return PathUtils.resolve(targetDirectory, sourceDirectory.relativize(directory));

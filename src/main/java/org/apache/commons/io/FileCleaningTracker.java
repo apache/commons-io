@@ -223,7 +223,7 @@ public class FileCleaningTracker {
     /**
      * Gets a copy of the file paths that failed to delete.
      *
-     * @return a copy of the file paths that failed to delete.
+     * @return A copy of the file paths that failed to delete.
      * @since 2.0
      */
     public List<String> getDeleteFailures() {
