@@ -17,6 +17,7 @@
 
 package org.apache.commons.io.input;
 
+import java.lang.management.ManagementFactory;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.nio.ByteBuffer;
@@ -89,7 +90,7 @@ final class ByteBufferCleaner {
      */
     static void clean(final ByteBuffer buffer) {
         try {
-            if (buffer.isDirect()) {
+            if (INSTANCE != null && buffer.isDirect()) {
                 Buffers.clearWritable(buffer);
                 INSTANCE.clean(buffer);
             }
@@ -98,7 +99,10 @@ final class ByteBufferCleaner {
         }
     }
 
-    private static Cleaner getCleaner() {
+    static Cleaner getCleaner() {
+        if (!unsafeMemoryAccessAllowed()) {
+            return null;
+        }
         try {
             return new Java8Cleaner();
         } catch (final Exception e) {
@@ -108,6 +112,21 @@ final class ByteBufferCleaner {
                 throw new IllegalStateException("Failed to initialize a Cleaner.", e);
             }
         }
+    }
+
+    private static boolean unsafeMemoryAccessAllowed() {
+        final int version;
+        try {
+            version = Integer.parseInt(ManagementFactory.getRuntimeMXBean().getSpecVersion());
+        } catch (final RuntimeException e) {
+            return true;
+        }
+        if (version < 23) {
+            return true;
+        }
+        // see https://openjdk.org/jeps/471
+        return ManagementFactory.getRuntimeMXBean().getInputArguments().stream()
+                                .anyMatch(arg -> arg.equals("--sun-misc-unsafe-memory-access=allow"));
     }
 
     /**
