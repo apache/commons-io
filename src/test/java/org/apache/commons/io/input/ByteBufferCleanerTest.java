@@ -26,7 +26,6 @@ import static org.junit.jupiter.api.condition.JRE.JAVA_23;
 
 import java.nio.ByteBuffer;
 
-import org.apache.commons.lang3.RandomUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledForJreRange;
 
