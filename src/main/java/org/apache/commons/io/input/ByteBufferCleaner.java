@@ -103,7 +103,7 @@ final class ByteBufferCleaner {
     }
 
     static Cleaner getCleaner() {
-        if (!unsafeMemoryAccessDeprecated()) {
+        if (unsafeMemoryAccessDeprecated()) {
             return null;
         }
         try {
@@ -122,10 +122,10 @@ final class ByteBufferCleaner {
         try {
             version = Integer.parseInt(System.getProperty("java.specification.version"));
         } catch (final RuntimeException e) {
-            return true;
+            return false;
         }
         // see https://openjdk.org/jeps/471
-        return version < 23;
+        return version >= 23;
     }
 
     /**
