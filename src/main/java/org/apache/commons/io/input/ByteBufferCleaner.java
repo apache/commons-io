@@ -91,9 +91,11 @@ final class ByteBufferCleaner {
      */
     static void clean(final ByteBuffer buffer) {
         try {
-            if (INSTANCE != null && buffer.isDirect()) {
+            if (buffer.isDirect()) {
                 Buffers.clearWritable(buffer);
-                INSTANCE.clean(buffer);
+                if (INSTANCE != null) {
+                    INSTANCE.clean(buffer);
+                }
             }
         } catch (final Exception e) {
             throw new IllegalStateException("Failed to clean direct buffer.", e);

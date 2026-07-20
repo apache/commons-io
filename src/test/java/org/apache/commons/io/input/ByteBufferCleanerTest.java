@@ -17,6 +17,7 @@
 package org.apache.commons.io.input;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -36,19 +37,22 @@ class ByteBufferCleanerTest {
 
     @Test
     void testCleanEmpty() {
-        final ByteBuffer buffer = ByteBuffer.allocateDirect(10);
+        final ByteBuffer buffer = ByteBuffer.allocateDirect(8);
         // There is no way verify that the buffer has been cleaned up, we are just verifying that
         // clean() doesn't blow up
         ByteBufferCleaner.clean(buffer);
+        verifyCleared(buffer);
     }
 
     @Test
     void testCleanFull() {
-        final ByteBuffer buffer = ByteBuffer.allocateDirect(10);
-        buffer.put(RandomUtils.insecure().randomBytes(10), 0, 10);
+        final ByteBuffer buffer = ByteBuffer.allocateDirect(8);
+        buffer.putLong(Long.MAX_VALUE);
+        verifyUncleared(buffer);
         // There is no way verify that the buffer has been cleaned up, we are just verifying that
         // clean() doesn't blow up
         ByteBufferCleaner.clean(buffer);
+        verifyCleared(buffer);
     }
 
     @Test
@@ -73,5 +77,15 @@ class ByteBufferCleanerTest {
     void testUnsupportedByDefaultOnJava23() {
         assertNull(ByteBufferCleaner.getCleaner());
         assertFalse(ByteBufferCleaner.isSupported(), "ByteBufferCleaner does not work on this platform, please investigate and fix");
+    }
+
+    private void verifyUncleared(final ByteBuffer buffer) {
+        buffer.flip();
+        assertEquals(Long.MAX_VALUE, buffer.getLong());
+        buffer.flip();
+    }
+
+    private void verifyCleared(final ByteBuffer buffer) {
+        assertEquals(0, buffer.getLong());
     }
 }
