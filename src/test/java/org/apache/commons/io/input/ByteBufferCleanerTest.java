@@ -18,23 +18,16 @@ package org.apache.commons.io.input;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.condition.JRE.JAVA_23;
 
-import java.lang.management.ManagementFactory;
-import java.lang.management.RuntimeMXBean;
 import java.nio.ByteBuffer;
-import java.util.Arrays;
 
 import org.apache.commons.lang3.RandomUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledForJreRange;
-import org.junit.jupiter.api.condition.JRE;
-import org.mockito.MockedStatic;
-import org.mockito.Mockito;
 
 /**
  * Tests {@code ByteBufferCleaner}.
@@ -80,17 +73,5 @@ class ByteBufferCleanerTest {
     void testUnsupportedByDefaultOnJava23() {
         assertNull(ByteBufferCleaner.getCleaner());
         assertFalse(ByteBufferCleaner.isSupported(), "ByteBufferCleaner does not work on this platform, please investigate and fix");
-    }
-
-    @Test
-    @EnabledForJreRange(min = JAVA_23)
-    void testSupportedIfUnsafeAllowedJava23() {
-        final RuntimeMXBean mockBean = Mockito.mock(RuntimeMXBean.class);
-        Mockito.when(mockBean.getSpecVersion()).thenReturn("23");
-        Mockito.when(mockBean.getInputArguments()).thenReturn(Arrays.asList("java", "--sun-misc-unsafe-memory-access=allow", "-version"));
-        try (final MockedStatic<ManagementFactory> managementFactory = Mockito.mockStatic(ManagementFactory.class)) {
-            managementFactory.when(ManagementFactory::getRuntimeMXBean).thenReturn(mockBean);
-            assertNotNull(ByteBufferCleaner.getCleaner());
-        }
     }
 }

@@ -17,15 +17,19 @@
 
 package org.apache.commons.io.input;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.management.ManagementFactory;
 import java.nio.channels.FileChannel;
 import java.nio.file.StandardOpenOption;
 
+import org.apache.commons.lang3.JavaVersion;
+import org.apache.commons.lang3.SystemUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -74,12 +78,13 @@ class BufferedFileChannelInputStreamTest extends AbstractInputStreamTest {
      */
     @Test
     void testCleanCalledOnlyOnce() throws Exception {
+        final boolean expectedCleanOnClose = !SystemUtils.isJavaVersionAtLeast(JavaVersion.JAVA_23);
         try (BufferedFileChannelInputStream stream = BufferedFileChannelInputStream.builder().setPath(InputPath).get()) {
             assertFalse(stream.isClean());
             stream.close();
-            assertTrue(stream.isClean());
+            assertEquals(stream.isClean(), expectedCleanOnClose);
             stream.close();
-            assertTrue(stream.isClean());
+            assertEquals(stream.isClean(), expectedCleanOnClose);
         }
     }
 

@@ -21,6 +21,7 @@ import java.lang.management.ManagementFactory;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.nio.ByteBuffer;
+import java.util.List;
 
 import org.apache.commons.io.Buffers;
 
@@ -100,7 +101,7 @@ final class ByteBufferCleaner {
     }
 
     static Cleaner getCleaner() {
-        if (!unsafeMemoryAccessAllowed()) {
+        if (!unsafeMemoryAccessDeprecated()) {
             return null;
         }
         try {
@@ -114,19 +115,15 @@ final class ByteBufferCleaner {
         }
     }
 
-    private static boolean unsafeMemoryAccessAllowed() {
+    private static boolean unsafeMemoryAccessDeprecated() {
         final int version;
         try {
-            version = Integer.parseInt(ManagementFactory.getRuntimeMXBean().getSpecVersion());
+            version = Integer.parseInt(System.getProperty("java.specification.version"));
         } catch (final RuntimeException e) {
             return true;
         }
-        if (version < 23) {
-            return true;
-        }
         // see https://openjdk.org/jeps/471
-        return ManagementFactory.getRuntimeMXBean().getInputArguments().stream()
-                                .anyMatch(arg -> arg.equals("--sun-misc-unsafe-memory-access=allow"));
+        return version < 23;
     }
 
     /**
