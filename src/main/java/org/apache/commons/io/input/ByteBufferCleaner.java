@@ -17,9 +17,11 @@
 
 package org.apache.commons.io.input;
 
+import java.lang.management.ManagementFactory;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.nio.ByteBuffer;
+import java.util.List;
 
 import org.apache.commons.io.Buffers;
 
@@ -91,14 +93,19 @@ final class ByteBufferCleaner {
         try {
             if (buffer.isDirect()) {
                 Buffers.clearWritable(buffer);
-                INSTANCE.clean(buffer);
+                if (INSTANCE != null) {
+                    INSTANCE.clean(buffer);
+                }
             }
         } catch (final Exception e) {
             throw new IllegalStateException("Failed to clean direct buffer.", e);
         }
     }
 
-    private static Cleaner getCleaner() {
+    static Cleaner getCleaner() {
+        if (unsafeMemoryAccessDeprecated()) {
+            return null;
+        }
         try {
             return new Java8Cleaner();
         } catch (final Exception e) {
@@ -108,6 +115,17 @@ final class ByteBufferCleaner {
                 throw new IllegalStateException("Failed to initialize a Cleaner.", e);
             }
         }
+    }
+
+    private static boolean unsafeMemoryAccessDeprecated() {
+        final int version;
+        try {
+            version = Integer.parseInt(System.getProperty("java.specification.version"));
+        } catch (final RuntimeException e) {
+            return false;
+        }
+        // see https://openjdk.org/jeps/471
+        return version >= 23;
     }
 
     /**
