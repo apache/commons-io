@@ -56,7 +56,7 @@ public interface IOIntConsumer {
      * @throws NullPointerException if {@code after} is null.
      */
     default IOIntConsumer andThen(final IOIntConsumer after) {
-        Objects.requireNonNull(after);
+        Objects.requireNonNull(after, "after");
         return (final int i) -> {
             accept(i);
             after.accept(i);

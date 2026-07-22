@@ -44,7 +44,7 @@ public interface IOBinaryOperator<T> extends IOBiFunction<T, T, T> {
      * @throws NullPointerException if the argument is null.
      */
     static <T> IOBinaryOperator<T> maxBy(final IOComparator<? super T> comparator) {
-        Objects.requireNonNull(comparator);
+        Objects.requireNonNull(comparator, "comparator");
         return (a, b) -> comparator.compare(a, b) >= 0 ? a : b;
     }
 
@@ -59,7 +59,7 @@ public interface IOBinaryOperator<T> extends IOBiFunction<T, T, T> {
      * @throws NullPointerException if the argument is null.
      */
     static <T> IOBinaryOperator<T> minBy(final IOComparator<? super T> comparator) {
-        Objects.requireNonNull(comparator);
+        Objects.requireNonNull(comparator, "comparator");
         return (a, b) -> comparator.compare(a, b) <= 0 ? a : b;
     }
 

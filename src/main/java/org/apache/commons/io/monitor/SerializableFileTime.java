@@ -44,7 +44,7 @@ final class SerializableFileTime implements Serializable {
     private FileTime fileTime;
 
     SerializableFileTime(final FileTime fileTime) {
-        this.fileTime = Objects.requireNonNull(fileTime);
+        this.fileTime = Objects.requireNonNull(fileTime, "fileTime");
     }
 
     public int compareTo(final FileTime other) {

@@ -72,7 +72,7 @@ public interface IOIterator<E> {
      * @throws IOException if an I/O error occurs.
      */
     default void forEachRemaining(final IOConsumer<? super E> action) throws IOException {
-        Objects.requireNonNull(action);
+        Objects.requireNonNull(action, "action");
         while (hasNext()) {
             action.accept(next());
         }

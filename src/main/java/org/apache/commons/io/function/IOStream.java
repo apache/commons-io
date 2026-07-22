@@ -79,11 +79,11 @@ public interface IOStream<T> extends IOBaseStream<T, IOStream<T>, Stream<T>> {
      *
      * @param <T> The type of stream elements.
      * @param seed The initial element.
-     * @param f A function to be applied to the previous element to produce a new element.
+     * @param unaryOperator A function to be applied to the previous element to produce a new element.
      * @return A new sequential {@code IOStream}.
      */
-    static <T> IOStream<T> iterate(final T seed, final IOUnaryOperator<T> f) {
-        Objects.requireNonNull(f);
+    static <T> IOStream<T> iterate(final T seed, final IOUnaryOperator<T> unaryOperator) {
+        Objects.requireNonNull(unaryOperator, "unaryOperator");
         final Iterator<T> iterator = new Iterator<T>() {
             @SuppressWarnings("unchecked")
             T t = (T) IOStreams.NONE;
@@ -96,7 +96,7 @@ public interface IOStream<T> extends IOBaseStream<T, IOStream<T>, Stream<T>> {
             @Override
             public T next() throws NoSuchElementException {
                 try {
-                    return t = t == IOStreams.NONE ? seed : f.apply(t);
+                    return t = t == IOStreams.NONE ? seed : unaryOperator.apply(t);
                 } catch (final IOException e) {
                     final NoSuchElementException nsee = new NoSuchElementException();
                     nsee.initCause(e);

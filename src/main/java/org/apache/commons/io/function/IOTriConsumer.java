@@ -67,7 +67,7 @@ public interface IOTriConsumer<T, U, V> {
      * @throws NullPointerException if {@code after} is null.
      */
     default IOTriConsumer<T, U, V> andThen(final IOTriConsumer<? super T, ? super U, ? super V> after) {
-        Objects.requireNonNull(after);
+        Objects.requireNonNull(after, "after");
         return (t, u, v) -> {
             accept(t, u, v);
             after.accept(t, u, v);

@@ -80,7 +80,7 @@ public interface IOPredicate<T> {
      * @throws NullPointerException if other is null.
      */
     default IOPredicate<T> and(final IOPredicate<? super T> other) {
-        Objects.requireNonNull(other);
+        Objects.requireNonNull(other, "other");
         return t -> test(t) && other.test(t);
     }
 
@@ -119,7 +119,7 @@ public interface IOPredicate<T> {
      * @throws NullPointerException if other is null.
      */
     default IOPredicate<T> or(final IOPredicate<? super T> other) {
-        Objects.requireNonNull(other);
+        Objects.requireNonNull(other, "other");
         return t -> test(t) || other.test(t);
     }
 

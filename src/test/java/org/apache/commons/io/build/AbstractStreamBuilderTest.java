@@ -65,7 +65,8 @@ class AbstractStreamBuilderTest {
     }
 
     private static Stream<IOConsumer<Builder>> fileBasedConfigurers() throws URISyntaxException {
-        final URI uri = Objects.requireNonNull(AbstractStreamBuilderTest.class.getResource(AbstractOriginTest.FILE_RES_RO)).toURI();
+        final URI uri = Objects.requireNonNull(AbstractStreamBuilderTest.class.getResource(AbstractOriginTest.FILE_RES_RO), AbstractOriginTest.FILE_RES_RO)
+                .toURI();
         final Path path = Paths.get(AbstractOriginTest.FILE_NAME_RO);
         // @formatter:off
         return Stream.of(

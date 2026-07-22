@@ -49,7 +49,7 @@ public interface IOIterable<T> {
      * @see Iterable#iterator()
      */
     default void forEach(final IOConsumer<? super T> action) throws IOException {
-        iterator().forEachRemaining(Objects.requireNonNull(action));
+        iterator().forEachRemaining(Objects.requireNonNull(action, "action"));
     }
 
     /**

@@ -50,7 +50,7 @@ public interface IOTriFunction<T, U, V, R> {
      * @throws NullPointerException if after is null.
      */
     default <W> IOTriFunction<T, U, V, W> andThen(final IOFunction<? super R, ? extends W> after) {
-        Objects.requireNonNull(after);
+        Objects.requireNonNull(after, "after");
         return (final T t, final U u, final V v) -> after.apply(apply(t, u, v));
     }
 

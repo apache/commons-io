@@ -180,7 +180,7 @@ public class XmlStreamWriter extends Writer {
      */
     private XmlStreamWriter(final OutputStream out, final Charset defaultEncoding) {
         this.out = out;
-        this.defaultCharset = Objects.requireNonNull(defaultEncoding);
+        this.defaultCharset = Objects.requireNonNull(defaultEncoding, "defaultEncoding");
     }
 
     /**

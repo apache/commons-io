@@ -125,8 +125,8 @@ public abstract class AbstractOriginTest<T, B extends AbstractOrigin<T, B>> {
     }
 
     @SuppressWarnings("resource")
-    private boolean isValid(final RandomAccessFile raf) throws IOException {
-        return Objects.requireNonNull(raf).getFD().valid();
+    private boolean isValid(final RandomAccessFile randomAccessFile) throws IOException {
+        return Objects.requireNonNull(randomAccessFile, "randomAccessFile").getFD().valid();
     }
 
     protected abstract B newOriginRo() throws IOException;

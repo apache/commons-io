@@ -65,7 +65,7 @@ public interface IOBiConsumer<T, U> {
      * @throws NullPointerException if {@code after} is null.
      */
     default IOBiConsumer<T, U> andThen(final IOBiConsumer<? super T, ? super U> after) {
-        Objects.requireNonNull(after);
+        Objects.requireNonNull(after, "after");
         return (t, u) -> {
             accept(t, u);
             after.accept(t, u);

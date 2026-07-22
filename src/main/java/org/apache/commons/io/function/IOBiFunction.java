@@ -50,7 +50,7 @@ public interface IOBiFunction<T, U, R> {
      * @throws NullPointerException if after is null.
      */
     default <V> IOBiFunction<T, U, V> andThen(final IOFunction<? super R, ? extends V> after) {
-        Objects.requireNonNull(after);
+        Objects.requireNonNull(after, "after");
         return (final T t, final U u) -> after.apply(apply(t, u));
     }
 
