@@ -221,6 +221,17 @@ public class FileCleaningTracker {
     }
 
     /**
+     * Tests whether {@link #exitWhenFinished()} has been called, and therefore whether the file cleaner thread will terminate when there are no more objects
+     * being tracked for deletion.
+     *
+     * @return {@code true} if {@link #exitWhenFinished()} has been called, {@code false} otherwise.
+     * @since 2.23.0
+     */
+    public synchronized boolean exitWhenFinishedTest() {
+        return exitWhenFinished;
+    }
+
+    /**
      * Gets a copy of the file paths that failed to delete.
      *
      * @return A copy of the file paths that failed to delete.
