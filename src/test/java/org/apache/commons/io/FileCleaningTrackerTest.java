@@ -116,6 +116,42 @@ class FileCleaningTrackerTest extends AbstractTempDirTest {
     }
 
     @Test
+    void testExitWhenFinishedTestMatchesField() {
+        // Before calling exitWhenFinished()
+        assertEquals(fileCleaningTracker.exitWhenFinished, fileCleaningTracker.exitWhenFinishedTest(),
+                "exitWhenFinishedTest() must reflect the exitWhenFinished field (before)");
+        fileCleaningTracker.exitWhenFinished();
+        // After calling exitWhenFinished()
+        assertEquals(fileCleaningTracker.exitWhenFinished, fileCleaningTracker.exitWhenFinishedTest(),
+                "exitWhenFinishedTest() must reflect the exitWhenFinished field (after)");
+    }
+
+    @Test
+    void testExitWhenFinishedTestReturnsFalseInitially() {
+        assertFalse(fileCleaningTracker.exitWhenFinishedTest(), "exitWhenFinishedTest() should return false before exitWhenFinished() is called");
+    }
+
+    @Test
+    void testExitWhenFinishedTestReturnsTrueAfterExitWhenFinished() {
+        fileCleaningTracker.exitWhenFinished();
+        assertTrue(fileCleaningTracker.exitWhenFinishedTest(), "exitWhenFinishedTest() should return true after exitWhenFinished() is called");
+    }
+
+    @Test
+    void testExitWhenFinishedTestWithActiveReaper() throws Exception {
+        final String path = testFile.getPath();
+        // Start the reaper by tracking a file
+        final RandomAccessFile raf = createRandomAccessFile();
+        fileCleaningTracker.track(path, raf);
+        assertFalse(fileCleaningTracker.exitWhenFinishedTest(), "exitWhenFinishedTest() should return false while reaper is still active");
+        assertTrue(fileCleaningTracker.reaper.isAlive(), "Reaper should be alive");
+        fileCleaningTracker.exitWhenFinished();
+        assertTrue(fileCleaningTracker.exitWhenFinishedTest(),
+                "exitWhenFinishedTest() should return true after exitWhenFinished() is called with active reaper");
+        raf.close();
+    }
+
+    @Test
     void testFileCleanerDirectory_ForceStrategy_FileSource() throws Exception {
         if (!testFile.getParentFile().exists()) {
             throw new IOException("Cannot create file " + testFile + " as the parent directory does not exist");
