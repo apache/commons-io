@@ -116,6 +116,12 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  * {@link FileEntry} can be used to capture additional properties that the basic implementation does not support. The {@link FileEntry#refresh(File)} method is
  * used to determine if a file or directory has changed since the last check and stores the current state of the {@link File}'s properties.
  * </p>
+ * <h2>Maximum Depth</h2>
+ * <p>
+ * Use {@link Builder#setMaxDepth(int)} to limit the depth of entries monitored below the root directory. The root directory has depth 0. Setting the maximum
+ * depth to 0 prevents listing any entries below the root. At greater depths, entries at the maximum depth are monitored, but their children are not listed and
+ * no events are generated for those children. The default is {@link Integer#MAX_VALUE}, which preserves full recursive monitoring.
+ * </p>
  * <h2>Deprecating Serialization</h2>
  * <p>
  * <em>Serialization is deprecated and will be removed in 3.0. Consider using a serialization proxy.</em>
@@ -139,6 +145,8 @@ public class FileAlterationObserver implements Serializable {
         private FileFilter fileFilter;
 
         private IOCase ioCase;
+
+        private int maxDepth = Integer.MAX_VALUE;
 
         private Builder() {
             // empty
@@ -178,6 +186,26 @@ public class FileAlterationObserver implements Serializable {
          */
         public Builder setIOCase(final IOCase ioCase) {
             this.ioCase = ioCase;
+            return asThis();
+        }
+
+        /**
+         * Sets the maximum depth of entries to monitor below the root directory. The root directory has depth 0.
+         * <p>
+         * Setting {@code maxDepth} to 0 prevents listing any entries below the root. At greater depths, entries at {@code maxDepth} are monitored, but their
+         * children are not listed and no events are generated for those children.
+         * </p>
+         *
+         * @param maxDepth the maximum depth, must not be negative.
+         * @return This instance.
+         * @throws IllegalArgumentException if {@code maxDepth} is negative.
+         * @since 2.23.0
+         */
+        public Builder setMaxDepth(final int maxDepth) {
+            if (maxDepth < 0) {
+                throw new IllegalArgumentException("maxDepth must not be negative");
+            }
+            this.maxDepth = maxDepth;
             return asThis();
         }
 
@@ -236,8 +264,14 @@ public class FileAlterationObserver implements Serializable {
      */
     private final Comparator<File> comparator;
 
+    /**
+     * The maximum depth of entries to monitor.
+     */
+    private final Integer maxDepth;
+
     private FileAlterationObserver(final Builder builder) {
-        this(builder.rootEntry != null ? builder.rootEntry : new FileEntry(builder.checkOriginFile()), builder.fileFilter, toComparator(builder.ioCase));
+        this(builder.rootEntry != null ? builder.rootEntry : new FileEntry(builder.checkOriginFile()), builder.fileFilter, toComparator(builder.ioCase),
+                builder.maxDepth);
     }
 
     /**
@@ -284,11 +318,24 @@ public class FileAlterationObserver implements Serializable {
      * @param comparator How to compare files.
      */
     private FileAlterationObserver(final FileEntry rootEntry, final FileFilter fileFilter, final Comparator<File> comparator) {
+        this(rootEntry, fileFilter, comparator, Integer.MAX_VALUE);
+    }
+
+    /**
+     * Constructs an observer for the specified directory, file filter, file comparator and maximum depth.
+     *
+     * @param rootEntry  The root directory to observe.
+     * @param fileFilter The file filter or null if none.
+     * @param comparator How to compare files.
+     * @param maxDepth   The maximum depth of entries to monitor.
+     */
+    private FileAlterationObserver(final FileEntry rootEntry, final FileFilter fileFilter, final Comparator<File> comparator, final int maxDepth) {
         Objects.requireNonNull(rootEntry, "rootEntry");
         Objects.requireNonNull(rootEntry.getFile(), "rootEntry.getFile()");
         this.rootEntry = rootEntry;
         this.fileFilter = fileFilter != null ? fileFilter : TrueFileFilter.INSTANCE;
         this.comparator = Objects.requireNonNull(comparator, "comparator");
+        this.maxDepth = maxDepth;
     }
 
     /**
@@ -367,7 +414,7 @@ public class FileAlterationObserver implements Serializable {
             }
             if (c < currentEntries.length && comparator.compare(previousEntry.getFile(), currentEntries[c]) == 0) {
                 fireOnChange(previousEntry, currentEntries[c]);
-                checkAndFire(previousEntry, previousEntry.getChildren(), listFiles(currentEntries[c]));
+                checkAndFire(previousEntry, previousEntry.getChildren(), listFiles(currentEntries[c], previousEntry));
                 actualEntries[c] = previousEntry;
                 c++;
             } else {
@@ -393,7 +440,7 @@ public class FileAlterationObserver implements Serializable {
         // fire directory/file events
         final File rootFile = rootEntry.getFile();
         if (rootFile.exists()) {
-            checkAndFire(rootEntry, rootEntry.getChildren(), listFiles(rootFile));
+            checkAndFire(rootEntry, rootEntry.getChildren(), listFiles(rootFile, rootEntry));
         } else if (rootEntry.isExists()) {
             checkAndFire(rootEntry, rootEntry.getChildren(), FileUtils.EMPTY_FILE_ARRAY);
         }
@@ -509,6 +556,17 @@ public class FileAlterationObserver implements Serializable {
     }
 
     /**
+     * Gets the maximum depth of entries to monitor. The root directory has depth 0.
+     *
+     * @return The maximum depth.
+     * @since 2.23.0
+     */
+    public int getMaxDepth() {
+        // A null value preserves unlimited recursion when deserializing streams written before this field was added.
+        return maxDepth != null ? maxDepth : Integer.MAX_VALUE;
+    }
+
+    /**
      * Initializes the observer.
      *
      * @throws Exception Thrown if an error occurs.
@@ -527,7 +585,19 @@ public class FileAlterationObserver implements Serializable {
      * @return The child file entries.
      */
     private FileEntry[] listFileEntries(final File file, final FileEntry entry) {
-        return Stream.of(listFiles(file)).map(f -> createFileEntry(entry, f)).toArray(FileEntry[]::new);
+        return Stream.of(listFiles(file, entry)).map(f -> createFileEntry(entry, f)).toArray(FileEntry[]::new);
+    }
+
+    /**
+     * Lists the contents of a directory when the parent entry is below the maximum depth.
+     *
+     * @param directory The directory to list.
+     * @param entry     The directory entry.
+     * @return The directory contents or a zero length array if the maximum depth is reached.
+     */
+    private File[] listFiles(final File directory, final FileEntry entry) {
+        final int depth = entry.getLevel() - rootEntry.getLevel();
+        return depth < getMaxDepth() ? listFiles(directory) : FileUtils.EMPTY_FILE_ARRAY;
     }
 
     /**
