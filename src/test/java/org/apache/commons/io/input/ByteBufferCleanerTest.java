@@ -37,10 +37,9 @@ class ByteBufferCleanerTest {
     @Test
     void testCleanEmpty() {
         final ByteBuffer buffer = ByteBuffer.allocateDirect(8);
-        // There is no way verify that the buffer has been cleaned up, we are just verifying that
-        // clean() doesn't blow up
+        // There is no way verify that the buffer has been cleaned up by inspecting it because a cleaned buffer should
+        // not be used. We are just verifying that clean() doesn't blow up
         ByteBufferCleaner.clean(buffer);
-        verifyCleared(buffer);
     }
 
     @Test
@@ -48,10 +47,9 @@ class ByteBufferCleanerTest {
         final ByteBuffer buffer = ByteBuffer.allocateDirect(8);
         buffer.putLong(Long.MAX_VALUE);
         verifyUncleared(buffer);
-        // There is no way verify that the buffer has been cleaned up, we are just verifying that
-        // clean() doesn't blow up
+        // There is no way verify that the buffer has been cleaned up by inspecting it because a cleaned buffer should
+        // not be used. We are just verifying that clean() doesn't blow up
         ByteBufferCleaner.clean(buffer);
-        verifyCleared(buffer);
     }
 
     @Test
@@ -82,9 +80,5 @@ class ByteBufferCleanerTest {
         buffer.flip();
         assertEquals(Long.MAX_VALUE, buffer.getLong());
         buffer.flip();
-    }
-
-    private void verifyCleared(final ByteBuffer buffer) {
-        assertEquals(0, buffer.getLong());
     }
 }
