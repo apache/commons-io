@@ -17,11 +17,9 @@
 
 package org.apache.commons.io.input;
 
-import java.lang.management.ManagementFactory;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.nio.ByteBuffer;
-import java.util.List;
 
 import org.apache.commons.io.Buffers;
 
