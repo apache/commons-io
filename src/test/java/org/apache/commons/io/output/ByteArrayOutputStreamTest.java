@@ -434,6 +434,52 @@ class ByteArrayOutputStreamTest {
 
     @ParameterizedTest(name = "[{index}] {0}")
     @MethodSource("baosFactories")
+    void testWriteRepeat(final String baosName, final BAOSFactory<?> baosFactory) throws IOException {
+        // Write a byte 0 times - no bytes should be written
+        try (AbstractByteArrayOutputStream<?> baout = baosFactory.newInstance()) {
+            baout.writeRepeat('A', 0);
+            assertEquals(0, baout.size());
+            assertArrayEquals(IOUtils.EMPTY_BYTE_ARRAY, baout.toByteArray());
+        }
+        // Write a single byte 1 time
+        try (AbstractByteArrayOutputStream<?> baout = baosFactory.newInstance()) {
+            baout.writeRepeat('X', 1);
+            assertEquals(1, baout.size());
+            assertArrayEquals(new byte[] { 'X' }, baout.toByteArray());
+        }
+        // Write a byte multiple times and verify the content
+        try (AbstractByteArrayOutputStream<?> baout = baosFactory.newInstance()) {
+            final int repeatCount = 10;
+            baout.writeRepeat('Z', repeatCount);
+            assertEquals(repeatCount, baout.size());
+            final byte[] expected = new byte[repeatCount];
+            Arrays.fill(expected, (byte) 'Z');
+            assertArrayEquals(expected, baout.toByteArray());
+        }
+        // Verify that writeRepeat returns 'this' (fluent API)
+        try (AbstractByteArrayOutputStream<?> baout = baosFactory.newInstance()) {
+            assertSame(baout, baout.writeRepeat('A', 3));
+        }
+        // Write across buffer boundaries (DEFAULT_SIZE is 1024)
+        try (AbstractByteArrayOutputStream<?> baout = baosFactory.newInstance(4)) {
+            final int repeatCount = 100;
+            baout.writeRepeat((byte) 0xFF, repeatCount);
+            assertEquals(repeatCount, baout.size());
+            final byte[] expected = new byte[repeatCount];
+            Arrays.fill(expected, (byte) 0xFF);
+            assertArrayEquals(expected, baout.toByteArray());
+        }
+        // Combine writeRepeat with other writes
+        try (AbstractByteArrayOutputStream<?> baout = baosFactory.newInstance()) {
+            baout.writeRepeat('A', 3);
+            baout.writeRepeat('B', 2);
+            assertEquals(5, baout.size());
+            assertArrayEquals(new byte[] { 'A', 'A', 'A', 'B', 'B' }, baout.toByteArray());
+        }
+    }
+
+    @ParameterizedTest(name = "[{index}] {0}")
+    @MethodSource("baosFactories")
     void testWriteStringCharset(final String baosName, final BAOSFactory<?> baosFactory) throws Exception {
         int written;
         // The ByteArrayOutputStream is initialized with 32 bytes to match
