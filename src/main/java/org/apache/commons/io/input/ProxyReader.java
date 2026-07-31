@@ -61,7 +61,7 @@ public abstract class ProxyReader extends FilterReader {
      * </p>
      *
      * @param n number of chars read, or -1 if the end of stream was reached.
-     * @throws IOException if the post-processing fails.
+     * @throws IOException Thrown if the post-processing fails.
      * @since 2.0
      */
     @SuppressWarnings("unused") // Possibly thrown from subclasses.
@@ -86,7 +86,7 @@ public abstract class ProxyReader extends FilterReader {
      * </p>
      *
      * @param n number of chars that the caller asked to be read.
-     * @throws IOException if the pre-processing fails.
+     * @throws IOException Thrown if the pre-processing fails.
      * @since 2.0
      */
     @SuppressWarnings("unused") // Possibly thrown from subclasses.
@@ -97,7 +97,7 @@ public abstract class ProxyReader extends FilterReader {
     /**
      * Closes the stream and releases any system resources associated with it by invoking the delegate's {@link Reader#close()} method.
      *
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      */
     @Override
     public void close() throws IOException {
@@ -116,7 +116,7 @@ public abstract class ProxyReader extends FilterReader {
      * </p>
      *
      * @param e The IOException thrown.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      * @since 2.0
      */
     protected void handleIOException(final IOException e) throws IOException {
@@ -127,7 +127,7 @@ public abstract class ProxyReader extends FilterReader {
      * Marks the present position in the stream by invoking the delegate's {@link Reader#mark(int)} method.
      *
      * @param readAheadLimit read ahead limit.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      */
     @Override
     public synchronized void mark(final int readAheadLimit) throws IOException {
@@ -152,7 +152,7 @@ public abstract class ProxyReader extends FilterReader {
      * Reads characters into an array by invoking the delegate's {@link Reader#read()} method.
      *
      * @return The character read or -1 if the end of stream.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      */
     @Override
     public int read() throws IOException {
@@ -172,7 +172,7 @@ public abstract class ProxyReader extends FilterReader {
      *
      * @param chr The buffer to read the characters into.
      * @return The number of characters read or -1 if the end of stream.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      */
     @Override
     public int read(final char[] chr) throws IOException {
@@ -194,7 +194,7 @@ public abstract class ProxyReader extends FilterReader {
      * @param st The start offset.
      * @param len The number of bytes to read.
      * @return The number of characters read or -1 if the end of stream.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      */
     @Override
     public int read(final char[] chr, final int st, final int len) throws IOException {
@@ -214,7 +214,7 @@ public abstract class ProxyReader extends FilterReader {
      *
      * @param target The char buffer to read the characters into.
      * @return The number of characters read or -1 if the end of stream.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      * @since 2.0
      */
     @Override
@@ -234,7 +234,7 @@ public abstract class ProxyReader extends FilterReader {
      * Tells whether this stream is ready to be read by invoking the delegate's {@link Reader#ready()} method.
      *
      * @return true if the stream is ready to be read.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      */
     @Override
     public boolean ready() throws IOException {
@@ -249,7 +249,7 @@ public abstract class ProxyReader extends FilterReader {
     /**
      * Resets the stream by invoking the delegate's {@link Reader#reset()} method.
      *
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      */
     @Override
     public synchronized void reset() throws IOException {
@@ -281,7 +281,7 @@ public abstract class ProxyReader extends FilterReader {
      *
      * @param ln The number of bytes to skip.
      * @return The number of bytes to skipped or EOF if the end of stream.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      */
     @Override
     public long skip(final long ln) throws IOException {

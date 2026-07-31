@@ -110,7 +110,7 @@ public final class UncheckedFilterOutputStream extends FilterOutputStream {
      * Constructs an output stream filter built on top of the specified underlying output stream.
      *
      * @param builder The buider.
-     * @throws IOException if an I/O error occurs converting to an {@link OutputStream} using {@link #getOutputStream()}.
+     * @throws IOException Thrown if an I/O error occurs converting to an {@link OutputStream} using {@link #getOutputStream()}.
      */
     @SuppressWarnings("resource") // Caller closes.
     private UncheckedFilterOutputStream(final Builder builder) throws IOException {

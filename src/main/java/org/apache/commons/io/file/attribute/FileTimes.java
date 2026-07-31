@@ -242,7 +242,7 @@ public final class FileTimes {
      * Sets the last modified time of the given file path to now.
      *
      * @param path The file path to set.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      */
     public static void setLastModifiedTime(final Path path) throws IOException {
         Files.setLastModifiedTime(path, now());

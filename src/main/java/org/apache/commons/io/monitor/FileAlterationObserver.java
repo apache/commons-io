@@ -151,7 +151,7 @@ public class FileAlterationObserver implements Serializable {
         /**
          * Gets a new {@link FileAlterationObserver} instance.
          *
-         * @throws IOException if an I/O error occurs converting to an {@link File} using {@link AbstractOrigin#getFile()}.
+         * @throws IOException Thrown if an I/O error occurs converting to an {@link File} using {@link AbstractOrigin#getFile()}.
          * @see #getUnchecked()
          */
         @Override

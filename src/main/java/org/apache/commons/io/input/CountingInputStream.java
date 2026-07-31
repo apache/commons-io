@@ -149,7 +149,7 @@ public class CountingInputStream extends ProxyInputStream {
      *
      * @param length  The number of bytes to skip.
      * @return The actual number of bytes skipped.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      * @see InputStream#skip(long)
      */
     @Override

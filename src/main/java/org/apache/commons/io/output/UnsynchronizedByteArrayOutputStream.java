@@ -121,7 +121,7 @@ public final class UnsynchronizedByteArrayOutputStream extends AbstractByteArray
      *
      * @param input Stream to be fully buffered.
      * @return A fully buffered stream.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      */
     public static InputStream toBufferedInputStream(final InputStream input) throws IOException {
         return toBufferedInputStream(input, DEFAULT_SIZE);
@@ -147,7 +147,7 @@ public final class UnsynchronizedByteArrayOutputStream extends AbstractByteArray
      * @param input Stream to be fully buffered.
      * @param size The initial buffer size.
      * @return A fully buffered stream.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      */
     public static InputStream toBufferedInputStream(final InputStream input, final int size) throws IOException {
         // It does not matter if a ByteArrayOutputStream is not closed as close() is a no-op

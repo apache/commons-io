@@ -199,7 +199,7 @@ public class XmlStreamWriter extends Writer {
     /**
      * Closes the underlying writer.
      *
-     * @throws IOException if an error occurs closing the underlying writer.
+     * @throws IOException Thrown if an error occurs closing the underlying writer.
      */
     @Override
     public void close() throws IOException {
@@ -217,7 +217,7 @@ public class XmlStreamWriter extends Writer {
      * @param cbuf The buffer to write the characters from.
      * @param off The start offset.
      * @param len The number of characters to write.
-     * @throws IOException if an error occurs detecting the encoding.
+     * @throws IOException Thrown if an error occurs detecting the encoding.
      */
     private void detectEncoding(final char[] cbuf, final int off, final int len)
             throws IOException {
@@ -269,7 +269,7 @@ public class XmlStreamWriter extends Writer {
     /**
      * Flushes the underlying writer.
      *
-     * @throws IOException if an error occurs flushing the underlying writer.
+     * @throws IOException Thrown if an error occurs flushing the underlying writer.
      */
     @Override
     public void flush() throws IOException {
@@ -305,7 +305,7 @@ public class XmlStreamWriter extends Writer {
      * @throws NullPointerException if the buffer is {@code null}.
      * @throws IndexOutOfBoundsException if {@code off} or {@code len} are negative,
      *                                   or if {@code off + len} is greater than {@code cbuf.length}.
-     * @throws IOException if an error occurs detecting the encoding.
+     * @throws IOException Thrown if an error occurs detecting the encoding.
      */
     @Override
     public void write(final char[] cbuf, final int off, final int len) throws IOException {

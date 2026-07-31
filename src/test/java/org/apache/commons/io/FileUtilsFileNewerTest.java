@@ -104,7 +104,7 @@ class FileUtilsFileNewerTest {
      * @param file The file of which the last modification date is compared.
      * @param fileTime The time reference measured in milliseconds since the epoch.
      * @param wantedResult The expected result.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      */
     protected void testIsFileNewer(final String description, final File file, final FileTime fileTime, final boolean wantedResult) throws IOException {
         assertEquals(wantedResult, FileUtils.isFileNewer(file, fileTime), () -> description + " - FileTime");
@@ -119,7 +119,7 @@ class FileUtilsFileNewerTest {
     /**
      * Tests the {@code isFileNewer(File, *)} methods which a not existing file.
      *
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      * @see FileUtils#isFileNewer(File, long)
      * @see FileUtils#isFileNewer(File, Date)
      * @see FileUtils#isFileNewer(File, File)

@@ -50,7 +50,7 @@ public interface IORunnable {
     /**
      * Like {@link Runnable#run()} but throws {@link IOException}.
      *
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      */
     void run() throws IOException;
 }

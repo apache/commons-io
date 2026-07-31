@@ -125,7 +125,7 @@ public class AutoCloseInputStream extends ProxyInputStream {
      * Automatically closes the stream if the end of stream was reached.
      *
      * @param n number of bytes read, or -1 if no more bytes are available.
-     * @throws IOException if the stream could not be closed.
+     * @throws IOException Thrown if the stream could not be closed.
      * @since 2.0
      */
     @Override
@@ -146,7 +146,7 @@ public class AutoCloseInputStream extends ProxyInputStream {
      * first called.
      * </p>
      *
-     * @throws IOException if the underlying input stream cannot be closed.
+     * @throws IOException Thrown if the underlying input stream cannot be closed.
      */
     @Override
     public void close() throws IOException {

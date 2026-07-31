@@ -140,7 +140,7 @@ public class ReversedLinesFileReader implements Closeable, IOIterable<String> {
          * @param partNumber             The part number.
          * @param length                 its length.
          * @param leftOverOfLastFilePart remainder.
-         * @throws IOException if there is a problem reading the file.
+         * @throws IOException Thrown if there is a problem reading the file.
          */
         private FilePart(final long partNumber, final int length, final byte[] leftOverOfLastFilePart) throws IOException {
             this.partNumber = partNumber;
@@ -280,7 +280,7 @@ public class ReversedLinesFileReader implements Closeable, IOIterable<String> {
          * Handles block rollover
          *
          * @return The new FilePart or null.
-         * @throws IOException if there was a problem reading the file.
+         * @throws IOException Thrown if there was a problem reading the file.
          */
         private FilePart rollOver() throws IOException {
 
@@ -376,7 +376,7 @@ public class ReversedLinesFileReader implements Closeable, IOIterable<String> {
      * Constructs a ReversedLinesFileReader with default block size of 4KB and the virtual machine's {@linkplain Charset#defaultCharset() default charset}.
      *
      * @param file The file to be read.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
      */
     @Deprecated
@@ -390,7 +390,7 @@ public class ReversedLinesFileReader implements Closeable, IOIterable<String> {
      *
      * @param file    The file to be read.
      * @param charset The charset to use, null uses the default Charset.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      * @since 2.5
      * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
      */
@@ -407,7 +407,7 @@ public class ReversedLinesFileReader implements Closeable, IOIterable<String> {
      *                  should match with the block size of the underlying file
      *                  system).
      * @param charset  The encoding of the file, null uses the default Charset.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      * @since 2.3
      * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
      */
@@ -439,7 +439,7 @@ public class ReversedLinesFileReader implements Closeable, IOIterable<String> {
      *
      * @param file    The file to be read.
      * @param charset The charset to use, null uses the default Charset.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      * @since 2.7
      * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
      */
@@ -456,7 +456,7 @@ public class ReversedLinesFileReader implements Closeable, IOIterable<String> {
      *                  should match with the block size of the underlying file
      *                  system).
      * @param charset  The encoding of the file, null uses the default Charset.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      * @since 2.7
      * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
      */
@@ -486,7 +486,7 @@ public class ReversedLinesFileReader implements Closeable, IOIterable<String> {
     /**
      * Closes underlying resources.
      *
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      */
     @Override
     public void close() throws IOException {
@@ -529,7 +529,7 @@ public class ReversedLinesFileReader implements Closeable, IOIterable<String> {
      * Returns the lines of the file from bottom to top.
      *
      * @return The next line or null if the start of the file is reached.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      */
     public String readLine() throws IOException {
         String line = currentFilePart.readLine();
@@ -561,7 +561,7 @@ public class ReversedLinesFileReader implements Closeable, IOIterable<String> {
      *
      * @param lineCount How many lines to read.
      * @return A new list.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      * @since 2.8.0
      */
     public List<String> readLines(final int lineCount) throws IOException {
@@ -588,7 +588,7 @@ public class ReversedLinesFileReader implements Closeable, IOIterable<String> {
      *
      * @param lineCount How many lines to read.
      * @return A String.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      * @since 2.8.0
      */
     public String toString(final int lineCount) throws IOException {

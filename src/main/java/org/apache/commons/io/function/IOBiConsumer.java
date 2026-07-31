@@ -50,7 +50,7 @@ public interface IOBiConsumer<T, U> {
      *
      * @param t The first input argument.
      * @param u The second input argument.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      */
     void accept(T t, U u) throws IOException;
 

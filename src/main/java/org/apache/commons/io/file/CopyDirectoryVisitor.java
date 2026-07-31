@@ -83,7 +83,7 @@ public class CopyDirectoryVisitor extends CountingPathVisitor {
      *
      * @param sourceFile The source file.
      * @param targetFile The target file.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      * @since 2.8.0
      */
     protected void copy(final Path sourceFile, final Path targetFile) throws IOException {

@@ -63,7 +63,7 @@ public interface IOQuadFunction<T, U, V, W, R> {
      * @param v The third function argument.
      * @param w The fourth function argument.
      * @return The function result.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      */
     R apply(T t, U u, V v, W w) throws IOException;
 }

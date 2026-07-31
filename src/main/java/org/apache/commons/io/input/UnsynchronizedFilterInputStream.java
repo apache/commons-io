@@ -134,7 +134,7 @@ public class UnsynchronizedFilterInputStream extends InputStream {
      * Returns the number of bytes that are available before this stream will block.
      *
      * @return The number of bytes available before blocking.
-     * @throws IOException if an error occurs in this stream.
+     * @throws IOException Thrown if an error occurs in this stream.
      */
     @Override
     public int available() throws IOException {
@@ -144,7 +144,7 @@ public class UnsynchronizedFilterInputStream extends InputStream {
     /**
      * Closes this stream. This implementation closes the filtered stream.
      *
-     * @throws IOException if an error occurs while closing this stream.
+     * @throws IOException Thrown if an error occurs while closing this stream.
      */
     @Override
     public void close() throws IOException {
@@ -186,7 +186,7 @@ public class UnsynchronizedFilterInputStream extends InputStream {
      * reached.
      *
      * @return The byte read or -1 if the end of the filtered stream has been reached.
-     * @throws IOException if the stream is closed or another IOException occurs.
+     * @throws IOException Thrown if the stream is closed or another IOException occurs.
      */
     @Override
     public int read() throws IOException {
@@ -199,7 +199,7 @@ public class UnsynchronizedFilterInputStream extends InputStream {
      *
      * @param buffer The byte array in which to store the read bytes.
      * @return The number of bytes actually read or -1 if the end of the filtered stream has been reached while reading.
-     * @throws IOException if this stream is closed or another IOException occurs.
+     * @throws IOException Thrown if this stream is closed or another IOException occurs.
      */
     @Override
     public int read(final byte[] buffer) throws IOException {
@@ -215,7 +215,7 @@ public class UnsynchronizedFilterInputStream extends InputStream {
      * @param offset The initial position in {@code buffer} to store the bytes read from this stream.
      * @param count  The maximum number of bytes to store in {@code buffer}.
      * @return The number of bytes actually read or -1 if the end of the filtered stream has been reached while reading.
-     * @throws IOException if this stream is closed or another I/O error occurs.
+     * @throws IOException Thrown if this stream is closed or another I/O error occurs.
      */
     @Override
     public int read(final byte[] buffer, final int offset, final int count) throws IOException {
@@ -225,8 +225,8 @@ public class UnsynchronizedFilterInputStream extends InputStream {
     /**
      * Resets this stream to the last marked location. This implementation resets the target stream.
      *
-     * @throws IOException if this stream is already closed, no mark has been set or the mark is no longer valid because more than {@code readLimit} bytes have
-     *                     been read since setting the mark.
+     * @throws IOException Thrown if this stream is already closed, no mark has been set or the mark is no longer valid because more than {@code readLimit}
+     *                     bytes have been read since setting the mark.
      * @see #mark(int)
      * @see #markSupported()
      */
@@ -242,7 +242,7 @@ public class UnsynchronizedFilterInputStream extends InputStream {
      *
      * @param count The number of bytes to skip.
      * @return The number of bytes actually skipped.
-     * @throws IOException if this stream is closed or another IOException occurs.
+     * @throws IOException Thrown if this stream is closed or another IOException occurs.
      * @see #mark(int)
      * @see #reset()
      */

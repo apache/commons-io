@@ -387,7 +387,7 @@ public class DeferredFileOutputStream extends ThresholdingOutputStream {
      * internally via a prefix/suffix configuration, and {@link Builder#setDeleteTempFileOnClose(boolean)} is
      * {@code true} (the default), that file is deleted.
      *
-     * @throws IOException if an error occurs.
+     * @throws IOException Thrown if an error occurs.
      */
     @Override
     public void close() throws IOException {
@@ -448,7 +448,7 @@ public class DeferredFileOutputStream extends ThresholdingOutputStream {
      * Gets the current output stream. This may be memory based or disk based, depending on the current state with respect to the threshold.
      *
      * @return The underlying output stream.
-     * @throws IOException if an error occurs.
+     * @throws IOException Thrown if an error occurs.
      * @deprecated Use {@link #getOutputStream()}.
      */
     @Deprecated
@@ -470,7 +470,7 @@ public class DeferredFileOutputStream extends ThresholdingOutputStream {
      * Switches the underlying output stream from a memory based stream to one that is backed by disk. This is the point at which we realize that too much data
      * is being written to keep in memory, so we elect to switch to disk-based storage.
      *
-     * @throws IOException if an error occurs.
+     * @throws IOException Thrown if an error occurs.
      */
     @Override
     protected void thresholdReached() throws IOException {
@@ -498,7 +498,7 @@ public class DeferredFileOutputStream extends ThresholdingOutputStream {
      * </p>
      *
      * @return The current contents of this output stream.
-     * @throws IOException if this stream is not yet closed or an error occurs.
+     * @throws IOException Thrown if this stream is not yet closed or an error occurs.
      * @see org.apache.commons.io.output.ByteArrayOutputStream#toInputStream()
      * @since 2.9.0
      */

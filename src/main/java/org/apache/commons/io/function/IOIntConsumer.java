@@ -42,7 +42,7 @@ public interface IOIntConsumer {
      * Performs this operation on the given argument.
      *
      * @param value The input argument.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      */
     void accept(int value) throws IOException;
 

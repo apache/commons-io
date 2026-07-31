@@ -60,7 +60,7 @@ public interface IOBiFunction<T, U, R> {
      * @param t The first function argument.
      * @param u The second function argument.
      * @return The function result.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      */
     R apply(T t, U u) throws IOException;
 

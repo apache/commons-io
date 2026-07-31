@@ -390,7 +390,7 @@ public abstract class DirectoryWalker<T> {
      * @param file  The current file being processed.
      * @param depth  The current file level (starting directory = 0).
      * @param results  The collection of result objects, may be updated.
-     * @throws IOException if an I/O Error occurs.
+     * @throws IOException Thrown if an I/O Error occurs.
      */
     protected final void checkIfCancelled(final File file, final int depth, final Collection<T> results) throws
             IOException {
@@ -409,7 +409,7 @@ public abstract class DirectoryWalker<T> {
      * @param depth  The current directory level (starting directory = 0).
      * @param files The files (possibly filtered) in the directory, may be {@code null}
      * @return The filtered list of files.
-     * @throws IOException if an I/O Error occurs.
+     * @throws IOException Thrown if an I/O Error occurs.
      * @since 2.0
      */
     @SuppressWarnings("unused") // Possibly thrown from subclasses.
@@ -430,7 +430,7 @@ public abstract class DirectoryWalker<T> {
      * @param results  The collection of result objects, may be updated.
      * @param cancel  The exception throw to cancel further processing
      * containing details at the point of cancellation.
-     * @throws IOException if an I/O Error occurs.
+     * @throws IOException Thrown if an I/O Error occurs.
      */
     protected void handleCancelled(final File startDirectory, final Collection<T> results,
                        final CancelException cancel) throws IOException {
@@ -453,7 +453,7 @@ public abstract class DirectoryWalker<T> {
      * @param depth  The current directory level (starting directory = 0).
      * @param results  The collection of result objects, may be updated.
      * @return true to process this directory, false to skip this directory.
-     * @throws IOException if an I/O Error occurs.
+     * @throws IOException Thrown if an I/O Error occurs.
      */
     @SuppressWarnings("unused") // Possibly thrown from subclasses.
     protected boolean handleDirectory(final File directory, final int depth, final Collection<T> results) throws
@@ -471,7 +471,7 @@ public abstract class DirectoryWalker<T> {
      * @param directory  The directory being processed.
      * @param depth  The current directory level (starting directory = 0).
      * @param results  The collection of result objects, may be updated.
-     * @throws IOException if an I/O Error occurs.
+     * @throws IOException Thrown if an I/O Error occurs.
      */
     @SuppressWarnings("unused") // Possibly thrown from subclasses.
     protected void handleDirectoryEnd(final File directory, final int depth, final Collection<T> results) throws
@@ -488,7 +488,7 @@ public abstract class DirectoryWalker<T> {
      * @param directory  The current directory being processed.
      * @param depth  The current directory level (starting directory = 0).
      * @param results  The collection of result objects, may be updated.
-     * @throws IOException if an I/O Error occurs.
+     * @throws IOException Thrown if an I/O Error occurs.
      */
     @SuppressWarnings("unused") // Possibly thrown from subclasses.
     protected void handleDirectoryStart(final File directory, final int depth, final Collection<T> results) throws
@@ -503,7 +503,7 @@ public abstract class DirectoryWalker<T> {
      * </p>
      *
      * @param results  The collection of result objects, may be updated.
-     * @throws IOException if an I/O Error occurs.
+     * @throws IOException Thrown if an I/O Error occurs.
      */
     @SuppressWarnings("unused") // Possibly thrown from subclasses.
     protected void handleEnd(final Collection<T> results) throws IOException {
@@ -519,7 +519,7 @@ public abstract class DirectoryWalker<T> {
      * @param file  The current file being processed.
      * @param depth  The current directory level (starting directory = 0).
      * @param results  The collection of result objects, may be updated.
-     * @throws IOException if an I/O Error occurs.
+     * @throws IOException Thrown if an I/O Error occurs.
      */
     @SuppressWarnings("unused") // Possibly thrown from subclasses.
     protected void handleFile(final File file, final int depth, final Collection<T> results) throws IOException {
@@ -562,7 +562,7 @@ public abstract class DirectoryWalker<T> {
      * @param depth  The current directory level (starting directory = 0).
      * @param results  The collection of result objects, may be updated.
      * @return true if the walk has been canceled.
-     * @throws IOException if an I/O Error occurs.
+     * @throws IOException Thrown if an I/O Error occurs.
      */
     @SuppressWarnings("unused") // Possibly thrown from subclasses.
     protected boolean handleIsCancelled(
@@ -580,7 +580,7 @@ public abstract class DirectoryWalker<T> {
      * @param directory  The restricted directory.
      * @param depth  The current directory level (starting directory = 0).
      * @param results  The collection of result objects, may be updated.
-     * @throws IOException if an I/O Error occurs.
+     * @throws IOException Thrown if an I/O Error occurs.
      */
     @SuppressWarnings("unused") // Possibly thrown from subclasses.
     protected void handleRestricted(final File directory, final int depth, final Collection<T> results) throws
@@ -596,7 +596,7 @@ public abstract class DirectoryWalker<T> {
      *
      * @param startDirectory  The directory to start from.
      * @param results  The collection of result objects, may be updated.
-     * @throws IOException if an I/O Error occurs.
+     * @throws IOException Thrown if an I/O Error occurs.
      */
     @SuppressWarnings("unused") // Possibly thrown from subclasses.
     protected void handleStart(final File startDirectory, final Collection<T> results) throws IOException {
@@ -618,7 +618,7 @@ public abstract class DirectoryWalker<T> {
      * @param startDirectory  The directory to start from, not null.
      * @param results  The collection of result objects, may be updated.
      * @throws NullPointerException if the start directory is null.
-     * @throws IOException if an I/O Error occurs.
+     * @throws IOException Thrown if an I/O Error occurs.
      */
     protected final void walk(final File startDirectory, final Collection<T> results) throws IOException {
         Objects.requireNonNull(startDirectory, "startDirectory");
@@ -637,7 +637,7 @@ public abstract class DirectoryWalker<T> {
      * @param directory  The directory to examine, not null.
      * @param depth  The directory level (starting directory = 0).
      * @param results  The collection of result objects, may be updated.
-     * @throws IOException if an I/O Error occurs.
+     * @throws IOException Thrown if an I/O Error occurs.
      */
     private void walk(final File directory, final int depth, final Collection<T> results) throws IOException {
         checkIfCancelled(directory, depth, results);

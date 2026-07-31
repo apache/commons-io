@@ -54,7 +54,7 @@ public class FileDeleteStrategy {
          * @param fileToDelete  The file to delete, not null.
          * @return Always returns {@code true}
          * @throws NullPointerException if the file is null.
-         * @throws IOException if an error occurs during file deletion.
+         * @throws IOException Thrown if an error occurs during file deletion.
          */
         @Override
         protected boolean doDelete(final File fileToDelete) throws IOException {
@@ -96,7 +96,7 @@ public class FileDeleteStrategy {
      *
      * @param fileToDelete  The file to delete, not null.
      * @throws NullPointerException if the file is null.
-     * @throws IOException if an error occurs during file deletion.
+     * @throws IOException Thrown if an error occurs during file deletion.
      */
     public void delete(final File fileToDelete) throws IOException {
         if (fileToDelete.exists() && !doDelete(fileToDelete)) {
@@ -142,7 +142,7 @@ public class FileDeleteStrategy {
      * @param file  The file to delete, exists, not null.
      * @return true if the file was deleted.
      * @throws NullPointerException if the file is null.
-     * @throws IOException if an error occurs during file deletion.
+     * @throws IOException Thrown if an error occurs during file deletion.
      */
     protected boolean doDelete(final File file) throws IOException {
         FileUtils.delete(file);

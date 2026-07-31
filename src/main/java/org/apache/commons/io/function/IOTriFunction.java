@@ -61,7 +61,7 @@ public interface IOTriFunction<T, U, V, R> {
      * @param u The second function argument.
      * @param v The third function argument.
      * @return The function result.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      */
     R apply(T t, U u, V v) throws IOException;
 

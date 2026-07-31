@@ -106,7 +106,7 @@ public class FilterChannel<C extends Channel> implements Channel {
      * Constructs a new instance.
      *
      * @param builder The source builder.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      */
     @SuppressWarnings("unchecked")
     FilterChannel(final AbstractBuilder<?, ?, ?> builder) throws IOException {

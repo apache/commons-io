@@ -200,7 +200,7 @@ public class RandomAccessFileInputStream extends AbstractInputStream {
      * @param size The number of bytes to copy.
      * @param os   Where to copy.
      * @return The number of bytes copied.
-     * @throws IOException if {@code pos} is less than {@code 0} or if an I/O error occurs.
+     * @throws IOException Thrown if {@code pos} is less than {@code 0} or if an I/O error occurs.
      * @since 2.19.0
      */
     public long copy(final long pos, final long size, final OutputStream os) throws IOException {

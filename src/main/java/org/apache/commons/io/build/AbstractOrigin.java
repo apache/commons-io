@@ -1339,7 +1339,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
      *
      * @param charset The charset to use for decoding, null maps to the default Charset.
      * @return A new Reader on the origin.
-     * @throws IOException if an I/O error occurs opening the file.
+     * @throws IOException Thrown if an I/O error occurs opening the file.
      */
     public Reader getReader(final Charset charset) throws IOException {
         return Files.newBufferedReader(getPath(), Charsets.toCharset(charset));
@@ -1371,7 +1371,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
      * Gets the size of the origin, if possible.
      *
      * @return The size of the origin in bytes or characters.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      * @since 2.13.0
      */
     public long size() throws IOException {

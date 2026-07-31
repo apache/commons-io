@@ -402,7 +402,7 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
      * </p>
      *
      * @param input An input stream.
-     * @throws IOException if an I/O error occurs while reading stream header.
+     * @throws IOException Thrown if an I/O error occurs while reading stream header.
      * @deprecated Use {@link #builder()}.
      */
     @Deprecated

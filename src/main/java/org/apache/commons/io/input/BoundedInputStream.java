@@ -382,7 +382,7 @@ public class BoundedInputStream extends ProxyInputStream {
     /**
      * Invokes the delegate's {@link InputStream#close()} method if {@link #isPropagateClose()} is {@code true}.
      *
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      */
     @Override
     public void close() throws IOException {
@@ -496,7 +496,7 @@ public class BoundedInputStream extends ProxyInputStream {
      * Invokes the delegate's {@link InputStream#read()} method if the current position is less than the limit.
      *
      * @return The byte read or -1 if the end of stream or the limit has been reached.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      */
     @Override
     public int read() throws IOException {
@@ -512,7 +512,7 @@ public class BoundedInputStream extends ProxyInputStream {
      *
      * @param b The buffer to read the bytes into.
      * @return The number of bytes read or -1 if the end of stream or the limit has been reached.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      */
     @Override
     public int read(final byte[] b) throws IOException {
@@ -526,7 +526,7 @@ public class BoundedInputStream extends ProxyInputStream {
      * @param off The start offset.
      * @param len The number of bytes to read.
      * @return The number of bytes read or -1 if the end of stream or the limit has been reached.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      */
     @Override
     public int read(final byte[] b, final int off, final int len) throws IOException {
@@ -540,7 +540,7 @@ public class BoundedInputStream extends ProxyInputStream {
     /**
      * Invokes the delegate's {@link InputStream#reset()} method.
      *
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      */
     @Override
     public synchronized void reset() throws IOException {
@@ -565,7 +565,7 @@ public class BoundedInputStream extends ProxyInputStream {
      *
      * @param n The number of bytes to skip.
      * @return The actual number of bytes skipped.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      */
     @Override
     public synchronized long skip(final long n) throws IOException {

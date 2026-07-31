@@ -271,7 +271,7 @@ class FileAlterationObserverTest extends AbstractMonitorTest {
     /**
      * Test checkAndNotify() creating
      *
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      */
     @Test
     void testFileCreate() throws IOException {
@@ -332,7 +332,7 @@ class FileAlterationObserverTest extends AbstractMonitorTest {
     /**
      * Test checkAndNotify() deleting
      *
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      */
     @Test
     void testFileDelete() throws IOException {
@@ -393,7 +393,7 @@ class FileAlterationObserverTest extends AbstractMonitorTest {
     /**
      * Test checkAndNotify() creating
      *
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      */
     @Test
     void testFileUpdate() throws IOException {
@@ -451,7 +451,7 @@ class FileAlterationObserverTest extends AbstractMonitorTest {
     /**
      * Test checkAndNotify() method
      *
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      */
     @Test
     void testObserveSingleFile() throws IOException {

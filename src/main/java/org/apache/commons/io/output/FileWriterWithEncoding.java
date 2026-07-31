@@ -172,7 +172,7 @@ public class FileWriterWithEncoding extends ProxyWriter {
      * @param encoding The encoding to use - may be Charset, CharsetEncoder or String, null uses the default Charset.
      * @param append   true to append.
      * @return A new initialized OutputStreamWriter.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      */
     private static OutputStreamWriter initWriter(final File file, final Object encoding, final boolean append) throws IOException {
         Objects.requireNonNull(file, "file");

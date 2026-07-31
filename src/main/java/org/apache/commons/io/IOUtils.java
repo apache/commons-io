@@ -714,7 +714,7 @@ public class IOUtils {
      * Closes the given {@link Closeable} as a null-safe operation.
      *
      * @param closeable The resource to close, may be null.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      * @since 2.7
      */
     public static void close(final Closeable closeable) throws IOException {
@@ -1225,7 +1225,7 @@ public class IOUtils {
      * @param input1 The first stream.
      * @param input2 The second stream.
      * @return true if the content of the streams are equal or they both don't. exist, false otherwise.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      */
     @SuppressWarnings("resource") // Caller closes input streams
     public static boolean contentEquals(final InputStream input1, final InputStream input2) throws IOException {
@@ -2133,7 +2133,7 @@ public class IOUtils {
      * @param input  The byte channel to read.
      * @param buffer byte buffer destination.
      * @return The actual length read; may be less than requested if EOF was reached.
-     * @throws IOException if a read error occurs.
+     * @throws IOException Thrown if a read error occurs.
      * @since 2.5
      */
     public static int read(final ReadableByteChannel input, final ByteBuffer buffer) throws IOException {
@@ -2157,7 +2157,7 @@ public class IOUtils {
      * @param reader where to read input from.
      * @param buffer destination.
      * @return actual length read; may be less than requested if EOF was reached.
-     * @throws IOException if a read error occurs.
+     * @throws IOException Thrown if a read error occurs.
      * @since 2.2
      */
     public static int read(final Reader reader, final char[] buffer) throws IOException {
@@ -2417,7 +2417,7 @@ public class IOUtils {
      *
      * @param name The resource name.
      * @return The requested byte array.
-     * @throws IOException if an I/O error occurs or the resource is not found.
+     * @throws IOException Thrown if an I/O error occurs or the resource is not found.
      * @see #resourceToByteArray(String, ClassLoader)
      * @since 2.6
      */
@@ -2434,7 +2434,7 @@ public class IOUtils {
      * @param name        The resource name.
      * @param classLoader The class loader that the resolution of the resource is delegated to.
      * @return The requested byte array.
-     * @throws IOException if an I/O error occurs or the resource is not found.
+     * @throws IOException Thrown if an I/O error occurs or the resource is not found.
      * @see #resourceToURL(String, ClassLoader)
      * @since 2.6
      */
@@ -2451,7 +2451,7 @@ public class IOUtils {
      * @param name    The resource name.
      * @param charset The charset to use, null means platform default.
      * @return The requested String.
-     * @throws IOException if an I/O error occurs or the resource is not found.
+     * @throws IOException Thrown if an I/O error occurs or the resource is not found.
      * @see #resourceToString(String, Charset, ClassLoader)
      * @since 2.6
      */
@@ -2469,7 +2469,7 @@ public class IOUtils {
      * @param charset     The Charset to use, null means platform default.
      * @param classLoader The class loader that the resolution of the resource is delegated to.
      * @return The requested String.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      * @see #resourceToURL(String, ClassLoader)
      * @since 2.6
      */
@@ -2485,7 +2485,7 @@ public class IOUtils {
      *
      * @param name The resource name.
      * @return A URL object for reading the resource.
-     * @throws IOException if the resource is not found.
+     * @throws IOException Thrown if the resource is not found.
      * @since 2.6
      */
     public static URL resourceToURL(final String name) throws IOException {
@@ -2502,7 +2502,7 @@ public class IOUtils {
      * @param name        The resource name.
      * @param classLoader Delegate to this class loader if not null.
      * @return A URL object for reading the resource.
-     * @throws IOException if the resource is not found.
+     * @throws IOException Thrown if the resource is not found.
      * @since 2.6
      */
     public static URL resourceToURL(final String name, final ClassLoader classLoader) throws IOException {
@@ -2777,7 +2777,7 @@ public class IOUtils {
      *
      * @param input Stream to be fully buffered.
      * @return A fully buffered stream.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      * @since 2.0
      */
     public static InputStream toBufferedInputStream(final InputStream input) throws IOException {
@@ -2804,7 +2804,7 @@ public class IOUtils {
      * @param input Stream to be fully buffered.
      * @param size  The initial buffer size.
      * @return A fully buffered stream.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      * @since 2.5
      */
     public static InputStream toBufferedInputStream(final InputStream input, final int size) throws IOException {
@@ -3397,7 +3397,7 @@ public class IOUtils {
      *
      * @param uri The URI source.
      * @return The contents of the URL as a String.
-     * @throws IOException if an I/O exception occurs.
+     * @throws IOException Thrown if an I/O exception occurs.
      * @since 2.1
      * @deprecated Use {@link #toString(URI, Charset)} instead.
      */
@@ -3412,7 +3412,7 @@ public class IOUtils {
      * @param uri      The URI source.
      * @param encoding The encoding name for the URL contents.
      * @return The contents of the URL as a String.
-     * @throws IOException if an I/O exception occurs.
+     * @throws IOException Thrown if an I/O exception occurs.
      * @since 2.3.
      */
     public static String toString(final URI uri, final Charset encoding) throws IOException {
@@ -3438,7 +3438,7 @@ public class IOUtils {
      *
      * @param url The URL source.
      * @return The contents of the URL as a String.
-     * @throws IOException if an I/O exception occurs.
+     * @throws IOException Thrown if an I/O exception occurs.
      * @since 2.1
      * @deprecated Use {@link #toString(URL, Charset)} instead.
      */
@@ -3453,7 +3453,7 @@ public class IOUtils {
      * @param url      The URL source.
      * @param encoding The encoding name for the URL contents.
      * @return The contents of the URL as a String.
-     * @throws IOException if an I/O exception occurs.
+     * @throws IOException Thrown if an I/O exception occurs.
      * @since 2.3
      */
     public static String toString(final URL url, final Charset encoding) throws IOException {

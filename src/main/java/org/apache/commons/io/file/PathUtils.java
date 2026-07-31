@@ -164,7 +164,7 @@ public final class PathUtils {
          * @param maxDepth         See {@link Files#walkFileTree(Path,Set,int,FileVisitor)}.
          * @param linkOptions      Options indicating how symbolic links are handled.
          * @param fileVisitOptions See {@link Files#walkFileTree(Path,Set,int,FileVisitor)}.
-         * @throws IOException if an I/O error is thrown by a visitor method.
+         * @throws IOException Thrown if an I/O error is thrown by a visitor method.
          */
         private RelativeSortedPaths(final Path dir1, final Path dir2, final int maxDepth, final LinkOption[] linkOptions,
                 final FileVisitOption[] fileVisitOptions) throws IOException {
@@ -274,7 +274,7 @@ public final class PathUtils {
      * @param directory        The directory to accumulate information.
      * @param maxDepth         See {@link Files#walkFileTree(Path,Set,int,FileVisitor)}.
      * @param fileVisitOptions See {@link Files#walkFileTree(Path,Set,int,FileVisitor)}.
-     * @throws IOException if an I/O error is thrown by a visitor method.
+     * @throws IOException Thrown if an I/O error is thrown by a visitor method.
      * @return file tree information.
      */
     private static AccumulatorPathVisitor accumulate(final Path directory, final int maxDepth, final FileVisitOption[] fileVisitOptions) throws IOException {
@@ -290,7 +290,7 @@ public final class PathUtils {
      *
      * @param directory directory to clean.
      * @return The visitation path counters.
-     * @throws IOException if an I/O error is thrown by a visitor method.
+     * @throws IOException Thrown if an I/O error is thrown by a visitor method.
      */
     public static PathCounters cleanDirectory(final Path directory) throws IOException {
         return cleanDirectory(directory, EMPTY_DELETE_OPTION_ARRAY);
@@ -305,7 +305,7 @@ public final class PathUtils {
      * @param directory     directory to clean.
      * @param deleteOptions How to handle deletion.
      * @return The visitation path counters.
-     * @throws IOException if an I/O error is thrown by a visitor method.
+     * @throws IOException Thrown if an I/O error is thrown by a visitor method.
      * @since 2.8.0
      */
     public static PathCounters cleanDirectory(final Path directory, final DeleteOption... deleteOptions) throws IOException {
@@ -371,7 +371,7 @@ public final class PathUtils {
      * @param fileSystem1 The first FileSystem.
      * @param fileSystem2 The second FileSystem.
      * @return Whether the two FileSystem contain the same files while considering file contents.
-     * @throws IOException if an I/O error is thrown by a visitor method.
+     * @throws IOException Thrown if an I/O error is thrown by a visitor method.
      * @since 2.19.0
      */
     public static boolean contentEquals(final FileSystem fileSystem1, final FileSystem fileSystem2) throws IOException {
@@ -414,7 +414,7 @@ public final class PathUtils {
      * @param targetDirectory The target directory.
      * @param copyOptions     Specifies how the copying should be done.
      * @return The visitation path counters.
-     * @throws IOException if an I/O error is thrown by a visitor method.
+     * @throws IOException Thrown if an I/O error is thrown by a visitor method.
      */
     public static PathCounters copyDirectory(final Path sourceDirectory, final Path targetDirectory, final CopyOption... copyOptions) throws IOException {
         final Path absoluteSource = sourceDirectory.toAbsolutePath();
@@ -429,7 +429,7 @@ public final class PathUtils {
      * @param targetFile  The target file.
      * @param copyOptions Specifies how the copying should be done.
      * @return The target file.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      * @see Files#copy(InputStream, Path, CopyOption...)
      */
     public static Path copyFile(final URL sourceFile, final Path targetFile, final CopyOption... copyOptions) throws IOException {
@@ -444,7 +444,7 @@ public final class PathUtils {
      * @param targetDirectory The target directory.
      * @param copyOptions     Specifies how the copying should be done.
      * @return The target file.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      * @see Files#copy(Path, Path, CopyOption...)
      */
     public static Path copyFileToDirectory(final Path sourceFile, final Path targetDirectory, final CopyOption... copyOptions) throws IOException {
@@ -461,7 +461,7 @@ public final class PathUtils {
      * @param targetDirectory The target directory.
      * @param copyOptions     Specifies how the copying should be done.
      * @return The target file.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      * @see Files#copy(InputStream, Path, CopyOption...)
      */
     public static Path copyFileToDirectory(final URL sourceFile, final Path targetDirectory, final CopyOption... copyOptions) throws IOException {
@@ -475,7 +475,7 @@ public final class PathUtils {
      *
      * @param directory directory to delete.
      * @return The visitor used to count the given directory.
-     * @throws IOException if an I/O error is thrown by a visitor method.
+     * @throws IOException Thrown if an I/O error is thrown by a visitor method.
      */
     public static PathCounters countDirectory(final Path directory) throws IOException {
         return visitFileTree(CountingPathVisitor.withLongCounters(), directory).getPathCounters();
@@ -486,7 +486,7 @@ public final class PathUtils {
      *
      * @param directory directory to count.
      * @return The visitor used to count the given directory.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      * @since 2.12.0
      */
     public static PathCounters countDirectoryAsBigInteger(final Path directory) throws IOException {
@@ -502,7 +502,7 @@ public final class PathUtils {
      * @param path  The path to a file (or directory).
      * @param attrs An optional list of file attributes to set atomically when creating the directories.
      * @return The Path for the {@code path}'s parent directory or null if the given path has no parent.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      * @since 2.9.0
      */
     public static Path createParentDirectories(final Path path, final FileAttribute<?>... attrs) throws IOException {
@@ -519,7 +519,7 @@ public final class PathUtils {
      * @param linkOption A {@link LinkOption} or null.
      * @param attrs      An optional list of file attributes to set atomically when creating the directories.
      * @return The Path for the {@code path}'s parent directory or null if the given path has no parent.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      * @since 2.12.0
      */
     public static Path createParentDirectories(final Path path, final LinkOption linkOption, final FileAttribute<?>... attrs) throws IOException {
@@ -611,7 +611,7 @@ public final class PathUtils {
      *
      * @param directory directory to delete.
      * @return The visitor used to delete the given directory.
-     * @throws IOException if an I/O error is thrown by a visitor method.
+     * @throws IOException Thrown if an I/O error is thrown by a visitor method.
      */
     public static PathCounters deleteDirectory(final Path directory) throws IOException {
         return deleteDirectory(directory, EMPTY_DELETE_OPTION_ARRAY);
@@ -623,7 +623,7 @@ public final class PathUtils {
      * @param directory     directory to delete.
      * @param deleteOptions How to handle deletion.
      * @return The visitor used to delete the given directory.
-     * @throws IOException if an I/O error is thrown by a visitor method.
+     * @throws IOException Thrown if an I/O error is thrown by a visitor method.
      * @since 2.8.0
      */
     public static PathCounters deleteDirectory(final Path directory, final DeleteOption... deleteOptions) throws IOException {
@@ -640,7 +640,7 @@ public final class PathUtils {
      * @param linkOptions   How to handle symbolic links.
      * @param deleteOptions How to handle deletion.
      * @return The visitor used to delete the given directory.
-     * @throws IOException if an I/O error is thrown by a visitor method.
+     * @throws IOException Thrown if an I/O error is thrown by a visitor method.
      * @since 2.9.0
      */
     public static PathCounters deleteDirectory(final Path directory, final LinkOption[] linkOptions, final DeleteOption... deleteOptions) throws IOException {
@@ -756,7 +756,7 @@ public final class PathUtils {
      * @param path1 The first directory.
      * @param path2 The second directory.
      * @return Whether the two directories contain the same files while considering file contents.
-     * @throws IOException if an I/O error is thrown by a visitor method.
+     * @throws IOException Thrown if an I/O error is thrown by a visitor method.
      */
     public static boolean directoryAndFileContentEquals(final Path path1, final Path path2) throws IOException {
         return directoryAndFileContentEquals(path1, path2, EMPTY_LINK_OPTION_ARRAY, EMPTY_OPEN_OPTION_ARRAY, EMPTY_FILE_VISIT_OPTION_ARRAY);
@@ -772,7 +772,7 @@ public final class PathUtils {
      * @param openOptions     options to open files.
      * @param fileVisitOption options to configure traversal.
      * @return Whether the two directories contain the same files while considering file contents.
-     * @throws IOException if an I/O error is thrown by a visitor method.
+     * @throws IOException Thrown if an I/O error is thrown by a visitor method.
      */
     public static boolean directoryAndFileContentEquals(final Path path1, final Path path2, final LinkOption[] linkOptions, final OpenOption[] openOptions,
             final FileVisitOption[] fileVisitOption) throws IOException {
@@ -819,7 +819,7 @@ public final class PathUtils {
      * @param path1 The first directory.
      * @param path2 The second directory.
      * @return Whether the two directories contain the same files without considering file contents.
-     * @throws IOException if an I/O error is thrown by a visitor method.
+     * @throws IOException Thrown if an I/O error is thrown by a visitor method.
      */
     public static boolean directoryContentEquals(final Path path1, final Path path2) throws IOException {
         return directoryContentEquals(path1, path2, Integer.MAX_VALUE, EMPTY_LINK_OPTION_ARRAY, EMPTY_FILE_VISIT_OPTION_ARRAY);
@@ -835,7 +835,7 @@ public final class PathUtils {
      * @param linkOptions      options to follow links.
      * @param fileVisitOptions options to configure the traversal.
      * @return Whether the two directories contain the same files without considering file contents.
-     * @throws IOException if an I/O error is thrown by a visitor method.
+     * @throws IOException Thrown if an I/O error is thrown by a visitor method.
      */
     public static boolean directoryContentEquals(final Path path1, final Path path2, final int maxDepth, final LinkOption[] linkOptions,
             final FileVisitOption[] fileVisitOptions) throws IOException {
@@ -980,7 +980,7 @@ public final class PathUtils {
      *
      * @param sourcePath The path to the file.
      * @return A file attribute view of the given type, or null if the attribute view type is not available.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      * @since 2.8.0
      */
     public static List<AclEntry> getAclEntryList(final Path sourcePath) throws IOException {
@@ -1214,7 +1214,7 @@ public final class PathUtils {
      *
      * @param path The file or directory to query.
      * @return whether the file or directory is empty.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      */
     public static boolean isEmpty(final Path path) throws IOException {
         return Files.isDirectory(path) ? isEmptyDirectory(path) : isEmptyFile(path);
@@ -1319,7 +1319,7 @@ public final class PathUtils {
      * @param file      The {@link File} to test.
      * @param reference The {@link File} of which the modification date is used.
      * @return true if the {@link File} exists and has been modified more recently than the reference {@link File}.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      * @since 2.12.0
      */
     public static boolean isNewer(final Path file, final Path reference) throws IOException {
@@ -1380,7 +1380,7 @@ public final class PathUtils {
      * @param file      The {@link File} to test.
      * @param reference The {@link File} of which the modification date is used.
      * @return true if the {@link File} exists and has been modified before than the reference {@link File}.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      * @since 2.12.0
      */
     public static boolean isOlder(final Path file, final Path reference) throws IOException {
@@ -1429,7 +1429,7 @@ public final class PathUtils {
      * @param dir        The path to the directory to stream.
      * @param pathFilter The directory stream filter.
      * @return A new instance.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      */
     public static DirectoryStream<Path> newDirectoryStream(final Path dir, final PathFilter pathFilter) throws IOException {
         return Files.newDirectoryStream(dir, new DirectoryStreamFilter(pathFilter));
@@ -1441,7 +1441,7 @@ public final class PathUtils {
      * @param path   The Path.
      * @param append Whether or not to append.
      * @return A new OutputStream.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      * @see Files#newOutputStream(Path, OpenOption...)
      * @since 2.12.0
      */
@@ -1509,7 +1509,7 @@ public final class PathUtils {
      *
      * @param path The path to read.
      * @return The path attributes.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      * @since 2.9.0
      */
     public static BasicFileAttributes readBasicFileAttributes(final Path path) throws IOException {
@@ -1588,7 +1588,7 @@ public final class PathUtils {
      * @param path    The source path.
      * @param charset How to convert bytes to a String, null uses the default Charset.
      * @return The file contents as a new String.
-     * @throws IOException if an I/O error occurs reading from the stream.
+     * @throws IOException Thrown if an I/O error occurs reading from the stream.
      * @see Files#readAllBytes(Path)
      * @see Charsets#toCharset(Charset)
      * @since 2.12.0
@@ -1675,7 +1675,7 @@ public final class PathUtils {
      * @param enableDeleteChildren true to set permissions to delete.
      * @param linkOptions          options indicating how handle symbolic links.
      * @return true if the operation was attempted and succeeded, false if parent is null.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      */
     private static boolean setPosixDeletePermissions(final Path parent, final boolean enableDeleteChildren, final LinkOption... linkOptions)
             throws IOException {
@@ -1703,7 +1703,7 @@ public final class PathUtils {
      * @param updatePermissions The List of PosixFilePermission to add or remove.
      * @param linkOptions       options indicating how handle symbolic links.
      * @return true if the operation was attempted and succeeded, false if parent is null.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      */
     private static boolean setPosixPermissions(final Path path, final boolean addPermissions, final List<PosixFilePermission> updatePermissions,
             final LinkOption... linkOptions) throws IOException {
@@ -1760,7 +1760,7 @@ public final class PathUtils {
      * @param readOnly    true for read-only, false for not read-only.
      * @param linkOptions options indicating how to handle symbolic links.
      * @return The given path.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      * @since 2.8.0
      */
     public static Path setReadOnly(final Path path, final boolean readOnly, final LinkOption... linkOptions) throws IOException {
@@ -1932,7 +1932,7 @@ public final class PathUtils {
      * @param visitor  See {@link Files#walkFileTree(Path,Set,int,FileVisitor)}.
      * @param <T>      See {@link Files#walkFileTree(Path,Set,int,FileVisitor)}.
      * @return The given visitor.
-     * @throws IOException if an I/O error is thrown by a visitor method.
+     * @throws IOException Thrown if an I/O error is thrown by a visitor method.
      */
     public static <T extends FileVisitor<? super Path>> T visitFileTree(final T visitor, final Path start, final Set<FileVisitOption> options,
             final int maxDepth) throws IOException {
@@ -1950,7 +1950,7 @@ public final class PathUtils {
      * @param more    See {@link Paths#get(String,String[])}.
      * @param <T>     See {@link Files#walkFileTree(Path,FileVisitor)}.
      * @return The given visitor.
-     * @throws IOException if an I/O error is thrown by a visitor method.
+     * @throws IOException Thrown if an I/O error is thrown by a visitor method.
      */
     public static <T extends FileVisitor<? super Path>> T visitFileTree(final T visitor, final String first, final String... more) throws IOException {
         return visitFileTree(visitor, Paths.get(first, more));
@@ -1965,7 +1965,7 @@ public final class PathUtils {
      * @param uri     See {@link Paths#get(URI)}.
      * @param <T>     See {@link Files#walkFileTree(Path,FileVisitor)}.
      * @return The given visitor.
-     * @throws IOException if an I/O error is thrown by a visitor method.
+     * @throws IOException Thrown if an I/O error is thrown by a visitor method.
      */
     public static <T extends FileVisitor<? super Path>> T visitFileTree(final T visitor, final URI uri) throws IOException {
         return visitFileTree(visitor, Paths.get(uri));
@@ -2025,7 +2025,7 @@ public final class PathUtils {
      * @param readAttributes whether to call the filters with file attributes (false passes null).
      * @param options        The options to configure the walk.
      * @return A filtered stream of paths.
-     * @throws IOException if an I/O error is thrown when accessing the starting file.
+     * @throws IOException Thrown if an I/O error is thrown when accessing the starting file.
      * @since 2.9.0
      */
     @SuppressWarnings("resource") // Caller closes

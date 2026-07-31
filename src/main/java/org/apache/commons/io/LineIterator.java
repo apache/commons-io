@@ -92,7 +92,7 @@ public class LineIterator implements Iterator<String>, Closeable {
      * then the {@link Reader} remains open.
      * This method can safely be called multiple times.
      *
-     * @throws IOException if closing the underlying {@link Reader} fails.
+     * @throws IOException Thrown if closing the underlying {@link Reader} fails.
      */
     @Override
     public void close() throws IOException {

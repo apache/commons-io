@@ -85,7 +85,7 @@ public class TaggedReader extends ProxyReader {
      * Tags any IOExceptions thrown, wrapping and re-throwing.
      *
      * @param e The IOException thrown.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      */
     @Override
     protected void handleIOException(final IOException e) throws IOException {

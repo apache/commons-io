@@ -148,7 +148,7 @@ public final class UnsynchronizedBufferedInputStream extends UnsynchronizedFilte
      * reads are now filtered through this stream.
      *
      * @param builder   A builder providing the input stream and buffer size.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      * @throws IllegalArgumentException if {@code size < 0}.
      */
     @SuppressWarnings("resource")
@@ -166,7 +166,7 @@ public final class UnsynchronizedBufferedInputStream extends UnsynchronizedFilte
      * available in the source stream.
      *
      * @return The number of bytes available before blocking.
-     * @throws IOException if this stream is closed.
+     * @throws IOException Thrown if this stream is closed.
      */
     @Override
     public int available() throws IOException {
@@ -180,7 +180,7 @@ public final class UnsynchronizedBufferedInputStream extends UnsynchronizedFilte
     /**
      * Closes this stream. The source stream is closed and any resources associated with it are released.
      *
-     * @throws IOException if an error occurs while closing this stream.
+     * @throws IOException Thrown if an error occurs while closing this stream.
      */
     @Override
     public void close() throws IOException {
@@ -260,7 +260,7 @@ public final class UnsynchronizedBufferedInputStream extends UnsynchronizedFilte
      * reached. If the internal buffer does not contain any available bytes then it is filled from the source stream and the first byte is returned.
      *
      * @return The byte read or -1 if the end of the source stream has been reached.
-     * @throws IOException if this stream is closed or another IOException occurs.
+     * @throws IOException Thrown if this stream is closed or another IOException occurs.
      */
     @Override
     public int read() throws IOException {
@@ -376,8 +376,8 @@ public final class UnsynchronizedBufferedInputStream extends UnsynchronizedFilte
     /**
      * Resets this stream to the last marked location.
      *
-     * @throws IOException if this stream is closed, no mark has been set or the mark is no longer valid because more than {@code readLimit} bytes have been
-     *                     read since setting the mark.
+     * @throws IOException Thrown if this stream is closed, no mark has been set or the mark is no longer valid because more than {@code readLimit} bytes have
+     *                     been read since setting the mark.
      * @see #mark(int)
      */
     @Override
@@ -396,7 +396,7 @@ public final class UnsynchronizedBufferedInputStream extends UnsynchronizedFilte
      *
      * @param amount The number of bytes to skip. {@code skip} does nothing and returns 0 if {@code amount} is less than zero.
      * @return The number of bytes actually skipped.
-     * @throws IOException if this stream is closed or another IOException occurs.
+     * @throws IOException Thrown if this stream is closed or another IOException occurs.
      */
     @Override
     public long skip(final long amount) throws IOException {

@@ -233,7 +233,7 @@ public class NullReader extends Reader {
      * {@code throwEofException} is set to {@code false}.
      * @throws EOFException if the end of file is reached and
      * {@code throwEofException} is set to {@code true}.
-     * @throws IOException if trying to read past the end of file.
+     * @throws IOException Thrown if trying to read past the end of file.
      */
     @Override
     public int read() throws IOException {
@@ -256,7 +256,7 @@ public class NullReader extends Reader {
      * {@code throwEofException} is set to {@code false}.
      * @throws EOFException if the end of file is reached and
      * {@code throwEofException} is set to {@code true}.
-     * @throws IOException if trying to read past the end of file.
+     * @throws IOException Thrown if trying to read past the end of file.
      */
     @Override
     public int read(final char[] chars) throws IOException {
@@ -276,7 +276,7 @@ public class NullReader extends Reader {
      * @throws IndexOutOfBoundsException if {@code offset} or {@code length} are negative, or if {@code offset + length} is greater than {@code chars.length}.
      * @throws EOFException if the end of file is reached and
      * {@code throwEofException} is set to {@code true}.
-     * @throws IOException if trying to read past the end of file.
+     * @throws IOException Thrown if trying to read past the end of file.
      */
     @Override
     public int read(final char[] chars, final int offset, final int length) throws IOException {
@@ -334,7 +334,7 @@ public class NullReader extends Reader {
      * {@code throwEofException} is set to {@code false}.
      * @throws EOFException if the end of file is reached and
      * {@code throwEofException} is set to {@code true}.
-     * @throws IOException if trying to read past the end of file.
+     * @throws IOException Thrown if trying to read past the end of file.
      */
     @Override
     public long skip(final long numberOfChars) throws IOException {

@@ -178,7 +178,7 @@ public class NullInputStream extends AbstractInputStream {
      * Handles End of File.
      *
      * @return {@code -1} if {@code throwEofException} is set to {@code false}
-     * @throws IOException if {@code throwEofException} is set to {@code true}.
+     * @throws IOException Thrown if {@code throwEofException} is set to {@code true}.
      */
     private int handleEof() throws IOException {
         checkThrowEof("handleEof()");

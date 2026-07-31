@@ -56,7 +56,7 @@ public abstract class UnsynchronizedReader extends Reader {
     /**
      * Checks if this instance is closed and throws an IOException if so.
      *
-     * @throws IOException if this instance is closed.
+     * @throws IOException Thrown if this instance is closed.
      */
     void checkOpen() throws IOException {
         Input.checkOpen(!isClosed());

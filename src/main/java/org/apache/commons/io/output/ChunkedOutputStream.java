@@ -117,7 +117,7 @@ public class ChunkedOutputStream extends FilterOutputStream {
      * Constructs a new stream that uses the specified chunk size.
      *
      * @param builder holds contruction data.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      */
     @SuppressWarnings("resource") // caller closes.
     private ChunkedOutputStream(final Builder builder) throws IOException {
@@ -171,7 +171,7 @@ public class ChunkedOutputStream extends FilterOutputStream {
      * @throws NullPointerException if the data is {@code null}.
      * @throws IndexOutOfBoundsException if {@code srcOffset} or {@code length} are negative,
      *                                   or if {@code srcOffset + length} is greater than {@code data.length}.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      */
     @Override
     public void write(final byte[] data, final int srcOffset, final int length) throws IOException {

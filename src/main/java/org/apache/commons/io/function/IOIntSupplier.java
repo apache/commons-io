@@ -43,7 +43,7 @@ public interface IOIntSupplier {
      * Gets a result.
      *
      * @return A result.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      */
     int getAsInt() throws IOException;
 }

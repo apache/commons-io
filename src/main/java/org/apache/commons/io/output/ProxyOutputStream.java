@@ -96,7 +96,7 @@ public class ProxyOutputStream extends FilterOutputStream {
      * </p>
      *
      * @param n number of bytes written.
-     * @throws IOException if the post-processing fails.
+     * @throws IOException Thrown if the post-processing fails.
      * @since 2.0
      */
     @SuppressWarnings("unused") // Possibly thrown from subclasses.
@@ -113,7 +113,7 @@ public class ProxyOutputStream extends FilterOutputStream {
      * </p>
      *
      * @param n number of bytes to be written.
-     * @throws IOException if the pre-processing fails.
+     * @throws IOException Thrown if the pre-processing fails.
      * @since 2.0
      */
     @SuppressWarnings("unused") // Possibly thrown from subclasses.
@@ -124,7 +124,7 @@ public class ProxyOutputStream extends FilterOutputStream {
     /**
      * Invokes the delegate's {@code close()} method.
      *
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      */
     @Override
     public void close() throws IOException {
@@ -134,7 +134,7 @@ public class ProxyOutputStream extends FilterOutputStream {
     /**
      * Invokes the delegate's {@code flush()} method.
      *
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      */
     @Override
     public void flush() throws IOException {
@@ -152,7 +152,7 @@ public class ProxyOutputStream extends FilterOutputStream {
      * </p>
      *
      * @param e The IOException thrown.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      * @since 2.0
      */
     protected void handleIOException(final IOException e) throws IOException {
@@ -191,7 +191,7 @@ public class ProxyOutputStream extends FilterOutputStream {
      * Invokes the delegate's {@code write(byte[])} method.
      *
      * @param b The bytes to write.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      */
     @Override
     public void write(final byte[] b) throws IOException {
@@ -211,7 +211,7 @@ public class ProxyOutputStream extends FilterOutputStream {
      * @param b   The bytes to write.
      * @param off The start offset.
      * @param len The number of bytes to write.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      */
     @Override
     public void write(final byte[] b, final int off, final int len) throws IOException {
@@ -228,7 +228,7 @@ public class ProxyOutputStream extends FilterOutputStream {
      * Invokes the delegate's {@code write(int)} method.
      *
      * @param b The byte to write.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      */
     @Override
     public void write(final int b) throws IOException {
@@ -248,7 +248,7 @@ public class ProxyOutputStream extends FilterOutputStream {
      * @param off    The start offset.
      * @param len    The number of bytes to write.
      * @param repeat How many times to write the bytes in {@code b}.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      * @since 2.21.0
      */
     public void writeRepeat(final byte[] b, final int off, final int len, final long repeat) throws IOException {
@@ -263,7 +263,7 @@ public class ProxyOutputStream extends FilterOutputStream {
      *
      * @param b      The bytes to write.
      * @param repeat How many times to write the bytes in {@code b}.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      * @since 2.21.0
      */
     public void writeRepeat(final byte[] b, final long repeat) throws IOException {
@@ -278,7 +278,7 @@ public class ProxyOutputStream extends FilterOutputStream {
      *
      * @param b      The byte to write.
      * @param repeat How many times to write the byte in {@code b}.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      * @since 2.21.0
      */
     public void writeRepeat(final int b, final long repeat) throws IOException {

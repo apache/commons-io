@@ -29,7 +29,7 @@ final class Input {
      * Throws an {@link IOException} on false input.
      *
      * @param isOpen whether an input is open or not.
-     * @throws IOException if {@code isOpen} is false indicating an input is closed.
+     * @throws IOException Thrown if {@code isOpen} is false indicating an input is closed.
      */
     static void checkOpen(final boolean isOpen) throws IOException {
         if (!isOpen) {

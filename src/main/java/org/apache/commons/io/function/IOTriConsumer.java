@@ -52,7 +52,7 @@ public interface IOTriConsumer<T, U, V> {
      * @param t The first input argument.
      * @param u The second input argument.
      * @param v The second third argument.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      */
     void accept(T t, U u, V v) throws IOException;
 

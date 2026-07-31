@@ -37,7 +37,7 @@ public class RandomAccessFiles {
      * @param raf1 A RandomAccessFile.
      * @param raf2 Another RandomAccessFile.
      * @return true if the contents of both RandomAccessFiles are equal, false otherwise.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      * @since 2.15.0
      */
     @SuppressWarnings("resource") // See comments

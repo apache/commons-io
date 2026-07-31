@@ -103,7 +103,7 @@ public interface IOConsumer<T> {
      * @param <T> The element type.
      * @param iterable The input to stream.
      * @param action The action to apply to each input element.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      * @since 2.12.0
      */
     static <T> void forEach(final Iterable<T> iterable, final IOConsumer<T> action) throws IOException {
@@ -116,7 +116,7 @@ public interface IOConsumer<T> {
      * @param <T> The element type.
      * @param stream The input to stream.
      * @param action The action to apply to each input element.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      * @since 2.12.0
      */
     static <T> void forEach(final Stream<T> stream, final IOConsumer<T> action) throws IOException {
@@ -129,7 +129,7 @@ public interface IOConsumer<T> {
      * @param <T> The element type.
      * @param array The input to stream.
      * @param action The action to apply to each input element.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      * @since 2.12.0
      */
     static <T> void forEach(final T[] array, final IOConsumer<T> action) throws IOException {
@@ -152,7 +152,7 @@ public interface IOConsumer<T> {
      * Performs this operation on the given argument.
      *
      * @param t The input argument.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      */
     void accept(T t) throws IOException;
 

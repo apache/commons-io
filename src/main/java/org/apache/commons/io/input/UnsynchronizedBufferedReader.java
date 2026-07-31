@@ -125,7 +125,7 @@ public class UnsynchronizedBufferedReader extends UnsynchronizedReader {
      * Closes this reader. This implementation closes the buffered source reader and releases the buffer. Nothing is done if this reader has already been
      * closed.
      *
-     * @throws IOException if an error occurs while closing this reader.
+     * @throws IOException Thrown if an error occurs while closing this reader.
      */
     @Override
     public void close() throws IOException {
@@ -275,7 +275,7 @@ public class UnsynchronizedBufferedReader extends UnsynchronizedReader {
      * characters in the source reader.
      *
      * @return The character read or -1 if the end of the source reader has been reached.
-     * @throws IOException if this reader is closed or some other I/O error occurs.
+     * @throws IOException Thrown if this reader is closed or some other I/O error occurs.
      */
     @Override
     public int read() throws IOException {
@@ -360,7 +360,7 @@ public class UnsynchronizedBufferedReader extends UnsynchronizedReader {
      * {@code "\r\n"}, or the end of the reader. The string does not include the newline sequence.
      *
      * @return The contents of the line or {@code null} if no characters were read before the end of the reader has been reached.
-     * @throws IOException if this reader is closed or some other I/O error occurs.
+     * @throws IOException Thrown if this reader is closed or some other I/O error occurs.
      */
     public String readLine() throws IOException {
         checkOpen();
@@ -437,7 +437,7 @@ public class UnsynchronizedBufferedReader extends UnsynchronizedReader {
      * Tests whether this reader is ready to be read without blocking.
      *
      * @return {@code true} if this reader will not block when {@code read} is called, {@code false} if unknown or blocking will occur.
-     * @throws IOException if this reader is closed or some other I/O error occurs.
+     * @throws IOException Thrown if this reader is closed or some other I/O error occurs.
      * @see #read()
      * @see #read(char[], int, int)
      * @see #readLine()
@@ -451,7 +451,7 @@ public class UnsynchronizedBufferedReader extends UnsynchronizedReader {
     /**
      * Resets this reader's position to the last {@code mark()} location. Invocations of {@code read()} and {@code skip()} will occur from this new location.
      *
-     * @throws IOException if this reader is closed or no mark has been set.
+     * @throws IOException Thrown if this reader is closed or no mark has been set.
      * @see #mark(int)
      * @see #markSupported()
      */

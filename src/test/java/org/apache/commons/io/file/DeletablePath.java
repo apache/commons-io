@@ -48,7 +48,7 @@ public class DeletablePath extends AbstractPathWrapper implements Closeable {
      * Deletes the delegate path.
      *
      * @return The visitor used to delete the given directory.
-     * @throws IOException if an I/O error is thrown by a visitor method or if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error is thrown by a visitor method or if an I/O error occurs.
      */
     public PathCounters delete() throws IOException {
         return delete((DeleteOption[]) null);
@@ -58,7 +58,7 @@ public class DeletablePath extends AbstractPathWrapper implements Closeable {
      * Deletes the delegate path.
      * @param deleteOptions How to handle deletion.
      * @return The visitor used to delete the given directory.
-     * @throws IOException if an I/O error is thrown by a visitor method or if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error is thrown by a visitor method or if an I/O error occurs.
      */
     public PathCounters delete(final DeleteOption... deleteOptions) throws IOException {
         return PathUtils.delete(get(), deleteOptions);

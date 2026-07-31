@@ -72,7 +72,7 @@ public class PeekableInputStream extends CircularBufferInputStream {
      * @param offset The start offset in {@code sourceBuffer}.
      * @param length The length to compare.
      * @return true if the next bytes exactly match the requested range from {@code sourceBuffer}.
-     * @throws IOException if there is a problem calling fillBuffer().
+     * @throws IOException Thrown if there is a problem calling fillBuffer().
      */
     public boolean peek(final byte[] sourceBuffer, final int offset, final int length) throws IOException {
         Objects.requireNonNull(sourceBuffer, "sourceBuffer");

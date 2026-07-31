@@ -52,7 +52,7 @@ public class DemuxInputStream extends InputStream {
     /**
      * Closes stream associated with current thread.
      *
-     * @throws IOException if an error occurs.
+     * @throws IOException Thrown if an error occurs.
      */
     @SuppressWarnings("resource") // we actually close the stream here
     @Override
@@ -64,7 +64,7 @@ public class DemuxInputStream extends InputStream {
      * Reads byte from stream associated with current thread.
      *
      * @return The byte read from stream.
-     * @throws IOException if an error occurs.
+     * @throws IOException Thrown if an error occurs.
      */
     @Override
     public int read() throws IOException {

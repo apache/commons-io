@@ -351,7 +351,7 @@ public abstract class AbstractByteArrayOutputStream<T extends AbstractByteArrayO
      *
      * @param in The input stream to read from.
      * @return total number of bytes read from the input stream (and written to this stream).
-     * @throws IOException if an I/O error occurs while reading the input stream.
+     * @throws IOException Thrown if an I/O error occurs while reading the input stream.
      * @since 1.4
      */
     public abstract int write(InputStream in) throws IOException;
@@ -403,7 +403,7 @@ public abstract class AbstractByteArrayOutputStream<T extends AbstractByteArrayO
      *
      * @param in The input stream to read from.
      * @return total number of bytes read from the input stream (and written to this stream).
-     * @throws IOException if an I/O error occurs while reading the input stream.
+     * @throws IOException Thrown if an I/O error occurs while reading the input stream.
      * @since 2.7
      */
     protected int writeImpl(final InputStream in) throws IOException {
@@ -442,7 +442,7 @@ public abstract class AbstractByteArrayOutputStream<T extends AbstractByteArrayO
      * Writes the entire contents of this byte stream to the specified output stream.
      *
      * @param out The output stream to write to.
-     * @throws IOException if an I/O error occurs, such as if the stream is closed.
+     * @throws IOException Thrown if an I/O error occurs, such as if the stream is closed.
      * @see java.io.ByteArrayOutputStream#writeTo(OutputStream)
      */
     public abstract void writeTo(OutputStream out) throws IOException;
@@ -451,7 +451,7 @@ public abstract class AbstractByteArrayOutputStream<T extends AbstractByteArrayO
      * Writes the entire contents of this byte stream to the specified output stream.
      *
      * @param out The output stream to write to.
-     * @throws IOException if an I/O error occurs, such as if the stream is closed.
+     * @throws IOException Thrown if an I/O error occurs, such as if the stream is closed.
      * @see java.io.ByteArrayOutputStream#writeTo(OutputStream)
      */
     protected void writeToImpl(final OutputStream out) throws IOException {

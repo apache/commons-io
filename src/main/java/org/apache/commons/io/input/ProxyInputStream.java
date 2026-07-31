@@ -106,7 +106,7 @@ public abstract class ProxyInputStream extends FilterInputStream {
      * Constructs a new ProxyInputStream.
      *
      * @param builder  How to build an instance.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      * @since 2.18.0
      */
     @SuppressWarnings("resource")
@@ -165,7 +165,7 @@ public abstract class ProxyInputStream extends FilterInputStream {
      * Invokes the delegate's {@link InputStream#available()} method.
      *
      * @return The number of available bytes, 0 if the stream is closed.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      */
     @Override
     public int available() throws IOException {
@@ -196,7 +196,7 @@ public abstract class ProxyInputStream extends FilterInputStream {
      * </p>
      *
      * @param n number of bytes that the caller asked to be read.
-     * @throws IOException if the pre-processing fails in a subclass.
+     * @throws IOException Thrown if the pre-processing fails in a subclass.
      * @since 2.0
      */
     @SuppressWarnings("unused") // Possibly thrown from subclasses.
@@ -207,7 +207,7 @@ public abstract class ProxyInputStream extends FilterInputStream {
     /**
      * Checks if this instance is closed and throws an IOException if so.
      *
-     * @throws IOException if this instance is closed.
+     * @throws IOException Thrown if this instance is closed.
      */
     void checkOpen() throws IOException {
         Input.checkOpen(!isClosed());
@@ -216,7 +216,7 @@ public abstract class ProxyInputStream extends FilterInputStream {
     /**
      * Invokes the delegate's {@link InputStream#close()} method.
      *
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      */
     @Override
     public void close() throws IOException {
@@ -232,7 +232,7 @@ public abstract class ProxyInputStream extends FilterInputStream {
      * </p>
      *
      * @param e The IOException thrown.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      * @since 2.0
      */
     protected void handleIOException(final IOException e) throws IOException {
@@ -276,7 +276,7 @@ public abstract class ProxyInputStream extends FilterInputStream {
      * Invokes the delegate's {@link InputStream#read()} method unless the stream is closed.
      *
      * @return The byte read or {@link IOUtils#EOF EOF} if we reached the end of stream.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      */
     @Override
     public int read() throws IOException {
@@ -346,7 +346,7 @@ public abstract class ProxyInputStream extends FilterInputStream {
     /**
      * Invokes the delegate's {@link InputStream#reset()} method.
      *
-     * @throws IOException if this stream has not been marked or if the mark has been invalidated.
+     * @throws IOException Thrown if this stream has not been marked or if the mark has been invalidated.
      */
     @Override
     public synchronized void reset() throws IOException {
@@ -377,7 +377,7 @@ public abstract class ProxyInputStream extends FilterInputStream {
      *
      * @param n The number of bytes to skip.
      * @return The actual number of bytes skipped.
-     * @throws IOException if the stream does not support seek, or if some other I/O error occurs.
+     * @throws IOException Thrown if the stream does not support seek, or if some other I/O error occurs.
      */
     @Override
     public long skip(final long n) throws IOException {

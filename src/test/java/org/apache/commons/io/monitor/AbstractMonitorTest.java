@@ -129,7 +129,7 @@ public abstract class AbstractMonitorTest {
      *
      * @param file The file to touch.
      * @return The file.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      */
     protected File touch(File file) throws IOException {
         final long lastModified = file.exists() ? FileUtils.lastModified(file) : 0;

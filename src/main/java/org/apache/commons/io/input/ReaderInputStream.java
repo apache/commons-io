@@ -356,7 +356,7 @@ public class ReaderInputStream extends AbstractInputStream {
     /**
      * Closes the stream. This method will cause the underlying {@link Reader} to be closed.
      *
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      */
     @Override
     public void close() throws IOException {
@@ -411,7 +411,7 @@ public class ReaderInputStream extends AbstractInputStream {
      * Reads a single byte.
      *
      * @return either the byte read or {@code -1} if the end of the stream has been reached.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      */
     @Override
     public int read() throws IOException {
@@ -433,7 +433,7 @@ public class ReaderInputStream extends AbstractInputStream {
      * @param b The byte array to read into, must not be {@code null}
      * @return The number of bytes read or {@code -1} if the end of the stream has been reached.
      * @throws NullPointerException if the byte array is {@code null}.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      */
     @Override
     public int read(final byte[] b) throws IOException {
@@ -449,7 +449,7 @@ public class ReaderInputStream extends AbstractInputStream {
      * @return The number of bytes read or {@code -1} if the end of the stream has been reached.
      * @throws NullPointerException      if the byte array is {@code null}.
      * @throws IndexOutOfBoundsException if {@code off} or {@code len} are negative, or if {@code off + len} is greater than {@code array.length}.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      */
     @Override
     public int read(final byte[] array, int off, int len) throws IOException {

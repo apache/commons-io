@@ -106,7 +106,7 @@ public class ThresholdingOutputStream extends OutputStream {
      * so, triggers an event to allow a concrete implementation to take action on this.
      *
      * @param count The number of bytes about to be written to the underlying output stream.
-     * @throws IOException if an error occurs.
+     * @throws IOException Thrown if an error occurs.
      */
     protected void checkThreshold(final int count) throws IOException {
         if (!thresholdExceeded && written + count > threshold) {
@@ -123,7 +123,7 @@ public class ThresholdingOutputStream extends OutputStream {
     /**
      * Closes this output stream and releases any system resources associated with this stream.
      *
-     * @throws IOException if an error occurs.
+     * @throws IOException Thrown if an error occurs.
      */
     @Override
     public void close() throws IOException {
@@ -139,7 +139,7 @@ public class ThresholdingOutputStream extends OutputStream {
     /**
      * Flushes this output stream and forces any buffered output bytes to be written out.
      *
-     * @throws IOException if an error occurs.
+     * @throws IOException Thrown if an error occurs.
      */
     @SuppressWarnings("resource") // the underlying stream is managed by a subclass.
     @Override
@@ -162,7 +162,7 @@ public class ThresholdingOutputStream extends OutputStream {
      * ultimately delegate.
      *
      * @return The underlying output stream.
-     * @throws IOException if an error occurs.
+     * @throws IOException Thrown if an error occurs.
      * @since 2.14.0
      */
     protected OutputStream getOutputStream() throws IOException {
@@ -174,7 +174,7 @@ public class ThresholdingOutputStream extends OutputStream {
      * ultimately delegate.
      *
      * @return The underlying output stream.
-     * @throws IOException if an error occurs.
+     * @throws IOException Thrown if an error occurs.
      * @deprecated Use {@link #getOutputStream()}.
      */
     @Deprecated
@@ -223,7 +223,7 @@ public class ThresholdingOutputStream extends OutputStream {
      * Indicates that the configured threshold has been reached, and that a subclass should take whatever action
      * necessary on this event. This may include changing the underlying output stream.
      *
-     * @throws IOException if an error occurs.
+     * @throws IOException Thrown if an error occurs.
      */
     protected void thresholdReached() throws IOException {
         thresholdConsumer.accept(this);
@@ -234,7 +234,7 @@ public class ThresholdingOutputStream extends OutputStream {
      *
      * @param b The array of bytes to be written.
      * @throws NullPointerException if the byte array is {@code null}.
-     * @throws IOException if an error occurs.
+     * @throws IOException Thrown if an error occurs.
      */
     @SuppressWarnings("resource") // the underlying stream is managed by a subclass.
     @Override
@@ -253,7 +253,7 @@ public class ThresholdingOutputStream extends OutputStream {
      * @param len The number of bytes to write.
      * @throws NullPointerException if the byte array is {@code null}.
      * @throws IndexOutOfBoundsException if {@code off} or {@code len} are negative, or if {@code off + len} is greater than {@code b.length}.
-     * @throws IOException if an error occurs.
+     * @throws IOException Thrown if an error occurs.
      */
     @SuppressWarnings("resource") // the underlying stream is managed by a subclass.
     @Override
@@ -271,7 +271,7 @@ public class ThresholdingOutputStream extends OutputStream {
      * Writes the specified byte to this output stream.
      *
      * @param b The byte to be written.
-     * @throws IOException if an error occurs.
+     * @throws IOException Thrown if an error occurs.
      */
     @SuppressWarnings("resource") // the underlying stream is managed by a subclass.
     @Override

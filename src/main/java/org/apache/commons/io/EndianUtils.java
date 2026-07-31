@@ -53,7 +53,7 @@ public class EndianUtils {
      *
      * @param input  The stream.
      * @return The byte.
-     * @throws IOException if the end of file is reached.
+     * @throws IOException Thrown if the end of file is reached.
      */
     private static int read(final InputStream input) throws IOException {
         final int value = input.read();

@@ -51,7 +51,7 @@ public class DemuxOutputStream extends OutputStream {
     /**
      * Closes stream associated with current thread.
      *
-     * @throws IOException if an error occurs.
+     * @throws IOException Thrown if an error occurs.
      */
     @SuppressWarnings("resource") // we actually close the stream here
     @Override
@@ -62,7 +62,7 @@ public class DemuxOutputStream extends OutputStream {
     /**
      * Flushes stream associated with current thread.
      *
-     * @throws IOException if an error occurs.
+     * @throws IOException Thrown if an error occurs.
      */
     @Override
     public void flush() throws IOException {
@@ -77,7 +77,7 @@ public class DemuxOutputStream extends OutputStream {
      * Writes byte to stream associated with current thread.
      *
      * @param ch The byte to write to stream.
-     * @throws IOException if an error occurs.
+     * @throws IOException Thrown if an error occurs.
      */
     @Override
     public void write(final int ch) throws IOException {

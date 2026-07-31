@@ -69,7 +69,7 @@ public interface IOIterator<E> {
      * Like {@link Iterator#forEachRemaining(Consumer)}.
      *
      * @param action See delegate.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      */
     default void forEachRemaining(final IOConsumer<? super E> action) throws IOException {
         Objects.requireNonNull(action, "action");
@@ -82,7 +82,7 @@ public interface IOIterator<E> {
      * Like {@link Iterator#hasNext()}.
      *
      * @return See delegate.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      */
     boolean hasNext() throws IOException;
 
@@ -90,7 +90,7 @@ public interface IOIterator<E> {
      * Like {@link Iterator#next()}.
      *
      * @return See delegate.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      * @throws NoSuchElementException if the iteration has no more elements.
      */
     E next() throws IOException;
@@ -98,7 +98,7 @@ public interface IOIterator<E> {
     /**
      * Like {@link Iterator#remove()}.
      *
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      */
     @SuppressWarnings("unused")
     default void remove() throws IOException {

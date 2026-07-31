@@ -373,7 +373,7 @@ public class Tailer implements Runnable, AutoCloseable {
          * Gets the current offset in this tailable.
          *
          * @return The offset from the beginning of the tailable, in bytes, at which the next read or write occurs.
-         * @throws IOException if an I/O error occurs.
+         * @throws IOException Thrown if an I/O error occurs.
          */
         long getPointer() throws IOException;
 
@@ -397,7 +397,7 @@ public class Tailer implements Runnable, AutoCloseable {
          *
          * @param pos The offset position, measured in bytes from the beginning of the tailable, at which to set the tailable
          *        pointer.
-         * @throws IOException if {@code pos} is less than {@code 0} or if an I/O error occurs.
+         * @throws IOException Thrown if {@code pos} is less than {@code 0} or if an I/O error occurs.
          */
         void seek(long pos) throws IOException;
     }
@@ -423,7 +423,7 @@ public class Tailer implements Runnable, AutoCloseable {
          *
          * @param fileTime The file time reference.
          * @return true if the {@link File} exists and has been modified after the given {@link FileTime}.
-         * @throws IOException if an I/O error occurs.
+         * @throws IOException Thrown if an I/O error occurs.
          */
         boolean isNewer(FileTime fileTime) throws IOException;
 
@@ -431,7 +431,7 @@ public class Tailer implements Runnable, AutoCloseable {
          * Gets the last modification {@link FileTime}.
          *
          * @return See {@link java.nio.file.Files#getLastModifiedTime(Path, LinkOption...)}.
-         * @throws IOException if an I/O error occurs.
+         * @throws IOException Thrown if an I/O error occurs.
          */
         FileTime lastModifiedFileTime() throws IOException;
 
@@ -440,7 +440,7 @@ public class Tailer implements Runnable, AutoCloseable {
          *
          * @return The size, in bytes, of this tailable, or {@code 0} if the file does not exist. Some operating systems may
          *         return {@code 0} for path names denoting system-dependent entities such as devices or pipes.
-         * @throws IOException if an I/O error occurs.
+         * @throws IOException Thrown if an I/O error occurs.
          */
         long size() throws IOException;
     }
@@ -932,7 +932,7 @@ public class Tailer implements Runnable, AutoCloseable {
      *
      * @param reader The file to read.
      * @return The new position after the lines have been read.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      */
     private long readLines(final RandomAccessResourceBridge reader) throws IOException {
         try (ByteArrayOutputStream lineBuf = new ByteArrayOutputStream(64)) {

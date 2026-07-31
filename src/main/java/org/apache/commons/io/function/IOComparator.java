@@ -50,7 +50,7 @@ public interface IOComparator<T> {
      *         the second.
      * @throws NullPointerException if an argument is null and this comparator does not permit null arguments.
      * @throws ClassCastException if the arguments' types prevent them from being compared by this comparator.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      */
     int compare(T o1, T o2) throws IOException;
 }

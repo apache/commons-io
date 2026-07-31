@@ -265,7 +265,7 @@ public final class BufferedFileChannelInputStream extends InputStream {
      * Checks whether data is left to be read from the input stream.
      *
      * @return true if data is left, false otherwise.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      */
     private boolean refill() throws IOException {
         Input.checkOpen(fileChannel.isOpen());

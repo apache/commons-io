@@ -81,7 +81,7 @@ public interface IOBaseStream<T, S extends IOBaseStream<T, S, B>, B extends Base
      *
      * @param closeHandler See {@link BaseStream#onClose(Runnable) delegate}.
      * @return See {@link BaseStream#onClose(Runnable) delegate}.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException Thrown if an I/O error occurs.
      * @see BaseStream#onClose(Runnable)
      */
     @SuppressWarnings({"unused", "resource"}) // throws IOException, unwrap()
