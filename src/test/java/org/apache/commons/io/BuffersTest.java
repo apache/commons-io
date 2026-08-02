@@ -18,6 +18,7 @@
 package org.apache.commons.io;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 
@@ -189,6 +190,27 @@ public class BuffersTest {
         assertEquals(0, result.position());
         assertEquals(CAPACITY, result.limit());
         for (int i = 0; i < CAPACITY; i++) {
+            assertEquals(0, result.get(i));
+        }
+    }
+
+    /**
+     * Tests {@link Buffers#clear(ByteBuffer)} with a direct buffer larger than {@link IOUtils#DEFAULT_BUFFER_SIZE}, ensuring the while-loop iterates over
+     * multiple chunks and all bytes are zeroed.
+     */
+    @Test
+    void testClearByteBufferDirectLargerThanDefaultBufferSize() {
+        final int capacity = IOUtils.DEFAULT_BUFFER_SIZE + CAPACITY;
+        final ByteBuffer buffer = ByteBuffer.allocateDirect(capacity);
+        assertFalse(buffer.hasArray());
+        for (int i = 0; i < capacity; i++) {
+            buffer.put((byte) (i + 1));
+        }
+        final ByteBuffer result = Buffers.clear(buffer);
+        assertSame(buffer, result);
+        assertEquals(0, result.position());
+        assertEquals(capacity, result.limit());
+        for (int i = 0; i < capacity; i++) {
             assertEquals(0, result.get(i));
         }
     }
