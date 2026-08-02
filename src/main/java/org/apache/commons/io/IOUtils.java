@@ -2268,7 +2268,7 @@ public class IOUtils {
      * @param input  The byte channel to read.
      * @param buffer byte buffer destination.
      * @throws IOException  if there is a problem reading the file.
-     * @throws EOFException if the number of bytes read was incorrect.
+     * @throws EOFException Thrown if the number of bytes read was incorrect.
      * @since 2.5
      */
     public static void readFully(final ReadableByteChannel input, final ByteBuffer buffer) throws IOException {

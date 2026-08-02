@@ -166,7 +166,7 @@ public final class FileAlterationMonitor implements Runnable {
     /**
      * Starts monitoring.
      *
-     * @throws Exception if an error occurs initializing the observer.
+     * @throws Exception Thrown if an error occurs initializing the observer.
      */
     public synchronized void start() throws Exception {
         if (running) {
@@ -187,7 +187,7 @@ public final class FileAlterationMonitor implements Runnable {
     /**
      * Stops monitoring.
      *
-     * @throws Exception if an error occurs initializing the observer.
+     * @throws Exception Thrown if an error occurs initializing the observer.
      */
     public synchronized void stop() throws Exception {
         stop(intervalMillis);
@@ -198,7 +198,7 @@ public final class FileAlterationMonitor implements Runnable {
      *
      * @param stopInterval The amount of time in milliseconds to wait for the thread to finish.
      * A value of zero will wait until the thread is finished (see {@link Thread#join(long)}).
-     * @throws Exception if an error occurs initializing the observer.
+     * @throws Exception Thrown if an error occurs initializing the observer.
      * @since 2.1
      */
     public synchronized void stop(final long stopInterval) throws Exception {

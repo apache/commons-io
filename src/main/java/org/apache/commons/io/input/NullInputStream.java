@@ -256,7 +256,7 @@ public class NullInputStream extends AbstractInputStream {
      *
      * @return Either The byte value returned by {@code processByte()} or {@code -1} if the end of file has been reached and {@code throwEofException} is set to
      *         {@code false}.
-     * @throws EOFException if the end of file is reached and {@code throwEofException} is set to {@code true}.
+     * @throws EOFException Thrown if the end of file is reached and {@code throwEofException} is set to {@code true}.
      * @throws IOException  if trying to read past the end of file.
      */
     @Override
@@ -275,7 +275,7 @@ public class NullInputStream extends AbstractInputStream {
      * @param bytes The byte array to read into.
      * @return The number of bytes read or {@code -1} if the end of file has been reached and {@code throwEofException} is set to {@code false}.
      * @throws NullPointerException if the byte array is {@code null}.
-     * @throws EOFException if the end of file is reached and {@code throwEofException} is set to {@code true}.
+     * @throws EOFException Thrown if the end of file is reached and {@code throwEofException} is set to {@code true}.
      * @throws IOException  if trying to read past the end of file.
      */
     @Override
@@ -292,7 +292,7 @@ public class NullInputStream extends AbstractInputStream {
      * @return The number of bytes read or {@code -1} if the end of file has been reached and {@code throwEofException} is set to {@code false}.
      * @throws NullPointerException if the byte array is {@code null}.
      * @throws IndexOutOfBoundsException if {@code offset} or {@code length} are negative, or if {@code offset + length} is greater than {@code bytes.length}.
-     * @throws EOFException if the end of file is reached and {@code throwEofException} is set to {@code true}.
+     * @throws EOFException Thrown if the end of file is reached and {@code throwEofException} is set to {@code true}.
      * @throws IOException  if trying to read past the end of file.
      */
     @Override
@@ -341,7 +341,7 @@ public class NullInputStream extends AbstractInputStream {
      *
      * @param numberOfBytes The number of bytes to skip.
      * @return The number of bytes skipped or {@code -1} if the end of file has been reached and {@code throwEofException} is set to {@code false}.
-     * @throws EOFException if the end of file is reached and {@code throwEofException} is set to {@code true}.
+     * @throws EOFException Thrown if the end of file is reached and {@code throwEofException} is set to {@code true}.
      * @throws IOException  if trying to read past the end of file.
      */
     @Override

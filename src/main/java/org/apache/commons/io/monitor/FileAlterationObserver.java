@@ -420,7 +420,7 @@ public class FileAlterationObserver implements Serializable {
     /**
      * Final processing.
      *
-     * @throws Exception if an error occurs.
+     * @throws Exception Thrown if an error occurs.
      */
     @SuppressWarnings("unused") // Possibly thrown from subclasses.
     public void destroy() throws Exception {
@@ -511,7 +511,7 @@ public class FileAlterationObserver implements Serializable {
     /**
      * Initializes the observer.
      *
-     * @throws Exception if an error occurs.
+     * @throws Exception Thrown if an error occurs.
      */
     @SuppressWarnings("unused") // Possibly thrown from subclasses.
     public void initialize() throws Exception {
