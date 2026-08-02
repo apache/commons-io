@@ -231,24 +231,23 @@ public final class Buffers {
     /**
      * A better typed version of {@link Buffer#clear()}.
      * <p>
-     * Clears this buffer. The position is set to zero, the limit is set to the capacity, and the mark is discarded.
+     * As {@link Buffer#clear()}, the position is set to zero, the limit is set to the capacity, and the mark is discarded.
      * </p>
      * <p>
      * Invoke this method before using a sequence of channel-read or <em>put</em> operations to fill this buffer. For example:
      * </p>
      *
      * <pre>
-     * buf.clear(); // Prepare buffer for reading
+     * clearBuffer(buf); // Prepare buffer for reading
      * in.read(buf); // Read data
      * </pre>
-     *
      * <p>
      * This method does not actually erase the data in the buffer, but it is named as if it did because it will most often be used in situations in which that
      * might as well be the case.
      * </p>
      *
-     * @param <B> A Buffer subclass.
-     * @param buffer The buffer to clear, may be null.
+     * @param <B>    A Buffer subclass.
+     * @param buffer The buffer to clear, may not be null.
      * @return The given buffer.
      */
     private static <B extends Buffer> B clearBuffer(final B buffer) {
