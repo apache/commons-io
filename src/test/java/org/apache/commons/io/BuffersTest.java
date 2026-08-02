@@ -32,6 +32,8 @@ import java.nio.LongBuffer;
 import java.nio.ShortBuffer;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 /**
  * Tests {@link Buffers}.
@@ -213,14 +215,16 @@ public class BuffersTest {
     }
 
     /**
-     * Tests {@link Buffers#clear(ByteBuffer)} with a direct buffer.
+     * Tests {@link Buffers#clear(ByteBuffer)} with an array-backed buffer.
      */
-    @Test
-    void testClearByteBufferDirect() {
-        final ByteBuffer buffer = ByteBuffer.allocateDirect(CAPACITY);
-        for (int i = 0; i < CAPACITY; i++) {
-            buffer.put((byte) (i + 1));
-        }
+    @ParameterizedTest
+    @ValueSource(ints = { 0, 1, 2, 3, 4, 5, 6, 7, 8 })
+    void testClearByteBufferArrayBackedPosition(final int position) {
+        final ByteBuffer buffer = ByteBuffer.allocate(CAPACITY);
+        buffer.put(new byte[] { 1, 2, 3, 4, 5, 6, 7, 8 });
+        assertEquals(CAPACITY, buffer.limit()); // sanity check
+        assertEquals(CAPACITY, buffer.position()); // sanity check
+        buffer.position(position);
         final ByteBuffer result = Buffers.clear(buffer);
         assertSame(buffer, result);
         assertEquals(0, result.position());
@@ -232,12 +236,11 @@ public class BuffersTest {
      * Tests {@link Buffers#clear(ByteBuffer)} with a direct buffer.
      */
     @Test
-    void testClearByteBufferDirectMiddle() {
+    void testClearByteBufferDirect() {
         final ByteBuffer buffer = ByteBuffer.allocateDirect(CAPACITY);
         for (int i = 0; i < CAPACITY; i++) {
             buffer.put((byte) (i + 1));
         }
-        buffer.position(CAPACITY / 2);
         final ByteBuffer result = Buffers.clear(buffer);
         assertSame(buffer, result);
         assertEquals(0, result.position());
@@ -265,6 +268,26 @@ public class BuffersTest {
     }
 
     /**
+     * Tests {@link Buffers#clear(ByteBuffer)} with a direct buffer.
+     */
+    @ParameterizedTest
+    @ValueSource(ints = { 0, 1, 2, 3, 4, 5, 6, 7, 8 })
+    void testClearByteBufferDirectPosition(final int position) {
+        final ByteBuffer buffer = ByteBuffer.allocateDirect(CAPACITY);
+        for (int i = 0; i < CAPACITY; i++) {
+            buffer.put((byte) (i + 1));
+        }
+        assertEquals(CAPACITY, buffer.limit()); // sanity check
+        assertEquals(CAPACITY, buffer.position()); // sanity check
+        buffer.position(position);
+        final ByteBuffer result = Buffers.clear(buffer);
+        assertSame(buffer, result);
+        assertEquals(0, result.position());
+        assertEquals(CAPACITY, result.limit());
+        assertZeroes(result);
+    }
+
+    /**
      * Tests {@link Buffers#clear(ByteBuffer)} with {@code null} returns {@code null}.
      */
     @Test
@@ -288,6 +311,24 @@ public class BuffersTest {
     void testClearCharBufferArrayBacked() {
         final CharBuffer buffer = CharBuffer.allocate(CAPACITY);
         buffer.put(new char[] { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h' });
+        final CharBuffer result = Buffers.clear(buffer);
+        assertSame(buffer, result);
+        assertEquals(0, result.position());
+        assertEquals(CAPACITY, result.limit());
+        assertZeroes(result);
+    }
+
+    /**
+     * Tests {@link Buffers#clear(CharBuffer)} with an array-backed buffer.
+     */
+    @ParameterizedTest
+    @ValueSource(ints = { 0, 1, 2, 3, 4, 5, 6, 7, 8 })
+    void testClearCharBufferArrayBackedPosition(final int position) {
+        final CharBuffer buffer = CharBuffer.allocate(CAPACITY);
+        buffer.put(new char[] { 1, 2, 3, 4, 5, 6, 7, 8 });
+        assertEquals(CAPACITY, buffer.limit()); // sanity check
+        assertEquals(CAPACITY, buffer.position()); // sanity check
+        buffer.position(position);
         final CharBuffer result = Buffers.clear(buffer);
         assertSame(buffer, result);
         assertEquals(0, result.position());
@@ -407,6 +448,24 @@ public class BuffersTest {
     }
 
     /**
+     * Tests {@link Buffers#clear(DoubleBuffer)} with an array-backed buffer.
+     */
+    @ParameterizedTest
+    @ValueSource(ints = { 0, 1, 2, 3, 4, 5, 6, 7, 8 })
+    void testClearDoubleBufferArrayBackedPosition(final int position) {
+        final DoubleBuffer buffer = DoubleBuffer.allocate(CAPACITY);
+        buffer.put(new double[] { 1d, 2d, 3d, 4d, 5d, 6d, 7d, 8d });
+        assertEquals(CAPACITY, buffer.limit()); // sanity check
+        assertEquals(CAPACITY, buffer.position()); // sanity check
+        buffer.position(position);
+        final DoubleBuffer result = Buffers.clear(buffer);
+        assertSame(buffer, result);
+        assertEquals(0, result.position());
+        assertEquals(CAPACITY, result.limit());
+        assertZeroes(result);
+    }
+
+    /**
      * Tests {@link Buffers#clear(DoubleBuffer)} with a direct (view) buffer .
      */
     @Test
@@ -447,6 +506,24 @@ public class BuffersTest {
     void testClearFloatBufferArrayBacked() {
         final FloatBuffer buffer = FloatBuffer.allocate(CAPACITY);
         buffer.put(new float[] { 1.1f, 2.2f, 3.3f, 4.4f, 5.5f, 6.6f, 7.7f, 8.8f });
+        final FloatBuffer result = Buffers.clear(buffer);
+        assertSame(buffer, result);
+        assertEquals(0, result.position());
+        assertEquals(CAPACITY, result.limit());
+        assertZeroes(result);
+    }
+
+    /**
+     * Tests {@link Buffers#clear(FloatBuffer)} with an array-backed buffer.
+     */
+    @ParameterizedTest
+    @ValueSource(ints = { 0, 1, 2, 3, 4, 5, 6, 7, 8 })
+    void testClearFloatBufferArrayBackedPosition(final int position) {
+        final FloatBuffer buffer = FloatBuffer.allocate(CAPACITY);
+        buffer.put(new float[] { 1f, 2f, 3f, 4f, 5f, 6f, 7f, 8f });
+        assertEquals(CAPACITY, buffer.limit()); // sanity check
+        assertEquals(CAPACITY, buffer.position()); // sanity check
+        buffer.position(position);
         final FloatBuffer result = Buffers.clear(buffer);
         assertSame(buffer, result);
         assertEquals(0, result.position());
@@ -503,6 +580,24 @@ public class BuffersTest {
     }
 
     /**
+     * Tests {@link Buffers#clear(IntBuffer)} with an array-backed buffer.
+     */
+    @ParameterizedTest
+    @ValueSource(ints = { 0, 1, 2, 3, 4, 5, 6, 7, 8 })
+    void testClearIntBufferArrayBackedPosition(final int position) {
+        final IntBuffer buffer = IntBuffer.allocate(CAPACITY);
+        buffer.put(new int[] { 1, 2, 3, 4, 5, 6, 7, 8 });
+        assertEquals(CAPACITY, buffer.limit()); // sanity check
+        assertEquals(CAPACITY, buffer.position()); // sanity check
+        buffer.position(position);
+        final IntBuffer result = Buffers.clear(buffer);
+        assertSame(buffer, result);
+        assertEquals(0, result.position());
+        assertEquals(CAPACITY, result.limit());
+        assertZeroes(result);
+    }
+
+    /**
      * Tests {@link Buffers#clear(IntBuffer)} with a direct (view) buffer.
      */
     @Test
@@ -551,6 +646,24 @@ public class BuffersTest {
     }
 
     /**
+     * Tests {@link Buffers#clear(LongBuffer)} with an array-backed buffer.
+     */
+    @ParameterizedTest
+    @ValueSource(ints = { 0, 1, 2, 3, 4, 5, 6, 7, 8 })
+    void testClearLongBufferArrayBackedPosition(final int position) {
+        final LongBuffer buffer = LongBuffer.allocate(CAPACITY);
+        buffer.put(new long[] { 1, 2, 3, 4, 5, 6, 7, 8 });
+        assertEquals(CAPACITY, buffer.limit()); // sanity check
+        assertEquals(CAPACITY, buffer.position()); // sanity check
+        buffer.position(position);
+        final LongBuffer result = Buffers.clear(buffer);
+        assertSame(buffer, result);
+        assertEquals(0, result.position());
+        assertEquals(CAPACITY, result.limit());
+        assertZeroes(result);
+    }
+
+    /**
      * Tests {@link Buffers#clear(LongBuffer)} with a direct (view) buffer.
      */
     @Test
@@ -591,6 +704,24 @@ public class BuffersTest {
     void testClearShortBufferArrayBacked() {
         final ShortBuffer buffer = ShortBuffer.allocate(CAPACITY);
         buffer.put(new short[] { 1, 2, 3, 4, 5, 6, 7, 8 });
+        final ShortBuffer result = Buffers.clear(buffer);
+        assertSame(buffer, result);
+        assertEquals(0, result.position());
+        assertEquals(CAPACITY, result.limit());
+        assertZeroes(result);
+    }
+
+    /**
+     * Tests {@link Buffers#clear(ShortBuffer)} with an array-backed buffer.
+     */
+    @ParameterizedTest
+    @ValueSource(ints = { 0, 1, 2, 3, 4, 5, 6, 7, 8 })
+    void testClearShortBufferArrayBackedPosition(final int position) {
+        final ShortBuffer buffer = ShortBuffer.allocate(CAPACITY);
+        buffer.put(new short[] { 1, 2, 3, 4, 5, 6, 7, 8 });
+        assertEquals(CAPACITY, buffer.limit()); // sanity check
+        assertEquals(CAPACITY, buffer.position()); // sanity check
+        buffer.position(position);
         final ShortBuffer result = Buffers.clear(buffer);
         assertSame(buffer, result);
         assertEquals(0, result.position());
