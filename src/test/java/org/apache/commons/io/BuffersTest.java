@@ -94,7 +94,7 @@ public class BuffersTest {
         final ByteBuffer buffer = ByteBuffer.allocate(CAPACITY);
         buffer.put(new byte[] { 1, 2, 3, 4, 5, 6, 7, 8 });
         assertEquals(CAPACITY, buffer.limit()); // sanity check
-        final Buffer result = Buffers.clear(buffer);
+        final Buffer result = Buffers.clear((Buffer) buffer);
         assertSame(buffer, result);
         assertEquals(0, buffer.position());
         assertEquals(CAPACITY, buffer.limit());
@@ -109,7 +109,7 @@ public class BuffersTest {
         final CharBuffer buffer = CharBuffer.allocate(CAPACITY);
         buffer.put(new char[] { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h' });
         assertEquals(CAPACITY, buffer.limit()); // sanity check
-        final Buffer result = Buffers.clear(buffer);
+        final Buffer result = Buffers.clear((Buffer) buffer);
         assertSame(buffer, result);
         assertEquals(0, buffer.position());
         assertEquals(CAPACITY, buffer.limit());
@@ -124,7 +124,7 @@ public class BuffersTest {
         final DoubleBuffer buffer = DoubleBuffer.allocate(CAPACITY);
         buffer.put(new double[] { 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0 });
         assertEquals(CAPACITY, buffer.limit()); // sanity check
-        final Buffer result = Buffers.clear(buffer);
+        final Buffer result = Buffers.clear((Buffer) buffer);
         assertSame(buffer, result);
         assertEquals(0, buffer.position());
         assertEquals(CAPACITY, buffer.limit());
@@ -139,7 +139,7 @@ public class BuffersTest {
         final FloatBuffer buffer = FloatBuffer.allocate(CAPACITY);
         buffer.put(new float[] { 1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f, 8.0f });
         assertEquals(CAPACITY, buffer.limit()); // sanity check
-        final Buffer result = Buffers.clear(buffer);
+        final Buffer result = Buffers.clear((Buffer) buffer);
         assertSame(buffer, result);
         assertEquals(0, buffer.position());
         assertEquals(CAPACITY, buffer.limit());
@@ -154,7 +154,7 @@ public class BuffersTest {
         final IntBuffer buffer = IntBuffer.allocate(CAPACITY);
         buffer.put(new int[] { 1, 2, 3, 4, 5, 6, 7, 8 });
         assertEquals(CAPACITY, buffer.limit()); // sanity check
-        final Buffer result = Buffers.clear(buffer);
+        final Buffer result = Buffers.clear((Buffer) buffer);
         assertSame(buffer, result);
         assertEquals(0, buffer.position());
         assertEquals(CAPACITY, buffer.limit());
@@ -169,7 +169,7 @@ public class BuffersTest {
         final LongBuffer buffer = LongBuffer.allocate(CAPACITY);
         buffer.put(new long[] { 1L, 2L, 3L, 4L, 5L, 6L, 7L, 8L });
         assertEquals(CAPACITY, buffer.limit()); // sanity check
-        final Buffer result = Buffers.clear(buffer);
+        final Buffer result = Buffers.clear((Buffer) buffer);
         assertSame(buffer, result);
         assertEquals(0, buffer.position());
         assertEquals(CAPACITY, buffer.limit());
@@ -184,7 +184,7 @@ public class BuffersTest {
         final ShortBuffer buffer = ShortBuffer.allocate(CAPACITY);
         buffer.put(new short[] { 1, 2, 3, 4, 5, 6, 7, 8 });
         assertEquals(CAPACITY, buffer.limit()); // sanity check
-        final Buffer result = Buffers.clear(buffer);
+        final Buffer result = Buffers.clear((Buffer) buffer);
         assertSame(buffer, result);
         assertEquals(0, buffer.position());
         assertEquals(CAPACITY, buffer.limit());
