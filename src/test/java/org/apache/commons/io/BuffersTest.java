@@ -40,6 +40,50 @@ public class BuffersTest {
 
     private static final int CAPACITY = 8;
 
+    private void assertZeroes(final ByteBuffer result) {
+        for (int i = 0; i < CAPACITY; i++) {
+            assertEquals((byte) 0, result.get(i));
+        }
+    }
+
+    private void assertZeroes(final CharBuffer buffer) {
+        for (int i = 0; i < CAPACITY; i++) {
+            final int i1 = i;
+            assertEquals(0, buffer.get(i1));
+        }
+    }
+
+    private void assertZeroes(final DoubleBuffer result) {
+        for (int i = 0; i < CAPACITY; i++) {
+            assertEquals(0.0, result.get(i));
+        }
+    }
+
+    private void assertZeroes(final FloatBuffer result) {
+        for (int i = 0; i < CAPACITY; i++) {
+            final int i1 = i;
+            assertEquals(0.0f, result.get(i1));
+        }
+    }
+
+    private void assertZeroes(final IntBuffer result) {
+        for (int i = 0; i < CAPACITY; i++) {
+            assertEquals(0, result.get(i));
+        }
+    }
+
+    private void assertZeroes(final LongBuffer result) {
+        for (int i = 0; i < CAPACITY; i++) {
+            assertEquals(0L, result.get(i));
+        }
+    }
+
+    private void assertZeroes(final ShortBuffer buffer) {
+        for (int i = 0; i < CAPACITY; i++) {
+            assertEquals((short) 0, buffer.get(i));
+        }
+    }
+
     /**
      * Tests {@link Buffers#clear(Buffer)} with a {@link ByteBuffer}.
      */
@@ -51,9 +95,7 @@ public class BuffersTest {
         assertSame(buffer, result);
         assertEquals(0, buffer.position());
         assertEquals(CAPACITY, buffer.limit());
-        for (int i = 0; i < CAPACITY; i++) {
-            assertEquals(0, buffer.get(i));
-        }
+        assertZeroes(buffer);
     }
 
     /**
@@ -67,9 +109,7 @@ public class BuffersTest {
         assertSame(buffer, result);
         assertEquals(0, buffer.position());
         assertEquals(CAPACITY, buffer.limit());
-        for (int i = 0; i < CAPACITY; i++) {
-            assertEquals(0, buffer.get(i));
-        }
+        assertZeroes(buffer);
     }
 
     /**
@@ -83,9 +123,7 @@ public class BuffersTest {
         assertSame(buffer, result);
         assertEquals(0, buffer.position());
         assertEquals(CAPACITY, buffer.limit());
-        for (int i = 0; i < CAPACITY; i++) {
-            assertEquals(0.0, buffer.get(i));
-        }
+        assertZeroes(buffer);
     }
 
     /**
@@ -99,9 +137,7 @@ public class BuffersTest {
         assertSame(buffer, result);
         assertEquals(0, buffer.position());
         assertEquals(CAPACITY, buffer.limit());
-        for (int i = 0; i < CAPACITY; i++) {
-            assertEquals(0.0f, buffer.get(i));
-        }
+        assertZeroes(buffer);
     }
 
     /**
@@ -115,9 +151,7 @@ public class BuffersTest {
         assertSame(buffer, result);
         assertEquals(0, buffer.position());
         assertEquals(CAPACITY, buffer.limit());
-        for (int i = 0; i < CAPACITY; i++) {
-            assertEquals(0, buffer.get(i));
-        }
+        assertZeroes(buffer);
     }
 
     /**
@@ -131,9 +165,7 @@ public class BuffersTest {
         assertSame(buffer, result);
         assertEquals(0, buffer.position());
         assertEquals(CAPACITY, buffer.limit());
-        for (int i = 0; i < CAPACITY; i++) {
-            assertEquals(0L, buffer.get(i));
-        }
+        assertZeroes(buffer);
     }
 
     /**
@@ -147,9 +179,7 @@ public class BuffersTest {
         assertSame(buffer, result);
         assertEquals(0, buffer.position());
         assertEquals(CAPACITY, buffer.limit());
-        for (int i = 0; i < CAPACITY; i++) {
-            assertEquals((short) 0, buffer.get(i));
-        }
+        assertZeroes(buffer);
     }
 
     /**
@@ -171,9 +201,7 @@ public class BuffersTest {
         assertSame(buffer, result);
         assertEquals(0, result.position());
         assertEquals(CAPACITY, result.limit());
-        for (int i = 0; i < CAPACITY; i++) {
-            assertEquals(0, result.get(i));
-        }
+        assertZeroes(result);
     }
 
     /**
@@ -189,9 +217,7 @@ public class BuffersTest {
         assertSame(buffer, result);
         assertEquals(0, result.position());
         assertEquals(CAPACITY, result.limit());
-        for (int i = 0; i < CAPACITY; i++) {
-            assertEquals(0, result.get(i));
-        }
+        assertZeroes(result);
     }
 
     /**
@@ -210,9 +236,7 @@ public class BuffersTest {
         assertSame(buffer, result);
         assertEquals(0, result.position());
         assertEquals(capacity, result.limit());
-        for (int i = 0; i < capacity; i++) {
-            assertEquals(0, result.get(i));
-        }
+        assertZeroes(result);
     }
 
     /**
@@ -243,9 +267,7 @@ public class BuffersTest {
         assertSame(buffer, result);
         assertEquals(0, result.position());
         assertEquals(CAPACITY, result.limit());
-        for (int i = 0; i < CAPACITY; i++) {
-            assertEquals(0, result.get(i));
-        }
+        assertZeroes(result);
     }
 
     /**
@@ -262,9 +284,7 @@ public class BuffersTest {
         assertSame(buffer, result);
         assertEquals(0, result.position());
         assertEquals(CAPACITY, result.limit());
-        for (int i = 0; i < CAPACITY; i++) {
-            assertEquals(0, result.get(i));
-        }
+        assertZeroes(result);
     }
 
     /**
@@ -293,13 +313,12 @@ public class BuffersTest {
         for (int i = 0; i < CAPACITY; i++) {
             buffer.put((byte) (i + 1));
         }
-        final Buffer result = Buffers.clearDirect(buffer);
+        final ByteBuffer result = Buffers.clearDirect(buffer);
         assertSame(buffer, result);
         assertEquals(0, result.position());
         assertEquals(CAPACITY, result.limit());
-        for (int i = 0; i < CAPACITY; i++) {
-            assertEquals(0, buffer.get(i));
-        }
+        assertZeroes(buffer);
+        assertZeroes(result);
     }
 
     /**
@@ -316,9 +335,7 @@ public class BuffersTest {
         assertSame(buffer, result);
         assertEquals(0, result.position());
         assertEquals(CAPACITY, result.limit());
-        for (int i = 0; i < CAPACITY; i++) {
-            assertEquals(0, buffer.get(i));
-        }
+        assertZeroes(buffer);
     }
 
     /**
@@ -361,9 +378,7 @@ public class BuffersTest {
         assertSame(buffer, result);
         assertEquals(0, result.position());
         assertEquals(CAPACITY, result.limit());
-        for (int i = 0; i < CAPACITY; i++) {
-            assertEquals(0.0, result.get(i));
-        }
+        assertZeroes(result);
     }
 
     /**
@@ -380,9 +395,7 @@ public class BuffersTest {
         assertSame(buffer, result);
         assertEquals(0, result.position());
         assertEquals(CAPACITY, result.limit());
-        for (int i = 0; i < CAPACITY; i++) {
-            assertEquals(0.0, result.get(i));
-        }
+        assertZeroes(result);
     }
 
     /**
@@ -413,9 +426,7 @@ public class BuffersTest {
         assertSame(buffer, result);
         assertEquals(0, result.position());
         assertEquals(CAPACITY, result.limit());
-        for (int i = 0; i < CAPACITY; i++) {
-            assertEquals(0.0f, result.get(i));
-        }
+        assertZeroes(result);
     }
 
     /**
@@ -432,9 +443,7 @@ public class BuffersTest {
         assertSame(buffer, result);
         assertEquals(0, result.position());
         assertEquals(CAPACITY, result.limit());
-        for (int i = 0; i < CAPACITY; i++) {
-            assertEquals(0.0f, result.get(i));
-        }
+        assertZeroes(result);
     }
 
     /**
@@ -465,9 +474,7 @@ public class BuffersTest {
         assertSame(buffer, result);
         assertEquals(0, result.position());
         assertEquals(CAPACITY, result.limit());
-        for (int i = 0; i < CAPACITY; i++) {
-            assertEquals(0, result.get(i));
-        }
+        assertZeroes(result);
     }
 
     /**
@@ -484,9 +491,7 @@ public class BuffersTest {
         assertSame(buffer, result);
         assertEquals(0, result.position());
         assertEquals(CAPACITY, result.limit());
-        for (int i = 0; i < CAPACITY; i++) {
-            assertEquals(0, result.get(i));
-        }
+        assertZeroes(result);
     }
 
     /**
@@ -517,9 +522,7 @@ public class BuffersTest {
         assertSame(buffer, result);
         assertEquals(0, result.position());
         assertEquals(CAPACITY, result.limit());
-        for (int i = 0; i < CAPACITY; i++) {
-            assertEquals(0L, result.get(i));
-        }
+        assertZeroes(result);
     }
 
     /**
@@ -536,9 +539,7 @@ public class BuffersTest {
         assertSame(buffer, result);
         assertEquals(0, result.position());
         assertEquals(CAPACITY, result.limit());
-        for (int i = 0; i < CAPACITY; i++) {
-            assertEquals(0L, result.get(i));
-        }
+        assertZeroes(result);
     }
 
     /**
@@ -569,9 +570,7 @@ public class BuffersTest {
         assertSame(buffer, result);
         assertEquals(0, result.position());
         assertEquals(CAPACITY, result.limit());
-        for (int i = 0; i < CAPACITY; i++) {
-            assertEquals((short) 0, result.get(i));
-        }
+        assertZeroes(result);
     }
 
     /**
@@ -588,9 +587,7 @@ public class BuffersTest {
         assertSame(buffer, result);
         assertEquals(0, result.position());
         assertEquals(CAPACITY, result.limit());
-        for (int i = 0; i < CAPACITY; i++) {
-            assertEquals((short) 0, result.get(i));
-        }
+        assertZeroes(result);
     }
 
     /**
@@ -640,9 +637,7 @@ public class BuffersTest {
         assertSame(buffer, result);
         assertEquals(0, result.position());
         assertEquals(CAPACITY, result.limit());
-        for (int i = 0; i < CAPACITY; i++) {
-            assertEquals((byte) 0, result.get(i));
-        }
+        assertZeroes(result);
     }
 
     /**
@@ -674,9 +669,7 @@ public class BuffersTest {
         assertSame(buffer, result);
         assertEquals(0, result.position());
         assertEquals(CAPACITY, result.limit());
-        for (int i = 0; i < CAPACITY; i++) {
-            assertEquals((char) 0, result.get(i));
-        }
+        assertZeroes(result);
     }
 
     /**
@@ -692,9 +685,7 @@ public class BuffersTest {
         assertSame(buffer, result);
         assertEquals(0, result.position());
         assertEquals(CAPACITY, result.limit());
-        for (int i = 0; i < CAPACITY; i++) {
-            assertEquals((byte) 0, result.get(i));
-        }
+        assertZeroes(result);
     }
 
     /**
@@ -711,7 +702,7 @@ public class BuffersTest {
         assertEquals(0, result.position());
         assertEquals(CAPACITY, result.limit());
         for (int i = 0; i < CAPACITY; i++) {
-            assertEquals((double) (i + 1), result.get(i));
+            assertEquals(i + 1, result.get(i));
         }
     }
 
@@ -726,9 +717,7 @@ public class BuffersTest {
         assertSame(buffer, result);
         assertEquals(0, result.position());
         assertEquals(CAPACITY, result.limit());
-        for (int i = 0; i < CAPACITY; i++) {
-            assertEquals(0.0, result.get(i));
-        }
+        assertZeroes(result);
     }
 
     /**
@@ -745,7 +734,7 @@ public class BuffersTest {
         assertEquals(0, result.position());
         assertEquals(CAPACITY, result.limit());
         for (int i = 0; i < CAPACITY; i++) {
-            assertEquals((float) (i + 1), result.get(i));
+            assertEquals(i + 1, result.get(i));
         }
     }
 
@@ -760,9 +749,7 @@ public class BuffersTest {
         assertSame(buffer, result);
         assertEquals(0, result.position());
         assertEquals(CAPACITY, result.limit());
-        for (int i = 0; i < CAPACITY; i++) {
-            assertEquals(0.0f, result.get(i));
-        }
+        assertZeroes(result);
     }
 
     /**
@@ -794,9 +781,7 @@ public class BuffersTest {
         assertSame(buffer, result);
         assertEquals(0, result.position());
         assertEquals(CAPACITY, result.limit());
-        for (int i = 0; i < CAPACITY; i++) {
-            assertEquals(0, result.get(i));
-        }
+        assertZeroes(result);
     }
 
     /**
@@ -813,7 +798,7 @@ public class BuffersTest {
         assertEquals(0, result.position());
         assertEquals(CAPACITY, result.limit());
         for (int i = 0; i < CAPACITY; i++) {
-            assertEquals((long) (i + 1), result.get(i));
+            assertEquals(i + 1, result.get(i));
         }
     }
 
@@ -828,9 +813,7 @@ public class BuffersTest {
         assertSame(buffer, result);
         assertEquals(0, result.position());
         assertEquals(CAPACITY, result.limit());
-        for (int i = 0; i < CAPACITY; i++) {
-            assertEquals(0L, result.get(i));
-        }
+        assertZeroes(result);
     }
 
     /**
@@ -879,9 +862,7 @@ public class BuffersTest {
         assertSame(buffer, result);
         assertEquals(0, result.position());
         assertEquals(CAPACITY, result.limit());
-        for (int i = 0; i < CAPACITY; i++) {
-            assertEquals((short) 0, result.get(i));
-        }
+        assertZeroes(result);
     }
 
 }
