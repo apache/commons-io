@@ -86,7 +86,7 @@ public final class Buffers {
             return null;
         }
         if (clearBuffer(buffer).hasArray()) {
-            Arrays.fill(buffer.array(), (byte) 0);
+            Arrays.fill(buffer.array(), buffer.arrayOffset(), buffer.arrayOffset() + buffer.capacity(), (byte) 0);
         } else {
             final byte[] zeros = new byte[IOUtils.DEFAULT_BUFFER_SIZE];
             while (buffer.hasRemaining()) {
@@ -108,7 +108,7 @@ public final class Buffers {
             return null;
         }
         if (clearBuffer(buffer).hasArray()) {
-            Arrays.fill(buffer.array(), (char) 0);
+            Arrays.fill(buffer.array(), buffer.arrayOffset(), buffer.arrayOffset() + buffer.capacity(), (char) 0);
         } else {
             final char[] zeros = new char[IOUtils.DEFAULT_BUFFER_SIZE];
             while (buffer.hasRemaining()) {
@@ -130,7 +130,7 @@ public final class Buffers {
             return null;
         }
         if (clearBuffer(buffer).hasArray()) {
-            Arrays.fill(buffer.array(), 0);
+            Arrays.fill(buffer.array(), buffer.arrayOffset(), buffer.arrayOffset() + buffer.capacity(), 0);
         } else {
             final double[] zeros = new double[IOUtils.DEFAULT_BUFFER_SIZE];
             while (buffer.hasRemaining()) {
@@ -152,7 +152,7 @@ public final class Buffers {
             return null;
         }
         if (clearBuffer(buffer).hasArray()) {
-            Arrays.fill(buffer.array(), 0);
+            Arrays.fill(buffer.array(), buffer.arrayOffset(), buffer.arrayOffset() + buffer.capacity(), 0);
         } else {
             final float[] zeros = new float[IOUtils.DEFAULT_BUFFER_SIZE];
             while (buffer.hasRemaining()) {
@@ -174,7 +174,7 @@ public final class Buffers {
             return null;
         }
         if (clearBuffer(buffer).hasArray()) {
-            Arrays.fill(buffer.array(), 0);
+            Arrays.fill(buffer.array(), buffer.arrayOffset(), buffer.arrayOffset() + buffer.capacity(), 0);
         } else {
             final int[] zeros = new int[IOUtils.DEFAULT_BUFFER_SIZE];
             while (buffer.hasRemaining()) {
@@ -196,7 +196,7 @@ public final class Buffers {
             return null;
         }
         if (clearBuffer(buffer).hasArray()) {
-            Arrays.fill(buffer.array(), 0);
+            Arrays.fill(buffer.array(), buffer.arrayOffset(), buffer.arrayOffset() + buffer.capacity(), 0);
         } else {
             final long[] zeros = new long[IOUtils.DEFAULT_BUFFER_SIZE];
             while (buffer.hasRemaining()) {
@@ -218,7 +218,7 @@ public final class Buffers {
             return null;
         }
         if (clearBuffer(buffer).hasArray()) {
-            Arrays.fill(buffer.array(), (short) 0);
+            Arrays.fill(buffer.array(), buffer.arrayOffset(), buffer.arrayOffset() + buffer.capacity(), (short) 0);
         } else {
             final short[] zeros = new short[IOUtils.DEFAULT_BUFFER_SIZE];
             while (buffer.hasRemaining()) {

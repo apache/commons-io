@@ -17,6 +17,7 @@
 
 package org.apache.commons.io;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
@@ -29,6 +30,7 @@ import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.nio.LongBuffer;
 import java.nio.ShortBuffer;
+import java.util.Arrays;
 
 import org.junit.jupiter.api.Test;
 
@@ -176,6 +178,26 @@ public class BuffersTest {
     }
 
     /**
+     * Tests {@link Buffers#clear(ByteBuffer)} on a slice: only the slice's own window of the backing array is zeroed.
+     */
+    @Test
+    void testClearByteBufferArrayBackedSlice() {
+        final byte[] backing = new byte[CAPACITY];
+        Arrays.fill(backing, (byte) 1);
+        final ByteBuffer parent = ByteBuffer.wrap(backing);
+        parent.position(2);
+        parent.limit(5);
+        final ByteBuffer slice = parent.slice();
+        assertEquals(2, slice.arrayOffset());
+        assertEquals(3, slice.capacity());
+        final ByteBuffer result = Buffers.clear(slice);
+        assertSame(slice, result);
+        assertEquals(0, result.position());
+        assertEquals(3, result.limit());
+        assertArrayEquals(new byte[] { 1, 1, 0, 0, 0, 1, 1, 1 }, backing);
+    }
+
+    /**
      * Tests {@link Buffers#clear(ByteBuffer)} with a direct buffer.
      */
     @Test
@@ -224,6 +246,26 @@ public class BuffersTest {
         for (int i = 0; i < CAPACITY; i++) {
             assertEquals(0, result.get(i));
         }
+    }
+
+    /**
+     * Tests {@link Buffers#clear(CharBuffer)} on a slice: only the slice's own window of the backing array is zeroed.
+     */
+    @Test
+    void testClearCharBufferArrayBackedSlice() {
+        final char[] backing = new char[CAPACITY];
+        Arrays.fill(backing, 'a');
+        final CharBuffer parent = CharBuffer.wrap(backing);
+        parent.position(2);
+        parent.limit(5);
+        final CharBuffer slice = parent.slice();
+        assertEquals(2, slice.arrayOffset());
+        assertEquals(3, slice.capacity());
+        final CharBuffer result = Buffers.clear(slice);
+        assertSame(slice, result);
+        assertEquals(0, result.position());
+        assertEquals(3, result.limit());
+        assertArrayEquals(new char[] { 'a', 'a', 0, 0, 0, 'a', 'a', 'a' }, backing);
     }
 
     /**
@@ -449,6 +491,26 @@ public class BuffersTest {
     }
 
     /**
+     * Tests {@link Buffers#clear(IntBuffer)} on a slice: only the slice's own window of the backing array is zeroed.
+     */
+    @Test
+    void testClearIntBufferArrayBackedSlice() {
+        final int[] backing = new int[CAPACITY];
+        Arrays.fill(backing, 1);
+        final IntBuffer parent = IntBuffer.wrap(backing);
+        parent.position(2);
+        parent.limit(5);
+        final IntBuffer slice = parent.slice();
+        assertEquals(2, slice.arrayOffset());
+        assertEquals(3, slice.capacity());
+        final IntBuffer result = Buffers.clear(slice);
+        assertSame(slice, result);
+        assertEquals(0, result.position());
+        assertEquals(3, result.limit());
+        assertArrayEquals(new int[] { 1, 1, 0, 0, 0, 1, 1, 1 }, backing);
+    }
+
+    /**
      * Tests {@link Buffers#clear(IntBuffer)} with a direct (view) buffer.
      */
     @Test
@@ -550,6 +612,26 @@ public class BuffersTest {
         for (int i = 0; i < CAPACITY; i++) {
             assertEquals((short) 0, result.get(i));
         }
+    }
+
+    /**
+     * Tests {@link Buffers#clear(ShortBuffer)} on a slice: only the slice's own window of the backing array is zeroed.
+     */
+    @Test
+    void testClearShortBufferArrayBackedSlice() {
+        final short[] backing = new short[CAPACITY];
+        Arrays.fill(backing, (short) 1);
+        final ShortBuffer parent = ShortBuffer.wrap(backing);
+        parent.position(2);
+        parent.limit(5);
+        final ShortBuffer slice = parent.slice();
+        assertEquals(2, slice.arrayOffset());
+        assertEquals(3, slice.capacity());
+        final ShortBuffer result = Buffers.clear(slice);
+        assertSame(slice, result);
+        assertEquals(0, result.position());
+        assertEquals(3, result.limit());
+        assertArrayEquals(new short[] { 1, 1, 0, 0, 0, 1, 1, 1 }, backing);
     }
 
     /**
