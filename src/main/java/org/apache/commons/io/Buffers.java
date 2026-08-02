@@ -38,11 +38,11 @@ import java.util.Arrays;
 public final class Buffers {
 
     /**
-     * Clears a buffer by filling it with zeros, the position is set to zero, the limit is set to the capacity, and the mark is discarded.
+     * Clears a whole buffer by filling it with zeros, the position is set to zero, the limit is set to the capacity, and the mark is discarded.
      *
      * @param buffer The buffer to clear, may be null.
      * @return The given buffer, or null.
-     * @throws ReadOnlyBufferException If the buffer is read-only.
+     * @throws ReadOnlyBufferException       If the buffer is read-only.
      * @throws UnsupportedOperationException Thrown if the given buffer is not one of {@link CharBuffer}, {@link ByteBuffer}, {@link DoubleBuffer},
      *                                       {@link FloatBuffer}, {@link IntBuffer}, {@link LongBuffer}, {@link ShortBuffer}, or null.
      */
@@ -75,7 +75,7 @@ public final class Buffers {
     }
 
     /**
-     * Clears a buffer by filling it with zeros, the position is set to zero, the limit is set to the capacity, and the mark is discarded.
+     * Clears a whole buffer by filling it with zeros, the position is set to zero, the limit is set to the capacity, and the mark is discarded.
      *
      * @param buffer The buffer to clear, may be null.
      * @return The given buffer.
@@ -88,7 +88,7 @@ public final class Buffers {
         if (clearBuffer(buffer).hasArray()) {
             Arrays.fill(buffer.array(), (byte) 0);
         } else {
-            final byte[] zeros = new byte[IOUtils.DEFAULT_BUFFER_SIZE];
+            final byte[] zeros = new byte[getClearBufferSize(buffer)];
             while (buffer.hasRemaining()) {
                 buffer.put(zeros, 0, Math.min(buffer.remaining(), zeros.length));
             }
@@ -97,7 +97,7 @@ public final class Buffers {
     }
 
     /**
-     * Clears a buffer by filling it with zeros, the position is set to zero, the limit is set to the capacity, and the mark is discarded.
+     * Clears a whole buffer by filling it with zeros, the position is set to zero, the limit is set to the capacity, and the mark is discarded.
      *
      * @param buffer The buffer to clear, may be null.
      * @return The given buffer.
@@ -110,7 +110,7 @@ public final class Buffers {
         if (clearBuffer(buffer).hasArray()) {
             Arrays.fill(buffer.array(), (char) 0);
         } else {
-            final char[] zeros = new char[IOUtils.DEFAULT_BUFFER_SIZE];
+            final char[] zeros = new char[getClearBufferSize(buffer)];
             while (buffer.hasRemaining()) {
                 buffer.put(zeros, 0, Math.min(buffer.remaining(), zeros.length));
             }
@@ -119,7 +119,7 @@ public final class Buffers {
     }
 
     /**
-     * Clears a buffer by filling it with zeros, the position is set to zero, the limit is set to the capacity, and the mark is discarded.
+     * Clears a whole buffer by filling it with zeros, the position is set to zero, the limit is set to the capacity, and the mark is discarded.
      *
      * @param buffer The buffer to clear, may be null.
      * @return The given buffer.
@@ -132,7 +132,7 @@ public final class Buffers {
         if (clearBuffer(buffer).hasArray()) {
             Arrays.fill(buffer.array(), 0);
         } else {
-            final double[] zeros = new double[IOUtils.DEFAULT_BUFFER_SIZE];
+            final double[] zeros = new double[getClearBufferSize(buffer)];
             while (buffer.hasRemaining()) {
                 buffer.put(zeros, 0, Math.min(buffer.remaining(), zeros.length));
             }
@@ -141,7 +141,7 @@ public final class Buffers {
     }
 
     /**
-     * Clears a buffer by filling it with zeros, the position is set to zero, the limit is set to the capacity, and the mark is discarded.
+     * Clears a whole buffer by filling it with zeros, the position is set to zero, the limit is set to the capacity, and the mark is discarded.
      *
      * @param buffer The buffer to clear, may be null.
      * @return The given buffer.
@@ -154,7 +154,7 @@ public final class Buffers {
         if (clearBuffer(buffer).hasArray()) {
             Arrays.fill(buffer.array(), 0);
         } else {
-            final float[] zeros = new float[IOUtils.DEFAULT_BUFFER_SIZE];
+            final float[] zeros = new float[getClearBufferSize(buffer)];
             while (buffer.hasRemaining()) {
                 buffer.put(zeros, 0, Math.min(buffer.remaining(), zeros.length));
             }
@@ -163,7 +163,7 @@ public final class Buffers {
     }
 
     /**
-     * Clears a buffer by filling it with zeros, the position is set to zero, the limit is set to the capacity, and the mark is discarded.
+     * Clears a whole buffer by filling it with zeros, the position is set to zero, the limit is set to the capacity, and the mark is discarded.
      *
      * @param buffer The buffer to clear, may be null.
      * @return The given buffer.
@@ -176,7 +176,7 @@ public final class Buffers {
         if (clearBuffer(buffer).hasArray()) {
             Arrays.fill(buffer.array(), 0);
         } else {
-            final int[] zeros = new int[IOUtils.DEFAULT_BUFFER_SIZE];
+            final int[] zeros = new int[getClearBufferSize(buffer)];
             while (buffer.hasRemaining()) {
                 buffer.put(zeros, 0, Math.min(buffer.remaining(), zeros.length));
             }
@@ -185,7 +185,7 @@ public final class Buffers {
     }
 
     /**
-     * Clears a buffer by filling it with zeros, the position is set to zero, the limit is set to the capacity, and the mark is discarded.
+     * Clears a whole buffer by filling it with zeros, the position is set to zero, the limit is set to the capacity, and the mark is discarded.
      *
      * @param buffer The buffer to clear, may be null.
      * @return The given buffer.
@@ -198,7 +198,7 @@ public final class Buffers {
         if (clearBuffer(buffer).hasArray()) {
             Arrays.fill(buffer.array(), 0);
         } else {
-            final long[] zeros = new long[IOUtils.DEFAULT_BUFFER_SIZE];
+            final long[] zeros = new long[getClearBufferSize(buffer)];
             while (buffer.hasRemaining()) {
                 buffer.put(zeros, 0, Math.min(buffer.remaining(), zeros.length));
             }
@@ -207,7 +207,7 @@ public final class Buffers {
     }
 
     /**
-     * Clears a buffer by filling it with zeros, the position is set to zero, the limit is set to the capacity, and the mark is discarded.
+     * Clears a whole buffer by filling it with zeros, the position is set to zero, the limit is set to the capacity, and the mark is discarded.
      *
      * @param buffer The buffer to clear, may be null.
      * @return The given buffer.
@@ -220,7 +220,7 @@ public final class Buffers {
         if (clearBuffer(buffer).hasArray()) {
             Arrays.fill(buffer.array(), (short) 0);
         } else {
-            final short[] zeros = new short[IOUtils.DEFAULT_BUFFER_SIZE];
+            final short[] zeros = new short[getClearBufferSize(buffer)];
             while (buffer.hasRemaining()) {
                 buffer.put(zeros, 0, Math.min(buffer.remaining(), zeros.length));
             }
@@ -287,6 +287,10 @@ public final class Buffers {
             clear(buffer);
         }
         return buffer;
+    }
+
+    private static int getClearBufferSize(final Buffer buffer) {
+        return Math.min(buffer.remaining(), IOUtils.DEFAULT_BUFFER_SIZE);
     }
 
     /**
