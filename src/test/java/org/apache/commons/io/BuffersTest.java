@@ -91,6 +91,7 @@ public class BuffersTest {
     void testClearBufferDispatchByteBuffer() {
         final ByteBuffer buffer = ByteBuffer.allocate(CAPACITY);
         buffer.put(new byte[] { 1, 2, 3, 4, 5, 6, 7, 8 });
+        assertEquals(CAPACITY, buffer.limit()); // sanity check
         final Buffer result = Buffers.clear(buffer);
         assertSame(buffer, result);
         assertEquals(0, buffer.position());
@@ -105,6 +106,7 @@ public class BuffersTest {
     void testClearBufferDispatchCharBuffer() {
         final CharBuffer buffer = CharBuffer.allocate(CAPACITY);
         buffer.put(new char[] { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h' });
+        assertEquals(CAPACITY, buffer.limit()); // sanity check
         final Buffer result = Buffers.clear(buffer);
         assertSame(buffer, result);
         assertEquals(0, buffer.position());
@@ -119,6 +121,7 @@ public class BuffersTest {
     void testClearBufferDispatchDoubleBuffer() {
         final DoubleBuffer buffer = DoubleBuffer.allocate(CAPACITY);
         buffer.put(new double[] { 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0 });
+        assertEquals(CAPACITY, buffer.limit()); // sanity check
         final Buffer result = Buffers.clear(buffer);
         assertSame(buffer, result);
         assertEquals(0, buffer.position());
@@ -133,6 +136,7 @@ public class BuffersTest {
     void testClearBufferDispatchFloatBuffer() {
         final FloatBuffer buffer = FloatBuffer.allocate(CAPACITY);
         buffer.put(new float[] { 1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f, 8.0f });
+        assertEquals(CAPACITY, buffer.limit()); // sanity check
         final Buffer result = Buffers.clear(buffer);
         assertSame(buffer, result);
         assertEquals(0, buffer.position());
@@ -147,6 +151,7 @@ public class BuffersTest {
     void testClearBufferDispatchIntBuffer() {
         final IntBuffer buffer = IntBuffer.allocate(CAPACITY);
         buffer.put(new int[] { 1, 2, 3, 4, 5, 6, 7, 8 });
+        assertEquals(CAPACITY, buffer.limit()); // sanity check
         final Buffer result = Buffers.clear(buffer);
         assertSame(buffer, result);
         assertEquals(0, buffer.position());
@@ -161,6 +166,7 @@ public class BuffersTest {
     void testClearBufferDispatchLongBuffer() {
         final LongBuffer buffer = LongBuffer.allocate(CAPACITY);
         buffer.put(new long[] { 1L, 2L, 3L, 4L, 5L, 6L, 7L, 8L });
+        assertEquals(CAPACITY, buffer.limit()); // sanity check
         final Buffer result = Buffers.clear(buffer);
         assertSame(buffer, result);
         assertEquals(0, buffer.position());
@@ -175,6 +181,7 @@ public class BuffersTest {
     void testClearBufferDispatchShortBuffer() {
         final ShortBuffer buffer = ShortBuffer.allocate(CAPACITY);
         buffer.put(new short[] { 1, 2, 3, 4, 5, 6, 7, 8 });
+        assertEquals(CAPACITY, buffer.limit()); // sanity check
         final Buffer result = Buffers.clear(buffer);
         assertSame(buffer, result);
         assertEquals(0, buffer.position());
@@ -197,6 +204,7 @@ public class BuffersTest {
     void testClearByteBufferArrayBacked() {
         final ByteBuffer buffer = ByteBuffer.allocate(CAPACITY);
         buffer.put(new byte[] { 1, 2, 3, 4, 5, 6, 7, 8 });
+        assertEquals(CAPACITY, buffer.limit()); // sanity check
         final ByteBuffer result = Buffers.clear(buffer);
         assertSame(buffer, result);
         assertEquals(0, result.position());
@@ -213,6 +221,23 @@ public class BuffersTest {
         for (int i = 0; i < CAPACITY; i++) {
             buffer.put((byte) (i + 1));
         }
+        final ByteBuffer result = Buffers.clear(buffer);
+        assertSame(buffer, result);
+        assertEquals(0, result.position());
+        assertEquals(CAPACITY, result.limit());
+        assertZeroes(result);
+    }
+
+    /**
+     * Tests {@link Buffers#clear(ByteBuffer)} with a direct buffer.
+     */
+    @Test
+    void testClearByteBufferDirectMiddle() {
+        final ByteBuffer buffer = ByteBuffer.allocateDirect(CAPACITY);
+        for (int i = 0; i < CAPACITY; i++) {
+            buffer.put((byte) (i + 1));
+        }
+        buffer.position(CAPACITY / 2);
         final ByteBuffer result = Buffers.clear(buffer);
         assertSame(buffer, result);
         assertEquals(0, result.position());
