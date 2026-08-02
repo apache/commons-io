@@ -38,7 +38,7 @@ import java.util.Arrays;
 public final class Buffers {
 
     /**
-     * Clears this buffer by filling it with zeros, the position is set to zero, the limit is set to the capacity, and the mark is discarded.
+     * Clears a buffer by filling it with zeros, the position is set to zero, the limit is set to the capacity, and the mark is discarded.
      *
      * @param buffer The buffer to clear, may be null.
      * @return The given buffer, or null.
@@ -75,7 +75,7 @@ public final class Buffers {
     }
 
     /**
-     * Clears this buffer by filling it with zeros, the position is set to zero, the limit is set to the capacity, and the mark is discarded.
+     * Clears a buffer by filling it with zeros, the position is set to zero, the limit is set to the capacity, and the mark is discarded.
      *
      * @param buffer The buffer to clear, may be null.
      * @return The given buffer.
@@ -97,7 +97,7 @@ public final class Buffers {
     }
 
     /**
-     * Clears this buffer by filling it with zeros, the position is set to zero, the limit is set to the capacity, and the mark is discarded.
+     * Clears a buffer by filling it with zeros, the position is set to zero, the limit is set to the capacity, and the mark is discarded.
      *
      * @param buffer The buffer to clear, may be null.
      * @return The given buffer.
@@ -119,7 +119,7 @@ public final class Buffers {
     }
 
     /**
-     * Clears this buffer by filling it with zeros, the position is set to zero, the limit is set to the capacity, and the mark is discarded.
+     * Clears a buffer by filling it with zeros, the position is set to zero, the limit is set to the capacity, and the mark is discarded.
      *
      * @param buffer The buffer to clear, may be null.
      * @return The given buffer.
@@ -141,7 +141,7 @@ public final class Buffers {
     }
 
     /**
-     * Clears this buffer by filling it with zeros, the position is set to zero, the limit is set to the capacity, and the mark is discarded.
+     * Clears a buffer by filling it with zeros, the position is set to zero, the limit is set to the capacity, and the mark is discarded.
      *
      * @param buffer The buffer to clear, may be null.
      * @return The given buffer.
@@ -163,7 +163,7 @@ public final class Buffers {
     }
 
     /**
-     * Clears this buffer by filling it with zeros, the position is set to zero, the limit is set to the capacity, and the mark is discarded.
+     * Clears a buffer by filling it with zeros, the position is set to zero, the limit is set to the capacity, and the mark is discarded.
      *
      * @param buffer The buffer to clear, may be null.
      * @return The given buffer.
@@ -185,7 +185,7 @@ public final class Buffers {
     }
 
     /**
-     * Clears this buffer by filling it with zeros, the position is set to zero, the limit is set to the capacity, and the mark is discarded.
+     * Clears a buffer by filling it with zeros, the position is set to zero, the limit is set to the capacity, and the mark is discarded.
      *
      * @param buffer The buffer to clear, may be null.
      * @return The given buffer.
@@ -207,7 +207,7 @@ public final class Buffers {
     }
 
     /**
-     * Clears this buffer by filling it with zeros, the position is set to zero, the limit is set to the capacity, and the mark is discarded.
+     * Clears a buffer by filling it with zeros, the position is set to zero, the limit is set to the capacity, and the mark is discarded.
      *
      * @param buffer The buffer to clear, may be null.
      * @return The given buffer.
