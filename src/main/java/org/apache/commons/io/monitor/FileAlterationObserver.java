@@ -267,7 +267,7 @@ public class FileAlterationObserver implements Serializable {
     /**
      * The maximum depth of entries to monitor.
      */
-    private final Integer maxDepth;
+    private final int maxDepth;
 
     private FileAlterationObserver(final Builder builder) {
         this(builder.rootEntry != null ? builder.rootEntry : new FileEntry(builder.checkOriginFile()), builder.fileFilter, toComparator(builder.ioCase),
@@ -562,8 +562,7 @@ public class FileAlterationObserver implements Serializable {
      * @since 2.23.0
      */
     public int getMaxDepth() {
-        // A null value preserves unlimited recursion when deserializing streams written before this field was added.
-        return maxDepth != null ? maxDepth : Integer.MAX_VALUE;
+        return maxDepth;
     }
 
     /**
@@ -589,7 +588,7 @@ public class FileAlterationObserver implements Serializable {
     }
 
     /**
-     * Lists the contents of a directory when the parent entry is below the maximum depth.
+     * Lists the contents of a directory when its entry is below the maximum depth.
      *
      * @param directory The directory to list.
      * @param entry     The directory entry.
