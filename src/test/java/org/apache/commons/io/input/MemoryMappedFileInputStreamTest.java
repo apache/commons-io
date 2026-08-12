@@ -20,9 +20,12 @@ import static org.apache.commons.lang3.ArrayUtils.EMPTY_BYTE_ARRAY;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.never;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.ByteBuffer;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
@@ -35,6 +38,8 @@ import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 
 /**
  * Tests {@link MemoryMappedFileInputStream}.
@@ -323,4 +328,31 @@ class MemoryMappedFileInputStreamTest {
         }
     }
 
+    @Test
+    void testCleanCalled() throws Exception {
+        // setup
+        final Path file = createTestFile(100);
+        final byte[] expectedData = Files.readAllBytes(file);
+        // test
+        final boolean expectedCleanOnClose = true;
+        try (MockedStatic<ByteBufferCleaner> mocked = Mockito.mockStatic(ByteBufferCleaner.class);
+             InputStream stream = MemoryMappedFileInputStream.builder().setPath(file).setClean(true).get()) {
+            stream.close();
+            mocked.verify(() -> ByteBufferCleaner.clean(any(ByteBuffer.class)));
+        }
+    }
+
+    @Test
+    void testCleanCalledNever() throws Exception {
+        // setup
+        final Path file = createTestFile(100);
+        final byte[] expectedData = Files.readAllBytes(file);
+        // test
+        final boolean expectedCleanOnClose = false;
+        try (MockedStatic<ByteBufferCleaner> mocked = Mockito.mockStatic(ByteBufferCleaner.class);
+                InputStream stream = MemoryMappedFileInputStream.builder().setPath(file).setClean(false).get()) {
+            stream.close();
+            mocked.verify(() -> ByteBufferCleaner.clean(any(ByteBuffer.class)), never());
+        }
+    }
 }

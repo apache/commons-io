@@ -26,6 +26,7 @@ import java.nio.file.StandardOpenOption;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.build.AbstractStreamBuilder;
+import org.apache.commons.io.input.MemoryMappedFileInputStream.Builder;
 
 /**
  * {@link InputStream} implementation which uses direct buffer to read a file to avoid extra copy of data between Java and native memory which happens when
@@ -74,11 +75,24 @@ public final class BufferedFileChannelInputStream extends InputStream {
 
         private FileChannel fileChannel;
 
+        private boolean clean = true;
+
         /**
          * Constructs a new builder of {@link BufferedFileChannelInputStream}.
          */
         public Builder() {
             // empty
+        }
+
+        /**
+         * Whether to attempt to clean ByteBuffer on close. Default is true.
+         *
+         * @param clean whether to attempt to clean ByteBuffer on close
+         * @return {@code this} instance.
+         */
+        public Builder setClean(final boolean clean) {
+            this.clean = clean;
+            return this;
         }
 
         /**
@@ -137,7 +151,9 @@ public final class BufferedFileChannelInputStream extends InputStream {
 
     private final ByteBuffer byteBuffer;
 
-    private boolean clean;
+    private final boolean clean;
+
+    private boolean cleaned;
 
     private final FileChannel fileChannel;
 
@@ -146,6 +162,7 @@ public final class BufferedFileChannelInputStream extends InputStream {
         this.fileChannel = builder.fileChannel != null ? builder.fileChannel : FileChannel.open(builder.getPath(), StandardOpenOption.READ);
         this.byteBuffer = ByteBuffer.allocateDirect(builder.getBufferSize());
         this.byteBuffer.flip();
+        this.clean = builder.clean;
     }
 
     /**
@@ -220,9 +237,9 @@ public final class BufferedFileChannelInputStream extends InputStream {
      * @param buffer The buffer to clean.
      */
     private void clean(final ByteBuffer buffer) {
-        if (!clean && ByteBufferCleaner.isSupported()) {
+        if (!cleaned && clean) {
             ByteBufferCleaner.clean(buffer);
-            clean = true;
+            cleaned = true;
         }
     }
 
@@ -235,8 +252,8 @@ public final class BufferedFileChannelInputStream extends InputStream {
         }
     }
 
-    boolean isClean() {
-        return clean;
+    boolean isCleaned() {
+        return cleaned;
     }
 
     @Override

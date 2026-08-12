@@ -27,8 +27,6 @@ import java.io.InputStream;
 import java.nio.channels.FileChannel;
 import java.nio.file.StandardOpenOption;
 
-import org.apache.commons.lang3.JavaVersion;
-import org.apache.commons.lang3.SystemUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -77,13 +75,25 @@ class BufferedFileChannelInputStreamTest extends AbstractInputStreamTest {
      */
     @Test
     void testCleanCalledOnlyOnce() throws Exception {
-        final boolean expectedCleanOnClose = !SystemUtils.isJavaVersionAtLeast(JavaVersion.JAVA_23);
+        final boolean expectedCleanOnClose = ByteBufferCleaner.getCleaner() != null;
         try (BufferedFileChannelInputStream stream = BufferedFileChannelInputStream.builder().setPath(InputPath).get()) {
-            assertFalse(stream.isClean());
+            assertFalse(stream.isCleaned());
             stream.close();
-            assertEquals(stream.isClean(), expectedCleanOnClose);
+            assertEquals(stream.isCleaned(), expectedCleanOnClose);
             stream.close();
-            assertEquals(stream.isClean(), expectedCleanOnClose);
+            assertEquals(stream.isCleaned(), expectedCleanOnClose);
+        }
+    }
+
+    @Test
+    void testCleanCalledNever() throws Exception {
+        final boolean expectedCleanOnClose = false;
+        try (BufferedFileChannelInputStream stream = BufferedFileChannelInputStream.builder().setPath(InputPath).setClean(false).get()) {
+            assertFalse(stream.isCleaned());
+            stream.close();
+            assertEquals(stream.isCleaned(), expectedCleanOnClose);
+            stream.close();
+            assertEquals(stream.isCleaned(), expectedCleanOnClose);
         }
     }
 

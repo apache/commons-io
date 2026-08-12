@@ -18,8 +18,7 @@ package org.apache.commons.io.input;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.condition.JRE.JAVA_23;
@@ -71,9 +70,8 @@ class ByteBufferCleanerTest {
 
     @Test
     @EnabledForJreRange(min = JAVA_23)
-    void testUnsupportedByDefaultOnJava23() {
-        assertNull(ByteBufferCleaner.getCleaner());
-        assertFalse(ByteBufferCleaner.isSupported(), "ByteBufferCleaner does not work on this platform, please investigate and fix");
+    void testSupportedByDefaultOnJava23() {
+        assertNotNull(ByteBufferCleaner.getCleaner(), "ByteBufferCleaner works on this platform by default, please investigate and fix");
     }
 
     private void verifyUncleared(final ByteBuffer buffer) {

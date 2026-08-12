@@ -92,12 +92,25 @@ public final class MemoryMappedFileInputStream extends AbstractInputStream {
     // @formatter:on
     public static class Builder extends AbstractStreamBuilder<MemoryMappedFileInputStream, Builder> {
 
+        private boolean clean = true;
+
         /**
          * Constructs a new builder of {@link MemoryMappedFileInputStream}.
          */
         public Builder() {
             setBufferSizeDefault(DEFAULT_BUFFER_SIZE);
             setBufferSize(DEFAULT_BUFFER_SIZE);
+        }
+
+        /**
+         * Whether to attempt to clean ByteBuffer on close. Default is true.
+         *
+         * @param clean whether to attempt to clean ByteBuffer on close
+         * @return {@code this} instance.
+         */
+        public Builder setClean(final boolean clean) {
+            this.clean = clean;
+            return this;
         }
 
         /**
@@ -147,6 +160,7 @@ public final class MemoryMappedFileInputStream extends AbstractInputStream {
 
     private final int bufferSize;
     private final FileChannel channel;
+    private final boolean clean;
     private ByteBuffer buffer = EMPTY_BUFFER;
 
     /**
@@ -163,6 +177,7 @@ public final class MemoryMappedFileInputStream extends AbstractInputStream {
     private MemoryMappedFileInputStream(final Builder builder) throws IOException {
         this.bufferSize = builder.getBufferSize();
         this.channel = FileChannel.open(builder.getPath(), StandardOpenOption.READ);
+        this.clean = builder.clean;
     }
 
     @Override
@@ -172,7 +187,7 @@ public final class MemoryMappedFileInputStream extends AbstractInputStream {
     }
 
     private void cleanBuffer() {
-        if (ByteBufferCleaner.isSupported()) {
+        if (clean) {
             ByteBufferCleaner.clean(buffer);
         }
     }

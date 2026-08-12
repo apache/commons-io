@@ -79,7 +79,7 @@ final class ByteBufferCleaner {
         }
     }
 
-    private static final Cleaner INSTANCE = getCleaner();
+    private static final Cleaner INSTANCE = getCleanerMaybe();
 
     /**
      * Releases memory held by the given {@link ByteBuffer}.
@@ -93,6 +93,8 @@ final class ByteBufferCleaner {
                 Buffers.clearWritable(buffer);
                 if (INSTANCE != null) {
                     INSTANCE.clean(buffer);
+                } else {
+                    getCleaner().clean(buffer);
                 }
             }
         } catch (final Exception e) {
@@ -100,10 +102,14 @@ final class ByteBufferCleaner {
         }
     }
 
-    static Cleaner getCleaner() {
+    static Cleaner getCleanerMaybe() {
         if (unsafeMemoryAccessDeprecated()) {
             return null;
         }
+        return getCleaner();
+    }
+
+    static Cleaner getCleaner() {
         try {
             return new Java8Cleaner();
         } catch (final Exception e) {
