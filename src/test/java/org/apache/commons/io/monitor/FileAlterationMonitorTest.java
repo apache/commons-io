@@ -23,6 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.File;
+import java.io.IOException;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -31,6 +32,7 @@ import java.util.Iterator;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.ThreadUtils;
 import org.apache.commons.io.test.TestUtils;
 import org.junit.jupiter.api.Test;
@@ -58,6 +60,32 @@ class FileAlterationMonitorTest extends AbstractMonitorTest {
             TestUtils.sleepQuietly(pauseTime);
         }
         fail(label + " " + file + " not found");
+    }
+
+    private void runMonitorTest(final long interval, final FileAlterationMonitor monitor) throws Exception, IOException {
+        assertEquals(interval, monitor.getInterval(), "Interval");
+        monitor.start();
+        // try and start again
+        assertThrows(IllegalStateException.class, () -> monitor.start());
+        // Create a File
+        checkCollectionsEmpty("A");
+        File file1 = touch(new File(testDir, "file1.java"));
+        checkFile("Create", file1, listener.getCreatedFiles());
+        listener.clear();
+        // Update a file
+        checkCollectionsEmpty("B");
+        file1 = touch(file1);
+        checkFile("Update", file1, listener.getChangedFiles());
+        listener.clear();
+        // Delete a file
+        checkCollectionsEmpty("C");
+        file1.delete();
+        checkFile("Delete", file1, listener.getDeletedFiles());
+        listener.clear();
+        // Stop monitoring
+        monitor.stop();
+        // try and stop again
+        assertThrows(IllegalStateException.class, () -> monitor.stop());
     }
 
     /**
@@ -137,35 +165,7 @@ class FileAlterationMonitorTest extends AbstractMonitorTest {
         final long interval = 100;
         listener.clear();
         final FileAlterationMonitor monitor = new FileAlterationMonitor(interval, observer);
-        assertEquals(interval, monitor.getInterval(), "Interval");
-        monitor.start();
-
-        // try and start again
-        assertThrows(IllegalStateException.class, () -> monitor.start());
-
-        // Create a File
-        checkCollectionsEmpty("A");
-        File file1 = touch(new File(testDir, "file1.java"));
-        checkFile("Create", file1, listener.getCreatedFiles());
-        listener.clear();
-
-        // Update a file
-        checkCollectionsEmpty("B");
-        file1 = touch(file1);
-        checkFile("Update", file1, listener.getChangedFiles());
-        listener.clear();
-
-        // Delete a file
-        checkCollectionsEmpty("C");
-        file1.delete();
-        checkFile("Delete", file1, listener.getDeletedFiles());
-        listener.clear();
-
-        // Stop monitoring
-        monitor.stop();
-
-        // try and stop again
-        assertThrows(IllegalStateException.class, () -> monitor.stop());
+        runMonitorTest(interval, monitor);
     }
 
     /**
@@ -227,5 +227,20 @@ class FileAlterationMonitorTest extends AbstractMonitorTest {
 
         // Stop monitoring
         monitor.stop();
+    }
+
+    @Test
+    void testThrowingObserverOnCheck() throws Exception {
+        final long interval = 100;
+        listener.clear();
+        @SuppressWarnings("deprecation")
+        final FileAlterationMonitor monitor = new FileAlterationMonitor(interval, new FileAlterationObserver(FileUtils.getTempDirectory()) {
+
+            @Override
+            public void checkAndNotify() {
+                throw new RuntimeException("Test");
+            }
+        }, observer);
+        runMonitorTest(interval, monitor);
     }
 }

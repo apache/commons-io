@@ -106,6 +106,16 @@ public final class FileAlterationMonitor implements Runnable {
         }
     }
 
+    void checkAndNotify() {
+        observers.forEach(foa -> {
+            try {
+                foa.checkAndNotify();
+            } catch (final Exception e) {
+                // Allow other observers to be notified even if one fails.
+            }
+        });
+    }
+
     /**
      * Gets the interval.
      *
@@ -142,7 +152,7 @@ public final class FileAlterationMonitor implements Runnable {
     @Override
     public void run() {
         while (running) {
-            observers.forEach(FileAlterationObserver::checkAndNotify);
+            checkAndNotify();
             if (!running) {
                 break;
             }
