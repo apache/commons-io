@@ -14,9 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.apache.commons.io.monitor;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.SerializationUtils;
@@ -26,6 +28,23 @@ import org.junit.jupiter.api.Test;
  * Tests {@link FileEntry}.
  */
 class FileEntryTest {
+
+    @Test
+    void testConstructor() {
+        final FileEntry current = new FileEntry(FileUtils.current());
+        assertEquals(FileUtils.current(), current.getFile());
+        assertEquals(FileUtils.current().getName(), current.getName());
+        assertEquals(FileUtils.current().getParentFile(), current.getParent());
+        assertEquals(0, current.getLevel());
+    }
+
+    @Test
+    void testConstructorNull() {
+        assertThrows(NullPointerException.class, () -> new FileEntry(null));
+        assertThrows(NullPointerException.class, () -> new FileEntry(null, null));
+        final FileEntry current = new FileEntry(FileUtils.current());
+        assertThrows(NullPointerException.class, () -> new FileEntry(current, null));
+    }
 
     @Test
     void testSerializable() {
