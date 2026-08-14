@@ -85,7 +85,8 @@ public class FileEntry implements Serializable {
     /**
      * Constructs a new monitor for a specified {@link File}.
      *
-     * @param file The file being monitored.
+     * @param file The file being monitored, not null.
+     * @throws NullPointerException if the file is null.
      */
     public FileEntry(final File file) {
         this(null, file);
@@ -94,8 +95,9 @@ public class FileEntry implements Serializable {
     /**
      * Constructs a new monitor for a specified {@link File}.
      *
-     * @param parent The parent.
-     * @param file The file being monitored.
+     * @param parent The parent, may be null.
+     * @param file The file being monitored, not null.
+     * @throws NullPointerException if the file is null.
      */
     public FileEntry(final FileEntry parent, final File file) {
         this.file = Objects.requireNonNull(file, "file");
@@ -155,7 +157,7 @@ public class FileEntry implements Serializable {
     /**
      * Gets the level
      *
-     * @return The level.
+     * @return The level, 0 if there is no parent, otherwise the parent's level + 1.
      */
     public int getLevel() {
         return parent == null ? 0 : parent.getLevel() + 1;
@@ -173,7 +175,7 @@ public class FileEntry implements Serializable {
     /**
      * Gets the parent entry.
      *
-     * @return The parent entry.
+     * @return The parent entry, may be null.
      */
     public FileEntry getParent() {
         return parent;
