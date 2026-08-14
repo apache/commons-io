@@ -14,6 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.apache.commons.io.monitor;
 
 import java.io.File;
@@ -29,20 +30,17 @@ import org.apache.commons.io.file.attribute.FileTimes;
 /**
  * The state of a file or directory, capturing the following {@link File} attributes at a point in time.
  * <ul>
- *   <li>File Name (see {@link File#getName()})</li>
- *   <li>Exists - whether the file exists or not (see {@link File#exists()})</li>
- *   <li>Directory - whether the file is a directory or not (see {@link File#isDirectory()})</li>
- *   <li>Last Modified Date/Time (see {@link FileUtils#lastModifiedUnchecked(File)})</li>
- *   <li>Length (see {@link File#length()}) - directories treated as zero</li>
- *   <li>Children - contents of a directory (see {@link File#listFiles(java.io.FileFilter)})</li>
+ * <li>File Name (see {@link File#getName()})</li>
+ * <li>Exists - whether the file exists or not (see {@link File#exists()})</li>
+ * <li>Directory - whether the file is a directory or not (see {@link File#isDirectory()})</li>
+ * <li>Last Modified Date/Time (see {@link FileUtils#lastModifiedUnchecked(File)})</li>
+ * <li>Length (see {@link File#length()}) - directories treated as zero</li>
+ * <li>Children - contents of a directory (see {@link File#listFiles(java.io.FileFilter)})</li>
  * </ul>
- *
  * <h2>Custom Implementations</h2>
  * <p>
- * If the state of additional {@link File} attributes is required then create a custom
- * {@link FileEntry} with properties for those attributes. Override the
- * {@link #newChildInstance(File)} to return a new instance of the appropriate type.
- * You may also want to override the {@link #refresh(File)} method.
+ * If the state of additional {@link File} attributes is required then create a custom {@link FileEntry} with properties for those attributes. Override the
+ * {@link #newChildInstance(File)} to return a new instance of the appropriate type. You may also want to override the {@link #refresh(File)} method.
  * </p>
  * <h2>Deprecating Serialization</h2>
  * <p>
@@ -96,7 +94,7 @@ public class FileEntry implements Serializable {
      * Constructs a new monitor for a specified {@link File}.
      *
      * @param parent The parent, may be null.
-     * @param file The file being monitored, not null.
+     * @param file   The file being monitored, not null.
      * @throws NullPointerException if the file is null.
      */
     public FileEntry(final FileEntry parent, final File file) {
@@ -108,9 +106,7 @@ public class FileEntry implements Serializable {
     /**
      * Gets the directory's files.
      *
-     * @return This directory's files or an empty
-     * array if the file is not a directory or the
-     * directory is empty.
+     * @return This directory's files or an empty array if the file is not a directory or the directory is empty.
      */
     public FileEntry[] getChildren() {
         return children != null ? children : EMPTY_FILE_ENTRY_ARRAY;
@@ -126,8 +122,7 @@ public class FileEntry implements Serializable {
     }
 
     /**
-     * Gets the last modified time from the last time it
-     * was checked.
+     * Gets the last modified time from the last time it was checked.
      *
      * @return The last modified time in milliseconds.
      */
@@ -155,7 +150,7 @@ public class FileEntry implements Serializable {
     }
 
     /**
-     * Gets the level
+     * Gets the level.
      *
      * @return The level, 0 if there is no parent, otherwise the parent's level + 1.
      */
@@ -191,8 +186,7 @@ public class FileEntry implements Serializable {
     }
 
     /**
-     * Tests whether the file existed the last time it
-     * was checked.
+     * Tests whether the file existed the last time it was checked.
      *
      * @return whether the file existed.
      */
@@ -203,8 +197,7 @@ public class FileEntry implements Serializable {
     /**
      * Constructs a new child instance.
      * <p>
-     * Custom implementations should override this method to return
-     * a new instance of the appropriate type.
+     * Custom implementations should override this method to return a new instance of the appropriate type.
      * </p>
      *
      * @param file The child file.
@@ -215,16 +208,12 @@ public class FileEntry implements Serializable {
     }
 
     /**
-     * Refreshes the attributes from the {@link File}, indicating
-     * whether the file has changed.
+     * Refreshes the attributes from the {@link File}, indicating whether the file has changed.
      * <p>
-     * This implementation refreshes the {@code name}, {@code exists},
-     * {@code directory}, {@code lastModified} and {@code length}
-     * properties.
+     * This implementation refreshes the {@code name}, {@code exists}, {@code directory}, {@code lastModified} and {@code length} properties.
      * </p>
      * <p>
-     * The {@code exists}, {@code directory}, {@code lastModified}
-     * and {@code length} properties are compared for changes
+     * The {@code exists}, {@code directory}, {@code lastModified} and {@code length} properties are compared for changes.
      * </p>
      *
      * @param file The file instance to compare to.
@@ -236,7 +225,6 @@ public class FileEntry implements Serializable {
         final SerializableFileTime origLastModified = lastModified;
         final boolean origDirectory = directory;
         final long origLength = length;
-
         // refresh the values
         name = file.getName();
         exists = Files.exists(file.toPath());
@@ -247,10 +235,8 @@ public class FileEntry implements Serializable {
             setLastModified(SerializableFileTime.EPOCH);
         }
         length = exists && !directory ? file.length() : 0;
-
         // Return if there are changes
-        return exists != origExists || !lastModified.equals(origLastModified) || directory != origDirectory
-            || length != origLength;
+        return exists != origExists || !lastModified.equals(origLastModified) || directory != origDirectory || length != origLength;
     }
 
     /**
@@ -272,8 +258,7 @@ public class FileEntry implements Serializable {
     }
 
     /**
-     * Sets whether the file existed the last time it
-     * was checked.
+     * Sets whether the file existed the last time it was checked.
      *
      * @param exists whether the file exists or not.
      */
@@ -292,8 +277,7 @@ public class FileEntry implements Serializable {
     }
 
     /**
-     * Sets the last modified time from the last time it
-     * was checked.
+     * Sets the last modified time from the last time it was checked.
      *
      * @param lastModified The last modified time in milliseconds.
      */
