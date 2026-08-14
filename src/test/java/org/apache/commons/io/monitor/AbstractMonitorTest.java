@@ -108,6 +108,9 @@ public abstract class AbstractMonitorTest {
         }
     }
 
+    /**
+     * Sets up test fixtures.
+     */
     @BeforeEach
     public void setUp() {
         final IOFileFilter files = FileFilterUtils.fileFileFilter();
