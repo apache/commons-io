@@ -306,4 +306,9 @@ public class FileEntry implements Serializable {
     public void setName(final String name) {
         this.name = name;
     }
+
+    @Override
+    public String toString() {
+        return String.format("FileEntry[%s]", file);
+    }
 }

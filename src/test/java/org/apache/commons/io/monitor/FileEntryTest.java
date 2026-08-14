@@ -59,4 +59,10 @@ class FileEntryTest {
         assertEquals(fe.getName(), SerializationUtils.roundtrip(fe).getName());
         assertEquals(fe.getParent(), SerializationUtils.roundtrip(fe).getParent());
     }
+
+    @Test
+    void testToString() {
+        final FileEntry fe = new FileEntry(FileUtils.current());
+        assertEquals("FileEntry[" + fe.getFile() + "]", fe.toString());
+    }
 }
