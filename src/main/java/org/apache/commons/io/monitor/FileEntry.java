@@ -119,7 +119,7 @@ public class FileEntry implements Serializable {
     /**
      * Gets the file being monitored.
      *
-     * @return The file being monitored.
+     * @return The file being monitored, never null.
      */
     public File getFile() {
         return file;
