@@ -32,10 +32,10 @@ import java.util.Iterator;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.ThreadUtils;
 import org.apache.commons.io.test.TestUtils;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 /**
  * {@link FileAlterationMonitor} Test Case.
@@ -230,11 +230,11 @@ class FileAlterationMonitorTest extends AbstractMonitorTest {
     }
 
     @Test
-    void testThrowingObserverOnCheck() throws Exception {
+    void testThrowingObserverOnCheck(@TempDir File tempDir) throws Exception {
         final long interval = 100;
         listener.clear();
         @SuppressWarnings("deprecation")
-        final FileAlterationMonitor monitor = new FileAlterationMonitor(interval, new FileAlterationObserver(FileUtils.getTempDirectory()) {
+        final FileAlterationMonitor monitor = new FileAlterationMonitor(interval, new FileAlterationObserver(tempDir) {
 
             @Override
             public void checkAndNotify() {
