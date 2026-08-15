@@ -14,6 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.apache.commons.io.monitor;
 
 import java.io.File;
@@ -26,6 +27,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.function.BiConsumer;
 import java.util.stream.Stream;
 
 import org.apache.commons.io.FileUtils;
@@ -36,8 +38,7 @@ import org.apache.commons.io.comparator.NameFileComparator;
 import org.apache.commons.io.filefilter.TrueFileFilter;
 
 /**
- * Represents the state of files below a root directory, checking the file system and notifying listeners of create, change or delete
- * events.
+ * Represents the state of files below a root directory, checking the file system and notifying listeners of create, change or delete events.
  * <p>
  * To use this implementation:
  * </p>
@@ -386,10 +387,8 @@ public class FileAlterationObserver implements Serializable {
      * Checks whether the file and its children have been created, modified or deleted.
      */
     public void checkAndNotify() {
-
         // fire onStart()
-        listeners.forEach(listener -> listener.onStart(this));
-
+        forEachListener(FileAlterationListener::onStart);
         // fire directory/file events
         final File rootFile = rootEntry.getFile();
         if (rootFile.exists()) {
@@ -397,10 +396,8 @@ public class FileAlterationObserver implements Serializable {
         } else if (rootEntry.isExists()) {
             checkAndFire(rootEntry, rootEntry.getChildren(), FileUtils.EMPTY_FILE_ARRAY);
         }
-        // Else: Didn't exist and still doesn't
-
-        // fire onStop()
-        listeners.forEach(listener -> listener.onStop(this));
+        // Else: Didn't exist and still doesn't fire onStop()
+        forEachListener(FileAlterationListener::onStop);
     }
 
     /**
@@ -435,7 +432,7 @@ public class FileAlterationObserver implements Serializable {
      */
     private void fireOnChange(final FileEntry entry, final File file) {
         if (entry.refresh(file)) {
-            listeners.forEach(listener -> {
+            forEachListener((listener, observer) -> {
                 if (entry.isDirectory()) {
                     listener.onDirectoryChange(file);
                 } else {
@@ -451,7 +448,7 @@ public class FileAlterationObserver implements Serializable {
      * @param entry The file entry.
      */
     private void fireOnCreate(final FileEntry entry) {
-        listeners.forEach(listener -> {
+        forEachListener((listener, observer) -> {
             if (entry.isDirectory()) {
                 listener.onDirectoryCreate(entry.getFile());
             } else {
@@ -467,11 +464,21 @@ public class FileAlterationObserver implements Serializable {
      * @param entry The file entry.
      */
     private void fireOnDelete(final FileEntry entry) {
-        listeners.forEach(listener -> {
+        forEachListener((listener, observer) -> {
             if (entry.isDirectory()) {
                 listener.onDirectoryDelete(entry.getFile());
             } else {
                 listener.onFileDelete(entry.getFile());
+            }
+        });
+    }
+
+    private void forEachListener(final BiConsumer<FileAlterationListener, FileAlterationObserver> consumer) {
+        listeners.forEach(l -> {
+            try {
+                consumer.accept(l, this);
+            } catch (final Exception e) {
+                // Allow other listeners to be notified even if one fails.
             }
         });
     }
@@ -580,5 +587,4 @@ public class FileAlterationObserver implements Serializable {
         builder.append("]");
         return builder.toString();
     }
-
 }
