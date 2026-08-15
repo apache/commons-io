@@ -262,7 +262,7 @@ class FileEntryTest {
         fe.setChildren(child, child2);
         assertArrayEquals(new FileEntry[] { child, child2 }, fe.getChildren());
         // Test setting children to null (should become EMPTY_ARRAY)
-        fe.setChildren(null);
+        fe.setChildren((FileEntry[]) null);
         assertArrayEquals(FileEntry.EMPTY_ARRAY, fe.getChildren(), "setChildren(null) should set EMPTY_ARRAY");
         // Test setting empty children array
         fe.setChildren();
