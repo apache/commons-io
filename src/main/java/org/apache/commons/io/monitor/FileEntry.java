@@ -302,9 +302,10 @@ public class FileEntry implements Serializable {
      * Sets the file name.
      *
      * @param name The file name.
+     * @throws NullPointerException if the name is null.
      */
     public void setName(final String name) {
-        this.name = name;
+        this.name = Objects.requireNonNull(name, "name");
     }
 
     @Override

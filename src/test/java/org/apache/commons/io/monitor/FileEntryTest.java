@@ -62,6 +62,14 @@ class FileEntryTest {
     }
 
     @Test
+    void testSetName() {
+        final FileEntry fe = new FileEntry(FileUtils.current());
+        fe.setName("test");
+        assertEquals("test", fe.getName());
+        assertThrows(NullPointerException.class, () -> fe.setName(null));
+    }
+
+    @Test
     void testToString() {
         final FileEntry fe = new FileEntry(FileUtils.current());
         assertEquals("FileEntry[" + fe.getFile() + "]", fe.toString());
