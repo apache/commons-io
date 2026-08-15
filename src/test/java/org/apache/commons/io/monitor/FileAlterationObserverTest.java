@@ -451,10 +451,10 @@ class FileAlterationObserverTest extends AbstractMonitorTest {
     /**
      * Test checkAndNotify() method
      *
-     * @throws IOException Thrown if an I/O error occurs.
+     * @throws Exception Thrown if an I/O error occurs.
      */
     @Test
-    void testObserveSingleFile() throws IOException {
+    void testObserveSingleFile() throws Exception {
         final File testDirA = new File(testDir, "test-dir-A");
         File testDirAFile1 = new File(testDirA, "A-file1.java");
         testDirA.mkdir();

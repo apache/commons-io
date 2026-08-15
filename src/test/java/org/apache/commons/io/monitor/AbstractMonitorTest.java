@@ -96,23 +96,22 @@ public abstract class AbstractMonitorTest {
      *
      * @param file The directory to observe.
      * @param fileFilter The file filter to apply.
+     * @throws Exception Thrown on observer initialization error.
      */
-    protected void createObserver(final File file, final FileFilter fileFilter) {
+    protected void createObserver(final File file, final FileFilter fileFilter) throws Exception {
         observer = FileAlterationObserver.builder().setFile(file).setFileFilter(fileFilter).getUnchecked();
         observer.addListener(listener);
         observer.addListener(new FileAlterationListenerAdaptor());
-        try {
-            observer.initialize();
-        } catch (final Exception e) {
-            fail("Observer init() threw " + e);
-        }
+        observer.initialize();
     }
 
     /**
-     * Sets up test fixtures.
+     * Sets up test fixtures
+     *
+     * @throws Exception Thrown on observer initialization error.
      */
     @BeforeEach
-    public void setUp() {
+    public void setUp() throws Exception {
         final IOFileFilter files = FileFilterUtils.fileFileFilter();
         final IOFileFilter javaSuffix = FileFilterUtils.suffixFileFilter(".java");
         final IOFileFilter fileFilter = FileFilterUtils.and(files, javaSuffix);
