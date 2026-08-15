@@ -60,7 +60,7 @@ public class FileEntry implements Serializable {
     private final FileEntry parent;
 
     /** My children. */
-    private FileEntry[] children;
+    private FileEntry[] children = EMPTY_FILE_ENTRY_ARRAY;
 
     /** Monitored file. */
     private final File file;
@@ -109,7 +109,7 @@ public class FileEntry implements Serializable {
      * @return This directory's files or an empty array if the file is not a directory or the directory is empty.
      */
     public FileEntry[] getChildren() {
-        return children != null ? children : EMPTY_FILE_ENTRY_ARRAY;
+        return children;
     }
 
     /**
@@ -245,7 +245,7 @@ public class FileEntry implements Serializable {
      * @param children This directory's files, may be null.
      */
     public void setChildren(final FileEntry... children) {
-        this.children = children;
+        this.children = children != null ? children : EMPTY_FILE_ENTRY_ARRAY;
     }
 
     /**
