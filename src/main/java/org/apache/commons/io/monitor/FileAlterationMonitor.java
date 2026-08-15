@@ -127,7 +127,7 @@ public final class FileAlterationMonitor implements Runnable {
     }
 
     /**
-     * Gets the set of {@link FileAlterationObserver} registered with this monitor.
+     * Gets a shallow copy of the list of {@link FileAlterationObserver} registered with this monitor.
      *
      * @return The set of {@link FileAlterationObserver}.
      */
