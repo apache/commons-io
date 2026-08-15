@@ -340,6 +340,6 @@ class FileEntryTest {
     void testToString_WithFile() {
         final File testFile = new File("/path/to/test.txt");
         final FileEntry fe = new FileEntry(testFile);
-        assertEquals("FileEntry[/path/to/test.txt]", fe.toString());
+        assertEquals("FileEntry[" + testFile + "]", fe.toString());
     }
 }
