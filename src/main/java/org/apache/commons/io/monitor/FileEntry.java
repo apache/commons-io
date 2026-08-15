@@ -54,13 +54,13 @@ public class FileEntry implements Serializable {
 
     private static final long serialVersionUID = -2505664948818681153L;
 
-    static final FileEntry[] EMPTY_FILE_ENTRY_ARRAY = {};
+    static final FileEntry[] EMPTY_ARRAY = {};
 
     /** The parent. */
     private final FileEntry parent;
 
     /** My children. */
-    private FileEntry[] children = EMPTY_FILE_ENTRY_ARRAY;
+    private FileEntry[] children = EMPTY_ARRAY;
 
     /** Monitored file. */
     private final File file;
@@ -245,7 +245,7 @@ public class FileEntry implements Serializable {
      * @param children This directory's files, may be null.
      */
     public void setChildren(final FileEntry... children) {
-        this.children = children != null ? children : EMPTY_FILE_ENTRY_ARRAY;
+        this.children = children != null ? children : EMPTY_ARRAY;
     }
 
     /**

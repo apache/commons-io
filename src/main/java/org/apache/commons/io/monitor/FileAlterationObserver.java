@@ -358,7 +358,7 @@ public class FileAlterationObserver implements Serializable {
      */
     private void checkAndFire(final FileEntry parentEntry, final FileEntry[] previousEntries, final File[] currentEntries) {
         int c = 0;
-        final FileEntry[] actualEntries = currentEntries.length > 0 ? new FileEntry[currentEntries.length] : FileEntry.EMPTY_FILE_ENTRY_ARRAY;
+        final FileEntry[] actualEntries = currentEntries.length > 0 ? new FileEntry[currentEntries.length] : FileEntry.EMPTY_ARRAY;
         for (final FileEntry previousEntry : previousEntries) {
             while (c < currentEntries.length && comparator.compare(previousEntry.getFile(), currentEntries[c]) > 0) {
                 actualEntries[c] = createFileEntry(parentEntry, currentEntries[c]);
