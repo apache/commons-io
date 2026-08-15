@@ -17,6 +17,7 @@
 
 package org.apache.commons.io.monitor;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -49,7 +50,7 @@ class FileEntryTest {
     @Test
     void testSerializable() {
         final FileEntry fe = new FileEntry(FileUtils.current());
-        assertEquals(fe.getChildren(), SerializationUtils.roundtrip(fe).getChildren());
+        assertArrayEquals(fe.getChildren(), SerializationUtils.roundtrip(fe).getChildren());
         assertEquals(fe.getClass(), SerializationUtils.roundtrip(fe).getClass());
         assertEquals(fe.getFile(), SerializationUtils.roundtrip(fe).getFile());
         assertEquals(fe.getLastModified(), SerializationUtils.roundtrip(fe).getLastModified());
