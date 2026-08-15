@@ -104,7 +104,7 @@ public class FileEntry implements Serializable {
     }
 
     /**
-     * Gets the directory's files.
+     * Gets the directory's files, never null.
      *
      * @return This directory's files or an empty array if the file is not a directory or the directory is empty.
      */
@@ -124,7 +124,7 @@ public class FileEntry implements Serializable {
     /**
      * Gets the last modified time from the last time it was checked.
      *
-     * @return The last modified time in milliseconds.
+     * @return The last modified time in milliseconds, defaults to 0.
      */
     public long getLastModified() {
         return lastModified.toMillis();
@@ -133,7 +133,7 @@ public class FileEntry implements Serializable {
     /**
      * Gets the last modified time from the last time it was checked.
      *
-     * @return The last modified time.
+     * @return The last modified time, defaults to {@link FileTimes#EPOCH}.
      * @since 2.12.0
      */
     public FileTime getLastModifiedFileTime() {
@@ -143,7 +143,7 @@ public class FileEntry implements Serializable {
     /**
      * Gets the length.
      *
-     * @return The length.
+     * @return The length, defaults to 0.
      */
     public long getLength() {
         return length;
@@ -161,7 +161,7 @@ public class FileEntry implements Serializable {
     /**
      * Gets the file name.
      *
-     * @return The file name.
+     * @return The file name, never null.
      */
     public String getName() {
         return name;
