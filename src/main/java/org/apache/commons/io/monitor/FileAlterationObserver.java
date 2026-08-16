@@ -21,9 +21,16 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
 import java.io.Serializable;
+import java.nio.file.FileVisitOption;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -137,9 +144,14 @@ public class FileAlterationObserver implements Serializable {
 
         private FileEntry rootEntry;
 
-        private FileFilter fileFilter;
+        private FileFilter fileFilter = TrueFileFilter.INSTANCE;
 
-        private IOCase ioCase;
+        private IOCase ioCase = IOCase.SYSTEM;
+
+        /**
+         * Defaults to max int for compatibility.
+         */
+        private int maxDepth = Integer.MAX_VALUE;
 
         private Builder() {
             // empty
@@ -167,7 +179,7 @@ public class FileAlterationObserver implements Serializable {
          * @return This instance.
          */
         public Builder setFileFilter(final FileFilter fileFilter) {
-            this.fileFilter = fileFilter;
+            this.fileFilter = fileFilter != null ? fileFilter : TrueFileFilter.INSTANCE;
             return asThis();
         }
 
@@ -178,7 +190,28 @@ public class FileAlterationObserver implements Serializable {
          * @return This instance.
          */
         public Builder setIOCase(final IOCase ioCase) {
-            this.ioCase = ioCase;
+            this.ioCase = ioCase != null ? ioCase : IOCase.SYSTEM;
+            return asThis();
+        }
+
+        /**
+         * Sets the maximum depth of entries to monitor below the root directory. The root directory has depth 0.
+         * <p>
+         * The {@code maxDepth} parameter is the maximum number of levels of directories to visit. A value of {@code 0} means that only the starting file is
+         * visited, unless denied by the security manager. A value of {@link Integer#MAX_VALUE MAX_VALUE} may be used to indicate that all levels should be
+         * visited, and is the default value.
+         * </p>
+         *
+         * @param maxDepth the maximum depth, must not be negative.
+         * @return This instance.
+         * @throws IllegalArgumentException if {@code maxDepth} is negative.
+         * @since 2.23.0
+         */
+        public Builder setMaxDepth(final int maxDepth) {
+            if (maxDepth < 0) {
+                throw new IllegalArgumentException("maxDepth must not be negative");
+            }
+            this.maxDepth = maxDepth;
             return asThis();
         }
 
@@ -233,12 +266,20 @@ public class FileAlterationObserver implements Serializable {
     private final transient FileFilter fileFilter;
 
     /**
+     * See {@link Files#walkFileTree(Path, java.util.Set, int, java.nio.file.FileVisitor)}.
+     */
+    private final int maxDepth;
+
+    /**
      * Compares file names.
      */
     private final Comparator<File> comparator;
 
     private FileAlterationObserver(final Builder builder) {
-        this(builder.rootEntry != null ? builder.rootEntry : new FileEntry(builder.checkOriginFile()), builder.fileFilter, toComparator(builder.ioCase));
+        this.rootEntry = builder.rootEntry != null ? builder.rootEntry : new FileEntry(builder.checkOriginFile());
+        this.fileFilter = builder.fileFilter;
+        this.comparator = toComparator(builder.ioCase);
+        this.maxDepth = builder.maxDepth;
     }
 
     /**
@@ -290,6 +331,7 @@ public class FileAlterationObserver implements Serializable {
         this.rootEntry = rootEntry;
         this.fileFilter = fileFilter != null ? fileFilter : TrueFileFilter.INSTANCE;
         this.comparator = Objects.requireNonNull(comparator, "comparator");
+        this.maxDepth = Integer.MAX_VALUE;
     }
 
     /**
@@ -516,6 +558,15 @@ public class FileAlterationObserver implements Serializable {
     }
 
     /**
+     * Gets the maximum depth of entries to monitor below the root directory. The root directory has depth 0.
+     *
+     * @return the maximum depth.
+     */
+    int getMaxDepth() {
+        return maxDepth;
+    }
+
+    /**
      * Initializes the observer.
      *
      * @throws Exception Thrown if an error occurs.
@@ -544,7 +595,47 @@ public class FileAlterationObserver implements Serializable {
      * @return The directory contents or a zero length array if the empty or the file is not a directory.
      */
     private File[] listFiles(final File directory) {
-        return directory.isDirectory() ? sort(directory.listFiles(fileFilter)) : FileUtils.EMPTY_FILE_ARRAY;
+        if (!directory.isDirectory()) {
+            return FileUtils.EMPTY_FILE_ARRAY;
+        }
+        final Path start = directory.toPath();
+        final List<File> files = new ArrayList<>();
+        try {
+            Files.walkFileTree(start, EnumSet.noneOf(FileVisitOption.class), maxDepth, new SimpleFileVisitor<Path>() {
+
+                private void filter(final List<File> files, final Path dir) {
+                    final File f = dir.toFile();
+                    if (fileFilter.accept(f)) {
+                        files.add(f);
+                    }
+                }
+
+                @Override
+                public FileVisitResult preVisitDirectory(final Path dir, final BasicFileAttributes attrs) throws IOException {
+                    if (!dir.equals(start)) {
+                        filter(files, dir);
+                        return FileVisitResult.SKIP_SUBTREE;
+                    }
+                    return FileVisitResult.CONTINUE;
+                }
+
+                @Override
+                public FileVisitResult visitFile(final Path file, final BasicFileAttributes attrs) throws IOException {
+                    filter(files, file);
+                    return FileVisitResult.CONTINUE;
+                }
+
+                @Override
+                public FileVisitResult visitFileFailed(final Path file, final IOException exc) throws IOException {
+                    return FileVisitResult.CONTINUE;
+                }
+            });
+        } catch (final IOException e) {
+            // ignore
+        }
+        // Walking visits the root directory, but we don't want to include it in the list of files.
+        files.remove(directory);
+        return sort(files.toArray(FileUtils.EMPTY_FILE_ARRAY));
     }
 
     /**
