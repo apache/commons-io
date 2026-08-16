@@ -45,8 +45,9 @@ import java.nio.file.attribute.PosixFileAttributes;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 
-import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.file.attribute.FileTimes;
 import org.apache.commons.io.filefilter.NameFileFilter;
+import org.apache.commons.io.function.IOConsumer;
 import org.apache.commons.io.test.TestUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -518,12 +519,15 @@ class PathUtilsTest extends AbstractTempDirTest {
 
     @Test
     void testTouch() throws IOException {
-        assertThrows(NullPointerException.class, () -> FileUtils.touch(null));
+        testTouch(PathUtils::touch);
+    }
 
+    private void testTouch(IOConsumer<Path> toucher) throws IOException {
+        assertThrows(NullPointerException.class, () -> PathUtils.touch(null));
         final Path file = managedTempDirPath.resolve("touch.txt");
         Files.deleteIfExists(file);
         assertFalse(Files.exists(file), "Bad test: test file still exists");
-        PathUtils.touch(file);
+        toucher.accept(file);
         assertTrue(Files.exists(file), "touch() created file");
         try (OutputStream out = Files.newOutputStream(file)) {
             assertEquals(0, Files.size(file), "Created empty file.");
@@ -534,12 +538,18 @@ class PathUtilsTest extends AbstractTempDirTest {
         setLastModifiedMillis(file, y2k); // 0L fails on Win98
         assertEquals(y2k, getLastModifiedMillis(file), "Bad test: set lastModified set incorrect value");
         final long nowMillis = System.currentTimeMillis();
-        PathUtils.touch(file);
+        toucher.accept(file);
         assertEquals(1, Files.size(file), "FileUtils.touch() didn't empty the file.");
         assertNotEquals(y2k, getLastModifiedMillis(file), "FileUtils.touch() changed lastModified");
         final int delta = 3000;
         assertTrue(getLastModifiedMillis(file) >= nowMillis - delta, "FileUtils.touch() changed lastModified to more than now-3s");
         assertTrue(getLastModifiedMillis(file) <= nowMillis + delta, "FileUtils.touch() changed lastModified to less than now+3s");
+    }
+
+    @Test
+    void testTouchFileTime() throws IOException {
+        testTouch(p -> PathUtils.touch(p, FileTimes.now()));
+
     }
 
     @Test

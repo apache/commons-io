@@ -1888,17 +1888,32 @@ public final class PathUtils {
      *
      * @param file The file to touch.
      * @return The given file.
-     * @throws NullPointerException if the parameter is {@code null}.
-     * @throws IOException          if setting the last-modified time failed or an I/O problem occurs.
+     * @throws NullPointerException Thrown if the parameter is {@code null}.
+     * @throws IOException          Thrown if setting the last-modified time failed or an I/O problem occurs.
      * @since 2.12.0
      */
     public static Path touch(final Path file) throws IOException {
+        return touch(file, FileTimes.now());
+    }
+
+    /**
+     * Implements behavior similar to the Unix "touch" utility. Creates a new file with size 0, or, if the file exists, just updates the file's modified time.
+     * this method creates parent directories if they do not exist.
+     *
+     * @param file     The file to touch.
+     * @param fileTime The time to set the last-modified time to, not null.
+     * @return The given file.
+     * @throws NullPointerException Thrown if the parameter is {@code null}.
+     * @throws IOException          Thrown if setting the last-modified time failed or an I/O problem occurs.
+     * @since 2.23.0
+     */
+    public static Path touch(final Path file, final FileTime fileTime) throws IOException {
         Objects.requireNonNull(file, "file");
         if (!Files.exists(file)) {
             createParentDirectories(file);
             Files.createFile(file);
         } else {
-            FileTimes.setLastModifiedTime(file);
+            Files.setLastModifiedTime(file, fileTime);
         }
         return file;
     }

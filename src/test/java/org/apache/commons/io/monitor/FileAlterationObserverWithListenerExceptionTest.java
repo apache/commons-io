@@ -23,6 +23,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.io.File;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.file.PathUtils;
+import org.apache.commons.io.file.attribute.FileTimes;
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.io.filefilter.HiddenFileFilter;
 import org.apache.commons.io.filefilter.IOFileFilter;
@@ -34,6 +36,8 @@ import org.junit.jupiter.api.io.TempDir;
  * Tests {@link FileAlterationObserver} to verify that when a {@link FileAlterationListener} throws an exception, other listeners are still notified.
  */
 class FileAlterationObserverWithListenerExceptionTest {
+
+    private static final long SLEEP_MILLIS = 110;
 
     /**
      * Extended CollectionFileListener that tracks the number of times onStart and onStop are called.
@@ -200,8 +204,8 @@ class FileAlterationObserverWithListenerExceptionTest {
         // Clear collections
         listener.clear();
         // Modify the directory
-        Thread.sleep(110); // Ensure different timestamp
-        FileUtils.touch(testDirA);
+        Thread.sleep(SLEEP_MILLIS);
+        PathUtils.touch(testDirA.toPath(), FileTimes.plusSeconds(FileTimes.now(), 120));
         // Second notification
         observer.checkAndNotify();
         // Verify working listener received the directory change event
@@ -275,10 +279,8 @@ class FileAlterationObserverWithListenerExceptionTest {
         observer.checkAndNotify();
         // Clear collections
         listener.clear();
-        // Modify the file
-        Thread.sleep(110); // Ensure different timestamp
-        FileUtils.touch(testFile);
-        // Second notification
+        Thread.sleep(SLEEP_MILLIS);
+        PathUtils.touch(testFile.toPath(), FileTimes.plusSeconds(FileTimes.now(), 120));
         observer.checkAndNotify();
         // Verify working listener received the file change event
         assertEquals(1, listener.getChangedFiles().size());
