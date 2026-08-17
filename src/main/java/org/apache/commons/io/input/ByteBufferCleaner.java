@@ -124,7 +124,8 @@ final class ByteBufferCleaner {
     private static boolean unsafeMemoryAccessDeprecated() {
         final int version;
         try {
-            version = Integer.parseInt(System.getProperty("java.specification.version"));
+            final String versionString = System.getProperty("java.specification.version");
+            version = "1.8".equals(versionString) ? 8 : Integer.parseInt(versionString);
         } catch (final RuntimeException e) {
             return false;
         }
