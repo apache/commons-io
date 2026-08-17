@@ -37,8 +37,6 @@ import org.junit.jupiter.api.io.TempDir;
  */
 class FileAlterationObserverWithListenerExceptionTest {
 
-    private static final long SLEEP_MILLIS = 110;
-
     /**
      * Extended CollectionFileListener that tracks the number of times onStart and onStop are called.
      */
@@ -169,6 +167,8 @@ class FileAlterationObserverWithListenerExceptionTest {
             throw new RuntimeException("onStop");
         }
     }
+
+    private static final long SLEEP_MILLIS = 110;
 
     /** Directory for test files */
     @TempDir

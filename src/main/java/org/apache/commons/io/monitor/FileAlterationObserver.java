@@ -595,6 +595,16 @@ public class FileAlterationObserver implements Serializable {
     }
 
     /**
+     * Lists the contents of a directory.
+     *
+     * @param directory The directory to list.
+     * @return The directory contents or a zero length array if the empty or the file is not a directory.
+     */
+    private File[] listFiles(final File directory) {
+        return directory.isDirectory() ? sort(directory.listFiles(fileFilter)) : FileUtils.EMPTY_FILE_ARRAY;
+    }
+
+    /**
      * Lists the contents of a directory when its entry is below the maximum depth.
      *
      * @param directory The directory to list.
@@ -604,16 +614,6 @@ public class FileAlterationObserver implements Serializable {
     private File[] listFiles(final File directory, final FileEntry entry) {
         final int depth = entry.getLevel() - rootEntry.getLevel();
         return depth < getMaxDepth() ? listFiles(directory) : FileUtils.EMPTY_FILE_ARRAY;
-    }
-
-    /**
-     * Lists the contents of a directory.
-     *
-     * @param directory The directory to list.
-     * @return The directory contents or a zero length array if the empty or the file is not a directory.
-     */
-    private File[] listFiles(final File directory) {
-        return directory.isDirectory() ? sort(directory.listFiles(fileFilter)) : FileUtils.EMPTY_FILE_ARRAY;
     }
 
     /**

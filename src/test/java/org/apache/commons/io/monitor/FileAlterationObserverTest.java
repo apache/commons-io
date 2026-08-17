@@ -97,7 +97,6 @@ class FileAlterationObserverTest extends AbstractMonitorTest {
         assertFalse(observer.getListeners().iterator().hasNext(), "Listeners[1]");
         observer.removeListener(null);
         assertFalse(observer.getListeners().iterator().hasNext(), "Listeners[2]");
-
         // Add Listener
         final FileAlterationListenerAdaptor listener = new FileAlterationListenerAdaptor();
         observer.addListener(listener);
@@ -105,7 +104,6 @@ class FileAlterationObserverTest extends AbstractMonitorTest {
         assertTrue(it.hasNext(), "Listeners[3]");
         assertEquals(listener, it.next(), "Added");
         assertFalse(it.hasNext(), "Listeners[4]");
-
         // Remove Listener
         observer.removeListener(listener);
         assertFalse(observer.getListeners().iterator().hasNext(), "Listeners[5]");
@@ -313,94 +311,6 @@ class FileAlterationObserverTest extends AbstractMonitorTest {
         checkCollectionsEmpty("G");
     }
 
-    @Test
-    void testMaxDepthDoesNotListChildrenAtBoundary() throws Exception {
-        final File deepFile = touch(new File(testDir, "boundary/deep.txt"));
-        final CountingFile boundaryDirectory = new CountingFile(deepFile.getParentFile(), deepFile);
-        final CountingFile rootDirectory = new CountingFile(testDir, boundaryDirectory);
-        final FileAlterationObserver depthLimitedObserver = FileAlterationObserver.builder().setFile(rootDirectory).setMaxDepth(1).getUnchecked();
-        depthLimitedObserver.initialize();
-
-        depthLimitedObserver.checkAndNotify();
-        depthLimitedObserver.checkAndNotify();
-        depthLimitedObserver.checkAndNotify();
-
-        assertEquals(0, boundaryDirectory.getListFilesCount());
-    }
-
-    @Test
-    void testMaxDepthIgnoresEventsBelowBoundary() throws Exception {
-        final File boundaryDirectory = new File(testDir, "boundary");
-        assertTrue(boundaryDirectory.mkdir());
-        final CollectionFileListener depthLimitedListener = new CollectionFileListener(true);
-        final FileAlterationObserver depthLimitedObserver = FileAlterationObserver.builder().setFile(testDir).setMaxDepth(1).getUnchecked();
-        depthLimitedObserver.addListener(depthLimitedListener);
-        depthLimitedObserver.initialize();
-
-        final File deepFile = touch(new File(boundaryDirectory, "deep.txt"));
-        depthLimitedObserver.checkAndNotify();
-        assertTrue(deepFile.exists());
-        assertTrue(depthLimitedListener.getCreatedFiles().isEmpty());
-
-        touch(deepFile);
-        depthLimitedObserver.checkAndNotify();
-        assertTrue(depthLimitedListener.getChangedFiles().isEmpty());
-
-        assertTrue(deepFile.delete());
-        depthLimitedObserver.checkAndNotify();
-        assertTrue(depthLimitedListener.getDeletedFiles().isEmpty());
-    }
-
-    @Test
-    void testMaxDepthMonitorsBoundaryDirectory() throws Exception {
-        final CollectionFileListener depthLimitedListener = new CollectionFileListener(true);
-        final FileAlterationObserver depthLimitedObserver = FileAlterationObserver.builder().setFile(testDir).setMaxDepth(1).getUnchecked();
-        depthLimitedObserver.addListener(depthLimitedListener);
-        depthLimitedObserver.initialize();
-
-        final File boundaryDirectory = new File(testDir, "boundary");
-        assertTrue(boundaryDirectory.mkdir());
-        depthLimitedObserver.checkAndNotify();
-        assertTrue(depthLimitedListener.getCreatedDirectories().contains(boundaryDirectory));
-
-        FileUtils.deleteDirectory(boundaryDirectory);
-        depthLimitedObserver.checkAndNotify();
-        assertTrue(depthLimitedListener.getDeletedDirectories().contains(boundaryDirectory));
-    }
-
-    @Test
-    void testMaxDepthSerialization() {
-        final FileAlterationObserver expected = FileAlterationObserver.builder().setFile(PATH_STRING_FIXTURE).setMaxDepth(2).getUnchecked();
-        final FileAlterationObserver actual = SerializationUtils.roundtrip(expected);
-        assertEquals(expected.getMaxDepth(), actual.getMaxDepth());
-    }
-
-    @Test
-    void testMaxDepthZeroDoesNotListRootChildren() throws Exception {
-        final File child = touch(new File(testDir, "child.txt"));
-        final CountingFile rootDirectory = new CountingFile(testDir, child);
-        final FileAlterationObserver depthLimitedObserver = FileAlterationObserver.builder().setFile(rootDirectory).setMaxDepth(0).getUnchecked();
-        depthLimitedObserver.initialize();
-
-        depthLimitedObserver.checkAndNotify();
-
-        assertEquals(0, rootDirectory.getListFilesCount());
-    }
-
-    @Test
-    void testMaxDepthZeroWithCustomRootEntry() throws Exception {
-        final File child = touch(new File(testDir, "child.txt"));
-        final CountingFile rootDirectory = new CountingFile(testDir, child);
-        final FileEntry parentEntry = new FileEntry(testDir.getParentFile());
-        final FileEntry rootEntry = new FileEntry(parentEntry, rootDirectory);
-        final FileAlterationObserver depthLimitedObserver = FileAlterationObserver.builder().setRootEntry(rootEntry).setMaxDepth(0).getUnchecked();
-        depthLimitedObserver.initialize();
-
-        depthLimitedObserver.checkAndNotify();
-
-        assertEquals(0, rootDirectory.getListFilesCount());
-    }
-
     /**
      * Test checkAndNotify() creating
      *
@@ -579,6 +489,94 @@ class FileAlterationObserverTest extends AbstractMonitorTest {
         checkAndNotify();
         checkCollectionSizes("F", 0, 1, 0, 0, 1, 0);
         assertTrue(listener.getChangedFiles().contains(testDirAFile5), "F testDirAFile5");
+    }
+
+    @Test
+    void testMaxDepthDoesNotListChildrenAtBoundary() throws Exception {
+        final File deepFile = touch(new File(testDir, "boundary/deep.txt"));
+        final CountingFile boundaryDirectory = new CountingFile(deepFile.getParentFile(), deepFile);
+        final CountingFile rootDirectory = new CountingFile(testDir, boundaryDirectory);
+        final FileAlterationObserver depthLimitedObserver = FileAlterationObserver.builder().setFile(rootDirectory).setMaxDepth(1).getUnchecked();
+        depthLimitedObserver.initialize();
+
+        depthLimitedObserver.checkAndNotify();
+        depthLimitedObserver.checkAndNotify();
+        depthLimitedObserver.checkAndNotify();
+
+        assertEquals(0, boundaryDirectory.getListFilesCount());
+    }
+
+    @Test
+    void testMaxDepthIgnoresEventsBelowBoundary() throws Exception {
+        final File boundaryDirectory = new File(testDir, "boundary");
+        assertTrue(boundaryDirectory.mkdir());
+        final CollectionFileListener depthLimitedListener = new CollectionFileListener(true);
+        final FileAlterationObserver depthLimitedObserver = FileAlterationObserver.builder().setFile(testDir).setMaxDepth(1).getUnchecked();
+        depthLimitedObserver.addListener(depthLimitedListener);
+        depthLimitedObserver.initialize();
+
+        final File deepFile = touch(new File(boundaryDirectory, "deep.txt"));
+        depthLimitedObserver.checkAndNotify();
+        assertTrue(deepFile.exists());
+        assertTrue(depthLimitedListener.getCreatedFiles().isEmpty());
+
+        touch(deepFile);
+        depthLimitedObserver.checkAndNotify();
+        assertTrue(depthLimitedListener.getChangedFiles().isEmpty());
+
+        assertTrue(deepFile.delete());
+        depthLimitedObserver.checkAndNotify();
+        assertTrue(depthLimitedListener.getDeletedFiles().isEmpty());
+    }
+
+    @Test
+    void testMaxDepthMonitorsBoundaryDirectory() throws Exception {
+        final CollectionFileListener depthLimitedListener = new CollectionFileListener(true);
+        final FileAlterationObserver depthLimitedObserver = FileAlterationObserver.builder().setFile(testDir).setMaxDepth(1).getUnchecked();
+        depthLimitedObserver.addListener(depthLimitedListener);
+        depthLimitedObserver.initialize();
+
+        final File boundaryDirectory = new File(testDir, "boundary");
+        assertTrue(boundaryDirectory.mkdir());
+        depthLimitedObserver.checkAndNotify();
+        assertTrue(depthLimitedListener.getCreatedDirectories().contains(boundaryDirectory));
+
+        FileUtils.deleteDirectory(boundaryDirectory);
+        depthLimitedObserver.checkAndNotify();
+        assertTrue(depthLimitedListener.getDeletedDirectories().contains(boundaryDirectory));
+    }
+
+    @Test
+    void testMaxDepthSerialization() {
+        final FileAlterationObserver expected = FileAlterationObserver.builder().setFile(PATH_STRING_FIXTURE).setMaxDepth(2).getUnchecked();
+        final FileAlterationObserver actual = SerializationUtils.roundtrip(expected);
+        assertEquals(expected.getMaxDepth(), actual.getMaxDepth());
+    }
+
+    @Test
+    void testMaxDepthZeroDoesNotListRootChildren() throws Exception {
+        final File child = touch(new File(testDir, "child.txt"));
+        final CountingFile rootDirectory = new CountingFile(testDir, child);
+        final FileAlterationObserver depthLimitedObserver = FileAlterationObserver.builder().setFile(rootDirectory).setMaxDepth(0).getUnchecked();
+        depthLimitedObserver.initialize();
+
+        depthLimitedObserver.checkAndNotify();
+
+        assertEquals(0, rootDirectory.getListFilesCount());
+    }
+
+    @Test
+    void testMaxDepthZeroWithCustomRootEntry() throws Exception {
+        final File child = touch(new File(testDir, "child.txt"));
+        final CountingFile rootDirectory = new CountingFile(testDir, child);
+        final FileEntry parentEntry = new FileEntry(testDir.getParentFile());
+        final FileEntry rootEntry = new FileEntry(parentEntry, rootDirectory);
+        final FileAlterationObserver depthLimitedObserver = FileAlterationObserver.builder().setRootEntry(rootEntry).setMaxDepth(0).getUnchecked();
+        depthLimitedObserver.initialize();
+
+        depthLimitedObserver.checkAndNotify();
+
+        assertEquals(0, rootDirectory.getListFilesCount());
     }
 
     /**
