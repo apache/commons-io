@@ -360,21 +360,6 @@ public abstract class AbstractByteArrayOutputStream<T extends AbstractByteArrayO
     public abstract void write(int b);
 
     /**
-     * Writes the specified byte to this byte array output stream {@code count} times.
-     *
-     * @param b The byte to write.
-     * @param count The number of times to write the byte.
-     * @return {@code this} instance.
-     * @since 2.23.0
-     */
-    public T writeRepeat(final int b, final int count) {
-        for (int i = 0; i < count; i++) {
-            write(b);
-        }
-        return asThis();
-    }
-
-    /**
      * Writes the bytes to the byte array.
      *
      * @param b The bytes to write.
@@ -436,6 +421,21 @@ public abstract class AbstractByteArrayOutputStream<T extends AbstractByteArrayO
         }
         currentBuffer[inBufferPos] = (byte) b;
         count++;
+    }
+
+    /**
+     * Writes the specified byte to this byte array output stream {@code count} times.
+     *
+     * @param b The byte to write.
+     * @param count The number of times to write the byte.
+     * @return {@code this} instance.
+     * @since 2.23.0
+     */
+    public T writeRepeat(final int b, final int count) {
+        for (int i = 0; i < count; i++) {
+            write(b);
+        }
+        return asThis();
     }
 
     /**
