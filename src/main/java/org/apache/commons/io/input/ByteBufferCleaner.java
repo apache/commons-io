@@ -79,7 +79,7 @@ final class ByteBufferCleaner {
         }
     }
 
-    private static final Cleaner INSTANCE = getCleanerMaybe();
+    private static final Cleaner INSTANCE = getCleaner();
 
     /**
      * Releases memory held by the given {@link ByteBuffer}.
@@ -91,55 +91,45 @@ final class ByteBufferCleaner {
         try {
             if (buffer.isDirect()) {
                 Buffers.clearWritable(buffer);
-                if (INSTANCE != null) {
-                    INSTANCE.clean(buffer);
-                } else {
-                    getCleaner().clean(buffer);
-                }
+                INSTANCE.clean(buffer);
             }
         } catch (final Exception e) {
             throw new IllegalStateException("Failed to clean direct buffer.", e);
         }
     }
 
-    static Cleaner getCleanerMaybe() {
-        if (unsafeMemoryAccessDeprecated()) {
-            return null;
-        }
-        return getCleaner();
-    }
-
     static Cleaner getCleaner() {
+        if (!isSupported()) {
+            return ignored -> {
+                // empty no op
+            };
+        }
         try {
-            return new Java8Cleaner();
+            return new ByteBufferCleaner.Java8Cleaner();
         } catch (final Exception e) {
             try {
-                return new Java9Cleaner();
+                return new ByteBufferCleaner.Java9Cleaner();
             } catch (final Exception e1) {
                 throw new IllegalStateException("Failed to initialize a Cleaner.", e);
             }
         }
     }
 
-    private static boolean unsafeMemoryAccessDeprecated() {
+    /**
+     * Tests if were able to load a non-empty cleaner for the current JVM. Attempting to call {@code ByteBufferCleaner#clean(ByteBuffer)} when this method
+     * returns false may result in an exception.
+     *
+     * @return {@code true} if cleaning is supported, {@code false} otherwise.
+     */
+    static boolean isSupported() {
         final int version;
         try {
             final String versionString = System.getProperty("java.specification.version");
             version = "1.8".equals(versionString) ? 8 : Integer.parseInt(versionString);
         } catch (final RuntimeException e) {
-            return false;
+            return true;
         }
-        // see https://openjdk.org/jeps/471
-        return version >= 23;
-    }
-
-    /**
-     * Tests if were able to load a suitable cleaner for the current JVM. Attempting to call {@code ByteBufferCleaner#clean(ByteBuffer)} when this method
-     * returns false will result in an exception.
-     *
-     * @return {@code true} if cleaning is supported, {@code false} otherwise.
-     */
-    static boolean isSupported() {
-        return INSTANCE != null;
+        // see https://openjdk.org/jeps/471 Deprecate the Memory-Access Methods in sun.misc.Unsafe for Removal
+        return version < 23;
     }
 }

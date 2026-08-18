@@ -16,6 +16,7 @@
  */
 package org.apache.commons.io.input;
 
+import static org.apache.commons.io.IOUtils.EMPTY_BYTE_ARRAY;
 import static org.apache.commons.io.IOUtils.EOF;
 
 import java.io.BufferedInputStream;
@@ -146,7 +147,7 @@ public final class MemoryMappedFileInputStream extends AbstractInputStream {
      */
     private static final int DEFAULT_BUFFER_SIZE = 256 * 1024;
 
-    private static final ByteBuffer EMPTY_BUFFER = ByteBuffer.wrap(new byte[0]).asReadOnlyBuffer();
+    private static final ByteBuffer EMPTY_BUFFER = ByteBuffer.wrap(EMPTY_BYTE_ARRAY).asReadOnlyBuffer();
 
     /**
      * Constructs a new {@link Builder}.

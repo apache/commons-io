@@ -13,6 +13,7 @@
  */
 package org.apache.commons.io.input;
 
+import static org.apache.commons.io.IOUtils.EMPTY_BYTE_ARRAY;
 import static org.apache.commons.io.IOUtils.EOF;
 
 import java.io.BufferedInputStream;
@@ -26,7 +27,6 @@ import java.nio.file.StandardOpenOption;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.build.AbstractStreamBuilder;
-import org.apache.commons.io.input.MemoryMappedFileInputStream.Builder;
 
 /**
  * {@link InputStream} implementation which uses direct buffer to read a file to avoid extra copy of data between Java and native memory which happens when
@@ -42,7 +42,7 @@ import org.apache.commons.io.input.MemoryMappedFileInputStream.Builder;
  * @see Builder
  * @since 2.9.0
  */
-public final class BufferedFileChannelInputStream extends InputStream {
+public final class BufferedFileChannelInputStream extends AbstractInputStream {
 
     // @formatter:off
     /**
@@ -139,6 +139,8 @@ public final class BufferedFileChannelInputStream extends InputStream {
 
     }
 
+    private static final ByteBuffer EMPTY_BUFFER = ByteBuffer.wrap(EMPTY_BYTE_ARRAY).asReadOnlyBuffer();
+
     /**
      * Constructs a new {@link Builder}.
      *
@@ -149,11 +151,9 @@ public final class BufferedFileChannelInputStream extends InputStream {
         return new Builder();
     }
 
-    private final ByteBuffer byteBuffer;
+    private ByteBuffer byteBuffer;
 
     private final boolean clean;
-
-    private boolean cleaned;
 
     private final FileChannel fileChannel;
 
@@ -224,7 +224,7 @@ public final class BufferedFileChannelInputStream extends InputStream {
     }
 
     /**
-     * Attempts to clean up a ByteBuffer if it is direct or memory-mapped. This uses an *unsafe* Sun API that will cause errors if one attempts to read from the
+     * Attempts to clean up byteBuffer if it is direct or memory-mapped. This uses an *unsafe* Sun API that will cause errors if one attempts to read from the
      * disposed buffer. However, neither the bytes allocated to direct buffers nor file descriptors opened for memory-mapped buffers put pressure on the garbage
      * collector. Waiting for garbage collection may lead to the depletion of off-heap memory or huge numbers of open files. There's unfortunately no standard
      * API to manually dispose of these kinds of buffers.
@@ -234,26 +234,21 @@ public final class BufferedFileChannelInputStream extends InputStream {
      * accessible even with reflection. However {@code sun.misc.Unsafe} added an {@code invokeCleaner()} method in JDK 9+ and this is still accessible with
      * reflection.
      * </p>
-     * @param buffer The buffer to clean.
      */
-    private void clean(final ByteBuffer buffer) {
-        if (!cleaned && clean) {
-            ByteBufferCleaner.clean(buffer);
-            cleaned = true;
+    private void cleanBuffer() {
+        if (clean) {
+            ByteBufferCleaner.clean(byteBuffer);
         }
     }
 
     @Override
     public synchronized void close() throws IOException {
-        try {
+        if (!isClosed()) {
+            cleanBuffer();
+            byteBuffer = EMPTY_BUFFER;
             fileChannel.close();
-        } finally {
-            clean(byteBuffer);
+            super.close();
         }
-    }
-
-    boolean isCleaned() {
-        return cleaned;
     }
 
     @Override

@@ -334,7 +334,6 @@ class MemoryMappedFileInputStreamTest {
         final Path file = createTestFile(100);
         final byte[] expectedData = Files.readAllBytes(file);
         // test
-        final boolean expectedCleanOnClose = true;
         try (MockedStatic<ByteBufferCleaner> mocked = Mockito.mockStatic(ByteBufferCleaner.class);
              InputStream stream = MemoryMappedFileInputStream.builder().setPath(file).setClean(true).get()) {
             stream.close();
@@ -348,7 +347,6 @@ class MemoryMappedFileInputStreamTest {
         final Path file = createTestFile(100);
         final byte[] expectedData = Files.readAllBytes(file);
         // test
-        final boolean expectedCleanOnClose = false;
         try (MockedStatic<ByteBufferCleaner> mocked = Mockito.mockStatic(ByteBufferCleaner.class);
                 InputStream stream = MemoryMappedFileInputStream.builder().setPath(file).setClean(false).get()) {
             stream.close();

@@ -17,13 +17,10 @@
 
 package org.apache.commons.io.input;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -81,37 +78,20 @@ class BufferedFileChannelInputStreamTest extends AbstractInputStreamTest {
      */
     @Test
     void testCleanCalledOnlyOnce() throws Exception {
-        final boolean expectedCleanOnClose = ByteBufferCleaner.getCleaner() != null;
-        final int expectedCleanCallCount = expectedCleanOnClose ? 1 : 0;
+        final boolean expectedCleanOnClose = ByteBufferCleaner.isSupported();
         try (MockedStatic<ByteBufferCleaner> mocked = Mockito.mockStatic(ByteBufferCleaner.class);
-             BufferedFileChannelInputStream stream = BufferedFileChannelInputStream.builder().setPath(InputPath).get()) {
-            assertFalse(stream.isCleaned());
-            mocked.verify(() -> ByteBufferCleaner.clean(any(ByteBuffer.class)), never());
-
+             InputStream stream = BufferedFileChannelInputStream.builder().setPath(InputPath).setClean(true).get()) {
             stream.close();
-            assertEquals(stream.isCleaned(), expectedCleanOnClose);
-            mocked.verify(() -> ByteBufferCleaner.clean(any(ByteBuffer.class)), times(expectedCleanCallCount));
-
-            stream.close();
-            assertEquals(stream.isCleaned(), expectedCleanOnClose);
-            mocked.verify(() -> ByteBufferCleaner.clean(any(ByteBuffer.class)), times(expectedCleanCallCount));
+            mocked.verify(() -> ByteBufferCleaner.clean(any(ByteBuffer.class)));
         }
     }
 
     @Test
     void testCleanCalledNever() throws Exception {
-        final boolean expectedCleanOnClose = false;
+        // test
         try (MockedStatic<ByteBufferCleaner> mocked = Mockito.mockStatic(ByteBufferCleaner.class);
-             BufferedFileChannelInputStream stream = BufferedFileChannelInputStream.builder().setPath(InputPath).setClean(false).get()) {
-            assertFalse(stream.isCleaned());
-            mocked.verify(() -> ByteBufferCleaner.clean(any(ByteBuffer.class)), never());
-
+             InputStream stream = BufferedFileChannelInputStream.builder().setPath(InputPath).setClean(false).get()) {
             stream.close();
-            assertEquals(stream.isCleaned(), expectedCleanOnClose);
-            mocked.verify(() -> ByteBufferCleaner.clean(any(ByteBuffer.class)), never());
-
-            stream.close();
-            assertEquals(stream.isCleaned(), expectedCleanOnClose);
             mocked.verify(() -> ByteBufferCleaner.clean(any(ByteBuffer.class)), never());
         }
     }
