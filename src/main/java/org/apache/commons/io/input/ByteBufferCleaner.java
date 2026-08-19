@@ -98,7 +98,7 @@ final class ByteBufferCleaner {
         }
     }
 
-    static Cleaner getCleaner() {
+    private static Cleaner getCleaner() {
         if (!isSupported()) {
             return ignored -> {
                 // empty no op
