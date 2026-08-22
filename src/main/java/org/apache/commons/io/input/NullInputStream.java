@@ -83,6 +83,7 @@ public class NullInputStream extends AbstractInputStream {
     private long readLimit;
     private final boolean throwEofException;
     private final boolean markSupported;
+    private final Object lock = new Object();
 
     /**
      * Constructs an {@link InputStream} that emulates a size 0 stream which supports marking and does not throw EOFException.
@@ -206,12 +207,14 @@ public class NullInputStream extends AbstractInputStream {
      * @throws UnsupportedOperationException if mark is not supported.
      */
     @Override
-    public synchronized void mark(final int readLimit) {
-        if (!markSupported) {
-            throw UnsupportedOperationExceptions.mark();
+    public void mark(final int readLimit) {
+        synchronized (lock) {
+            if (!markSupported) {
+                throw UnsupportedOperationExceptions.mark();
+            }
+            mark = position;
+            this.readLimit = readLimit;
         }
-        mark = position;
-        this.readLimit = readLimit;
     }
 
     /**
@@ -322,18 +325,20 @@ public class NullInputStream extends AbstractInputStream {
      * @throws IOException                   If no position has been marked or the read limit has been exceeded since the last position was marked.
      */
     @Override
-    public synchronized void reset() throws IOException {
-        if (!markSupported) {
-            throw UnsupportedOperationExceptions.reset();
+    public void reset() throws IOException {
+        synchronized (lock) {
+            if (!markSupported) {
+                throw UnsupportedOperationExceptions.reset();
+            }
+            if (mark < 0) {
+                throw new IOException("No position has been marked");
+            }
+            if (position > mark + readLimit) {
+                throw new IOException("Marked position [" + mark + "] is no longer valid - passed the read limit [" + readLimit + "]");
+            }
+            position = mark;
+            setClosed(false);
         }
-        if (mark < 0) {
-            throw new IOException("No position has been marked");
-        }
-        if (position > mark + readLimit) {
-            throw new IOException("Marked position [" + mark + "] is no longer valid - passed the read limit [" + readLimit + "]");
-        }
-        position = mark;
-        setClosed(false);
     }
 
     /**
