@@ -82,6 +82,7 @@ The <action> type attribute can be add,update,fix,remove.
       <action type="add" dev="ggregory" due-to="Gary Gregory">Add FileEntry.toString().</action>
       <action type="add" dev="ggregory" due-to="Gary Gregory">Add PathUtils.touch(Path, FileTime).</action>
       <action type="add" dev="ggregory" due-to="Xu Zhao, zx8410-ops, Gary Gregory" issue="IO-892">Add FileAlterationObserver.Builder.setMaxDepth(int) to limit directory traversal depth.</action>
+      <action type="add" dev="ggregory" due-to="Gary Gregory, maxxedev">Make the call to the "sun." packages optional when cleaning byte buffers (#872).</action>
       <!-- UPDATE -->
       <action type="update" dev="ggregory" due-to="Gary Gregory">Bump org.apache.commons:commons-parent from 98 to 103 (#849).</action>
       <action type="update" dev="ggregory" due-to="Gary Gregory">[test] Bump commons-codec:commons-codec from 1.21.0 to 1.22.1.</action>
