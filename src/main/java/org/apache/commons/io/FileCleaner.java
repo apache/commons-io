@@ -40,6 +40,8 @@ public class FileCleaner {
      * The instance to use for the deprecated, static methods.
      */
     private static final FileCleaningTracker INSTANCE = new FileCleaningTracker();
+    
+    private static final Object LOCK = new Object();
 
     /**
      * Call this method to cause the file cleaner thread to terminate when there are no more objects being tracked for deletion.
@@ -62,8 +64,10 @@ public class FileCleaner {
      * @deprecated Use {@link FileCleaningTracker#exitWhenFinished()}.
      */
     @Deprecated
-    public static synchronized void exitWhenFinished() {
-        INSTANCE.exitWhenFinished();
+    public static void exitWhenFinished() {
+        synchronized (LOCK) {
+            INSTANCE.exitWhenFinished();
+        }
     }
 
     /**
