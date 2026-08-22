@@ -40,7 +40,7 @@ public class FileCleaner {
      * The instance to use for the deprecated, static methods.
      */
     private static final FileCleaningTracker INSTANCE = new FileCleaningTracker();
-    
+
     private static final Object LOCK = new Object();
 
     /**
