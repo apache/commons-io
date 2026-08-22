@@ -273,7 +273,8 @@ public final class Buffers {
     }
 
     /**
-     * Clears the given <em>writable</em> buffer by filling it with zeros and resetting the position to zero. The limit is set to the capacity of the buffer.
+     * Clears the given <em>writable</em> buffer by filling it with zeros, the position is set to zero, the limit is set to the capacity, and the mark is
+     * discarded.
      * <p>
      * If the buffer is read-only, then nothing happens to that buffer.
      * </p>
