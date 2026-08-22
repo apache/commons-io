@@ -14,27 +14,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.apache.commons.io;
 
 import java.io.File;
 
 /**
- * Keeps track of files awaiting deletion, and deletes them when an associated
- * marker object is reclaimed by the garbage collector.
+ * Keeps track of files awaiting deletion, and deletes them when an associated marker object is reclaimed by the garbage collector.
  * <p>
- * This utility creates a background thread to handle file deletion.
- * Each file to be deleted is registered with a handler object.
- * When the handler object is garbage collected, the file is deleted.
+ * This utility creates a background thread to handle file deletion. Each file to be deleted is registered with a handler object. When the handler object is
+ * garbage collected, the file is deleted.
  * </p>
  * <p>
- * In an environment with multiple class loaders (a servlet container, for
- * example), you should consider stopping the background thread if it is no
- * longer needed. This is done by invoking the method
- * {@link #exitWhenFinished}, typically in
+ * In an environment with multiple class loaders (a servlet container, for example), you should consider stopping the background thread if it is no longer
+ * needed. This is done by invoking the method {@link #exitWhenFinished}, typically in
  * {@code javax.servlet.ServletContextListener.contextDestroyed(javax.servlet.ServletContextEvent)} or similar.
  * </p>
  *
- * @deprecated Use {@link FileCleaningTracker}
+ * @deprecated Use {@link FileCleaningTracker}.
  */
 @Deprecated
 public class FileCleaner {
@@ -45,28 +42,21 @@ public class FileCleaner {
     private static final FileCleaningTracker INSTANCE = new FileCleaningTracker();
 
     /**
-     * Call this method to cause the file cleaner thread to terminate when
-     * there are no more objects being tracked for deletion.
+     * Call this method to cause the file cleaner thread to terminate when there are no more objects being tracked for deletion.
      * <p>
-     * In a simple environment, you don't need this method as the file cleaner
-     * thread will simply exit when the JVM exits. In a more complex environment,
-     * with multiple class loaders (such as an application server), you should be
-     * aware that the file cleaner thread will continue running even if the class
-     * loader it was started from terminates. This can constitute a memory leak.
+     * In a simple environment, you don't need this method as the file cleaner thread will simply exit when the JVM exits. In a more complex environment, with
+     * multiple class loaders (such as an application server), you should be aware that the file cleaner thread will continue running even if the class loader
+     * it was started from terminates. This can constitute a memory leak.
      * </p>
      * <p>
-     * For example, suppose that you have developed a web application, which
-     * contains the Commons IO jar file in your WEB-INF/lib directory. In other
-     * words, the FileCleaner class is loaded through the class loader of your
-     * web application. If the web application is terminated, but the servlet
-     * container is still running, then the file cleaner thread will still exist,
-     * posing a memory leak.
+     * For example, suppose that you have developed a web application, which contains the Commons IO jar file in your WEB-INF/lib directory. In other words, the
+     * FileCleaner class is loaded through the class loader of your web application. If the web application is terminated, but the servlet container is still
+     * running, then the file cleaner thread will still exist, posing a memory leak.
      * </p>
      * <p>
-     * This method allows the thread to be terminated. Simply call this method
-     * in the resource cleanup code, such as
-     * {@code javax.servlet.ServletContextListener.contextDestroyed(javax.servlet.ServletContextEvent)}.
-     * One called, no new objects can be tracked by the file cleaner.
+     * This method allows the thread to be terminated. Simply call this method in the resource cleanup code, such as
+     * {@code javax.servlet.ServletContextListener.contextDestroyed(javax.servlet.ServletContextEvent)}. One called, no new objects can be tracked by the file
+     * cleaner.
      * </p>
      *
      * @deprecated Use {@link FileCleaningTracker#exitWhenFinished()}.
@@ -77,10 +67,8 @@ public class FileCleaner {
     }
 
     /**
-     * Gets the singleton instance, which is used by the deprecated, static methods.
-     * This is mainly useful for code, which wants to support the new
-     * {@link FileCleaningTracker} class while maintain compatibility with the
-     * deprecated {@link FileCleaner}.
+     * Gets the singleton instance, which is used by the deprecated, static methods. This is mainly useful for code, which wants to support the new
+     * {@link FileCleaningTracker} class while maintain compatibility with the deprecated {@link FileCleaner}.
      *
      * @return The singleton instance.
      */
@@ -89,8 +77,7 @@ public class FileCleaner {
     }
 
     /**
-     * Gets the number of files currently being tracked, and therefore
-     * awaiting deletion.
+     * Gets the number of files currently being tracked, and therefore awaiting deletion.
      *
      * @return The number of files being tracked.
      * @deprecated Use {@link FileCleaningTracker#getTrackCount()}.
@@ -101,12 +88,11 @@ public class FileCleaner {
     }
 
     /**
-     * Track the specified file, using the provided marker, deleting the file
-     * when the marker instance is garbage collected.
-     * The {@link FileDeleteStrategy#NORMAL normal} deletion strategy will be used.
+     * Track the specified file, using the provided marker, deleting the file when the marker instance is garbage collected. The
+     * {@link FileDeleteStrategy#NORMAL normal} deletion strategy will be used.
      *
-     * @param file  The file to be tracked, not null.
-     * @param marker  The marker object used to track the file, not null.
+     * @param file   The file to be tracked, not null.
+     * @param marker The marker object used to track the file, not null.
      * @throws NullPointerException if the file is null.
      * @deprecated Use {@link FileCleaningTracker#track(File, Object)}.
      */
@@ -116,13 +102,12 @@ public class FileCleaner {
     }
 
     /**
-     * Track the specified file, using the provided marker, deleting the file
-     * when the marker instance is garbage collected.
-     * The specified deletion strategy is used.
+     * Track the specified file, using the provided marker, deleting the file when the marker instance is garbage collected. The specified deletion strategy is
+     * used.
      *
-     * @param file  The file to be tracked, not null.
-     * @param marker  The marker object used to track the file, not null.
-     * @param deleteStrategy  The strategy to delete the file, null means normal.
+     * @param file           The file to be tracked, not null.
+     * @param marker         The marker object used to track the file, not null.
+     * @param deleteStrategy The strategy to delete the file, null means normal.
      * @throws NullPointerException if the file is null.
      * @deprecated Use {@link FileCleaningTracker#track(File, Object, FileDeleteStrategy)}.
      */
@@ -132,12 +117,11 @@ public class FileCleaner {
     }
 
     /**
-     * Track the specified file, using the provided marker, deleting the file
-     * when the marker instance is garbage collected.
-     * The {@link FileDeleteStrategy#NORMAL normal} deletion strategy will be used.
+     * Track the specified file, using the provided marker, deleting the file when the marker instance is garbage collected. The
+     * {@link FileDeleteStrategy#NORMAL normal} deletion strategy will be used.
      *
-     * @param path  The full path to the file to be tracked, not null.
-     * @param marker  The marker object used to track the file, not null.
+     * @param path   The full path to the file to be tracked, not null.
+     * @param marker The marker object used to track the file, not null.
      * @throws NullPointerException if the path is null.
      * @deprecated Use {@link FileCleaningTracker#track(String, Object)}.
      */
@@ -147,13 +131,12 @@ public class FileCleaner {
     }
 
     /**
-     * Track the specified file, using the provided marker, deleting the file
-     * when the marker instance is garbage collected.
-     * The specified deletion strategy is used.
+     * Track the specified file, using the provided marker, deleting the file when the marker instance is garbage collected. The specified deletion strategy is
+     * used.
      *
-     * @param path  The full path to the file to be tracked, not null.
-     * @param marker  The marker object used to track the file, not null.
-     * @param deleteStrategy  The strategy to delete the file, null means normal.
+     * @param path           The full path to the file to be tracked, not null.
+     * @param marker         The marker object used to track the file, not null.
+     * @param deleteStrategy The strategy to delete the file, null means normal.
      * @throws NullPointerException if the path is null.
      * @deprecated Use {@link FileCleaningTracker#track(String, Object, FileDeleteStrategy)}.
      */
