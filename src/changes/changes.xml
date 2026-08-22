@@ -66,6 +66,7 @@ The <action> type attribute can be add,update,fix,remove.
       <action type="fix" dev="ggregory" due-to="Gary Gregory">FileAlterationObserver now notifies all listeners even if one throws an exception.</action>
       <action type="fix" dev="ggregory" due-to="Gary Gregory">Fix SpotBugs USO_UNSAFE_METHOD_SYNCHRONIZATION in FileCleaner.exitWhenFinished().</action>
       <action type="fix" dev="ggregory" due-to="Gary Gregory">Fix SpotBugs USO_UNSAFE_METHOD_SYNCHRONIZATION in NullInputStream.mark()/reset().</action>
+      <action type="fix" dev="ggregory" due-to="Gary Gregory">Fix SpotBugs USO_UNSAFE_METHOD_SYNCHRONIZATION in ProxyInputStream.mark()/reset().</action>
       <!-- ADD -->
       <action type="add" dev="ggregory" due-to="Gary Gregory">Add IOConsumer.accept(IOConsumer, T) (#846).</action>
       <action type="add" dev="ggregory" due-to="Gary Gregory">Add UnsynchronizedBufferedReader.unwrap() (#850).</action>
