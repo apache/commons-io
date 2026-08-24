@@ -1302,7 +1302,7 @@ public class FileUtils {
             return false;
         }
         try {
-            if (file.isDirectory()) {
+            if (file.isDirectory() && !isSymlink(file)) {
                 cleanDirectory(file);
             }
         } catch (final Exception ignored) {

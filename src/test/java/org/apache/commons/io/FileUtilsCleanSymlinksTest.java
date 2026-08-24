@@ -189,6 +189,30 @@ class FileUtilsCleanSymlinksTest {
     }
 
     @Test
+    void testDeleteQuietlyWithASymlinkDirDeletesOnlyLink() throws Exception {
+        if (SystemProperties.getOsName().startsWith("Win")) {
+            // Can't use "ln" for symlinks on the command line in Windows.
+            return;
+        }
+
+        final File randomDirectory = new File(top, "randomDir");
+        assertTrue(randomDirectory.mkdirs());
+
+        final File randomFile = new File(randomDirectory, "randomfile");
+        FileUtils.touch(randomFile);
+        assertEquals(1, randomDirectory.list().length);
+
+        final File symlinkDirectory = new File(top, "fakeDir");
+        assertTrue(setupSymlink(randomDirectory, symlinkDirectory));
+
+        assertTrue(FileUtils.deleteQuietly(symlinkDirectory));
+        assertFalse(symlinkDirectory.exists());
+        assertTrue(randomDirectory.exists());
+        assertTrue(randomFile.exists());
+        assertEquals(1, randomDirectory.list().length, "Contents of symbolic link should not have been removed");
+    }
+
+    @Test
     void testIdentifiesBrokenSymlinkFile() throws Exception {
         if (SystemProperties.getOsName().startsWith("Win")) {
             // Can't use "ln" for symlinks on the command line in Windows.
