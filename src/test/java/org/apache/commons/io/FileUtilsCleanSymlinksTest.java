@@ -21,6 +21,8 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.LinkOption;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -206,7 +208,7 @@ class FileUtilsCleanSymlinksTest {
         assertTrue(setupSymlink(randomDirectory, symlinkDirectory));
 
         assertTrue(FileUtils.deleteQuietly(symlinkDirectory));
-        assertFalse(symlinkDirectory.exists());
+        assertFalse(Files.exists(symlinkDirectory.toPath(), LinkOption.NOFOLLOW_LINKS));
         assertTrue(randomDirectory.exists());
         assertTrue(randomFile.exists());
         assertEquals(1, randomDirectory.list().length, "Contents of symbolic link should not have been removed");
