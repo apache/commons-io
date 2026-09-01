@@ -116,4 +116,10 @@
     <Class name="org.apache.commons.io.channels.ByteArraySeekableByteChannel" />
     <Bug pattern="AT_STALE_THREAD_WRITE_OF_PRIMITIVE, AT_NONATOMIC_OPERATIONS_ON_SHARED_VARIABLE" />
   </Match>
+  <Match>
+    <!-- False positive -->
+    <Class name="org.apache.commons.io.input.ReadAheadInputStream" />
+    <Method name="read" />
+    <Bug pattern="NCR_NOT_PROPERLY_CHECKED_READ" />
+  </Match>
 </FindBugsFilter>

@@ -24,8 +24,8 @@ import java.nio.ByteBuffer;
 import org.apache.commons.io.Buffers;
 
 /**
- * Cleans a direct {@link ByteBuffer}. Without manual intervention, direct ByteBuffers will be cleaned eventually upon garbage collection. However, this should
- * not be relied upon since it may not occur in a timely fashion - especially since off heap ByeBuffers don't put pressure on the garbage collector.
+ * Cleans {@link ByteBuffer} instances. Without manual intervention, direct ByteBuffers are eventually cleaned on garbage collection. However, this should not
+ * be relied upon since it may not occur in a timely fashion, especially since off heap ByeBuffers don't put pressure on the garbage collector.
  * <p>
  * <strong>Warning:</strong> Do not attempt to use a direct {@link ByteBuffer} that has been cleaned or bad things will happen. Don't use this class unless you
  * can ensure that the cleaned buffer will not be accessed anymore.
@@ -79,22 +79,30 @@ final class ByteBufferCleaner {
         }
     }
 
-    private static final Cleaner INSTANCE = getCleaner();
+    private static final Cleaner CLEANER = getCleaner();
 
     /**
      * Releases memory held by the given {@link ByteBuffer}.
+     * <p>
+     * If the buffer is writable, it is cleared by filling it with zeros, the position is set to zero, the limit is set to the capacity, and the mark is
+     * discarded.
+     * </p>
+     * <p>
+     * If the buffer is direct and {@code clean} is true, it cleaned using the "sun." package.
+     * </p>
      *
-     * @param buffer to release.
+     * @param buffer   The buffer to release.
+     * @param sunClean Perform additional cleaning using the "sun." package.
      * @throws IllegalStateException on internal failure.
      */
-    static void clean(final ByteBuffer buffer) {
+    static void clean(final ByteBuffer buffer, final boolean sunClean) {
         try {
-            if (buffer.isDirect()) {
-                Buffers.clearWritable(buffer);
-                INSTANCE.clean(buffer);
+            Buffers.clearWritable(buffer);
+            if (sunClean && buffer.isDirect()) {
+                sunClean(buffer);
             }
         } catch (final Exception e) {
-            throw new IllegalStateException("Failed to clean direct buffer.", e);
+            throw new IllegalStateException("Failed to clean a direct ByteBuffer.", e);
         }
     }
 
@@ -105,18 +113,12 @@ final class ByteBufferCleaner {
             try {
                 return new Java9Cleaner();
             } catch (final Exception e1) {
-                throw new IllegalStateException("Failed to initialize a Cleaner.", e);
+                throw new IllegalStateException("Failed to initialize a direct ByteBuffer Cleaner.", e);
             }
         }
     }
 
-    /**
-     * Tests if were able to load a suitable cleaner for the current JVM. Attempting to call {@code ByteBufferCleaner#clean(ByteBuffer)} when this method
-     * returns false will result in an exception.
-     *
-     * @return {@code true} if cleaning is supported, {@code false} otherwise.
-     */
-    static boolean isSupported() {
-        return INSTANCE != null;
+    static void sunClean(final ByteBuffer buffer) throws ReflectiveOperationException {
+        CLEANER.clean(buffer);
     }
 }

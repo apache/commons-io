@@ -35,6 +35,8 @@ import org.apache.commons.io.IOUtils;
  */
 public abstract class ProxyReader extends FilterReader {
 
+    private final Object lock = new Object();
+
     /**
      * Constructs a new ProxyReader.
      *
@@ -130,11 +132,13 @@ public abstract class ProxyReader extends FilterReader {
      * @throws IOException Thrown if an I/O error occurs.
      */
     @Override
-    public synchronized void mark(final int readAheadLimit) throws IOException {
-        try {
-            in.mark(readAheadLimit);
-        } catch (final IOException e) {
-            handleIOException(e);
+    public void mark(final int readAheadLimit) throws IOException {
+        synchronized (lock) {
+            try {
+                in.mark(readAheadLimit);
+            } catch (final IOException e) {
+                handleIOException(e);
+            }
         }
     }
 
@@ -252,11 +256,13 @@ public abstract class ProxyReader extends FilterReader {
      * @throws IOException Thrown if an I/O error occurs.
      */
     @Override
-    public synchronized void reset() throws IOException {
-        try {
-            in.reset();
-        } catch (final IOException e) {
-            handleIOException(e);
+    public void reset() throws IOException {
+        synchronized (lock) {
+            try {
+                in.reset();
+            } catch (final IOException e) {
+                handleIOException(e);
+            }
         }
     }
 

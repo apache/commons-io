@@ -102,6 +102,8 @@ public abstract class ProxyInputStream extends FilterInputStream {
 
     private final IOIntConsumer afterRead;
 
+    private final Object lock = new Object();
+
     /**
      * Constructs a new ProxyInputStream.
      *
@@ -254,9 +256,11 @@ public abstract class ProxyInputStream extends FilterInputStream {
      * @param readLimit read ahead limit.
      */
     @Override
-    public synchronized void mark(final int readLimit) {
-        if (in != null) {
-            in.mark(readLimit);
+    public void mark(final int readLimit) {
+        synchronized (this) {
+            if (in != null) {
+                in.mark(readLimit);
+            }
         }
     }
 
@@ -349,11 +353,13 @@ public abstract class ProxyInputStream extends FilterInputStream {
      * @throws IOException Thrown if this stream has not been marked or if the mark has been invalidated.
      */
     @Override
-    public synchronized void reset() throws IOException {
-        try {
-            in.reset();
-        } catch (final IOException e) {
-            handleIOException(e);
+    public void reset() throws IOException {
+        synchronized (lock) {
+            try {
+                in.reset();
+            } catch (final IOException e) {
+                handleIOException(e);
+            }
         }
     }
 

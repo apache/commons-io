@@ -20,9 +20,13 @@ import static org.apache.commons.lang3.ArrayUtils.EMPTY_BYTE_ARRAY;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.never;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.ByteBuffer;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
@@ -35,6 +39,8 @@ import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 
 /**
  * Tests {@link MemoryMappedFileInputStream}.
@@ -108,6 +114,55 @@ class MemoryMappedFileInputStreamTest {
             assertEquals(Math.max(len - 1, 0), inputStream.available());
             IOUtils.toByteArray(inputStream);
             assertEquals(0, inputStream.available());
+        }
+    }
+
+    @Test
+    void testCleanCalled() throws Exception {
+        // setup
+        final Path file = createTestFile(100);
+        // test
+        try (MockedStatic<ByteBufferCleaner> mocked = Mockito.mockStatic(ByteBufferCleaner.class);
+             InputStream stream = MemoryMappedFileInputStream.builder().setPath(file).setClean(true).get()) {
+            stream.close();
+            mocked.verify(() -> ByteBufferCleaner.clean(any(ByteBuffer.class), eq(true)));
+        }
+    }
+
+    @Test
+    void testCleanCalledNever() throws Exception {
+        // setup
+        final Path file = createTestFile(100);
+        // test
+        try (MockedStatic<ByteBufferCleaner> mocked = Mockito.mockStatic(ByteBufferCleaner.class);
+                InputStream stream = MemoryMappedFileInputStream.builder().setPath(file).setClean(false).get()) {
+            stream.close();
+            mocked.verify(() -> ByteBufferCleaner.sunClean(any(ByteBuffer.class)), never());
+        }
+    }
+
+    @Test
+    void testCleanCalledOnlyOnce() throws Exception {
+        // setup
+        final Path file = createTestFile(100);
+        // test
+        try (MockedStatic<ByteBufferCleaner> mocked = Mockito.mockStatic(ByteBufferCleaner.class);
+             InputStream stream = MemoryMappedFileInputStream.builder().setPath(file).setClean(true).get()) {
+            stream.close();
+            stream.close();
+            mocked.verify(() -> ByteBufferCleaner.clean(any(ByteBuffer.class), eq(true)), Mockito.times(1));
+        }
+    }
+
+    @Test
+    void testDefaultCleanIsTrue() throws Exception {
+        // setup
+        final Path file = createTestFile(100);
+        // test
+        try (MockedStatic<ByteBufferCleaner> mocked = Mockito.mockStatic(ByteBufferCleaner.class);
+             InputStream stream = MemoryMappedFileInputStream.builder().setPath(file).get()) {
+            stream.close();
+            mocked.verify(() -> ByteBufferCleaner.clean(any(ByteBuffer.class), eq(true)));
         }
     }
 
@@ -322,5 +377,4 @@ class MemoryMappedFileInputStreamTest {
             assertArrayEquals(expectedData, IOUtils.toByteArray(inputStream));
         }
     }
-
 }

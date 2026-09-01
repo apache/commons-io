@@ -11,6 +11,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.apache.commons.io.input;
 
 import static org.apache.commons.io.IOUtils.EOF;
@@ -121,7 +122,6 @@ public class ReadAheadInputStream extends FilterInputStream {
             this.executorService = executorService;
             return this;
         }
-
     }
 
     private static final ThreadLocal<byte[]> BYTE_ARRAY_1 = ThreadLocal.withInitial(() -> new byte[1]);
@@ -374,7 +374,6 @@ public class ReadAheadInputStream extends FilterInputStream {
         }
         len = Math.min(len, activeBuffer.remaining());
         activeBuffer.get(b, offset, len);
-
         return len;
     }
 
@@ -411,7 +410,6 @@ public class ReadAheadInputStream extends FilterInputStream {
             } finally {
                 stateChangeLock.unlock();
             }
-
             // Please note that it is safe to release the lock and read into the read ahead buffer
             // because either of following two conditions will hold:
             //

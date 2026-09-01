@@ -92,6 +92,8 @@ public final class MemoryMappedFileInputStream extends AbstractInputStream {
     // @formatter:on
     public static class Builder extends AbstractStreamBuilder<MemoryMappedFileInputStream, Builder> {
 
+        private boolean clean = true;
+
         /**
          * Constructs a new builder of {@link MemoryMappedFileInputStream}.
          */
@@ -125,6 +127,23 @@ public final class MemoryMappedFileInputStream extends AbstractInputStream {
         public MemoryMappedFileInputStream get() throws IOException {
             return new MemoryMappedFileInputStream(this);
         }
+
+        /**
+         * Sets whether to do a complete clean of the internal ByteBuffer on close. Defaults to true.
+         * <p>
+         * Setting to false disables calling the low-level cleaner from the {@code sun.} packages that would be used on garbage collection. Leaving this value
+         * to the true defaults invokes this cleaner on close. Set to false to avoid deprecation warnings on Java version 23 and above, see
+         * <a href="https://openjdk.org/jeps/471">JEP 471: Deprecate the Memory-Access Methods in sun.misc.Unsafe for Removal</a>.
+         * </p>
+         *
+         * @param clean whether to attempt to clean ByteBuffer on close.
+         * @return {@code this} instance.
+         * @since 2.23.0
+         */
+        public Builder setClean(final boolean clean) {
+            this.clean = clean;
+            return this;
+        }
     }
 
     /**
@@ -133,7 +152,7 @@ public final class MemoryMappedFileInputStream extends AbstractInputStream {
      */
     private static final int DEFAULT_BUFFER_SIZE = 256 * 1024;
 
-    private static final ByteBuffer EMPTY_BUFFER = ByteBuffer.wrap(new byte[0]).asReadOnlyBuffer();
+    private static final ByteBuffer EMPTY_BUFFER = Input.emptyByteBuffer();
 
     /**
      * Constructs a new {@link Builder}.
@@ -147,6 +166,7 @@ public final class MemoryMappedFileInputStream extends AbstractInputStream {
 
     private final int bufferSize;
     private final FileChannel channel;
+    private final boolean clean;
     private ByteBuffer buffer = EMPTY_BUFFER;
 
     /**
@@ -163,6 +183,7 @@ public final class MemoryMappedFileInputStream extends AbstractInputStream {
     private MemoryMappedFileInputStream(final Builder builder) throws IOException {
         this.bufferSize = builder.getBufferSize();
         this.channel = FileChannel.open(builder.getPath(), StandardOpenOption.READ);
+        this.clean = builder.clean;
     }
 
     @Override
@@ -172,18 +193,19 @@ public final class MemoryMappedFileInputStream extends AbstractInputStream {
     }
 
     private void cleanBuffer() {
-        if (ByteBufferCleaner.isSupported()) {
-            ByteBufferCleaner.clean(buffer);
-        }
+        ByteBufferCleaner.clean(buffer, clean);
     }
 
     @Override
     public void close() throws IOException {
         if (!isClosed()) {
-            cleanBuffer();
-            buffer = EMPTY_BUFFER;
-            channel.close();
-            super.close();
+            try {
+                channel.close();
+            } finally {
+                cleanBuffer();
+                buffer = EMPTY_BUFFER;
+                super.close();
+            }
         }
     }
 

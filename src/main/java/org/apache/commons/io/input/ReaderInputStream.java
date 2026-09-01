@@ -389,11 +389,15 @@ public class ReaderInputStream extends AbstractInputStream {
         }
         encoderOut.compact();
         lastCoderResult = charsetEncoder.encode(encoderIn, encoderOut, endOfInput);
-        if (endOfInput) {
-            lastCoderResult = charsetEncoder.flush(encoderOut);
-        }
+        // IO-780: Check encode() errors before flush() overwrites lastCoderResult.
         if (lastCoderResult.isError()) {
             lastCoderResult.throwException();
+        }
+        if (endOfInput) {
+            lastCoderResult = charsetEncoder.flush(encoderOut);
+            if (lastCoderResult.isError()) {
+                lastCoderResult.throwException();
+            }
         }
         encoderOut.flip();
     }

@@ -16,7 +16,6 @@
  */
 package org.apache.commons.io.input;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -149,21 +148,26 @@ class ReaderInputStreamTest {
         }
     }
 
+    /**
+     * Tests IO-780: a trailing unpaired surrogate is malformed input. {@code encode()} reports the
+     * error; {@code flush()} must not overwrite that result, otherwise {@code read()} returns EOF
+     * instead of throwing.
+     */
     @Test
     @Timeout(value = 500, unit = TimeUnit.MILLISECONDS)
     void testCodingError() throws IOException {
-        // Encoder which throws on malformed or unmappable input
+        // Encoder which throws on malformed or unmappable input (default CodingErrorAction.REPORT)
         CharsetEncoder encoder = StandardCharsets.UTF_8.newEncoder();
         try (ReaderInputStream in = new ReaderInputStream(new StringReader("\uD800"), encoder)) {
-            // Does not throws an exception because the input is an underflow and not an error
-            assertDoesNotThrow(() -> in.read());
-            // assertThrows(IllegalStateException.class, () -> in.read());
+            assertThrows(CharacterCodingException.class, in::read);
         }
         encoder = StandardCharsets.UTF_8.newEncoder();
         try (ReaderInputStream in = ReaderInputStream.builder().setReader(new StringReader("\uD800")).setCharsetEncoder(encoder).get()) {
-            // TODO WIP
-            assertDoesNotThrow(() -> in.read());
-            // assertThrows(IllegalStateException.class, () -> in.read());
+            assertThrows(CharacterCodingException.class, in::read);
+        }
+        encoder = StandardCharsets.UTF_8.newEncoder();
+        try (ReaderInputStream in = new ReaderInputStream(new StringReader("\uD800"), encoder)) {
+            assertThrows(CharacterCodingException.class, () -> in.read(new byte[8]));
         }
     }
 
