@@ -162,4 +162,13 @@ class CircularByteBufferTest {
         // targetOffset >= targetBuffer.length
         assertThrows(IllegalArgumentException.class, () -> cbb.read(bytesOut, 0, bytesOut.length + 1));
     }
+
+    @Test
+    void testPeekLongerThanBuffered() {
+        final CircularByteBuffer cbb = new CircularByteBuffer(8);
+        cbb.add(new byte[] { 1, 2, 3, 4, 5, 6 }, 0, 6);
+        cbb.read(new byte[4], 0, 4);
+        assertTrue(cbb.peek(new byte[] { 5, 6 }, 0, 2));
+        assertFalse(cbb.peek(new byte[] { 5, 6, 0, 0 }, 0, 4));
+    }
 }

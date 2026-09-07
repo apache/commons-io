@@ -190,7 +190,7 @@ public class CircularByteBuffer {
         if (length < 0 || length > buffer.length) {
             throw new IllegalArgumentException("Illegal length: " + length);
         }
-        if (length < currentNumberOfBytes) {
+        if (length != currentNumberOfBytes) {
             return false;
         }
         int localOffset = startOffset;
