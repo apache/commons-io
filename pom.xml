@@ -204,14 +204,6 @@ file comparators, endian transformation classes, and much more.
           <!-- Limit memory size see IO-161 -->
           <!-- Mockito inline may need -XX:+EnableDynamicAgentLoading -->
           <argLine>@{argLine} -Xmx25M ${EnableDynamicAgentLoading}</argLine>
-          <includes>
-            <!-- Only include test classes, not test data -->
-            <include>**/*Test*.class</include>
-          </includes>
-          <excludes>
-            <exclude>**/*AbstractTestCase*</exclude>
-            <exclude>**/testtools/**</exclude>
-          </excludes>
         </configuration>
       </plugin>
       <plugin>
