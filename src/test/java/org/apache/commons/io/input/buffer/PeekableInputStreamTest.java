@@ -93,6 +93,13 @@ class PeekableInputStreamTest {
     }
 
     @Test
+    void testPeekLongerThanInputDoesNotMatch() throws IOException {
+        try (PeekableInputStream inputStream = new PeekableInputStream(new ByteArrayInputStream(new byte[] { 1, 2 }))) {
+            assertFalse(inputStream.peek(new byte[] { 1, 2, 0, 0 }));
+        }
+    }
+
+    @Test
     void testRandomRead() throws Exception {
         final byte[] inputBuffer = newInputBuffer();
         final byte[] bufferCopy = new byte[inputBuffer.length];
