@@ -988,6 +988,7 @@ public class Tailer implements Runnable, AutoCloseable {
         try {
             FileTime last = FileTimes.EPOCH; // The last time the file was checked for changes
             long position = 0; // position within the file
+            boolean rotationPending = false;
             // Open the file
             while (getRun() && reader == null) {
                 try {
@@ -1008,21 +1009,28 @@ public class Tailer implements Runnable, AutoCloseable {
                 final boolean newer = tailable.isNewer(last); // IO-279, must be done first
                 // Check the file length to see if it was rotated
                 final long length = tailable.size();
-                if (length < position) {
+                if (rotationPending || length < position) {
                     // File was rotated
-                    listener.fileRotated();
+                    if (!rotationPending) {
+                        listener.fileRotated();
+                        rotationPending = true;
+                    }
                     // Reopen the reader after rotation ensuring that the old file is closed iff we re-open it
                     // successfully
-                    try (RandomAccessResourceBridge save = reader) {
-                        reader = tailable.getRandomAccess(RAF_READ_ONLY_MODE);
-                        // At this point, we're sure that the old file is rotated
-                        // Finish scanning the old file and then we'll start with the new one
-                        try {
-                            readLines(save);
-                        } catch (final IOException ioe) {
-                            listener.handle(ioe);
+                    try {
+                        final RandomAccessResourceBridge replacement = tailable.getRandomAccess(RAF_READ_ONLY_MODE);
+                        try (RandomAccessResourceBridge save = reader) {
+                            reader = replacement;
+                            // At this point, we're sure that the old file is rotated
+                            // Finish scanning the old file and then we'll start with the new one
+                            try {
+                                readLines(save);
+                            } catch (final IOException ioe) {
+                                listener.handle(ioe);
+                            }
+                            position = 0;
+                            rotationPending = false;
                         }
-                        position = 0;
                     } catch (final FileNotFoundException e) {
                         // in this case we continue to use the previous reader and position values
                         listener.fileNotFound();
