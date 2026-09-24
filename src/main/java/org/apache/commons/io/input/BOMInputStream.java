@@ -226,7 +226,7 @@ public class BOMInputStream extends ProxyInputStream {
     private int fbIndex;
     private int[] firstBytes;
     private final boolean include;
-    private boolean markedAtStart;
+    private boolean markedAtStart = true;
     private int markFbIndex;
 
     /**
@@ -370,7 +370,7 @@ public class BOMInputStream extends ProxyInputStream {
     @Override
     public synchronized void mark(final int readLimit) {
         markFbIndex = fbIndex;
-        markedAtStart = firstBytes == null;
+        markedAtStart = false;
         in.mark(readLimit);
     }
 
@@ -493,11 +493,11 @@ public class BOMInputStream extends ProxyInputStream {
      */
     @Override
     public synchronized void reset() throws IOException {
+        in.reset();
         fbIndex = markFbIndex;
         if (markedAtStart) {
-            firstBytes = null;
+            readBom();
         }
-        in.reset();
     }
 
     /**

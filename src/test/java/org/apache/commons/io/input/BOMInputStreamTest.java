@@ -16,6 +16,7 @@
  */
 package org.apache.commons.io.input;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -43,6 +44,8 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.test.CustomIOException;
 import org.apache.commons.lang3.SystemProperties;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -427,6 +430,36 @@ class BOMInputStreamTest {
             in.read();
             in.reset();
             assertEquals('A', in.read());
+        }
+    }
+
+    @ParameterizedTest
+    @CsvSource({ "false, false", "false, true", "true, false", "true, true" })
+    void testResetWithoutMark(final boolean addBom, final boolean include) throws Exception {
+        final byte[] data = { 'A', 'B', 'C', 'D', 'E' };
+        final byte[] expected = IOUtils.toByteArray(createUtf8Input(data, addBom && include));
+        try (BOMInputStream in = BOMInputStream.builder()
+                .setInputStream(createUtf8Input(data, addBom))
+                .setByteOrderMarks(ByteOrderMark.UTF_8, ByteOrderMark.UTF_16BE, ByteOrderMark.UTF_32BE)
+                .setInclude(include)
+                .get()) {
+            in.reset();
+            assertArrayEquals(expected, IOUtils.toByteArray(in));
+            in.reset();
+            assertEquals(expected[0] & 0xFF, in.read());
+            in.reset();
+            assertArrayEquals(expected, IOUtils.toByteArray(in));
+        }
+    }
+
+    @Test
+    void testResetWithoutMarkShortStream() throws Exception {
+        final byte[] data = { 'A' };
+        try (BOMInputStream in = BOMInputStream.builder().setInputStream(new ByteArrayInputStream(data)).get()) {
+            in.reset();
+            assertArrayEquals(data, IOUtils.toByteArray(in));
+            in.reset();
+            assertArrayEquals(data, IOUtils.toByteArray(in));
         }
     }
 
