@@ -17,6 +17,7 @@
 package org.apache.commons.io.output;
 
 import static org.apache.commons.io.test.TestUtils.checkFile;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -32,6 +33,7 @@ import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.util.Arrays;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -41,6 +43,8 @@ import org.junit.jupiter.api.io.TempDir;
  * Tests {@link FileWriterWithEncoding}.
  */
 class FileWriterWithEncodingTest {
+
+    private static final String NON_ASCII = "caf\u00e9";
 
     @TempDir
     public File temporaryFolder;
@@ -201,6 +205,26 @@ class FileWriterWithEncodingTest {
             }
             assertTrue(file1.exists());
             assertTrue(file2.exists());
+        }
+    }
+
+    @Test
+    void testBuilder_nonDefaultCharset() throws Exception {
+        for (final Charset charset : Arrays.asList(StandardCharsets.UTF_16, StandardCharsets.ISO_8859_1)) {
+            try (Writer writer = FileWriterWithEncoding.builder().setFile(file2).setCharset(charset).get()) {
+                writer.write(NON_ASCII);
+            }
+            assertArrayEquals(NON_ASCII.getBytes(charset), Files.readAllBytes(file2.toPath()));
+        }
+    }
+
+    @Test
+    void testBuilder_nonDefaultCharsetEncoder() throws Exception {
+        for (final Charset charset : Arrays.asList(StandardCharsets.UTF_16, StandardCharsets.ISO_8859_1)) {
+            try (Writer writer = FileWriterWithEncoding.builder().setFile(file2).setCharsetEncoder(charset.newEncoder()).get()) {
+                writer.write(NON_ASCII);
+            }
+            assertArrayEquals(NON_ASCII.getBytes(charset), Files.readAllBytes(file2.toPath()));
         }
     }
 
