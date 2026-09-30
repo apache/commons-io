@@ -22,6 +22,10 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -47,6 +51,7 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
@@ -56,6 +61,8 @@ import org.apache.commons.io.test.TestUtils;
 import org.apache.commons.lang3.SystemProperties;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 /**
  * Test for {@link Tailer}.
@@ -687,6 +694,40 @@ class TailerTest {
             assertEquals("Line one", lines.get(0), "1 line 1");
             listener.clear();
         }
+    }
+
+    @ParameterizedTest
+    @CsvSource({"0, true", "1, true", "2, true", "0, false", "1, false", "2, false"})
+    void testTailFromEndAfterInitialOpen(final int missingOpens, final boolean tailFromEnd) throws Exception {
+        final File file = Files.createTempFile(temporaryFolder.toPath(), "tailer-initial-open", ".txt").toFile();
+        Files.write(file.toPath(), "first\nsecond\n".getBytes(StandardCharsets.UTF_8));
+        final NonStandardTailable delegate = new NonStandardTailable(file);
+        final Tailer.Tailable tailable = mock(Tailer.Tailable.class);
+        final AtomicInteger opens = new AtomicInteger();
+        when(tailable.getRandomAccess(anyString())).thenAnswer(invocation -> {
+            if (opens.getAndIncrement() < missingOpens) {
+                throw new FileNotFoundException(file.toString());
+            }
+            return delegate.getRandomAccess(invocation.getArgument(0));
+        });
+        when(tailable.size()).thenAnswer(invocation -> delegate.size());
+        when(tailable.lastModifiedFileTime()).thenReturn(FileTime.fromMillis(1));
+        final TestTailerListener listener = new TestTailerListener();
+        try (Tailer tailer = Tailer.builder().setTailable(tailable).setTailerListener(listener)
+                .setCharset(StandardCharsets.UTF_8).setTailFromEnd(tailFromEnd).setStartThread(false)
+                .setDelayDuration(Duration.ZERO).get()) {
+            // Stop after one polling cycle, even if the initial content was incorrectly skipped.
+            when(tailable.isNewer(any())).thenReturn(false).thenAnswer(invocation -> {
+                tailer.close();
+                return false;
+            });
+            tailer.run();
+        }
+        assertNull(listener.exception);
+        assertEquals(missingOpens, listener.notFound);
+        assertEquals(missingOpens + 1, opens.get());
+        assertEquals(0, listener.rotated);
+        assertEquals(tailFromEnd && missingOpens == 0 ? Collections.emptyList() : Arrays.asList("first", "second"), listener.getLines());
     }
 
     @Test

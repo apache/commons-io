@@ -988,18 +988,21 @@ public class Tailer implements Runnable, AutoCloseable {
         try {
             FileTime last = FileTimes.EPOCH; // The last time the file was checked for changes
             long position = 0; // position within the file
+            boolean tailFromEndOnOpen = tailFromEnd;
             // Open the file
             while (getRun() && reader == null) {
                 try {
                     reader = tailable.getRandomAccess(RAF_READ_ONLY_MODE);
                 } catch (final FileNotFoundException e) {
+                    // A file that appears after startup must be read from the beginning.
+                    tailFromEndOnOpen = false;
                     listener.fileNotFound();
                 }
                 if (reader == null) {
                     ThreadUtils.sleep(delayDuration);
                 } else {
                     // The current position in the file
-                    position = tailFromEnd ? tailable.size() : 0;
+                    position = tailFromEndOnOpen ? tailable.size() : 0;
                     last = tailable.lastModifiedFileTime();
                     reader.seek(position);
                 }
