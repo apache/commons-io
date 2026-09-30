@@ -111,6 +111,12 @@
     <Class name="org.apache.commons.io.input.BOMInputStream" />
     <Bug pattern="AT_STALE_THREAD_WRITE_OF_PRIMITIVE" />
   </Match>
+  <!-- BOMInputStream is not thread-safe; read and reset need not share a lock. -->
+  <Match>
+    <Class name="org.apache.commons.io.input.BOMInputStream" />
+    <Field name="fbIndex" />
+    <Bug pattern="IS2_INCONSISTENT_SYNC" />
+  </Match>
   <!-- This class is not thread-safe. Should this be a TO-DO?. -->
   <Match>
     <Class name="org.apache.commons.io.channels.ByteArraySeekableByteChannel" />
