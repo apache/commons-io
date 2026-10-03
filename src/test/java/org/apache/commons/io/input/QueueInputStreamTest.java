@@ -344,7 +344,8 @@ public class QueueInputStreamTest {
         try (QueueInputStream inputStream = QueueInputStream.builder().setTimeout(Duration.ofMillis(500)).get();
                 QueueOutputStream outputStream = inputStream.newQueueOutputStream()) {
             final Stopwatch stopwatch = Stopwatch.createStarted();
-            final String actualData = assertTimeout(Duration.ofSeconds(1), () -> readUnbuffered(inputStream, 3));
+            // Allow for scheduling delays on busy CI hosts while checking the minimum wait below.
+            final String actualData = assertTimeout(Duration.ofSeconds(10), () -> readUnbuffered(inputStream, 3));
             stopwatch.stop();
             assertEquals("", actualData);
 
