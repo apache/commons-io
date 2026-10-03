@@ -212,6 +212,18 @@ class MemoryMappedFileInputStreamTest {
     }
 
     @Test
+    void testReadSingleByteIsUnsigned() throws IOException {
+        final byte[] expectedData = { 0x00, 0x01, 0x7F, (byte) 0x80, (byte) 0xAB, (byte) 0xFE, (byte) 0xFF };
+        final Path file = Files.write(Files.createTempFile(tempDir, null, null), expectedData);
+        try (InputStream inputStream = newInputStream(file, 4)) {
+            for (final byte expected : expectedData) {
+                assertEquals(expected & 0xFF, inputStream.read());
+            }
+            assertEquals(IOUtils.EOF, inputStream.read());
+        }
+    }
+
+    @Test
     void testReadSingleByte() throws IOException {
         // setup
         final Path file = createTestFile(2);
