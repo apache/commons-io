@@ -228,6 +228,85 @@ class ValidatingObjectInputStreamTest extends AbstractCloseableListTest {
     }
 
     @Test
+    void testMaxArrayLength() throws Exception {
+        final byte[] bytes = SerializationUtils.serialize(new byte[1000]);
+        // Passes without a limit and with a large enough limit
+        try (ValidatingObjectInputStream vois = ValidatingObjectInputStream.builder()
+                .accept(byte[].class)
+                .setInputStream(new ByteArrayInputStream(bytes))
+                .get()) {
+            assertEquals(1000, ((byte[]) vois.readObject()).length);
+        }
+        try (ValidatingObjectInputStream vois = ValidatingObjectInputStream.builder()
+                .accept(byte[].class)
+                .setMaxArrayLength(1000)
+                .setInputStream(new ByteArrayInputStream(bytes))
+                .get()) {
+            assertEquals(1000, ((byte[]) vois.readObject()).length);
+        }
+        // The declared array length exceeds the limit: rejected before the allocation is honored
+        try (ValidatingObjectInputStream vois = ValidatingObjectInputStream.builder()
+                .accept(byte[].class)
+                .setMaxArrayLength(999)
+                .setInputStream(new ByteArrayInputStream(bytes))
+                .get()) {
+            assertThrows(InvalidClassException.class, vois::readObject);
+        }
+    }
+
+    @Test
+    void testMaxDepth() throws Exception {
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("k", "v");
+        for (int i = 0; i < 20; i++) {
+            final HashMap<String, Object> outer = new HashMap<>();
+            outer.put("k", map);
+            map = outer;
+        }
+        final byte[] bytes = SerializationUtils.serialize(map);
+        // Passes without a limit
+        try (ValidatingObjectInputStream vois = ValidatingObjectInputStream.builder()
+                .accept(HashMap.class)
+                .setInputStream(new ByteArrayInputStream(bytes))
+                .get()) {
+            assertEquals(HashMap.class, vois.readObject().getClass());
+        }
+        // Nesting depth exceeds the limit
+        try (ValidatingObjectInputStream vois = ValidatingObjectInputStream.builder()
+                .accept(HashMap.class)
+                .setMaxDepth(3)
+                .setInputStream(new ByteArrayInputStream(bytes))
+                .get()) {
+            assertThrows(InvalidClassException.class, vois::readObject);
+        }
+    }
+
+    @Test
+    void testMaxRefs() throws Exception {
+        // Integer values are ordinary objects and count toward the reference limit on every JDK; bare strings may not.
+        final HashMap<String, Integer> map = new HashMap<>();
+        for (int i = 0; i < 20; i++) {
+            map.put("key" + i, i);
+        }
+        final byte[] bytes = SerializationUtils.serialize(map);
+        // Passes without a limit
+        try (ValidatingObjectInputStream vois = ValidatingObjectInputStream.builder()
+                .accept(HashMap.class, Number.class, Integer.class)
+                .setInputStream(new ByteArrayInputStream(bytes))
+                .get()) {
+            assertEquals(HashMap.class, vois.readObject().getClass());
+        }
+        // Reference count exceeds the limit
+        try (ValidatingObjectInputStream vois = ValidatingObjectInputStream.builder()
+                .accept(HashMap.class, Number.class, Integer.class)
+                .setMaxRefs(5)
+                .setInputStream(new ByteArrayInputStream(bytes))
+                .get()) {
+            assertThrows(InvalidClassException.class, vois::readObject);
+        }
+    }
+
+    @Test
     void testNoAccept() {
         assertThrows(InvalidClassException.class, () -> assertSerialization(addCloseable(newFixture())));
     }
