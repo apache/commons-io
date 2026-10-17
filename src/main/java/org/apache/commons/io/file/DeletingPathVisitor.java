@@ -152,10 +152,18 @@ public class DeletingPathVisitor extends CountingPathVisitor {
         if (accept(file)) {
             // delete files and valid links, respecting linkOptions
             if (Files.exists(file, linkOptions)) {
-                if (overrideReadOnly) {
-                    PathUtils.setReadOnly(file, false, linkOptions);
+                boolean readOnlyCleared = false;
+                try {
+                    if (overrideReadOnly) {
+                        PathUtils.setReadOnly(file, false, linkOptions);
+                        readOnlyCleared = true;
+                    }
+                    Files.deleteIfExists(file);
+                } finally {
+                    if (readOnlyCleared && Files.exists(file, linkOptions)) {
+                        PathUtils.setReadOnly(file, true, linkOptions);
+                    }
                 }
-                Files.deleteIfExists(file);
             }
             // invalid links will survive previous delete, different approach needed:
             if (Files.isSymbolicLink(file)) {
