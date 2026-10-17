@@ -146,9 +146,17 @@ public class ByteArraySeekableByteChannel implements SeekableByteChannel {
         this.data = builder.getByteArray();
         this.size = data.length;
         final OpenOption[] openOptions = builder.getOpenOptions();
-        Arrays.sort(openOptions);
-        this.isWritable = openOptions.length == 0 || Arrays.binarySearch(openOptions, StandardOpenOption.WRITE) >= 0
-                || Arrays.binarySearch(openOptions, StandardOpenOption.APPEND) >= 0;
+        // Don't sort: options may mix types (StandardOpenOption, LinkOption, ...) or not be Comparable at all.
+        this.isWritable = openOptions.length == 0 || contains(openOptions, StandardOpenOption.WRITE) || contains(openOptions, StandardOpenOption.APPEND);
+    }
+
+    private static boolean contains(final OpenOption[] openOptions, final OpenOption openOption) {
+        for (final OpenOption option : openOptions) {
+            if (option == openOption) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private ByteArraySeekableByteChannel(final byte[] data) {
