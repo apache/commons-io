@@ -190,8 +190,10 @@ public class FilenameUtils {
      * {@code ..} is handled.
      * </p>
      * <p>
-     * If {@code pathToAdd} is absolute (has an absolute prefix), then it will be normalized and returned. Otherwise, the paths will be joined, normalized and
-     * returned.
+     * If {@code fullFileNameToAdd} has a prefix for which {@link #getPrefixLength(String)} returns a positive length, then {@code basePath} is ignored and
+     * {@code fullFileNameToAdd} is normalized and returned. Otherwise, the paths will be joined, normalized and returned. Both Unix and Windows prefixes are
+     * recognized on every platform, including tilde prefixes such as {@code ~/} and {@code ~user/}, drive-relative prefixes such as {@code C:}, and UNC
+     * prefixes. UNC prefixes may begin with any combination of two forward or backward slashes, including {@code \/} and {@code /\}.
      * </p>
      * <p>
      * The output will be the same on both Unix and Windows except for the separator character.
@@ -216,6 +218,13 @@ public class FilenameUtils {
      * <p>
      * [2] Note that the first parameter must be a path. If it ends with a name, then the name will be built into the concatenated path. If this might be a
      * problem, use {@link #getFullPath(String)} on the base path argument.
+     * </p>
+     *
+     * <p>
+     * <strong>Security note:</strong> This method does not ensure that the result stays within {@code basePath}. Callers handling untrusted paths must validate
+     * the result against the intended base directory. Rejecting names for which {@code getPrefixLength(name) != 0} prevents prefix-based replacement of the
+     * base, but is not sufficient to ensure containment: for example, {@code concat("/base", "../outside")} returns a path to {@code /outside}. Normalization
+     * only manipulates the path string; it does not resolve symbolic links or establish containment in the file system.
      * </p>
      *
      * @param basePath          The base path to attach to, always treated as a path.
@@ -840,8 +849,8 @@ public class FilenameUtils {
      * The output will be the same irrespective of the machine that the code is running on. ie. both Unix and Windows prefixes are matched regardless.
      * </p>
      * <p>
-     * Note that a leading // (or \\) is used to indicate a UNC name on Windows. These must be followed by a server name, so double-slashes are not collapsed to
-     * a single slash at the start of the file name.
+     * Note that a leading // (or \\) is used to indicate a UNC name on Windows. Mixed leading separators ({@code \/} or {@code /\}) are also recognized.
+     * These must be followed by a server name and a separator, so double-slashes are not collapsed to a single slash at the start of the file name.
      * </p>
      *
      * @param fileName The file name to find the prefix in, null returns -1.
