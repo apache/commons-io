@@ -32,6 +32,9 @@ import org.apache.commons.io.file.Counters.PathCounters;
 /**
  * Deletes files and directories as a visit proceeds.
  *
+ * <p>Directory reparse points reported as {@link BasicFileAttributes#isOther()} are deleted without visiting their contents. Checks and deletion are
+ * not atomic, so this visitor does not guarantee confinement when directories or path components can be replaced concurrently.</p>
+ *
  * @since 2.7
  */
 public class DeletingPathVisitor extends CountingPathVisitor {
@@ -144,7 +147,16 @@ public class DeletingPathVisitor extends CountingPathVisitor {
     @Override
     public FileVisitResult preVisitDirectory(final Path dir, final BasicFileAttributes attrs) throws IOException {
         super.preVisitDirectory(dir, attrs);
-        return accept(dir) ? FileVisitResult.CONTINUE : FileVisitResult.SKIP_SUBTREE;
+        if (!accept(dir)) {
+            return FileVisitResult.SKIP_SUBTREE;
+        }
+        if (attrs.isOther()) {
+            // Windows junctions are directories as well as other file system objects, even without FOLLOW_LINKS.
+            Files.delete(dir);
+            updateDirCounter(dir, null);
+            return FileVisitResult.SKIP_SUBTREE;
+        }
+        return FileVisitResult.CONTINUE;
     }
 
     @Override

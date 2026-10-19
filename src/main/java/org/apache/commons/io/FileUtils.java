@@ -1249,6 +1249,16 @@ public class FileUtils {
     /**
      * Deletes a directory recursively.
      *
+     * <p>
+     * Symbolic links and directory reparse points such as Windows junctions are deleted without deleting their target's contents. If the given directory does
+     * not exist, including when it is a symbolic link to a missing target, this method does nothing.
+     * </p>
+     *
+     * <p>
+     * The link checks and deletion are not atomic. Do not rely on this method to confine deletion when an untrusted party can concurrently replace directories
+     * or path components.
+     * </p>
+     *
      * @param directory directory to delete.
      * @throws IOException              in case deletion is unsuccessful.
      * @throws NullPointerException     if the parameter is {@code null}.
@@ -1259,7 +1269,7 @@ public class FileUtils {
         if (!directory.exists()) {
             return;
         }
-        if (!isSymlink(directory)) {
+        if (!isLinkLikeDirectory(directory)) {
             cleanDirectory(directory);
         }
         delete(directory);
@@ -1277,7 +1287,7 @@ public class FileUtils {
             return;
         }
         directory.deleteOnExit();
-        if (!isSymlink(directory)) {
+        if (!isLinkLikeDirectory(directory)) {
             cleanDirectoryOnExit(directory);
         }
     }
@@ -1440,8 +1450,13 @@ public class FileUtils {
     }
 
     /**
-     * Requests a file to be deleted when the virtual machine terminates.
-     * If file is directory delete it and all subdirectories.
+     * Requests a file to be deleted when the virtual machine terminates. If file is directory delete it and all subdirectories.
+     *
+     * <p>
+     * Symbolic links and directory reparse points such as Windows junctions are scheduled without enumerating their targets. Directory enumeration and deletion
+     * at JVM termination are not atomic. Do not rely on this method to confine deletion when an untrusted party can replace directories or path components
+     * before the JVM terminates.
+     * </p>
      *
      * @param file file or directory to delete, must not be {@code null}.
      * @throws NullPointerException if the file is {@code null}.
@@ -2057,6 +2072,29 @@ public class FileUtils {
      */
     private static boolean isFileProtocol(final URL url) {
         return PROTOCOL_FILE.equalsIgnoreCase(url.getProtocol());
+    }
+
+    /**
+     * Tests whether a file is a symbolic link or a directory with other file system attributes.
+     *
+     * <p>
+     * Attributes are read without following symbolic links. On Windows, junctions report both {@code isDirectory()} and {@code isOther()} as true. Requiring
+     * both attributes preserves the rejection of non-directory special files such as FIFOs.
+     * </p>
+     *
+     * @param file the file to test.
+     * @return true for a symbolic link, a directory with other attributes, or an entry that disappeared before its attributes could be read.
+     * @throws IOException if the attributes cannot be read for a reason other than a missing entry.
+     */
+    private static boolean isLinkLikeDirectory(final File file) throws IOException {
+        final BasicFileAttributes attributes;
+        try {
+            attributes = Files.readAttributes(file.toPath(), BasicFileAttributes.class, LinkOption.NOFOLLOW_LINKS);
+        } catch (final NoSuchFileException e) {
+            // Skip enumeration if the entry disappeared. Immediate deletion will report the missing entry.
+            return true;
+        }
+        return attributes.isSymbolicLink() || attributes.isDirectory() && attributes.isOther();
     }
 
     /**
