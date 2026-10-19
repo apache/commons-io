@@ -19,11 +19,14 @@ package org.apache.commons.io;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTimeoutPreemptively;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
+import java.time.Duration;
 import java.util.Locale;
 
+import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -205,6 +208,90 @@ class FilenameUtilsWildcardTest {
         assertEquals(WINDOWS, FilenameUtils.wildcardMatch("BARFOO", "*Foo", IOCase.SYSTEM));
         assertEquals(WINDOWS, FilenameUtils.wildcardMatch("FOO", "Foo*", IOCase.SYSTEM));
         assertEquals(WINDOWS, FilenameUtils.wildcardMatch("FOOBAR", "Foo*", IOCase.SYSTEM));
+    }
+
+    @Test
+    void testMatchCombinatorialBacktracking() {
+        final String text = StringUtils.repeat("ab", 60) + "ac";
+        final String pattern = StringUtils.repeat("*ab", 30) + "*ac*ad";
+        assertTimeoutPreemptively(Duration.ofSeconds(10), () -> {
+            assertFalse(FilenameUtils.wildcardMatch(text, pattern));
+            assertFalse(FilenameUtils.wildcardMatch(text, pattern, IOCase.INSENSITIVE));
+            assertFalse(FilenameUtils.wildcardMatchOnSystem(text, pattern));
+            assertTrue(FilenameUtils.wildcardMatch(text + "ad", pattern));
+            assertFalse(FilenameUtils.wildcardMatch(text, pattern.toUpperCase(Locale.ROOT), IOCase.INSENSITIVE));
+            assertTrue(FilenameUtils.wildcardMatch(text + "ad", pattern.toUpperCase(Locale.ROOT), IOCase.INSENSITIVE));
+        });
+    }
+
+    @Test
+    void testMatchLongInput() {
+        final String text = StringUtils.repeat('a', 65_535);
+        final String pattern = StringUtils.repeat("*a", 64);
+        assertTimeoutPreemptively(Duration.ofSeconds(10), () -> {
+            assertFalse(FilenameUtils.wildcardMatch(text, "*a*b"));
+            assertFalse(FilenameUtils.wildcardMatch(text, pattern + "*b"));
+            assertTrue(FilenameUtils.wildcardMatch(text, pattern));
+        });
+    }
+
+    @Test
+    void testMatchLongQuestionPattern() {
+        final String text = StringUtils.repeat('a', 131_072);
+        final String pattern = StringUtils.repeat('?', text.length());
+        assertTimeoutPreemptively(Duration.ofSeconds(10), () -> {
+            assertTrue(FilenameUtils.wildcardMatch(text, pattern));
+            assertFalse(FilenameUtils.wildcardMatch(text + "a", pattern));
+            assertFalse(FilenameUtils.wildcardMatch(text, "Z" + pattern.substring(1)));
+            assertTrue(FilenameUtils.wildcardMatch(text, "a*"));
+        });
+    }
+
+    @Test
+    void testMatchOverlappingLiterals() {
+        assertMatch("ababb", "*ab*ab*b", true);
+        assertMatch("abab", "*ab*ab*b", false);
+        assertMatch("aaaaab", "*aa*ab", true);
+        assertMatch("aaaab", "*aaa*ab", true);
+        assertMatch("aaab", "*aaa*ab", false);
+        assertTrue(FilenameUtils.wildcardMatch("aAaAAb", "*AA*AB", IOCase.INSENSITIVE));
+        assertFalse(FilenameUtils.wildcardMatch("aAaAAb", "*AA*AB", IOCase.SENSITIVE));
+    }
+
+    @Test
+    void testMatchStarQuestionCompatibility() {
+        assertMatch("ab", "*?", false);
+        assertMatch("ab", "**?", false);
+        assertMatch("ab", "a*?", true);
+        assertMatch("abc", "a*?c", true);
+        assertMatch("abxc", "a*?c", false);
+        assertMatch("abc", "*?*", true);
+        assertMatch("", "*?*", false);
+        assertMatch("aab", "*a*?", true);
+        assertMatch("ab", "*?*?", true);
+        assertMatch("abc", "*?*?", false);
+    }
+
+    @Test
+    void testMatchSurrogates() {
+        final String high = "\uD801";
+        final String low = "\uDC28";
+        final String upper = "\uD801\uDC00";
+        final String lower = high + low;
+        assertMatch(lower, "??", true);
+        assertMatch(lower, "?", false);
+        assertMatch(lower, "*" + high + "?", true);
+        assertMatch(lower, "?" + low, true);
+        assertMatch(high, "*" + high, true);
+        assertMatch(low, "*" + low, true);
+        assertMatch(high, "*" + lower, false);
+        assertMatch(lower, "*" + lower, true);
+        assertMatch(lower, "*" + upper, false);
+        // Compare a whole literal run, even when its UTF-16 contains an unpaired surrogate.
+        assertEquals(IOCase.INSENSITIVE.checkEquals(high + upper, upper + high),
+                FilenameUtils.wildcardMatch(high + upper, upper + high + "*", IOCase.INSENSITIVE));
+        assertEquals(upper.equalsIgnoreCase(lower), FilenameUtils.wildcardMatch(lower, "*" + upper, IOCase.INSENSITIVE));
+        assertEquals(upper.equalsIgnoreCase(lower), FilenameUtils.wildcardMatch("x" + lower + "y", "?" + upper + "*", IOCase.INSENSITIVE));
     }
 
     @Test

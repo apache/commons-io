@@ -20,15 +20,19 @@ package org.apache.commons.io.serialization;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTimeoutPreemptively;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InvalidClassException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.ObjectStreamConstants;
+import java.time.Duration;
 import java.util.HashMap;
 import java.util.UUID;
 import java.util.regex.Pattern;
@@ -36,6 +40,7 @@ import java.util.regex.Pattern;
 import org.apache.commons.io.input.BoundedInputStream;
 import org.apache.commons.io.serialization.ValidatingObjectInputStream.Builder;
 import org.apache.commons.lang3.SerializationUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -109,6 +114,32 @@ class ValidatingObjectInputStreamTest extends AbstractCloseableListTest {
     @Test
     void testAcceptWildcardBuilder() throws Exception {
         assertSerialization(addCloseable(newBuilder().accept("org.apache.commons.io.*").get()));
+    }
+
+    @Test
+    void testAcceptWildcardHostileClassName() throws IOException {
+        final String name = StringUtils.repeat("ab", 60) + "ac";
+        final ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        try (DataOutputStream out = new DataOutputStream(bytes)) {
+            out.writeShort(ObjectStreamConstants.STREAM_MAGIC);
+            out.writeShort(ObjectStreamConstants.STREAM_VERSION);
+            out.writeByte(ObjectStreamConstants.TC_OBJECT);
+            out.writeByte(ObjectStreamConstants.TC_CLASSDESC);
+            out.writeUTF(name);
+            out.writeLong(1);
+            out.writeByte(ObjectStreamConstants.SC_SERIALIZABLE);
+            out.writeShort(0);
+            out.writeByte(ObjectStreamConstants.TC_ENDBLOCKDATA);
+            out.writeByte(ObjectStreamConstants.TC_NULL);
+        }
+        assertTimeoutPreemptively(Duration.ofSeconds(10), () -> {
+            try (ValidatingObjectInputStream in = ValidatingObjectInputStream.builder()
+                    .setInputStream(new ByteArrayInputStream(bytes.toByteArray()))
+                    .accept(StringUtils.repeat("*ab", 30) + "*ac*ad").get()) {
+                final InvalidClassException exception = assertThrows(InvalidClassException.class, in::readObject);
+                assertTrue(exception.getMessage().contains(name));
+            }
+        });
     }
 
     @Test
