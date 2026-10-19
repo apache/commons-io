@@ -19,6 +19,7 @@ package org.apache.commons.io.filefilter;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
+import java.nio.file.DirectoryIteratorException;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -90,7 +91,8 @@ public class EmptyFileFilter extends AbstractFileFilter implements Serializable 
      * Singleton instance of the <em>not-empty</em> filter.
      *
      * <p>
-     * The NIO filter returns {@link FileVisitResult#TERMINATE} if the file or directory cannot be checked because of an {@link IOException}.
+     * The NIO filter returns {@link FileVisitResult#TERMINATE} if the file or directory cannot be checked because of an {@link IOException}, including
+     * directory iteration failures reported through {@link DirectoryIteratorException}.
      * </p>
      */
     public static final IOFileFilter NOT_EMPTY = new NotFileFilter(EMPTY) {
@@ -111,7 +113,12 @@ public class EmptyFileFilter extends AbstractFileFilter implements Serializable 
             return true;
         }
         if (Files.isDirectory(file)) {
-            return PathUtils.isEmptyDirectory(file);
+            try {
+                return PathUtils.isEmptyDirectory(file);
+            } catch (final DirectoryIteratorException e) {
+                // Let get() handle directory iteration failures like other I/O errors.
+                throw e.getCause();
+            }
         }
         return Files.size(file) == 0;
     }
@@ -142,6 +149,10 @@ public class EmptyFileFilter extends AbstractFileFilter implements Serializable 
 
     /**
      * Tests to see if the file is empty.
+     *
+     * <p>
+     * Directory iteration failures are handled using the underlying {@link IOException} from {@link DirectoryIteratorException}.
+     * </p>
      *
      * @param file The file or directory to check.
      * @param attributes The path's basic attributes (may be null).
