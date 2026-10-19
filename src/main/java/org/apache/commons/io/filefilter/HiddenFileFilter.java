@@ -83,8 +83,22 @@ public class HiddenFileFilter extends AbstractFileFilter implements Serializable
 
     private static final long serialVersionUID = 8930842316112759062L;
 
-    /** Singleton instance of <em>visible</em> filter */
-    public static final IOFileFilter VISIBLE = HIDDEN.negate();
+    /**
+     * Singleton instance of the <em>visible</em> filter.
+     *
+     * <p>The NIO filter returns {@link FileVisitResult#TERMINATE} if the hidden status cannot be determined because of an
+     * {@link java.io.IOException}.</p>
+     */
+    public static final IOFileFilter VISIBLE = new NotFileFilter(HIDDEN) {
+
+        private static final long serialVersionUID = 1L;
+
+        @Override
+        public FileVisitResult accept(final Path file, final BasicFileAttributes attributes) {
+            // Negate the predicate before handling an I/O error, so an error remains a rejection.
+            return get(() -> toFileVisitResult(file != null && !Files.isHidden(file)));
+        }
+    };
 
     /**
      * Restrictive constructor.
@@ -109,7 +123,7 @@ public class HiddenFileFilter extends AbstractFileFilter implements Serializable
      *
      * @param file       The File to check.
      * @param attributes The path's basic attributes (may be null).
-     * @return {@code true} if the file is <em>hidden</em>, otherwise {@code false}.
+     * @return {@link FileVisitResult#CONTINUE} if the path is null or hidden, otherwise {@link FileVisitResult#TERMINATE}, including on an I/O error.
      * @since 2.9.0
      */
     @Override
