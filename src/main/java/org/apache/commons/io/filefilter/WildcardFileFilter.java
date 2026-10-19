@@ -18,6 +18,7 @@ package org.apache.commons.io.filefilter;
 
 import java.io.File;
 import java.io.Serializable;
+import java.nio.file.FileSystems;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
@@ -285,6 +286,10 @@ public class WildcardFileFilter extends AbstractFileFilter implements Serializab
 
     /**
      * Tests to see if the file name matches one of the wildcards.
+     * <p>
+     * Paths in the default file system with a file name are tested through {@link #accept(File)} to honor subclass overrides.
+     * Other paths are matched by file name without converting to a {@link File}.
+     * </p>
      *
      * @param path The file to check.
      * @param attributes The path's basic attributes (may be null).
@@ -293,6 +298,9 @@ public class WildcardFileFilter extends AbstractFileFilter implements Serializab
      */
     @Override
     public FileVisitResult accept(final Path path, final BasicFileAttributes attributes) {
+        if (path != null && path.getFileName() != null && path.getFileSystem() == FileSystems.getDefault()) {
+            return toFileVisitResult(accept(path.toFile()));
+        }
         return toFileVisitResult(accept(PathUtils.getFileNameString(path)));
     }
 
