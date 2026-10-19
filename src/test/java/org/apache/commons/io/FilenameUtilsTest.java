@@ -37,6 +37,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 /**
  * Tests {@link FilenameUtils}.
@@ -127,6 +129,22 @@ class FilenameUtilsTest {
         assertEquals("~user" + SEP + "c" + SEP + "d", FilenameUtils.concat("a/b/", "~user/c/d"));
         assertEquals("~" + SEP, FilenameUtils.concat("a/b/", "~"));
         assertEquals("~user" + SEP, FilenameUtils.concat("a/b/", "~user"));
+    }
+
+    @Test
+    void testConcatDoesNotEnforceContainment() {
+        assertEquals(0, FilenameUtils.getPrefixLength("../outside"));
+        assertEquals(SEP + "outside", FilenameUtils.concat("/base", "../outside"));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = { "//server/share/x", "\\\\server\\share\\x", "\\/server/share/x", "/\\server\\share\\x", "\\\\server/share\\x" })
+    void testConcatUncSeparators(final String fileName) {
+        final String expected = SEP + SEP + "server" + SEP + "share" + SEP + "x";
+        assertEquals(9, FilenameUtils.getPrefixLength(fileName), fileName);
+        assertEquals(expected, FilenameUtils.concat("/base", fileName), fileName);
+        assertEquals("//server/share/x", FilenameUtils.normalize(fileName, true), fileName);
+        assertEquals("\\\\server\\share\\x", FilenameUtils.normalize(fileName, false), fileName);
     }
 
     @Test
