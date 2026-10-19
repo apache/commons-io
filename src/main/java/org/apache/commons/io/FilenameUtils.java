@@ -18,11 +18,9 @@
 package org.apache.commons.io;
 
 import java.io.File;
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Deque;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -1542,6 +1540,10 @@ public class FilenameUtils {
      * work properly at present in match strings.
      * </p>
      *
+     * <p>
+     * Matching uses O(nm) time in the worst case and O(m) temporary space, where n is the file name length and m is the wildcard matcher length.
+     * </p>
+     *
      * @param fileName        The file name to match on, may be null.
      * @param wildcardMatcher The wildcard string to match against, may be null.
      * @param ioCase          what case sensitivity rule to use, null means case-sensitive.
@@ -1556,64 +1558,60 @@ public class FilenameUtils {
             return false;
         }
         ioCase = IOCase.value(ioCase, IOCase.SENSITIVE);
-        final String[] wcs = splitOnTokens(wildcardMatcher);
-        boolean anyChars = false;
-        int textIdx = 0;
-        int wcsIdx = 0;
-        final Deque<int[]> backtrack = new ArrayDeque<>(wcs.length);
-        // loop around a backtrack stack, to handle complex * matching
-        do {
-            if (!backtrack.isEmpty()) {
-                final int[] array = backtrack.pop();
-                wcsIdx = array[0];
-                textIdx = array[1];
-                anyChars = true;
-            }
-            // loop whilst tokens and text left to process
-            while (wcsIdx < wcs.length) {
-                if (wcs[wcsIdx].equals("?")) {
-                    // ? so move to next text char
-                    textIdx++;
-                    if (textIdx > fileName.length()) {
-                        break;
+        if (wildcardMatcher.indexOf('*') == NOT_FOUND && wildcardMatcher.indexOf('?') == NOT_FOUND) {
+            return ioCase.checkEquals(fileName, wildcardMatcher);
+        }
+        final String[] tokens = splitOnTokens(wildcardMatcher);
+        int textIndex = 0;
+        int tokenIndex = 0;
+        // Once a later star is reached, it can absorb every later starting position for the
+        // remaining suffix. Retrying earlier stars would only repeat work already covered by this star.
+        int starTokenIndex = NOT_FOUND;
+        int starTextIndex = NOT_FOUND;
+        while (tokenIndex < tokens.length || textIndex < fileName.length()) {
+            if (tokenIndex < tokens.length) {
+                final String token = tokens[tokenIndex];
+                if ("*".equals(token)) {
+                    if (tokenIndex == tokens.length - 1) {
+                        return true;
                     }
-                    anyChars = false;
-                } else if (wcs[wcsIdx].equals("*")) {
-                    // set any chars status
-                    anyChars = true;
-                    if (wcsIdx == wcs.length - 1) {
-                        textIdx = fileName.length();
+                    // Historically, a star immediately before a question mark consumes no characters.
+                    if (!"?".equals(tokens[tokenIndex + 1])) {
+                        starTokenIndex = tokenIndex + 1;
+                        starTextIndex = textIndex;
                     }
-                } else {
-                    // matching text token
-                    if (anyChars) {
-                        // any chars then try to locate text token
-                        textIdx = ioCase.checkIndexOf(fileName, textIdx, wcs[wcsIdx]);
-                        if (textIdx == NOT_FOUND) {
-                            // token not found
-                            break;
-                        }
-                        final int repeat = ioCase.checkIndexOf(fileName, textIdx + 1, wcs[wcsIdx]);
-                        if (repeat >= 0) {
-                            backtrack.push(new int[] { wcsIdx, repeat });
-                        }
-                    } else if (!ioCase.checkRegionMatches(fileName, textIdx, wcs[wcsIdx])) {
-                        // matching from current position
-                        // couldn't match token
-                        break;
-                    }
-                    // matched text token, move text index to end of matched token
-                    textIdx += wcs[wcsIdx].length();
-                    anyChars = false;
+                    tokenIndex++;
+                    continue;
                 }
-                wcsIdx++;
+                if ("?".equals(token)) {
+                    if (textIndex < fileName.length()) {
+                        textIndex++;
+                        tokenIndex++;
+                        continue;
+                    }
+                } else if (tokenIndex == starTokenIndex) {
+                    // Search directly after the most recent star, rather than retrying each character in the outer loop.
+                    textIndex = ioCase.checkIndexOf(fileName, textIndex, token);
+                    if (textIndex == NOT_FOUND) {
+                        return false;
+                    }
+                    starTextIndex = textIndex;
+                    textIndex += token.length();
+                    tokenIndex++;
+                    continue;
+                } else if (ioCase.checkRegionMatches(fileName, textIndex, token)) {
+                    textIndex += token.length();
+                    tokenIndex++;
+                    continue;
+                }
             }
-            // full match
-            if (wcsIdx == wcs.length && textIdx == fileName.length()) {
-                return true;
+            if (starTokenIndex == NOT_FOUND || starTextIndex == fileName.length()) {
+                return false;
             }
-        } while (!backtrack.isEmpty());
-        return false;
+            textIndex = ++starTextIndex;
+            tokenIndex = starTokenIndex;
+        }
+        return true;
     }
 
     /**
