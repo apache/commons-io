@@ -17,14 +17,16 @@
 package org.apache.commons.io.filefilter;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.Serializable;
+import java.nio.file.DirectoryIteratorException;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
-import java.util.stream.Stream;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.file.PathUtils;
 
 /**
  * This filter accepts files or directories that are empty.
@@ -85,10 +87,41 @@ public class EmptyFileFilter extends AbstractFileFilter implements Serializable 
     /** Singleton instance of <em>empty</em> filter */
     public static final IOFileFilter EMPTY = new EmptyFileFilter();
 
-    /** Singleton instance of <em>not-empty</em> filter */
-    public static final IOFileFilter NOT_EMPTY = EMPTY.negate();
+    /**
+     * Singleton instance of the <em>not-empty</em> filter.
+     *
+     * <p>
+     * The NIO filter returns {@link FileVisitResult#TERMINATE} if the file or directory cannot be checked because of an {@link IOException}, including
+     * directory iteration failures reported through {@link DirectoryIteratorException}.
+     * </p>
+     */
+    public static final IOFileFilter NOT_EMPTY = new NotFileFilter(EMPTY) {
+
+        private static final long serialVersionUID = 1L;
+
+        @Override
+        public FileVisitResult accept(final Path file, final BasicFileAttributes attributes) {
+            // Negate the predicate before handling an I/O error, so an error remains a rejection.
+            return get(() -> toFileVisitResult(!isEmpty(file)));
+        }
+    };
 
     private static final long serialVersionUID = 3631422087512832211L;
+
+    private static boolean isEmpty(final Path file) throws IOException {
+        if (file == null) {
+            return true;
+        }
+        if (Files.isDirectory(file)) {
+            try {
+                return PathUtils.isEmptyDirectory(file);
+            } catch (final DirectoryIteratorException e) {
+                // Let get() handle directory iteration failures like other I/O errors.
+                throw e.getCause();
+            }
+        }
+        return Files.size(file) == 0;
+    }
 
     /**
      * Restrictive constructor.
@@ -117,24 +150,18 @@ public class EmptyFileFilter extends AbstractFileFilter implements Serializable 
     /**
      * Tests to see if the file is empty.
      *
+     * <p>
+     * Directory iteration failures are handled using the underlying {@link IOException} from {@link DirectoryIteratorException}.
+     * </p>
+     *
      * @param file The file or directory to check.
      * @param attributes The path's basic attributes (may be null).
-     * @return {@code true} if the file or directory is <em>empty</em>, otherwise {@code false}.
+     * @return {@link FileVisitResult#CONTINUE} if the path is null or empty, otherwise {@link FileVisitResult#TERMINATE}, including on an I/O error.
      * @since 2.9.0
      */
     @Override
     public FileVisitResult accept(final Path file, final BasicFileAttributes attributes) {
-        if (file == null) {
-            return toFileVisitResult(true);
-        }
-        return get(() -> {
-            if (Files.isDirectory(file)) {
-                try (Stream<Path> stream = Files.list(file)) {
-                    return toFileVisitResult(!stream.findFirst().isPresent());
-                }
-            }
-            return toFileVisitResult(Files.size(file) == 0);
-        });
+        return get(() -> toFileVisitResult(isEmpty(file)));
     }
 
 }
