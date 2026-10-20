@@ -341,6 +341,18 @@ public enum FileSystem {
     }
 
     /**
+     * Tests whether the given name is the current-directory name {@code "."} or the parent-directory name {@code ".."}; neither is a legal name for a new
+     * file on any file system, and passing {@code ".."} through a file name gate enables path traversal.
+     *
+     * @param candidate the name to test, not null.
+     * @return {@code true} if the name is {@code "."} or {@code ".."}.
+     */
+    private static boolean isDotName(final CharSequence candidate) {
+        final int len = candidate.length();
+        return (len == 1 || len == 2) && candidate.chars().allMatch(c -> c == '.');
+    }
+
+    /**
      * Decides if the operating system matches.
      * <p>
      * This method is package private instead of private to support unit test invocation.
@@ -370,7 +382,6 @@ public enum FileSystem {
     private static String replace(final String path, final char oldChar, final char newChar) {
         return path == null ? null : path.replace(oldChar, newChar);
     }
-
     /**
      * Truncates a string respecting grapheme cluster boundaries.
      *
@@ -414,6 +425,7 @@ public enum FileSystem {
     private final int maxFileNameLength;
     private final int maxPathLength;
     private final String[] reservedFileNames;
+
     private final boolean reservedFileNamesExtensions;
 
     private final boolean supportsDriveLetter;
@@ -579,6 +591,21 @@ public enum FileSystem {
     }
 
     /**
+     * Tests whether the given name ends in a dot or a space on a file system that silently strips them (Windows), which would alias the name to a different
+     * string than the one checked.
+     *
+     * @param candidate the name to test, not null.
+     * @return {@code true} if the name has a trailing dot or space this file system would strip.
+     */
+    private boolean hasTrailingDotOrSpace(final CharSequence candidate) {
+        if (!trimsTrailingDotsAndSpaces || candidate.length() == 0) {
+            return false;
+        }
+        final char last = candidate.charAt(candidate.length() - 1);
+        return last == '.' || last == ' ';
+    }
+
+    /**
      * Tests whether this file system preserves case.
      *
      * @return Whether this file system preserves case.
@@ -654,33 +681,6 @@ public enum FileSystem {
                 && !isReservedFileName(candidate)
                 && !hasTrailingDotOrSpace(candidate)
                 && candidate.chars().noneMatch(this::isIllegalFileNameChar);
-    }
-
-    /**
-     * Tests whether the given name is the current-directory name {@code "."} or the parent-directory name {@code ".."}; neither is a legal name for a new
-     * file on any file system, and passing {@code ".."} through a file name gate enables path traversal.
-     *
-     * @param candidate the name to test, not null.
-     * @return {@code true} if the name is {@code "."} or {@code ".."}.
-     */
-    private static boolean isDotName(final CharSequence candidate) {
-        final int len = candidate.length();
-        return (len == 1 || len == 2) && candidate.chars().allMatch(c -> c == '.');
-    }
-
-    /**
-     * Tests whether the given name ends in a dot or a space on a file system that silently strips them (Windows), which would alias the name to a different
-     * string than the one checked.
-     *
-     * @param candidate the name to test, not null.
-     * @return {@code true} if the name has a trailing dot or space this file system would strip.
-     */
-    private boolean hasTrailingDotOrSpace(final CharSequence candidate) {
-        if (!trimsTrailingDotsAndSpaces || candidate.length() == 0) {
-            return false;
-        }
-        final char last = candidate.charAt(candidate.length() - 1);
-        return last == '.' || last == ' ';
     }
 
     /**
@@ -805,24 +805,6 @@ public enum FileSystem {
     }
 
     /**
-     * Strips trailing dots and spaces on file systems that silently strip them when creating a file (Windows); no-op on other file systems.
-     *
-     * @param name The name to trim, not null.
-     * @return The trimmed name.
-     */
-    private String trimTrailingDotsAndSpaces(final String name) {
-        if (!trimsTrailingDotsAndSpaces) {
-            return name;
-        }
-        int end = name.length();
-        while (end > 0 && (name.charAt(end - 1) == '.' || name.charAt(end - 1) == ' ')) {
-            end--;
-        }
-        return end == name.length() ? name : name.substring(0, end);
-    }
-
-
-    /**
      * Converts a candidate file name (without a path) to a legal file name.
      *
      * <p>
@@ -844,6 +826,24 @@ public enum FileSystem {
      */
     public String toLegalFileName(final String candidate, final char replacement) {
         return toLegalFileName(candidate, replacement, Charset.defaultCharset());
+    }
+
+
+    /**
+     * Strips trailing dots and spaces on file systems that silently strip them when creating a file (Windows); no-op on other file systems.
+     *
+     * @param name The name to trim, not null.
+     * @return The trimmed name.
+     */
+    private String trimTrailingDotsAndSpaces(final String name) {
+        if (!trimsTrailingDotsAndSpaces) {
+            return name;
+        }
+        int end = name.length();
+        while (end > 0 && (name.charAt(end - 1) == '.' || name.charAt(end - 1) == ' ')) {
+            end--;
+        }
+        return end == name.length() ? name : name.substring(0, end);
     }
 
 }

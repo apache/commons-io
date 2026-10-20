@@ -50,6 +50,15 @@ class WildcardFileFilterTest extends AbstractFilterTest {
     }
 
     @Test
+    void testStarQuestion() throws IOException {
+        final IOFileFilter filter = WildcardFileFilter.builder().setWildcards("log*?.txt").get();
+        assertFiltering(filter, new File("dir/logs.txt"), true);
+        assertFiltering(filter, new File("dir/logbook.txt"), true);
+        assertFiltering(filter, new File("dir/log.txt"), false);
+        assertFiltering(filter, new File("dir/logbook.TXT"), false);
+    }
+
+    @Test
     void testWildcard() throws IOException {
         IOFileFilter filter = new WildcardFileFilter("*.txt");
         assertFiltering(filter, new File("log.txt"), true);

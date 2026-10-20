@@ -101,6 +101,16 @@ public class ObjectStreamClassPredicate implements Predicate<ObjectStreamClass> 
      * The reject list takes precedence over the accept list.
      * </p>
      *
+     * <p>
+     * Matching is case-sensitive. The wildcard {@code *} matches zero or more characters and {@code ?} matches one character, including {@code '.'} in both
+     * cases. Unlike <a href="https://openjdk.org/jeps/290">JEP 290</a> serialization filter patterns, these patterns do not treat package boundaries specially:
+     * {@code com.example.*} matches classes in {@code com.example} and all its subpackages, and {@code **} is equivalent to {@code *}.
+     * </p>
+     *
+     * <p>
+     * Use {@link #accept(Pattern)} with a regular expression to match only classes directly in a package.
+     * </p>
+     *
      * @param patterns Wildcard file name patterns as defined by {@link org.apache.commons.io.FilenameUtils#wildcardMatch(String, String)
      *                 FilenameUtils.wildcardMatch}
      * @return {@code this} instance.
@@ -156,6 +166,16 @@ public class ObjectStreamClassPredicate implements Predicate<ObjectStreamClass> 
      * Rejects the wildcard specified classes for deserialization, even if they are otherwise accepted.
      * <p>
      * The reject list takes precedence over the accept list.
+     * </p>
+     *
+     * <p>
+     * Matching is case-sensitive. The wildcard {@code *} matches zero or more characters and {@code ?} matches one character, including {@code '.'} in both
+     * cases. Unlike <a href="https://openjdk.org/jeps/290">JEP 290</a> serialization filter patterns, these patterns do not treat package boundaries specially:
+     * {@code com.example.*} matches classes in {@code com.example} and all its subpackages, and {@code **} is equivalent to {@code *}.
+     * </p>
+     *
+     * <p>
+     * Use {@link #reject(Pattern)} with a regular expression to match only classes directly in a package.
      * </p>
      *
      * @param patterns Wildcard file name patterns as defined by {@link org.apache.commons.io.FilenameUtils#wildcardMatch(String, String)
