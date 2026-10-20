@@ -203,7 +203,7 @@ file comparators, endian transformation classes, and much more.
           <reuseForks>false</reuseForks>
           <!-- Limit memory size see IO-161 -->
           <!-- Mockito inline may need -XX:+EnableDynamicAgentLoading -->
-          <argLine>@{argLine} -Xmx25M ${EnableDynamicAgentLoading}</argLine>
+          <argLine>@{argLine} -Xmx25M ${EnableDynamicAgentLoading} --add-opens=java.base/sun.nio.ch=ALL-UNNAMED --add-opens=java.base/jdk.internal.ref=ALL-UNNAMED</argLine>
         </configuration>
       </plugin>
       <plugin>
