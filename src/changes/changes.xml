@@ -72,6 +72,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action type="fix" dev="ggregory" due-to="Gary Gregory">Relax QueueInputStream timeout test for busy CI hosts.</action>
       <action type="fix" dev="ggregory" due-to="Claude Security, Gary Gregory">Fix FileSystem filename validation and sanitization (f005) (#890).</action>
       <action type="fix" dev="ggregory" due-to="Claude Security, Gary Gregory">Clarify FilenameUtils.concat() prefix and containment behavior (f006) (#891).</action>
+      <action type="fix" dev="ggregory" due-to="Claude Security, Gary Gregory">Bound wildcard matching backtracking and memory use (f008) (#892).</action>
+      <action type="fix" dev="ggregory" due-to="Claude Security, Gary Gregory">Fix NIO error handling in visible and non-empty file filters (f009) (#894).</action>
+      <action type="fix" dev="ggregory" due-to="Claude Security, Gary Gregory">Fix directory deletion through Windows junctions (f010) (#895).</action>
       <!-- ADD -->
       <action type="add" dev="ggregory" due-to="Gary Gregory">Add IOConsumer.accept(IOConsumer, T) (#846).</action>
       <action type="add" dev="ggregory" due-to="Gary Gregory">Add UnsynchronizedBufferedReader.unwrap() (#850).</action>

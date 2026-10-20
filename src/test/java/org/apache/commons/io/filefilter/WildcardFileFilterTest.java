@@ -20,6 +20,7 @@ package org.apache.commons.io.filefilter;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTimeoutPreemptively;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
@@ -27,11 +28,13 @@ import java.io.IOException;
 import java.nio.file.FileSystem;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Path;
+import java.time.Duration;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
 import org.apache.commons.io.IOCase;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
 
 import com.google.common.jimfs.Jimfs;
@@ -68,6 +71,18 @@ class WildcardFileFilterTest extends AbstractFilterTest {
         final IOFileFilter filter = WildcardFileFilter.builder().setWildcards("*").get();
         assertFiltering(filter, (Path) null, false);
         assertFiltering(filter, temporaryFolder.toPath().toAbsolutePath().getRoot(), false);
+    }
+
+    @Test
+    void testRepeatedWildcards() {
+        final String name = StringUtils.repeat("ab", 60) + "ac";
+        final WildcardFileFilter filter = WildcardFileFilter.builder().setWildcards(StringUtils.repeat("*ab", 30) + "*ac*ad").get();
+        assertTimeoutPreemptively(Duration.ofSeconds(10), () -> {
+            assertFalse(filter.accept(new File(name)));
+            assertFalse(filter.accept(null, name));
+            assertEquals(FileVisitResult.TERMINATE, filter.accept(new File(name).toPath(), null));
+            assertTrue(filter.accept(new File(name + "ad")));
+        });
     }
 
     @Test
