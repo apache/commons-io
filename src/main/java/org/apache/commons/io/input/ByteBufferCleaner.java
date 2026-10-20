@@ -39,22 +39,22 @@ final class ByteBufferCleaner {
 
         void clean(ByteBuffer buffer) throws ReflectiveOperationException;
     }
-    
+
     private static final class RuntimeDependentCleaner implements Cleaner {
         private final Method cleanerMethod;
         private Method cleanMethod;
 
         private RuntimeDependentCleaner() throws SecurityException {
-        	try {
-	        	try { // for Java 8
-	        		cleanMethod = Class.forName("sun.misc.Cleaner").getMethod("clean");
-	        	} catch (final Exception e) { // for Java 9+
-	        		cleanMethod = Class.forName("jdk.internal.ref.Cleaner").getMethod("clean");
-	        	}
-	        	cleanerMethod = Class.forName("sun.nio.ch.DirectBuffer").getMethod("cleaner");
-        	} catch (final Exception e) {
-        		throw new IllegalStateException("Failed to create RuntimeDependentCleaner", e);
-        	}
+            try {
+                try { // for Java 8
+                    cleanMethod = Class.forName("sun.misc.Cleaner").getMethod("clean");
+                } catch (final Exception e) { // for Java 9+
+                    cleanMethod = Class.forName("jdk.internal.ref.Cleaner").getMethod("clean");
+                }
+                cleanerMethod = Class.forName("sun.nio.ch.DirectBuffer").getMethod("cleaner");
+            } catch (final Exception e) {
+                throw new IllegalStateException("Failed to create RuntimeDependentCleaner", e);
+            }
         }
 
         @Override
@@ -65,9 +65,9 @@ final class ByteBufferCleaner {
             }
         }
     }
-    
+
     private static final Cleaner CLEANER = new RuntimeDependentCleaner();
-    
+
     /**
      * Releases memory held by the given {@link ByteBuffer}.
      * <p>
