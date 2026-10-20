@@ -22,17 +22,22 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.attribute.BasicFileAttributes;
 
 import org.apache.commons.io.file.Counters.PathCounters;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 /**
  * Tests {@link DeletingPathVisitor}.
@@ -44,6 +49,19 @@ class DeletingPathVisitorTest extends AbstractTempDirTest {
     private void applyDeleteEmptyDirectory(final DeletingPathVisitor visitor) throws IOException {
         Files.walkFileTree(tempDirPath, visitor);
         assertCounts(1, 0, 0, visitor);
+    }
+
+    @ParameterizedTest
+    @ValueSource(booleans = {false, true})
+    void testDeleteDirectoryWithOtherAttributes(final boolean skip) throws IOException {
+        final Path directory = Files.createDirectory(tempDirPath.resolve("junction"));
+        final BasicFileAttributes attributes = mock(BasicFileAttributes.class);
+        when(attributes.isDirectory()).thenReturn(true);
+        when(attributes.isOther()).thenReturn(true);
+        final DeletingPathVisitor visitor = new DeletingPathVisitor(Counters.longPathCounters(), skip ? new String[] {"junction"} : new String[0]);
+        assertEquals(FileVisitResult.SKIP_SUBTREE, visitor.preVisitDirectory(directory, attributes));
+        assertEquals(skip, Files.exists(directory));
+        assertCounts(skip ? 0 : 1, 0, 0, visitor);
     }
 
     /**
