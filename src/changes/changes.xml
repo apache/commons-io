@@ -76,6 +76,7 @@ The <action> type attribute can be add,update,fix,remove.
       <action type="fix" dev="ggregory" due-to="Claude Security, Gary Gregory">Fix NIO error handling in visible and non-empty file filters (f009) (#894).</action>
       <action type="fix" dev="ggregory" due-to="Claude Security, Gary Gregory">Fix directory deletion through Windows junctions (f010) (#895).</action>
       <action type="fix" dev="ggregory" due-to="Claude Security, Gary Gregory">>Fix FilenameUtils wildcard matching for *? sequences. Affected patterns can now match more names, including in file filters and serialization accept and reject lists.</action>
+      <action type="fix" dev="ggregory" due-to="Claude Security, Gary Gregory">Fix *? matching in FilenameUtils.wildcardMatch() (f012) (#896).</action>
       <!-- ADD -->
       <action type="add" dev="ggregory" due-to="Gary Gregory">Add IOConsumer.accept(IOConsumer, T) (#846).</action>
       <action type="add" dev="ggregory" due-to="Gary Gregory">Add UnsynchronizedBufferedReader.unwrap() (#850).</action>
