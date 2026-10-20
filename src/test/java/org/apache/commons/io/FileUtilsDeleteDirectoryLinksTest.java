@@ -46,6 +46,7 @@ import org.junit.jupiter.api.condition.EnabledOnOs;
 import org.junit.jupiter.api.condition.OS;
 import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.MockedStatic;
 
@@ -125,13 +126,13 @@ class FileUtilsDeleteDirectoryLinksTest {
     }
 
     @ParameterizedTest
-    @ValueSource(booleans = { false, true })
-    void testDirectoryWithOtherAttributes(final boolean onExit) throws IOException {
+    @CsvSource({ "false, false", "false, true", "true, false", "true, true" })
+    void testDirectoryWithOtherAttributes(final boolean onExit, final boolean directoryAttribute) throws IOException {
         final Path directory = Files.createDirectory(tempDir.resolve("directory"));
         final File directoryFile = spy(directory.toFile());
         final Path sentinel = Files.write(directory.resolve("sentinel"), new byte[] { 1 });
         final BasicFileAttributes attributes = mock(BasicFileAttributes.class);
-        when(attributes.isDirectory()).thenReturn(true);
+        when(attributes.isDirectory()).thenReturn(directoryAttribute);
         when(attributes.isOther()).thenReturn(true);
         try (MockedStatic<Files> files = mockStatic(Files.class)) {
             files.when(() -> Files.readAttributes(directory, BasicFileAttributes.class, LinkOption.NOFOLLOW_LINKS)).thenReturn(attributes);

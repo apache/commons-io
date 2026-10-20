@@ -2075,15 +2075,16 @@ public class FileUtils {
     }
 
     /**
-     * Tests whether a file is a symbolic link or a directory with other file system attributes.
+     * Tests whether a file is a symbolic link or another link-like directory.
      *
      * <p>
-     * Attributes are read without following symbolic links. On Windows, junctions report both {@code isDirectory()} and {@code isOther()} as true. Requiring
-     * both attributes preserves the rejection of non-directory special files such as FIFOs.
+     * Attributes are read without following symbolic links. Windows junctions report {@code isOther()} as true, but their {@code isDirectory()} attribute
+     * depends on the JDK version. A separate {@link File#isDirectory()} check recognizes directory targets while preserving the rejection of non-directory
+     * special files such as FIFOs.
      * </p>
      *
      * @param file the file to test.
-     * @return true for a symbolic link, a directory with other attributes, or an entry that disappeared before its attributes could be read.
+     * @return true for a symbolic link, another link-like directory, or an entry that disappeared before its attributes could be read.
      * @throws IOException if the attributes cannot be read for a reason other than a missing entry.
      */
     private static boolean isLinkLikeDirectory(final File file) throws IOException {
@@ -2094,7 +2095,7 @@ public class FileUtils {
             // Skip enumeration if the entry disappeared. Immediate deletion will report the missing entry.
             return true;
         }
-        return attributes.isSymbolicLink() || attributes.isDirectory() && attributes.isOther();
+        return attributes.isSymbolicLink() || attributes.isOther() && file.isDirectory();
     }
 
     /**
