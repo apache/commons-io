@@ -148,6 +148,16 @@ class ValidatingObjectInputStreamTest extends AbstractCloseableListTest {
     }
 
     @Test
+    void testAcceptWildcardStarQuestionBuilder() throws Exception {
+        assertSerialization(addCloseable(newBuilder().accept("org.*?MockSerializedClass").get()));
+    }
+
+    @Test
+    void testAcceptWildcardStarQuestionInstance() throws Exception {
+        assertSerialization(addCloseable(newFixture()).accept("org.*?MockSerializedClass"));
+    }
+
+    @Test
     void testBuildDefault() throws Exception {
         final byte[] serialized = SerializationUtils.serialize("");
         try (InputStream is = newBuilder().setInputStream(new ByteArrayInputStream(serialized)).get()) {
@@ -433,6 +443,18 @@ class ValidatingObjectInputStreamTest extends AbstractCloseableListTest {
     @Test
     void testRejectWildcardInstance() {
         assertThrows(InvalidClassException.class, () -> assertSerialization(addCloseable(newFixture()).accept(MockSerializedClass.class).reject("org.*")));
+    }
+
+    @Test
+    void testRejectWildcardStarQuestionBuilder() {
+        assertThrows(InvalidClassException.class,
+                () -> assertSerialization(addCloseable(newBuilder().accept("*").reject("org.*?MockSerializedClass").get())));
+    }
+
+    @Test
+    void testRejectWildcardStarQuestionInstance() {
+        assertThrows(InvalidClassException.class,
+                () -> assertSerialization(addCloseable(newFixture()).accept("*").reject("org.*?MockSerializedClass")));
     }
 
     @Test

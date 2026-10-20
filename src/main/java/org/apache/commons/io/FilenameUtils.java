@@ -1521,7 +1521,7 @@ public class FilenameUtils {
      * wildcardMatch("c.txt", "*.????")     --&gt; false
      * </pre>
      * <p>
-     * The sequence "*?" does not work properly at present in match strings.
+     * The sequence {@code *?} matches one or more characters.
      * </p>
      *
      * @param fileName        The file name to match on, may be null.
@@ -1536,8 +1536,8 @@ public class FilenameUtils {
     /**
      * Checks a fileName to see if it matches the specified wildcard matcher allowing control over case-sensitivity.
      * <p>
-     * The wildcard matcher uses the characters '?' and '*' to represent a single or multiple (zero or more) wildcard characters. The sequence "*?" does not
-     * work properly at present in match strings.
+     * The wildcard matcher uses the characters '?' and '*' to represent a single or multiple (zero or more) wildcard characters. The sequence {@code *?}
+     * matches one or more characters.
      * </p>
      *
      * <p>
@@ -1575,11 +1575,8 @@ public class FilenameUtils {
                     if (tokenIndex == tokens.length - 1) {
                         return true;
                     }
-                    // Historically, a star immediately before a question mark consumes no characters.
-                    if (!"?".equals(tokens[tokenIndex + 1])) {
-                        starTokenIndex = tokenIndex + 1;
-                        starTextIndex = textIndex;
-                    }
+                    starTokenIndex = tokenIndex + 1;
+                    starTextIndex = textIndex;
                     tokenIndex++;
                     continue;
                 }
@@ -1629,7 +1626,7 @@ public class FilenameUtils {
      * wildcardMatch("c.txt", "*.????")     --&gt; false
      * </pre>
      * <p>
-     * The sequence "*?" does not work properly at present in match strings.
+     * The sequence {@code *?} matches one or more characters.
      * </p>
      *
      * @param fileName        The file name to match on.
