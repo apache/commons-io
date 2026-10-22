@@ -131,7 +131,7 @@ public final class ThrottledInputStream extends CountingInputStream {
          * @param value The maximum bytes.
          * @param chronoUnit A duration scale goal.
          * @return {@code this} instance.
-         * @throws IllegalArgumentException Thrown if maxBytesPerSecond &lt;= 0.
+         * @throws IllegalArgumentException Thrown if {@code value <= 0} or the unit is shorter than 1 millisecond.
          * @since 2.19.0
          */
         public Builder setMaxBytes(final long value, final ChronoUnit chronoUnit) {
@@ -142,23 +142,28 @@ public final class ThrottledInputStream extends CountingInputStream {
         /**
          * Sets the maximum bytes per duration.
          * <p>
-         * For example, to throttle reading to 100K per second, use:
+         * The duration is truncated to whole milliseconds. The rate is computed as {@code value * 1000.0 / duration.toMillis()} bytes per second. For example,
+         * to throttle reading to 100K per second, use:
          * </p>
          * <pre>
          * builder.setMaxBytes(100_000, Duration.ofSeconds(1))
          * </pre>
          * <p>
-         * To test idle timeouts for example, use 1 byte per minute, 1 byte per 30 seconds, and so on.
+         * To test idle timeouts for example, use 1 byte per minute (a rate of 1/60 bytes per second), 1 byte per 30 seconds, and so on.
          * </p>
          *
          * @param value The maximum bytes.
          * @param duration A duration goal.
          * @return {@code this} instance.
-         * @throws IllegalArgumentException Thrown if maxBytesPerSecond &lt;= 0.
+         * @throws IllegalArgumentException Thrown if {@code value <= 0} or the duration is shorter than 1 millisecond.
          */
         // Consider making public in the future
         Builder setMaxBytes(final long value, final Duration duration) {
-            setMaxBytesPerSecond((double) Objects.requireNonNull(duration, "duration").toMillis() / 1_000 * value);
+            final long millis = Objects.requireNonNull(duration, "duration").toMillis();
+            if (millis <= 0) {
+                throw new IllegalArgumentException("Duration " + duration + " must be at least 1 millisecond.");
+            }
+            setMaxBytesPerSecond(value * 1_000d / millis);
             return asThis();
         }
 
