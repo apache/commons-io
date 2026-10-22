@@ -79,6 +79,7 @@ The <action> type attribute can be add,update,fix,remove.
       <action type="fix" dev="ggregory" due-to="Claude Security, Gary Gregory">Fix *? matching in FilenameUtils.wildcardMatch() (f012) (#896).</action>
       <action type="fix" dev="ggregory" due-to="Claude Security, Gary Gregory">Document FileUtils URL decoding and containment checks (f011).</action>
       <action type="fix" dev="ggregory" due-to="Claude Security, Gary Gregory">FileUtils.toFile(URL) and toFiles(URL...) now reject decoded file paths containing the NUL character (f011).</action>
+      <action type="fix" dev="ggregory" due-to="Claude Security, Gary Gregory">Avoid quadratic processing in ReversedLinesFileReader (f013) (#901).</action>
       <!-- ADD -->
       <action type="add" dev="ggregory" due-to="Gary Gregory">Add IOConsumer.accept(IOConsumer, T) (#846).</action>
       <action type="add" dev="ggregory" due-to="Gary Gregory">Add UnsynchronizedBufferedReader.unwrap() (#850).</action>
