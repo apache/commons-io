@@ -707,10 +707,12 @@ public final class PathUtils {
         }
         final Path parent = getParent(file);
         PosixFileAttributes posixFileAttributes = null;
+        boolean readOnlyCleared = false;
         try {
             if (overrideReadOnly(deleteOptions)) {
                 posixFileAttributes = readPosixFileAttributes(parent, linkOptions);
                 setReadOnly(file, false, linkOptions);
+                readOnlyCleared = true;
             }
             // Read size _after_ having read/execute access on POSIX.
             exists = exists(file, linkOptions);
@@ -720,6 +722,9 @@ public final class PathUtils {
                 pathCounts.getByteCounter().add(size);
             }
         } finally {
+            if (readOnlyCleared && exists(file, linkOptions)) {
+                setReadOnly(file, true, linkOptions);
+            }
             if (posixFileAttributes != null) {
                 Files.setPosixFilePermissions(parent, posixFileAttributes.permissions());
             }
