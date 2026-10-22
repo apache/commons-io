@@ -1420,10 +1420,9 @@ public class FilenameUtils {
      * @return The input.
      * @throws IllegalArgumentException if path contains the null character ({@code U+0000}).
      */
-    private static String requireNonNullChars(final String path) {
+    static String requireNonNullChars(final String path) {
         if (path.indexOf(0) >= 0) {
-            throw new IllegalArgumentException(
-                    "Null character present in file/path name; there are no legitimate use cases, but several injection attacks may use it");
+            throw new IllegalArgumentException("Null character present in file path");
         }
         return path;
     }
