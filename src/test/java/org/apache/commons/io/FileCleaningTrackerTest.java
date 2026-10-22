@@ -27,12 +27,14 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.lang.ref.Reference;
 import java.lang.ref.ReferenceQueue;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collections;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.io.file.AbstractTempDirTest;
 import org.apache.commons.io.test.TestUtils;
@@ -45,38 +47,64 @@ import org.junit.jupiter.api.Test;
  */
 class FileCleaningTrackerTest extends AbstractTempDirTest {
 
+    private static final long TIMEOUT_MILLIS = 10_000;
+
+    private final CountDownLatch deletionComplete = new CountDownLatch(1);
+
     private File testFile;
     private Path testPath;
 
     private FileCleaningTracker fileCleaningTracker;
 
+    private void awaitDeletion() throws InterruptedException {
+        assertTrue(deletionComplete.await(TIMEOUT_MILLIS, TimeUnit.MILLISECONDS), "Timed out waiting for file deletion");
+    }
+
+    private void awaitReaperTermination() throws InterruptedException {
+        if (fileCleaningTracker.reaper != null) {
+            fileCleaningTracker.reaper.join(TIMEOUT_MILLIS);
+            assertFalse(fileCleaningTracker.reaper.isAlive(), "Timed out waiting for the reaper to terminate");
+        }
+    }
+
     RandomAccessFile createRandomAccessFile() throws FileNotFoundException {
         return RandomAccessFileMode.READ_WRITE.create(testFile);
     }
 
-    private void gcFinalize() {
-        System.gc();
-        System.runFinalization();
+    private FileDeleteStrategy deletionStrategy(final FileDeleteStrategy delegate) {
+        return new FileDeleteStrategy("Notify " + delegate) {
+            @Override
+            protected boolean doDelete(final File file) throws IOException {
+                try {
+                    return delegate.doDelete(file);
+                } finally {
+                    deletionComplete.countDown();
+                }
+            }
+        };
+    }
+
+    private void enqueueTrackers() {
+        // Exercise the reaper without depending on garbage collection.
+        final Reference<?>[] references;
+        synchronized (fileCleaningTracker.trackers) {
+            references = fileCleaningTracker.trackers.toArray(new Reference<?>[0]);
+        }
+        for (final Reference<?> reference : references) {
+            reference.clear();
+            reference.enqueue();
+        }
+    }
+
+    private void finishTracking() throws InterruptedException {
+        // Joining also waits for deletion and failure recording when testing the default and null strategies.
+        enqueueTrackers();
+        fileCleaningTracker.exitWhenFinished();
+        awaitReaperTermination();
     }
 
     protected FileCleaningTracker newInstance() {
         return new FileCleaningTracker();
-    }
-
-    private void pauseForDeleteToComplete(File file) {
-        int count = 0;
-        while (file.exists() && count++ < 40) {
-            TestUtils.sleepQuietly(500L);
-            file = new File(file.getPath());
-        }
-    }
-
-    private void pauseForDeleteToComplete(Path file) {
-        int count = 0;
-        while (Files.exists(file) && count++ < 40) {
-            TestUtils.sleepQuietly(500L);
-            file = Paths.get(file.toAbsolutePath().toString());
-        }
     }
 
     @BeforeEach
@@ -94,7 +122,7 @@ class FileCleaningTrackerTest extends AbstractTempDirTest {
     }
 
     @AfterEach
-    public void tearDown() {
+    public void tearDown() throws InterruptedException {
         // reset file cleaner class, so as not to break other tests
         /**
          * The following block of code can possibly be removed when the deprecated {@link FileCleaner} is gone. The question is, whether we want to support
@@ -102,9 +130,7 @@ class FileCleaningTrackerTest extends AbstractTempDirTest {
          */
         {
             if (fileCleaningTracker != null) {
-                if (fileCleaningTracker.reaper != null) {
-                    fileCleaningTracker.reaper.interrupt();
-                }
+                finishTracking();
                 fileCleaningTracker.refQueue = new ReferenceQueue<>();
                 fileCleaningTracker.trackers.clear();
                 fileCleaningTracker.deleteFailures.clear();
@@ -165,13 +191,13 @@ class FileCleaningTrackerTest extends AbstractTempDirTest {
 
         Object obj = new Object();
         assertEquals(0, fileCleaningTracker.getTrackCount());
-        fileCleaningTracker.track(tempDirFile, obj, FileDeleteStrategy.FORCE);
+        fileCleaningTracker.track(tempDirFile, obj, deletionStrategy(FileDeleteStrategy.FORCE));
         assertEquals(1, fileCleaningTracker.getTrackCount());
 
         obj = null;
 
-        waitUntilTrackCount0();
-        pauseForDeleteToComplete(testFile.getParentFile());
+        enqueueTrackers();
+        awaitDeletion();
 
         assertEquals(0, fileCleaningTracker.getTrackCount());
         assertFalse(new File(testFile.getPath()).exists(), showFailures());
@@ -192,13 +218,13 @@ class FileCleaningTrackerTest extends AbstractTempDirTest {
 
         Object obj = new Object();
         assertEquals(0, fileCleaningTracker.getTrackCount());
-        fileCleaningTracker.track(tempDirPath, obj, FileDeleteStrategy.FORCE);
+        fileCleaningTracker.track(tempDirPath, obj, deletionStrategy(FileDeleteStrategy.FORCE));
         assertEquals(1, fileCleaningTracker.getTrackCount());
 
         obj = null;
 
-        waitUntilTrackCount0();
-        pauseForDeleteToComplete(testPath.getParent());
+        enqueueTrackers();
+        awaitDeletion();
 
         assertEquals(0, fileCleaningTracker.getTrackCount());
         assertFalse(Files.exists(testPath), showFailures());
@@ -218,9 +244,10 @@ class FileCleaningTrackerTest extends AbstractTempDirTest {
 
         obj = null;
 
-        waitUntilTrackCount0();
+        finishTracking();
 
         assertEquals(0, fileCleaningTracker.getTrackCount());
+        assertEquals(Collections.singletonList(tempDirFile.getPath()), fileCleaningTracker.getDeleteFailures());
         assertTrue(testFile.exists());  // not deleted, as dir not empty
         assertTrue(testFile.getParentFile().exists());  // not deleted, as dir not empty
     }
@@ -238,9 +265,10 @@ class FileCleaningTrackerTest extends AbstractTempDirTest {
 
         obj = null;
 
-        waitUntilTrackCount0();
+        finishTracking();
 
         assertEquals(0, fileCleaningTracker.getTrackCount());
+        assertEquals(Collections.singletonList(tempDirFile.getPath()), fileCleaningTracker.getDeleteFailures());
         assertTrue(testFile.exists());  // not deleted, as dir not empty
         assertTrue(testFile.getParentFile().exists());  // not deleted, as dir not empty
     }
@@ -258,9 +286,10 @@ class FileCleaningTrackerTest extends AbstractTempDirTest {
 
         obj = null;
 
-        waitUntilTrackCount0();
+        finishTracking();
 
         assertEquals(0, fileCleaningTracker.getTrackCount());
+        assertEquals(Collections.singletonList(tempDirFile.getPath()), fileCleaningTracker.getDeleteFailures());
         assertTrue(Files.exists(testPath));  // not deleted, as dir not empty
         assertTrue(Files.exists(testPath.getParent()));  // not deleted, as dir not empty
     }
@@ -305,8 +334,8 @@ class FileCleaningTrackerTest extends AbstractTempDirTest {
         testFile = null;
         raf = null;
 
-        waitUntilTrackCount0();
-        pauseForDeleteToComplete(new File(path));
+        enqueueTrackers();
+        awaitReaperTermination();
 
         assertEquals(0, fileCleaningTracker.getTrackCount(), "10-Track Count");
         assertFalse(new File(path).exists(), "11-testFile exists " + showFailures());
@@ -323,7 +352,7 @@ class FileCleaningTrackerTest extends AbstractTempDirTest {
         assertTrue(testFile.exists());
 
         assertEquals(0, fileCleaningTracker.getTrackCount());
-        fileCleaningTracker.track(path, raf);
+        fileCleaningTracker.track(path, raf, deletionStrategy(FileDeleteStrategy.NORMAL));
         assertEquals(1, fileCleaningTracker.getTrackCount());
         assertFalse(fileCleaningTracker.exitWhenFinished);
         assertTrue(fileCleaningTracker.reaper.isAlive());
@@ -332,8 +361,8 @@ class FileCleaningTrackerTest extends AbstractTempDirTest {
         testFile = null;
         raf = null;
 
-        waitUntilTrackCount0();
-        pauseForDeleteToComplete(new File(path));
+        enqueueTrackers();
+        awaitDeletion();
 
         assertEquals(0, fileCleaningTracker.getTrackCount());
         assertFalse(new File(path).exists(), showFailures());
@@ -342,9 +371,7 @@ class FileCleaningTrackerTest extends AbstractTempDirTest {
 
         assertFalse(fileCleaningTracker.exitWhenFinished);
         fileCleaningTracker.exitWhenFinished();
-        for (int i = 0; i < 20 && fileCleaningTracker.reaper.isAlive(); i++) {
-            TestUtils.sleep(500L);  // allow reaper thread to die
-        }
+        awaitReaperTermination();
         assertTrue(fileCleaningTracker.exitWhenFinished);
         assertFalse(fileCleaningTracker.reaper.isAlive());
         assertFalse(Files.exists(Paths.get(path)));
@@ -356,8 +383,6 @@ class FileCleaningTrackerTest extends AbstractTempDirTest {
         fileCleaningTracker.exitWhenFinished();
         assertTrue(fileCleaningTracker.exitWhenFinished);
         assertNull(fileCleaningTracker.reaper);
-
-        waitUntilTrackCount0();
 
         assertEquals(0, fileCleaningTracker.getTrackCount());
         assertTrue(fileCleaningTracker.exitWhenFinished);
@@ -380,11 +405,22 @@ class FileCleaningTrackerTest extends AbstractTempDirTest {
         testFile = null;
         raf = null;
 
-        waitUntilTrackCount0();
-        pauseForDeleteToComplete(new File(path));
+        finishTracking();
 
         assertEquals(0, fileCleaningTracker.getTrackCount());
         assertFalse(new File(path).exists(), showFailures());
+    }
+
+    @Test
+    void testFileCleanerGarbageCollection() throws Exception {
+        TestUtils.createFile(testFile, 100);
+        trackGarbageCollectableMarker();
+
+        System.gc();
+        awaitDeletion();
+
+        assertEquals(0, fileCleaningTracker.getTrackCount());
+        assertFalse(testFile.exists(), showFailures());
     }
 
     @Test
@@ -395,28 +431,8 @@ class FileCleaningTrackerTest extends AbstractTempDirTest {
         assertThrows(NullPointerException.class, () -> fileCleaningTracker.track((String) null, new Object(), FileDeleteStrategy.NORMAL));
     }
 
-
-    private void waitUntilTrackCount0() throws Exception {
-        System.gc();
-        TestUtils.sleep(500);
-        int count = 0;
-        while (fileCleaningTracker.getTrackCount() != 0 && count++ < 5) {
-            List<String> list = new ArrayList<>();
-            try {
-                long i = 0;
-                while (fileCleaningTracker.getTrackCount() != 0) {
-                    list.add(
-                            "A Big String A Big String A Big String A Big String A Big String A Big String A Big String A Big String A Big String A Big String "
-                                    + i++);
-                }
-            } catch (final Throwable ignored) {
-            }
-            list = null;
-            gcFinalize();
-            TestUtils.sleep(1000);
-        }
-        if (fileCleaningTracker.getTrackCount() != 0) {
-            throw new IllegalStateException("Your JVM is not releasing References, try running the test with less memory (-Xmx)");
-        }
+    private void trackGarbageCollectableMarker() {
+        // A separate stack frame ensures the marker is unreachable when GC is requested.
+        fileCleaningTracker.track(testFile, new Object(), deletionStrategy(FileDeleteStrategy.NORMAL));
     }
-    }
+}
