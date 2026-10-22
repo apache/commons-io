@@ -3098,7 +3098,8 @@ public class FileUtils {
      * Converts from a {@link URL} to a {@link File}.
      * <p>
      * Syntax such as {@code file:///my%20docs/file.txt} will be correctly decoded to {@code /my docs/file.txt}. UTF-8 is used to decode percent-encoded octets
-     * to characters. Additionally, malformed percent-encoded octets are handled leniently by passing them through literally.
+     * to characters. Additionally, malformed percent-encoded octets are handled leniently by passing them through literally. Paths containing the NUL
+     * character ({@code U+0000}) are rejected.
      * </p>
      *
      * <p>Percent-decoding can introduce path segments such as {@code ..} (from {@code %2e%2e}) and path separators (for example, {@code /} from {@code %2f}).
@@ -3107,13 +3108,15 @@ public class FileUtils {
      *
      * @param url The file URL to convert, {@code null} returns {@code null}.
      * @return The equivalent {@link File} object, or {@code null} if the URL's protocol is not {@code file}.
+     * @throws IllegalArgumentException if the decoded file path contains the NUL character ({@code U+0000}).
      */
     public static File toFile(final URL url) {
         if (url == null || !isFileProtocol(url)) {
             return null;
         }
         final String fileName = url.getFile().replace('/', File.separatorChar);
-        return new File(decodeUrl(fileName));
+        final String decodedFileName = decodeUrl(fileName);
+        return new File(FilenameUtils.requireNonNullChars(decodedFileName));
     }
 
     /**
@@ -3129,7 +3132,8 @@ public class FileUtils {
      *
      * @param urls The file URLs to convert, {@code null} returns empty array.
      * @return A non-{@code null} array of Files matching the input, with a {@code null} item if there was a {@code null} at that index in the input array.
-     * @throws IllegalArgumentException if any non-{@code null} URL's protocol is not {@code file}.
+     * @throws IllegalArgumentException if any non-{@code null} URL's protocol is not {@code file}, or any decoded file path contains the NUL character
+     *         ({@code U+0000}).
      * @since 1.1
      */
     public static File[] toFiles(final URL... urls) {
