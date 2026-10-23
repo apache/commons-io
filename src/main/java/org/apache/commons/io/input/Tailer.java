@@ -246,13 +246,21 @@ public class Tailer implements Runnable, AutoCloseable {
         }
 
         /**
-         * Sets whether a change in timestamp causes the file to be re-read.
+         * Sets whether to ignore timestamp advances when the file length equals the current read position.
+         *
          * <p>
-         * Useful when your watched file gets touched (the timestamps is more recent without changing the file) or when a file system updates a timestamp before
-         * a file's content. The default (false) re-reads the current file, while true does nothing.
+         * The default ({@code false}) re-reads the file from the beginning, delivering its complete lines again. This detects same-length overwrites but also
+         * replays unchanged content when a file is touched or a file system updates its timestamp before its content. The new timestamp is recorded, so another
+         * timestamp-triggered replay requires a further timestamp advance.
          * </p>
          *
-         * @param ignoreTouch Whether a change in timestamp causes the file to be re-read.
+         * <p>
+         * Setting this option to {@code true} suppresses these replays, including detection of same-length overwrites through timestamp advances alone. File
+         * growth and truncation below the current read position are still handled normally. This option does not compare file contents or guarantee that lines
+         * are delivered only once.
+         * </p>
+         *
+         * @param ignoreTouch {@code true} to ignore timestamp advances when the file length equals the current read position.
          * @return {@code this} instance.
          * @since 2.20.0
          */
@@ -714,7 +722,7 @@ public class Tailer implements Runnable, AutoCloseable {
     private volatile boolean run = true;
 
     /**
-     * Whether to ignore a touch on the file, a change in timestamp when the contents stay the same.
+     * Whether to ignore timestamp advances when the file length equals the current read position.
      */
     private final boolean ignoreTouch;
 
@@ -848,7 +856,7 @@ public class Tailer implements Runnable, AutoCloseable {
      * @param delayDuration The delay between checks of the file for new content in milliseconds.
      * @param tailAtEnd Set to true to tail from the end of the file, false to tail from the beginning of the file.
      * @param reOpen if true, close and reopen the file between reading chunks.
-     * @param ignoreTouch if true, file timestamp changes without content change get ignored.
+     * @param ignoreTouch if true, timestamp advances are ignored when the file length equals the current read position.
      * @param bufferSize Buffer size.
      */
     private Tailer(final Tailable tailable, final Charset charset, final TailerListener tailerListener, final Duration delayDuration, final boolean tailAtEnd,
