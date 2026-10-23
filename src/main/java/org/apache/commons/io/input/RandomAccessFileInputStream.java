@@ -251,11 +251,9 @@ public class RandomAccessFileInputStream extends AbstractInputStream {
         if (filePointer >= fileLength) {
             return 0;
         }
-        final long targetPos = filePointer + skipCount;
-        final long newPos = targetPos > fileLength ? fileLength - 1 : targetPos;
-        if (newPos > 0) {
-            randomAccessFile.seek(newPos);
-        }
+        // Limit the skip before adding to the file pointer to avoid overflow and stop at EOF.
+        final long newPos = filePointer + Math.min(skipCount, fileLength - filePointer);
+        randomAccessFile.seek(newPos);
         return randomAccessFile.getFilePointer() - filePointer;
     }
 }
