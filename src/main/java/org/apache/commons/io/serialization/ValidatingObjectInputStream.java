@@ -27,6 +27,8 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 import org.apache.commons.io.build.AbstractStreamBuilder;
@@ -442,7 +444,7 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
         }
 
         /**
-         * If true, checks that all interfaces and annotations for a given type are not rejected and accepted.
+         * Sets whether to validate interfaces and runtime-visible annotations recursively.
          * <p>
          * For compatibility with previous versions, this is false by default.
          * </p>
@@ -452,7 +454,7 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
          * <ol>
          * <li>The type name.</li>
          * <li>The interfaces implemented by the class, recursively.</li>
-         * <li>The annotation on this type, recursively.</li>
+         * <li>The runtime-visible annotations on this type, recursively.</li>
          * </ol>
          * <p>
          * The reject list takes precedence over the accept list.
@@ -681,23 +683,34 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
     /**
      * Checks that the given type can be legally resolved as configured.
      * <p>
-     * Checks:
-     * <ol>
-     * <li>The type name.</li>
-     * <li>The interfaces implemented by the class, recursively.</li>
-     * <li>The annotation on this type, recursively.</li>
-     * </ol>
+     * Checks the type name, its interfaces, and its runtime-visible annotations recursively. Each type is visited once per traversal to avoid
+     * annotation cycles.
+     * </p>
      *
-     * @param result
-     * @throws InvalidClassException
+     * @param result The type to check.
+     * @throws InvalidClassException Thrown when a rejected or non-accepted type is found.
      */
     private void check(final Class<?> result) throws InvalidClassException {
+        check(result, new HashSet<>());
+    }
+
+    /**
+     * Checks a type and recursively checks its interfaces and runtime-visible annotations.
+     *
+     * @param result The type to check.
+     * @param visited The types already visited in this traversal.
+     * @throws InvalidClassException Thrown when a rejected or non-accepted type is found.
+     */
+    private void check(final Class<?> result, final Set<Class<?>> visited) throws InvalidClassException {
+        if (!visited.add(result)) {
+            return;
+        }
         checkTypeName(result.getName());
         for (final Class<?> iface : result.getInterfaces()) {
-            check(iface);
+            check(iface, visited);
         }
         for (final Annotation annotation : result.getAnnotations()) {
-            check(annotation.annotationType());
+            check(annotation.annotationType(), visited);
         }
     }
 
@@ -832,12 +845,26 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
      * <p>
      * The reject list takes precedence over the accept list.
      * </p>
+     * <p>
+     * In strict mode, each interface of the resolved proxy class is checked recursively, including its super-interfaces and runtime-visible annotations,
+     * as described by {@link Builder#setStrict(boolean)}. The generated proxy class name is not checked. Without strict mode, only the interface names
+     * supplied by the stream are checked.
+     * </p>
      */
     @Override
     protected Class<?> resolveProxyClass(final String[] interfaces) throws IOException, ClassNotFoundException {
         for (final String interfaceName : interfaces) {
             checkTypeName(interfaceName);
         }
-        return super.resolveProxyClass(interfaces);
+        final Class<?> result = super.resolveProxyClass(interfaces);
+        if (strict) {
+            // The proxy class itself has a synthetic name; validate its interfaces recursively,
+            // exactly like resolveClass() validates a resolved class in strict mode.
+            final Set<Class<?>> visited = new HashSet<>();
+            for (final Class<?> iface : result.getInterfaces()) {
+                check(iface, visited);
+            }
+        }
+        return result;
     }
 }
