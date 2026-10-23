@@ -96,6 +96,11 @@
     <Method name="withLongCounters" />
     <Bug pattern="HSM_HIDING_METHOD" />
   </Match>
+  <!-- CharSequenceInputStream is not thread-safe; its Javadoc requires external synchronization for shared access. -->
+  <Match>
+    <Class name="org.apache.commons.io.input.CharSequenceInputStream" />
+    <Bug pattern="AT_NONATOMIC_64BIT_PRIMITIVE, AT_NONATOMIC_OPERATIONS_ON_SHARED_VARIABLE, AT_STALE_THREAD_WRITE_OF_PRIMITIVE" />
+  </Match>
   <!-- This class is not thread-safe. Should this be a TO-DO?. -->
   <Match>
     <Class name="org.apache.commons.io.input.NullInputStream" />
