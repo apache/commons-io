@@ -440,10 +440,9 @@ public class FileAlterationObserver implements Serializable {
         final File rootFile = rootEntry.getFile();
         if (rootFile.exists()) {
             checkAndFire(rootEntry, rootEntry.getChildren(), listFiles(rootFile, rootEntry));
-        } else if (rootEntry.isExists()) {
+        } else {
             checkAndFire(rootEntry, rootEntry.getChildren(), FileUtils.EMPTY_FILE_ARRAY);
         }
-        // Else: Didn't exist and still doesn't fire onStop()
         forEachListener(FileAlterationListener::onStop);
     }
 

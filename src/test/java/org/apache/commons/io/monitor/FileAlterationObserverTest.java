@@ -311,6 +311,38 @@ class FileAlterationObserverTest extends AbstractMonitorTest {
         checkCollectionsEmpty("G");
     }
 
+    @Test
+    void testDirectoryInitiallyMissing() throws Exception {
+        final File rootDirectory = new File(testDir, "initially-missing");
+        final File childDirectory = new File(rootDirectory, "child-directory");
+        final File childFile = new File(rootDirectory, "child.java");
+        assertFalse(rootDirectory.exists());
+        createObserver(rootDirectory, null);
+        checkAndNotify();
+        checkCollectionsEmpty("Initially missing");
+
+        for (int cycle = 0; cycle < 2; cycle++) {
+            assertTrue(rootDirectory.mkdir());
+            assertTrue(childDirectory.mkdir());
+            assertTrue(childFile.createNewFile());
+            checkAndNotify();
+            checkCollectionSizes("Created " + cycle, 1, 0, 0, 1, 0, 0);
+            assertTrue(listener.getCreatedDirectories().contains(childDirectory));
+            assertTrue(listener.getCreatedFiles().contains(childFile));
+            assertFalse(listener.getCreatedDirectories().contains(rootDirectory));
+
+            FileUtils.deleteDirectory(rootDirectory);
+            checkAndNotify();
+            checkCollectionSizes("Deleted " + cycle, 0, 0, 1, 0, 0, 1);
+            assertTrue(listener.getDeletedDirectories().contains(childDirectory));
+            assertTrue(listener.getDeletedFiles().contains(childFile));
+            assertFalse(listener.getDeletedDirectories().contains(rootDirectory));
+
+            checkAndNotify();
+            checkCollectionsEmpty("Still missing " + cycle);
+        }
+    }
+
     /**
      * Test checkAndNotify() creating
      *
