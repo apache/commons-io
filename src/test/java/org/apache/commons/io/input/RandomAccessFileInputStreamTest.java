@@ -36,6 +36,9 @@ import java.nio.file.StandardOpenOption;
 import org.apache.commons.io.RandomAccessFileMode;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 /**
  * Tests {@link RandomAccessFileInputStream}.
@@ -352,6 +355,32 @@ class RandomAccessFileInputStreamTest {
             //
             assertEquals(0, inputStream.skip(1));
             assertEquals(0, inputStream.skip(1000000000000L));
+        }
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+        "1430, 0, 2430",
+        "1430, 12, 2430",
+        "1430, 1429, 2",
+        "1, 0, 2",
+        "0, 0, 2",
+        "1430, 1430, 2",
+        "1430, 0, 9223372036854775807",
+        "1430, 1, 9223372036854775807"
+    })
+    void testSkipPastEof(final long length, final long position, final long skipCount, @TempDir final Path tempDir) throws IOException {
+        try (RandomAccessFile file = RandomAccessFileMode.READ_WRITE.create(tempDir.resolve("skip.bin").toFile());
+             RandomAccessFileInputStream inputStream = RandomAccessFileInputStream.builder()
+                    .setRandomAccessFile(file)
+                    .get()) {
+            file.setLength(length);
+            file.seek(position);
+            assertEquals(length - position, inputStream.skip(skipCount));
+            assertEquals(length, file.getFilePointer());
+            assertEquals(0, inputStream.availableLong());
+            assertEquals(-1, inputStream.read());
+            assertEquals(0, inputStream.skip(1));
         }
     }
 }
