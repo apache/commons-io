@@ -85,6 +85,7 @@ The <action> type attribute can be add,update,fix,remove.
       <action type="fix" dev="ggregory" due-to="Claude Security, Gary Gregory">Fix BOMInputStream afterRead byte accounting (f017) (#905).</action>
       <action type="fix" dev="ggregory" due-to="Claude Security, Gary Gregory">Fix SwappedDataInputStream single-byte reads at EOF (f018) (#906).</action>
       <action type="fix" dev="ggregory" due-to="Claude Security, Gary Gregory">Fix CharSequenceInputStream encoding completion and stream state (f019) (#907).</action>
+      <action type="fix" dev="ggregory" due-to="Claude Security, Gary Gregory">Document LockableFileWriter lock-directory security considerations (f022).</action>
       <!-- ADD -->
       <action type="add" dev="ggregory" due-to="Gary Gregory">Add IOConsumer.accept(IOConsumer, T) (#846).</action>
       <action type="add" dev="ggregory" due-to="Gary Gregory">Add UnsynchronizedBufferedReader.unwrap() (#850).</action>
