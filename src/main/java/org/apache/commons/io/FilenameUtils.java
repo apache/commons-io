@@ -253,16 +253,22 @@ public class FilenameUtils {
     }
 
     /**
-     * Determines whether the {@code parent} directory contains the {@code child} (a file or directory). This does not read from the file system, and there is
-     * no guarantee or expectation that these paths actually exist.
+     * Determines whether the {@code parent} directory contains the {@code child} (a file or directory).
+     *
      * <p>
-     * The files names are expected to be normalized.
+     * The file names are expected to be normalized. This method does not read from the file system, and there is no guarantee or expectation that these paths
+     * actually exist. It does not resolve symbolic links or establish containment in the file system.
      * </p>
+     *
+     * <p>
+     * Comparisons use {@link IOCase#SYSTEM}, whose case sensitivity follows the operating system of the running JVM. This method does not detect the case
+     * sensitivity of the target file system, which may differ from these conventions, for example for a remote file system.
+     * </p>
+     *
      * Edge cases:
      * <ul>
-     * <li>A {@code directory} must not be null: if null, throw IllegalArgumentException</li>
+     * <li>A null or empty parent or child path: return false</li>
      * <li>A directory does not contain itself: return false</li>
-     * <li>A null child file is not contained in any parent: return false</li>
      * </ul>
      *
      * @param canonicalParent The path string to consider as the parent.
@@ -569,12 +575,15 @@ public class FilenameUtils {
      * a/b/c/    --&gt; ""
      * </pre>
      * <p>
-     * The output will be the same irrespective of the machine that the code is running on.
+     * The output will be the same irrespective of the machine that the code is running on, with the exception of a possible {@link IllegalArgumentException} on
+     * Windows (see below).
      * </p>
      *
      * @param fileName The file name, null returns null.
      * @return The name of the file without the path, or an empty string if none exists.
-     * @throws IllegalArgumentException if the file name contains the null character ({@code U+0000}).
+     * @throws IllegalArgumentException if the file name contains the null character ({@code U+0000}), or, on Windows only, its last path component contains a
+     *                                  colon, for example {@code "foo.exe:bar.txt"} or {@code "C:report.txt"}.
+     * @see #getExtension(String)
      */
     public static String getBaseName(final String fileName) {
         return removeExtension(getName(fileName));
@@ -597,15 +606,20 @@ public class FilenameUtils {
      * Windows (see below).
      * </p>
      * <p>
-     * <strong>Note:</strong> This method used to have a hidden problem for names like "foo.exe:bar.txt". In this case, the name wouldn't be the name of a file,
-     * but the identifier of an alternate data stream (bar.txt) on the file foo.exe. The method used to return ".txt" here, which would be misleading. Commons
-     * IO 2.7 and later throw an {@link IllegalArgumentException} for names like this.
+     * On Windows, names like {@code "foo.exe:bar.txt"} identify an alternate data stream ({@code bar.txt}) on the file {@code foo.exe}. Before Commons IO 2.7,
+     * this method returned {@code "txt"} for that name on Windows. Commons IO 2.7 and later throw an {@link IllegalArgumentException} on Windows instead.
+     * On other operating systems, this method continues to treat the name as text and returns {@code "txt"}.
+     * </p>
+     *
+     * <p>
+     * Extension extraction does not validate whether a file name is safe or legal for a destination file system. Callers transferring files between systems
+     * must validate names against the destination's rules separately.
      * </p>
      *
      * @param fileName The file name to retrieve the extension of.
      * @return The extension of the file or an empty string if none exists or {@code null} if the file name is {@code null}.
-     * @throws IllegalArgumentException <strong>Windows only:</strong> the file name parameter is, in fact, the identifier of an Alternate Data Stream, for
-     *                                  example "foo.exe:bar.txt".
+     * @throws IllegalArgumentException <strong>Windows only:</strong> the last path component contains a colon, for example {@code "foo.exe:bar.txt"} or
+     *                                  {@code "C:report.txt"}.
      */
     public static String getExtension(final String fileName) throws IllegalArgumentException {
         if (fileName == null) {
@@ -925,15 +939,15 @@ public class FilenameUtils {
      * Windows (see below).
      * </p>
      * <p>
-     * <strong>Note:</strong> This method used to have a hidden problem for names like "foo.exe:bar.txt". In this case, the name wouldn't be the name of a file,
-     * but the identifier of an alternate data stream (bar.txt) on the file foo.exe. The method used to return ".txt" here, which would be misleading. Commons
-     * IO 2.7, and later versions, are throwing an {@link IllegalArgumentException} for names like this.
+     * On Windows, names like {@code "foo.exe:bar.txt"} identify an alternate data stream ({@code bar.txt}) on the file {@code foo.exe}. Before Commons IO 2.7,
+     * this method returned {@code 11} for that name on Windows. Commons IO 2.7 and later throw an {@link IllegalArgumentException} on Windows instead.
+     * On other operating systems, this method continues to treat the name as text and returns {@code 11}.
      * </p>
      *
      * @param fileName The file name to find the last extension separator in, null returns -1.
      * @return The index of the last extension separator character, or -1 if there is no such character.
-     * @throws IllegalArgumentException <strong>Windows only:</strong> the file name parameter is, in fact, the identifier of an Alternate Data Stream, for
-     *                                  example "foo.exe:bar.txt".
+     * @throws IllegalArgumentException <strong>Windows only:</strong> the last path component contains a colon, for example {@code "foo.exe:bar.txt"} or
+     *                                  {@code "C:report.txt"}.
      */
     public static int indexOfExtension(final String fileName) throws IllegalArgumentException {
         if (fileName == null) {
@@ -986,7 +1000,9 @@ public class FilenameUtils {
      * @param fileName   The file name, null returns false.
      * @param extensions The extensions to check for, null checks for no extension.
      * @return true if the file name is one of the extensions.
-     * @throws IllegalArgumentException if the file name contains the null character ({@code U+0000}).
+     * @throws IllegalArgumentException if the file name contains the null character ({@code U+0000}), or, on Windows only, its last path component contains a
+     *                                  colon, for example {@code "foo.exe:bar.txt"} or {@code "C:report.txt"}.
+     * @see #getExtension(String)
      */
     public static boolean isExtension(final String fileName, final Collection<String> extensions) {
         if (fileName == null) {
@@ -1009,7 +1025,9 @@ public class FilenameUtils {
      * @param fileName  The file name, null returns false.
      * @param extension The extension to check for, null or empty checks for no extension.
      * @return true if the file name has the specified extension.
-     * @throws IllegalArgumentException if the file name contains the null character ({@code U+0000}).
+     * @throws IllegalArgumentException if the file name contains the null character ({@code U+0000}), or, on Windows only, its last path component contains a
+     *                                  colon, for example {@code "foo.exe:bar.txt"} or {@code "C:report.txt"}.
+     * @see #getExtension(String)
      */
     public static boolean isExtension(final String fileName, final String extension) {
         if (fileName == null) {
@@ -1032,7 +1050,9 @@ public class FilenameUtils {
      * @param fileName   The file name, null returns false.
      * @param extensions The extensions to check for, null checks for no extension.
      * @return true if the file name is one of the extensions.
-     * @throws IllegalArgumentException if the file name contains the null character ({@code U+0000}).
+     * @throws IllegalArgumentException if the file name contains the null character ({@code U+0000}), or, on Windows only, its last path component contains a
+     *                                  colon, for example {@code "foo.exe:bar.txt"} or {@code "C:report.txt"}.
+     * @see #getExtension(String)
      */
     public static boolean isExtension(final String fileName, final String... extensions) {
         if (fileName == null) {
@@ -1384,6 +1404,7 @@ public class FilenameUtils {
      * Removes the extension from a fileName.
      * <p>
      * This method returns the textual part of the file name before the last period. There must be no directory separator after the period.
+     * </p>
      *
      * <pre>
      * foo.txt    --&gt; foo
@@ -1394,11 +1415,15 @@ public class FilenameUtils {
      * a.b\c      --&gt; a.b\c
      * </pre>
      * <p>
-     * The output will be the same irrespective of the machine that the code is running on.
+     * The output will be the same irrespective of the machine that the code is running on, with the exception of a possible {@link IllegalArgumentException} on
+     * Windows (see below).
+     * </p>
      *
      * @param fileName The file name, null returns null.
      * @return The file name minus the extension.
-     * @throws IllegalArgumentException if the file name contains the null character ({@code U+0000}).
+     * @throws IllegalArgumentException if the file name contains the null character ({@code U+0000}), or, on Windows only, its last path component contains a
+     *                                  colon, for example {@code "foo.exe:bar.txt"} or {@code "C:report.txt"}.
+     * @see #getExtension(String)
      */
     public static String removeExtension(final String fileName) {
         if (fileName == null) {
