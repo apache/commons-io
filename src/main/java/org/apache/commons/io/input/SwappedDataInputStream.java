@@ -58,25 +58,33 @@ public class SwappedDataInputStream extends ProxyInputStream implements DataInpu
     /**
      * Invokes the delegate's {@code read()} method.
      *
-     * @return The byte read or -1 if the end of stream.
+     * @return The signed byte read.
      * @throws IOException Thrown if an I/O error occurs.
      * @throws EOFException Thrown if an end of file is reached unexpectedly.
      */
     @Override
     public byte readByte() throws IOException, EOFException {
-        return (byte) in.read();
+        return (byte) readCheckedByte();
     }
 
     /**
-     * Reads a 2 byte, unsigned, little-endian UTF-16 code point.
+     * Reads a 2 byte, unsigned, little-endian UTF-16 code unit.
      *
-     * @return The UTF-16 code point read or -1 if the end of stream.
+     * @return The UTF-16 code unit read.
      * @throws IOException Thrown if an I/O error occurs.
      * @throws EOFException Thrown if an end of file is reached unexpectedly.
      */
     @Override
     public char readChar() throws IOException, EOFException {
         return (char) readShort();
+    }
+
+    private int readCheckedByte() throws IOException {
+        final int value = in.read();
+        if (EOF == value) {
+            throw new EOFException("Unexpected EOF reached");
+        }
+        return value;
     }
 
     /**
@@ -192,13 +200,13 @@ public class SwappedDataInputStream extends ProxyInputStream implements DataInpu
     /**
      * Invokes the delegate's {@code read()} method.
      *
-     * @return The byte read or -1 if the end of stream.
+     * @return The byte read, as an unsigned value in the range 0-255.
      * @throws EOFException Thrown if an end of file is reached unexpectedly.
      * @throws IOException Thrown if an I/O error occurs.
      */
     @Override
     public int readUnsignedByte() throws IOException, EOFException {
-        return in.read();
+        return readCheckedByte();
     }
 
     /**
