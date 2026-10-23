@@ -59,6 +59,11 @@ public class ObjectStreamClassPredicate implements Predicate<ObjectStreamClass> 
      * The reject list takes precedence over the accept list.
      * </p>
      *
+     * <p>
+     * Classes are matched by their exact names. Array classes must be accepted separately from their element classes.
+     * For example, accepting {@code Foo.class} does not accept {@code Foo[].class}.
+     * </p>
+     *
      * @param classes Classes to accept.
      * @return this object.
      */
@@ -85,6 +90,11 @@ public class ObjectStreamClassPredicate implements Predicate<ObjectStreamClass> 
      * Accepts class names that match the supplied pattern for deserialization, unless they are otherwise rejected.
      * <p>
      * The reject list takes precedence over the accept list.
+     * </p>
+     *
+     * <p>
+     * The pattern must match the entire class name, as defined by {@link java.util.regex.Matcher#matches()}.
+     * For example, {@code foo\.Bar} matches {@code foo.Bar}, but not {@code foo.BarExtra}. Use {@code .*foo\.Bar.*} to match a substring.
      * </p>
      *
      * @param pattern A Pattern for compiled regular expression.
@@ -126,6 +136,12 @@ public class ObjectStreamClassPredicate implements Predicate<ObjectStreamClass> 
      * The reject list takes precedence over the accept list.
      * </p>
      *
+     * <p>
+     * Classes are matched by their exact names. Rejecting {@code Foo.class} does not reject {@code Foo[].class}, so an otherwise accepted
+     * empty or null-only array can still be deserialized. Element class descriptors encountered while reading array contents are checked separately.
+     * To reject the array class itself, also reject {@code Foo[].class}.
+     * </p>
+     *
      * @param classes Classes to reject.
      * @return {@code this} instance.
      */
@@ -152,6 +168,11 @@ public class ObjectStreamClassPredicate implements Predicate<ObjectStreamClass> 
      * Rejects class names that match the supplied pattern for deserialization, even if they are otherwise accepted.
      * <p>
      * The reject list takes precedence over the accept list.
+     * </p>
+     *
+     * <p>
+     * The pattern must match the entire class name, as defined by {@link java.util.regex.Matcher#matches()}.
+     * For example, {@code foo\.Bar} matches {@code foo.Bar}, but not {@code foo.BarExtra}. Use {@code .*foo\.Bar.*} to match a substring.
      * </p>
      *
      * @param pattern standard Java regexp.
@@ -205,6 +226,11 @@ public class ObjectStreamClassPredicate implements Predicate<ObjectStreamClass> 
      * Tests that the class name conforms to requirements.
      * <p>
      * The reject list takes precedence over the accept list.
+     * </p>
+     *
+     * <p>
+     * Matchers receive the class name unchanged, including array descriptors such as {@code [Lcom.example.Foo;} for {@code com.example.Foo[]}.
+     * Array descriptors are not converted to element class names.
      * </p>
      *
      * @param name The class name to test.
