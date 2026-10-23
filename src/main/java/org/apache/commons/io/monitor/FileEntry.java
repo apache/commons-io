@@ -80,6 +80,9 @@ public class FileEntry implements Serializable {
     /** The file's length. */
     private long length;
 
+    /** The last modified time read error from the most recent refresh. Not part of the serialized form. */
+    private transient IOException lastModifiedIOException;
+
     /**
      * Constructs a new monitor for a specified {@link File}.
      *
@@ -138,6 +141,27 @@ public class FileEntry implements Serializable {
      */
     public FileTime getLastModifiedFileTime() {
         return lastModified.unwrap();
+    }
+
+    /**
+     * Gets the last modified time read error recorded by the most recent refresh.
+     * <p>
+     * If reading the last modified time throws an {@link IOException}, {@link #refresh(File)} keeps the previous timestamp and records the exception.
+     * Other attributes are still refreshed and may cause a change to be reported. While an exception is recorded, the timestamp may be stale and
+     * timestamp changes may remain undetected until a successful read.
+     * </p>
+     * <p>
+     * A null result does not guarantee that all attributes were read successfully. In particular, if
+     * {@link Files#exists(java.nio.file.Path, java.nio.file.LinkOption...)} returns false, the timestamp is reset to {@link FileTimes#EPOCH} and no
+     * exception is recorded, even when existence could not be determined because of an I/O error. This method also returns null before the first
+     * refresh and after deserialization.
+     * </p>
+     *
+     * @return The exception caught while reading the last modified time in the most recent refresh, or null if none was recorded.
+     * @since 2.23.0
+     */
+    public IOException getLastModifiedIOException() {
+        return lastModifiedIOException;
     }
 
     /**
@@ -215,6 +239,15 @@ public class FileEntry implements Serializable {
      * <p>
      * The {@code exists}, {@code directory}, {@code lastModified} and {@code length} properties are compared for changes.
      * </p>
+     * <p>
+     * If reading the last modified time throws an {@link IOException}, the previous timestamp is kept and the exception is available from
+     * {@link #getLastModifiedIOException()}. Other attributes are still refreshed and compared, so this method may still return true. The attributes
+     * are read separately and do not form an atomic snapshot.
+     * </p>
+     * <p>
+     * If the existence check returns false, the timestamp is reset to {@link FileTimes#EPOCH} and any recorded exception is cleared. This can indicate
+     * either a missing file or an inability to determine whether the file exists.
+     * </p>
      *
      * @param file The file instance to compare to.
      * @return {@code true} if the file has changed, otherwise {@code false}.
@@ -231,8 +264,10 @@ public class FileEntry implements Serializable {
         directory = exists && file.isDirectory();
         try {
             setLastModified(exists ? FileUtils.lastModifiedFileTime(file) : FileTimes.EPOCH);
+            lastModifiedIOException = null;
         } catch (final IOException e) {
-            setLastModified(SerializableFileTime.EPOCH);
+            // Preserve the timestamp so a failed read alone does not report a change.
+            lastModifiedIOException = e;
         }
         length = exists && !directory ? file.length() : 0;
         // Return if there are changes
