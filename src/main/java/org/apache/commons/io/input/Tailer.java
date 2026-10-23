@@ -34,8 +34,10 @@ import java.nio.file.attribute.FileTime;
 import java.time.Duration;
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.ThreadUtils;
@@ -714,6 +716,16 @@ public class Tailer implements Runnable, AutoCloseable {
     private volatile boolean run = true;
 
     /**
+     * Completion of the single run's cleanup attempt.
+     */
+    private final CountDownLatch termination = new CountDownLatch(1);
+
+    /**
+     * The thread executing the current run.
+     */
+    private volatile Thread runThread;
+
+    /**
      * Whether to ignore a touch on the file, a change in timestamp when the contents stay the same.
      */
     private final boolean ignoreTouch;
@@ -866,6 +878,29 @@ public class Tailer implements Runnable, AutoCloseable {
     }
 
     /**
+     * Waits for this tailer's single {@link #run()} execution and its cleanup attempt to finish.
+     * <p>
+     * This method does not request {@link #close()}, interrupt the worker, or shut down an executor. A run that has never
+     * started can time out even after close. Successful completion does not guarantee that a custom resource's close
+     * operation succeeded. This wait is not intended to coordinate repeated or concurrent invocations of run.
+     * </p>
+     *
+     * @param timeout the maximum time to wait; non-positive values only test for completion.
+     * @param unit the time unit of the timeout.
+     * @return true if the run's cleanup attempt completed, false if the wait timed out.
+     * @throws InterruptedException if the waiting thread is interrupted.
+     * @throws IllegalStateException if called by the active tailer thread, including a listener callback.
+     * @throws NullPointerException if unit is null.
+     * @since 2.23.0
+     */
+    public boolean awaitTermination(final long timeout, final TimeUnit unit) throws InterruptedException {
+        if (Thread.currentThread() == runThread) {
+            throw new IllegalStateException("Cannot await termination from the tailer thread");
+        }
+        return termination.await(timeout, unit);
+    }
+
+    /**
      * Requests the tailer to complete its current loop and return.
      */
     @Override
@@ -984,6 +1019,7 @@ public class Tailer implements Runnable, AutoCloseable {
      */
     @Override
     public void run() {
+        runThread = Thread.currentThread();
         RandomAccessResourceBridge reader = null;
         try {
             FileTime last = FileTimes.EPOCH; // The last time the file was checked for changes
@@ -1072,11 +1108,16 @@ public class Tailer implements Runnable, AutoCloseable {
             listener.handle(e);
         } finally {
             try {
-                IOUtils.close(reader);
-            } catch (final IOException e) {
-                listener.handle(e);
+                try {
+                    IOUtils.close(reader);
+                } catch (final IOException e) {
+                    listener.handle(e);
+                }
+                close();
+            } finally {
+                runThread = null;
+                termination.countDown();
             }
-            close();
         }
     }
 
