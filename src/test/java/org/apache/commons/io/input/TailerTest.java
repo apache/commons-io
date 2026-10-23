@@ -708,7 +708,9 @@ class TailerTest {
             listener.clear();
             // touch the file
             TestUtils.sleepToNextSecond(); // ensure to be within the next second because of posix fs limitation
-            file.setLastModified(System.currentTimeMillis());
+            final FileTime previousTimestamp = Files.getLastModifiedTime(file.toPath());
+            assertTrue(file.setLastModified(System.currentTimeMillis()), "Failed to update the file timestamp");
+            assertTrue(Files.getLastModifiedTime(file.toPath()).compareTo(previousTimestamp) > 0, "File timestamp must advance");
             TestUtils.sleep(delayMillis * 10);
             lines = listener.getLines();
             assertEquals(0, lines.size(), "nothing should have changed by touching");
@@ -734,12 +736,116 @@ class TailerTest {
             listener.clear();
             // touch the file
             TestUtils.sleepToNextSecond(); // ensure to be within the next second because of posix fs limitation
-            file.setLastModified(System.currentTimeMillis());
+            final FileTime previousTimestamp = Files.getLastModifiedTime(file.toPath());
+            assertTrue(file.setLastModified(System.currentTimeMillis()), "Failed to update the file timestamp");
+            assertTrue(Files.getLastModifiedTime(file.toPath()).compareTo(previousTimestamp) > 0, "File timestamp must advance");
             lines = expectLinesWithLongTimeout(listener, delayMillis, 20);
             assertEquals(1, lines.size(), "1 line count");
             assertEquals("Line one", lines.get(0), "1 line 1");
             listener.clear();
         }
+    }
+
+    private void testTailerTimestampChanges(final Boolean ignoreTouch) throws Exception {
+        final File file = new File(temporaryFolder, "tailer-timestamp-changes-" + ignoreTouch + ".txt");
+        Files.write(file.toPath(), "alpha\n".getBytes(StandardCharsets.UTF_8));
+        final TestTailerListener listener = new TestTailerListener();
+        final NonStandardTailable delegate = new NonStandardTailable(file);
+        final List<String> expected = new ArrayList<>();
+        // Drive changes between polls on the tailer's own thread, without filesystem timestamp resolution or scheduling races.
+        final class TimestampTailable implements Tailer.Tailable {
+            private int poll;
+            private Tailer tailer;
+            private long timestamp = 1;
+
+            @Override
+            public Tailer.RandomAccessResourceBridge getRandomAccess(final String mode) throws FileNotFoundException {
+                return delegate.getRandomAccess(mode);
+            }
+
+            @Override
+            public boolean isNewer(final FileTime fileTime) throws IOException {
+                assertEquals(expected, listener.getLines(), "Lines after poll " + poll);
+                switch (++poll) {
+                case 1:
+                    expected.add("alpha");
+                    break;
+                case 2:
+                case 4:
+                    timestamp++;
+                    if (!Boolean.TRUE.equals(ignoreTouch)) {
+                        expected.add("alpha");
+                    }
+                    break;
+                case 5:
+                    Files.write(file.toPath(), "bravo\n".getBytes(StandardCharsets.UTF_8));
+                    timestamp++;
+                    if (!Boolean.TRUE.equals(ignoreTouch)) {
+                        expected.add("bravo");
+                    }
+                    break;
+                case 6:
+                    writeLines(file, "extra");
+                    timestamp++;
+                    expected.add("extra");
+                    break;
+                case 7:
+                    Files.write(file.toPath(), "x\n".getBytes(StandardCharsets.UTF_8));
+                    timestamp++;
+                    break;
+                case 8:
+                    // The preceding poll detected truncation and reset the read position.
+                    expected.add("x");
+                    break;
+                case 10:
+                    tailer.close();
+                    break;
+                default:
+                    // An unchanged timestamp must not replay lines on subsequent polls.
+                    break;
+                }
+                return lastModifiedFileTime().compareTo(fileTime) > 0;
+            }
+
+            @Override
+            public FileTime lastModifiedFileTime() {
+                return FileTime.fromMillis(timestamp);
+            }
+
+            @Override
+            public long size() {
+                return delegate.size();
+            }
+        }
+        final TimestampTailable tailable = new TimestampTailable();
+        final Tailer.Builder builder = Tailer.builder().setTailable(tailable).setTailerListener(listener).setCharset(StandardCharsets.UTF_8)
+                .setDelayDuration(Duration.ofMillis(1)).setStartThread(false);
+        if (ignoreTouch != null) {
+            builder.setIgnoreTouch(ignoreTouch);
+        }
+        try (Tailer tailer = builder.get()) {
+            tailable.tailer = tailer;
+            tailer.run();
+        }
+        assertNull(listener.exception);
+        assertEquals(10, tailable.poll, "All scripted polls must complete");
+        assertEquals(expected, listener.getLines());
+        assertEquals(1, listener.rotated);
+    }
+
+    @Test
+    void testTailerTimestampChangesDefault() throws Exception {
+        testTailerTimestampChanges(null);
+    }
+
+    @Test
+    void testTailerTimestampChangesIgnored() throws Exception {
+        testTailerTimestampChanges(Boolean.TRUE);
+    }
+
+    @Test
+    void testTailerTimestampChangesReplayed() throws Exception {
+        testTailerTimestampChanges(Boolean.FALSE);
     }
 
     private void validateTailer(final TestTailerListener listener, final File file) throws IOException, InterruptedException {
