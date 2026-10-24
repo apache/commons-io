@@ -30,6 +30,7 @@ import java.nio.channels.NonWritableChannelException;
 import java.nio.channels.SeekableByteChannel;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.LinkOption;
 import java.nio.file.StandardOpenOption;
 import java.util.stream.Stream;
 
@@ -103,6 +104,27 @@ public class ByteArraySeekableByteChannelTest extends AbstractSeekableByteChanne
             assertEquals(9, channel.array().length);
             assertThrows(NonWritableChannelException.class, () -> channel.write(ByteBuffer.wrap(BYTE_ARRAY)));
             assertThrows(NonWritableChannelException.class, () -> channel.truncate(0));
+        }
+    }
+
+    @Test
+    void testBuilderReadOnlyMixedOptionTypes() throws IOException {
+        try (ByteArraySeekableByteChannel channel = ByteArraySeekableByteChannel.builder()
+                .setByteArray(BYTE_ARRAY)
+                .setOpenOptions(StandardOpenOption.READ, LinkOption.NOFOLLOW_LINKS)
+                .get()) {
+            assertEquals(9, channel.size());
+            assertThrows(NonWritableChannelException.class, () -> channel.write(ByteBuffer.wrap(BYTE_ARRAY)));
+        }
+    }
+
+    @Test
+    void testBuilderReadWriteMixedOptionTypes() throws IOException {
+        try (ByteArraySeekableByteChannel channel = ByteArraySeekableByteChannel.builder()
+                .setByteArray(BYTE_ARRAY)
+                .setOpenOptions(LinkOption.NOFOLLOW_LINKS, StandardOpenOption.READ, StandardOpenOption.WRITE)
+                .get()) {
+            testBuilderReadWrite(channel);
         }
     }
 
