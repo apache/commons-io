@@ -22,22 +22,36 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.FileSystem;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
+import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.nio.file.attribute.DosFileAttributeView;
+import java.nio.file.attribute.PosixFileAttributeView;
+import java.nio.file.attribute.PosixFilePermission;
+import java.nio.file.attribute.PosixFilePermissions;
+import java.util.Set;
 
 import org.apache.commons.io.file.Counters.PathCounters;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledOnOs;
+import org.junit.jupiter.api.condition.OS;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
+
+import com.google.common.jimfs.Configuration;
+import com.google.common.jimfs.Jimfs;
 
 /**
  * Tests {@link DeletingPathVisitor}.
@@ -192,5 +206,171 @@ class DeletingPathVisitorTest extends AbstractTempDirTest {
         assertFalse(Files.exists(symlinkDir));
         assertFalse(Files.exists(rootDir));
         assertTrue(visitor.getPathCounters().getDirectoryCounter().get() > 0);
+    }
+
+    @ParameterizedTest
+    @CsvSource({"false,false", "false,true", "true,false", "true,true"})
+    @EnabledOnOs(OS.WINDOWS)
+    void testOverrideReadOnlyDosSymbolicLink(final boolean followLinks, final boolean dangling) throws IOException {
+        final Path target = managedTempDirPath.resolve("target");
+        if (!dangling) {
+            Files.write(target, new byte[] {1});
+        }
+        final Path link = Files.createSymbolicLink(tempDirPath.resolve("link"), target);
+        final DosFileAttributeView linkDos = Files.getFileAttributeView(link, DosFileAttributeView.class, LinkOption.NOFOLLOW_LINKS);
+        try {
+            linkDos.setReadOnly(true);
+            assertTrue(linkDos.readAttributes().isReadOnly());
+            // Unlike Jimfs, Windows enforces the link's own read-only attribute during deletion.
+            final DeletingPathVisitor visitor = new DeletingPathVisitor(Counters.longPathCounters(),
+                    followLinks ? new LinkOption[0] : PathUtils.noFollowLinkOptionArray(),
+                    new DeleteOption[] {StandardDeleteOption.OVERRIDE_READ_ONLY});
+            Files.walkFileTree(tempDirPath, visitor);
+            assertFalse(Files.exists(tempDirPath, LinkOption.NOFOLLOW_LINKS));
+            assertEquals(!dangling, Files.exists(target));
+        } finally {
+            if (Files.exists(link, LinkOption.NOFOLLOW_LINKS)) {
+                linkDos.setReadOnly(false);
+            }
+        }
+    }
+
+    @ParameterizedTest
+    @CsvSource({"false,false", "false,true", "true,false", "true,true"})
+    void testOverrideReadOnlyDosSymbolicLinkTarget(final boolean followLinks, final boolean directory) throws IOException {
+        // Exercise DOS attributes even when the host file system only supports POSIX attributes.
+        final Configuration configuration = Configuration.windows().toBuilder().setAttributeViews("basic", "dos").build();
+        try (FileSystem fileSystem = Jimfs.newFileSystem(configuration)) {
+            final Path root = Files.createDirectory(fileSystem.getPath("C:\\deleteMe"));
+            final Path target = fileSystem.getPath("C:\\target");
+            if (directory) {
+                Files.createDirectory(target);
+                Files.write(target.resolve("content"), new byte[] {1});
+            } else {
+                Files.write(target, new byte[] {1});
+            }
+            final DosFileAttributeView dos = Files.getFileAttributeView(target, DosFileAttributeView.class);
+            dos.setReadOnly(true);
+            Files.createSymbolicLink(root.resolve("link"), target);
+            final DeletingPathVisitor visitor = new DeletingPathVisitor(Counters.longPathCounters(),
+                    followLinks ? new LinkOption[0] : PathUtils.noFollowLinkOptionArray(),
+                    new DeleteOption[] {StandardDeleteOption.OVERRIDE_READ_ONLY});
+            Files.walkFileTree(root, visitor);
+            assertFalse(Files.exists(root, LinkOption.NOFOLLOW_LINKS));
+            assertTrue(Files.exists(target));
+            assertTrue(dos.readAttributes().isReadOnly());
+            if (directory) {
+                assertTrue(Files.exists(target.resolve("content")));
+            }
+        }
+    }
+
+    @ParameterizedTest
+    @ValueSource(booleans = {false, true})
+    void testOverrideReadOnlyRegularFile(final boolean followLinks) throws IOException {
+        final Path file = Files.write(tempDirPath.resolve("file"), new byte[] {1});
+        final DosFileAttributeView dos = Files.getFileAttributeView(file, DosFileAttributeView.class);
+        final Set<PosixFilePermission> permissions = dos == null ? Files.getPosixFilePermissions(tempDirPath) : null;
+        try {
+            if (dos != null) {
+                dos.setReadOnly(true);
+            } else {
+                Files.setPosixFilePermissions(tempDirPath, PosixFilePermissions.fromString("r-x------"));
+            }
+            final DeletingPathVisitor visitor = new DeletingPathVisitor(Counters.longPathCounters(),
+                    followLinks ? new LinkOption[0] : PathUtils.noFollowLinkOptionArray(),
+                    new DeleteOption[] {StandardDeleteOption.OVERRIDE_READ_ONLY});
+            Files.walkFileTree(tempDirPath, visitor);
+            assertFalse(Files.exists(tempDirPath, LinkOption.NOFOLLOW_LINKS));
+            assertCounts(1, 1, 1, visitor);
+        } finally {
+            if (dos != null && Files.exists(file)) {
+                dos.setReadOnly(false);
+            } else if (dos == null && Files.exists(tempDirPath)) {
+                Files.setPosixFilePermissions(tempDirPath, permissions);
+            }
+        }
+    }
+
+    @ParameterizedTest
+    @CsvSource({"false,false", "false,true", "true,false", "true,true"})
+    void testOverrideReadOnlyRelativeSymbolicLink(final boolean followLinks, final boolean dangling) throws IOException {
+        final Configuration configuration = Configuration.unix().toBuilder().setAttributeViews("basic", "posix").build();
+        try (FileSystem fileSystem = Jimfs.newFileSystem(configuration)) {
+            final Path target = fileSystem.getPath("target");
+            if (!dangling) {
+                Files.write(target, new byte[] {1});
+            }
+            final Path link = Files.createSymbolicLink(fileSystem.getPath("link"), target);
+            final DeletingPathVisitor visitor = new DeletingPathVisitor(Counters.longPathCounters(),
+                    followLinks ? new LinkOption[0] : PathUtils.noFollowLinkOptionArray(),
+                    new DeleteOption[] {StandardDeleteOption.OVERRIDE_READ_ONLY});
+            Files.walkFileTree(link, visitor);
+            assertFalse(Files.exists(link, LinkOption.NOFOLLOW_LINKS));
+            assertEquals(!dangling, Files.exists(target));
+            assertEquals(1, visitor.getPathCounters().getFileCounter().get());
+        }
+    }
+
+    @ParameterizedTest
+    @CsvSource({"false,false", "false,true", "true,false", "true,true"})
+    void testOverrideReadOnlySymbolicLinkParent(final boolean followLinks, final boolean dangling) throws IOException {
+        assumeTrue(Files.getFileAttributeView(tempDirPath, PosixFileAttributeView.class) != null);
+        final Path target = managedTempDirPath.resolve("target");
+        if (!dangling) {
+            Files.write(target, new byte[] {1});
+        }
+        Files.createSymbolicLink(tempDirPath.resolve("link"), target);
+        final Set<PosixFilePermission> permissions = Files.getPosixFilePermissions(tempDirPath);
+        try {
+            Files.setPosixFilePermissions(tempDirPath, PosixFilePermissions.fromString("r-x------"));
+            final DeletingPathVisitor visitor = new DeletingPathVisitor(Counters.longPathCounters(),
+                    followLinks ? new LinkOption[0] : PathUtils.noFollowLinkOptionArray(),
+                    new DeleteOption[] {StandardDeleteOption.OVERRIDE_READ_ONLY});
+            Files.walkFileTree(tempDirPath, visitor);
+            assertFalse(Files.exists(tempDirPath, LinkOption.NOFOLLOW_LINKS));
+            assertEquals(!dangling, Files.exists(target));
+        } finally {
+            if (Files.exists(tempDirPath)) {
+                Files.setPosixFilePermissions(tempDirPath, permissions);
+            }
+        }
+    }
+
+    @ParameterizedTest
+    @CsvSource({"false,false", "false,true", "true,false", "true,true"})
+    void testOverrideReadOnlySymbolicLinkTarget(final boolean followLinks, final boolean directory) throws IOException {
+        final Path target = directory ? Files.createDirectory(managedTempDirPath.resolve("target"))
+                : Files.write(managedTempDirPath.resolve("target"), new byte[] {1});
+        final Path content = directory ? Files.write(target.resolve("content"), new byte[] {1}) : target;
+        final DosFileAttributeView dos = Files.getFileAttributeView(target, DosFileAttributeView.class);
+        final Set<PosixFilePermission> permissions = dos == null ? Files.getPosixFilePermissions(target) : null;
+        try {
+            if (dos != null) {
+                dos.setReadOnly(true);
+            } else {
+                Files.setPosixFilePermissions(target, PosixFilePermissions.fromString(directory ? "r-x------" : "r--------"));
+            }
+            Files.createSymbolicLink(tempDirPath.resolve("link"), target);
+            final LinkOption[] options = followLinks ? new LinkOption[0] : PathUtils.noFollowLinkOptionArray();
+            final DeletingPathVisitor visitor = new DeletingPathVisitor(Counters.longPathCounters(), options,
+                    new DeleteOption[] {StandardDeleteOption.OVERRIDE_READ_ONLY});
+            Files.walkFileTree(tempDirPath, visitor);
+            assertFalse(Files.exists(tempDirPath, LinkOption.NOFOLLOW_LINKS));
+            assertTrue(Files.exists(content));
+            if (dos != null) {
+                assertTrue(dos.readAttributes().isReadOnly());
+            } else {
+                assertEquals(PosixFilePermissions.fromString(directory ? "r-x------" : "r--------"), Files.getPosixFilePermissions(target));
+            }
+            assertEquals(1, visitor.getPathCounters().getFileCounter().get());
+            assertEquals(1, visitor.getPathCounters().getDirectoryCounter().get());
+        } finally {
+            if (dos != null) {
+                dos.setReadOnly(false);
+            } else {
+                Files.setPosixFilePermissions(target, permissions);
+            }
+        }
     }
 }
