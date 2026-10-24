@@ -17,6 +17,7 @@
 
 package org.apache.commons.io.file;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -31,6 +32,7 @@ import java.nio.file.Files;
 import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
@@ -44,6 +46,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.ArgumentsProvider;
 import org.junit.jupiter.params.provider.ArgumentsSource;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.support.ParameterDeclarations;
 
 /**
@@ -239,6 +242,150 @@ class PathUtilsCopyTest extends AbstractTempDirTest {
         final Path copyOfFileLink = copyOfDir.resolve("link-to-file");
         assertTrue(Files.exists(copyOfFileLink));
         assertTrue(Files.isSymbolicLink(copyOfFileLink));
+    }
+
+    @Test
+    void testCopyDirectorySourceCyclicSymbolicLink() throws Exception {
+        final Path source = Files.createSymbolicLink(tempDirPath.resolve("source"), Paths.get("source"));
+        final Path target = tempDirPath.resolve("target");
+        final PathCounters counters = PathUtils.copyDirectory(source, target, LinkOption.NOFOLLOW_LINKS);
+        assertFalse(Files.exists(target));
+        assertEquals(0, counters.getDirectoryCounter().get());
+        assertEquals(0, counters.getFileCounter().get());
+        assertEquals(0, counters.getByteCounter().get());
+    }
+
+    @Test
+    void testCopyDirectorySourceSymbolicLinkWithParent() throws Exception {
+        final Path source = Files.createDirectory(tempDirPath.resolve("source"));
+        final Path sub = Files.createDirectory(source.resolve("sub"));
+        final byte[] content = { 1, 2, 3 };
+        Files.write(source.resolve("file"), content);
+        final Path alias = Files.createSymbolicLink(tempDirPath.resolve("alias"), sub);
+        final Path target = Files.createDirectory(source.resolve("dest"));
+        final PathCounters counters = PathUtils.copyDirectory(alias.resolve(".."), target);
+        assertArrayEquals(content, Files.readAllBytes(target.resolve("file")));
+        assertFalse(Files.exists(target.resolve("dest")));
+        assertEquals(2, counters.getDirectoryCounter().get());
+        assertEquals(1, counters.getFileCounter().get());
+        assertEquals(3, counters.getByteCounter().get());
+    }
+
+    @Test
+    void testCopyDirectoryTargetInsideSameArchive() throws Exception {
+        try (FileSystem archive = openArchive(tempDirPath.resolve(TEST_JAR_NAME), true)) {
+            final Path source = Files.createDirectory(archive.getPath("/source"));
+            final byte[] content = { 1, 2, 3 };
+            Files.write(source.resolve("file"), content);
+            final Path target = Files.createDirectory(source.resolve("dest"));
+            final PathCounters counters = PathUtils.copyDirectory(source, target);
+            assertArrayEquals(content, Files.readAllBytes(target.resolve("file")));
+            assertFalse(Files.exists(target.resolve("dest")));
+            assertEquals(1, counters.getDirectoryCounter().get());
+            assertEquals(1, counters.getFileCounter().get());
+            assertEquals(3, counters.getByteCounter().get());
+        }
+    }
+
+    @ParameterizedTest
+    @CsvSource({ "dest,false", "dest,true", "sub/dest,false", "sub/dest,true" })
+    void testCopyDirectoryTargetInsideSource(final String targetName, final boolean existing) throws Exception {
+        final Path source = Files.createDirectory(tempDirPath.resolve("source"));
+        final Path sub = Files.createDirectory(source.resolve("sub"));
+        final byte[] content = { 1, 2, 3 };
+        Files.write(source.resolve("file"), content);
+        Files.write(sub.resolve("nested"), content);
+        final Path target = source.resolve(targetName);
+        if (existing) {
+            Files.createDirectory(target);
+            Files.write(target.resolve("old"), content);
+        }
+        final PathCounters counters = PathUtils.copyDirectory(source, target);
+        assertArrayEquals(content, Files.readAllBytes(target.resolve("file")));
+        assertArrayEquals(content, Files.readAllBytes(target.resolve("sub/nested")));
+        assertFalse(Files.exists(target.resolve(targetName)));
+        assertEquals(existing, Files.exists(target.resolve("old")));
+        assertEquals(2, counters.getDirectoryCounter().get());
+        assertEquals(2, counters.getFileCounter().get());
+        assertEquals(6, counters.getByteCounter().get());
+    }
+
+    @Test
+    void testCopyDirectoryTargetInsideSourceWithCopyOptions() throws Exception {
+        final Path source = Files.createDirectory(tempDirPath.resolve("source"));
+        final byte[] content = { 1, 2, 3 };
+        final Path file = Files.write(source.resolve("file"), content);
+        Files.createSymbolicLink(source.resolve("link"), file);
+        final Path target = Files.createDirectory(source.resolve("dest"));
+        Files.write(target.resolve("file"), new byte[] { 4 });
+        final PathCounters counters = PathUtils.copyDirectory(source, target, StandardCopyOption.REPLACE_EXISTING, LinkOption.NOFOLLOW_LINKS);
+        assertArrayEquals(content, Files.readAllBytes(target.resolve("file")));
+        assertTrue(Files.isSymbolicLink(target.resolve("link")));
+        assertEquals(file, Files.readSymbolicLink(target.resolve("link")));
+        assertFalse(Files.exists(target.resolve("dest")));
+        assertEquals(1, counters.getDirectoryCounter().get());
+        assertEquals(2, counters.getFileCounter().get());
+    }
+
+    @Test
+    void testCopyDirectoryTargetInsideSourceWithRelativePaths() throws Exception {
+        final Path source = Files.createDirectory(tempDirPath.resolve("source"));
+        final byte[] content = { 1, 2, 3 };
+        Files.write(source.resolve("file"), content);
+        final Path target = Files.createDirectory(source.resolve("dest"));
+        final Path workingDirectory = Paths.get("").toAbsolutePath();
+        final PathCounters counters = PathUtils.copyDirectory(workingDirectory.relativize(source.toAbsolutePath()),
+                workingDirectory.relativize(target.toAbsolutePath()));
+        assertArrayEquals(content, Files.readAllBytes(target.resolve("file")));
+        assertFalse(Files.exists(target.resolve("dest")));
+        assertEquals(1, counters.getDirectoryCounter().get());
+        assertEquals(1, counters.getFileCounter().get());
+        assertEquals(3, counters.getByteCounter().get());
+    }
+
+    @Test
+    void testCopyDirectoryTargetSameAsSource() throws Exception {
+        final Path source = Files.createDirectory(tempDirPath.resolve("source"));
+        final byte[] content = { 1, 2, 3 };
+        Files.write(source.resolve("file"), content);
+        final PathCounters counters = PathUtils.copyDirectory(source, source);
+        assertArrayEquals(content, Files.readAllBytes(source.resolve("file")));
+        assertEquals(1, counters.getDirectoryCounter().get());
+        assertEquals(1, counters.getFileCounter().get());
+        assertEquals(3, counters.getByteCounter().get());
+    }
+
+    @ParameterizedTest
+    @CsvSource({ "false,false", "false,true", "true,false", "true,true" })
+    void testCopyDirectoryTargetSymbolicLinkAliasInsideSource(final boolean parent, final boolean existing) throws Exception {
+        final Path source = Files.createDirectory(tempDirPath.resolve("source"));
+        final Path sub = Files.createDirectory(source.resolve("sub"));
+        final byte[] content = { 1, 2, 3 };
+        Files.write(source.resolve("file"), content);
+        final Path alias = Files.createSymbolicLink(tempDirPath.resolve("alias"), parent ? sub : source);
+        final Path target = (parent ? alias.resolve("..") : alias).resolve("dest");
+        if (existing) {
+            Files.createDirectory(target);
+            Files.write(target.resolve("old"), content);
+        }
+        final PathCounters counters = PathUtils.copyDirectory(source, target);
+        final Path actualTarget = source.resolve("dest");
+        assertArrayEquals(content, Files.readAllBytes(actualTarget.resolve("file")));
+        assertFalse(Files.exists(actualTarget.resolve("dest")));
+        assertEquals(existing, Files.exists(actualTarget.resolve("old")));
+        assertEquals(2, counters.getDirectoryCounter().get());
+        assertEquals(1, counters.getFileCounter().get());
+        assertEquals(3, counters.getByteCounter().get());
+    }
+
+    @Test
+    void testCopyDirectoryTargetWithSourcePrefix() throws Exception {
+        final Path source = Files.createDirectory(tempDirPath.resolve("source"));
+        final byte[] content = { 1, 2, 3 };
+        Files.write(source.resolve("file"), content);
+        final Path target = tempDirPath.resolve("source-copy");
+        PathUtils.copyDirectory(source, target);
+        assertArrayEquals(content, Files.readAllBytes(target.resolve("file")));
     }
 
     /**

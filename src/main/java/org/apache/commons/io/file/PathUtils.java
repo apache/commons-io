@@ -410,16 +410,38 @@ public final class PathUtils {
     /**
      * Copies a directory to another directory.
      *
+     * <p>
+     * If the target directory is strictly inside the source directory, the target subtree, including any existing contents, is excluded from the copy.
+     * Symbolic links are resolved when comparing the source and target locations. The comparison does not protect against concurrent changes to the file
+     * system.
+     * </p>
+     *
      * @param sourceDirectory The source directory.
      * @param targetDirectory The target directory.
      * @param copyOptions     Specifies how the copying should be done.
      * @return The visitation path counters.
-     * @throws IOException Thrown if an I/O error is thrown by a visitor method.
+     * @throws IOException Thrown if resolving a path or copying an entry fails.
      */
     public static PathCounters copyDirectory(final Path sourceDirectory, final Path targetDirectory, final CopyOption... copyOptions) throws IOException {
         final Path absoluteSource = sourceDirectory.toAbsolutePath();
-        return visitFileTree(new CopyDirectoryVisitor(Counters.longPathCounters(), absoluteSource, targetDirectory, copyOptions), absoluteSource)
-                .getPathCounters();
+        // Paths from different file systems cannot be compared by all providers.
+        // The walker does not descend into a source that is itself a symbolic link.
+        final Path realSource = isSameFileSystem(sourceDirectory, targetDirectory) && Files.isDirectory(absoluteSource, LinkOption.NOFOLLOW_LINKS)
+                ? absoluteSource.toRealPath() : null;
+        final Path realTarget = realSource != null ? toRealPathOfExistingPrefix(targetDirectory.toAbsolutePath()) : null;
+        final CopyDirectoryVisitor visitor;
+        if (realSource != null && realTarget.startsWith(realSource) && !realTarget.equals(realSource)) {
+            visitor = new CopyDirectoryVisitor(Counters.longPathCounters(), absoluteSource, targetDirectory, copyOptions) {
+                @Override
+                public FileVisitResult preVisitDirectory(final Path directory, final BasicFileAttributes attributes) throws IOException {
+                    // Do not walk the destination, whether it already existed or was created by this copy.
+                    return directory.toRealPath().equals(realTarget) ? FileVisitResult.SKIP_SUBTREE : super.preVisitDirectory(directory, attributes);
+                }
+            };
+        } else {
+            visitor = new CopyDirectoryVisitor(Counters.longPathCounters(), absoluteSource, targetDirectory, copyOptions);
+        }
+        return visitFileTree(visitor, absoluteSource).getPathCounters();
     }
 
     /**
@@ -1874,6 +1896,36 @@ public final class PathUtils {
 
     private static <T> List<T> toList(final Iterable<T> iterable) {
         return StreamSupport.stream(iterable.spliterator(), false).collect(Collectors.toList());
+    }
+
+    /**
+     * Resolves symbolic links in the longest existing prefix of an absolute path.
+     *
+     * <p>
+     * Missing name elements are appended unchanged. The path is not normalized before resolving symbolic links because doing so can change the meaning of
+     * {@code ..} following a symbolic link.
+     * </p>
+     *
+     * @param absolutePath An absolute path whose final name elements may not exist.
+     * @return The real path of the existing prefix with the missing name elements appended.
+     * @throws IOException Thrown if resolving the existing prefix fails.
+     */
+    private static Path toRealPathOfExistingPrefix(final Path absolutePath) throws IOException {
+        Path existing = absolutePath;
+        Path remainder = absolutePath.getFileSystem().getPath("");
+        while (true) {
+            try {
+                return existing.toRealPath().resolve(remainder);
+            } catch (final NoSuchFileException e) {
+                final Path parent = existing.getParent();
+                final Path fileName = existing.getFileName();
+                if (parent == null || fileName == null) {
+                    throw e;
+                }
+                remainder = fileName.resolve(remainder);
+                existing = parent;
+            }
+        }
     }
 
     private static List<Path> toSortedList(final Iterable<Path> rootDirectories) {
