@@ -27,12 +27,17 @@ import static org.junit.jupiter.api.Assumptions.assumeFalse;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -42,6 +47,7 @@ import java.util.stream.Stream;
 import org.apache.commons.io.file.PathUtils;
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
+import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.apache.commons.lang3.JavaVersion;
 import org.apache.commons.lang3.SystemUtils;
 import org.apache.commons.lang3.function.Consumers;
@@ -88,6 +94,41 @@ class FileUtilsListFilesTest {
         FileUtils.touch(file);
         file = new File(dir, "Repository");
         FileUtils.touch(file);
+    }
+
+    @Test
+    void testIterateFilesWithFileFilterOverride() throws IOException {
+        final File directory = new File(temporaryFolder, "file-filter-override");
+        FileUtils.forceMkdir(directory);
+        FileUtils.touch(new File(directory, "test1.pdf"));
+        FileUtils.touch(new File(directory, "test1.txt"));
+        FileUtils.touch(new File(directory, "test2.PDF"));
+        FileUtils.touch(new File(directory, "test2.TXT"));
+        FileUtils.touch(new File(directory, "ignored.xml"));
+        final IOFileFilter filter = new WildcardFileFilter("*.pdf", "*.txt") {
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public boolean accept(final File file) {
+                return super.accept(file.getParentFile(), file.getName().toLowerCase(Locale.ROOT));
+            }
+        };
+        assertEquals(Stream.of("test1.pdf", "test1.txt", "test2.PDF", "test2.TXT").collect(Collectors.toSet()),
+                new HashSet<>(toFileNames(FileUtils.iterateFiles(directory, filter, null))));
+    }
+
+    @Test
+    void testIterateFilesWithPathFilterOverride() {
+        final IOFileFilter filter = new WildcardFileFilter("*.xml") {
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public FileVisitResult accept(final Path path, final BasicFileAttributes attributes) {
+                return path.getFileName().toString().equals("README") ? FileVisitResult.CONTINUE : FileVisitResult.TERMINATE;
+            }
+        };
+        assertEquals(Collections.singleton("README"),
+                new HashSet<>(toFileNames(FileUtils.iterateFiles(temporaryFolder, filter, null))));
     }
 
     @Test

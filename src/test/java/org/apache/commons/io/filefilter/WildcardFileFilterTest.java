@@ -25,17 +25,53 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.FileSystem;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Path;
 import java.time.Duration;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 import org.apache.commons.io.IOCase;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
 
+import com.google.common.jimfs.Jimfs;
+
 class WildcardFileFilterTest extends AbstractFilterTest {
+
+    @Test
+    void testAcceptPathWithFileOverride() {
+        final IOFileFilter filter = new WildcardFileFilter("*.txt") {
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public boolean accept(final File file) {
+                return !file.getName().startsWith("skip") && super.accept(file.getParentFile(), file.getName().toLowerCase(Locale.ROOT));
+            }
+        };
+        assertFiltering(filter, new File("log.TXT").toPath(), true);
+        assertFiltering(filter, new File("skip.txt").toPath(), false);
+        assertFiltering(filter, new File("log.xml").toPath(), false);
+    }
+
+    @Test
+    void testAcceptPathWithNonDefaultFileSystem() throws IOException {
+        final IOFileFilter filter = WildcardFileFilter.builder().setWildcards("*.txt").get();
+        try (FileSystem fileSystem = Jimfs.newFileSystem()) {
+            assertFiltering(filter, fileSystem.getPath("log.txt"), true);
+            assertFiltering(filter, fileSystem.getPath("log.TXT"), false);
+            assertFiltering(filter, fileSystem.getPath("log.xml"), false);
+        }
+    }
+
+    @Test
+    void testAcceptPathWithoutFileName() {
+        final IOFileFilter filter = WildcardFileFilter.builder().setWildcards("*").get();
+        assertFiltering(filter, (Path) null, false);
+        assertFiltering(filter, temporaryFolder.toPath().toAbsolutePath().getRoot(), false);
+    }
 
     @Test
     void testRepeatedWildcards() {
