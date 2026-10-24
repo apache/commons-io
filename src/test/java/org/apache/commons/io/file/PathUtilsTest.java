@@ -209,6 +209,7 @@ class PathUtilsTest extends AbstractTempDirTest {
     @ParameterizedTest
     @ValueSource(booleans = { false, true })
     void testCreateDirectoriesSymlinkParentTraversal(final boolean absoluteTarget) throws IOException {
+        assumeFalse(SystemUtils.IS_OS_WINDOWS, "Windows resolves parent traversal differently from POSIX systems");
         final Path fixture = Files.createTempDirectory(current().toAbsolutePath().normalize(), "path-utils-");
         try {
             final Path linkDir = Files.createDirectories(fixture.resolve("linkDir"));
@@ -241,7 +242,9 @@ class PathUtilsTest extends AbstractTempDirTest {
             }
             final Path link = Files.createSymbolicLink(linkDir.resolve("link"), target);
             final Path input = relativeInput ? current().toAbsolutePath().normalize().relativize(link) : link;
-            assertEquals(input.resolveSibling(target), PathUtils.createParentDirectories(input.resolve("file.txt"), PathUtils.NULL_LINK_OPTION));
+            final Path parent = PathUtils.createParentDirectories(input.resolve("file.txt"), PathUtils.NULL_LINK_OPTION);
+            // Files.createDirectories() may return an absolute path when it creates missing ancestors.
+            assertEquals(expected.toAbsolutePath(), parent.toAbsolutePath());
             assertTrue(Files.isDirectory(expected));
             assertFalse(Files.exists(fixture.resolve("target")));
         } finally {
