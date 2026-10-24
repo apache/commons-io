@@ -538,10 +538,16 @@ public final class PathUtils {
      * If the parent directory already exists, then return it.
      * </p>
      *
+     * <p>
+     * When {@code linkOption} is {@code null} and the parent is a symbolic link, resolves its target against the link's directory before checking for
+     * existence or creating directories. The returned path is this resolved target, which may be relative or absolute. The path is not normalized,
+     * because removing {@code ..} components can change its meaning when symbolic links are present.
+     * </p>
+     *
      * @param path       The path to a file (or directory).
-     * @param linkOption A {@link LinkOption} or null.
+     * @param linkOption {@link LinkOption#NOFOLLOW_LINKS} to retain the parent symbolic link, or {@code null} to resolve its target.
      * @param attrs      An optional list of file attributes to set atomically when creating the directories.
-     * @return The Path for the {@code path}'s parent directory or null if the given path has no parent.
+     * @return The parent path, or its resolved symbolic link target when following links, or {@code null} if the given path has no parent.
      * @throws IOException Thrown if an I/O error occurs.
      * @since 2.12.0
      */
@@ -1575,7 +1581,11 @@ public final class PathUtils {
     }
 
     private static Path readIfSymbolicLink(final Path path) throws IOException {
-        return path != null ? Files.isSymbolicLink(path) ? Files.readSymbolicLink(path) : path : null;
+        if (path == null || !Files.isSymbolicLink(path)) {
+            return path;
+        }
+        // Relative targets are relative to the link's directory. Preserve symlink-sensitive components such as "..".
+        return path.resolveSibling(Files.readSymbolicLink(path));
     }
 
     /**

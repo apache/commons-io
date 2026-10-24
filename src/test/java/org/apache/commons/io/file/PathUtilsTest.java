@@ -54,6 +54,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.SystemProperties;
 import org.apache.commons.lang3.SystemUtils;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 /**
  * Tests {@link PathUtils}.
@@ -186,6 +189,72 @@ class PathUtilsTest extends AbstractTempDirTest {
     void testCreateDirectoriesSymlinkClashing() throws IOException {
         final Path symlinkedDir = createTempSymbolicLinkedRelativeDir(tempDirPath);
         assertEquals(symlinkedDir, PathUtils.createParentDirectories(symlinkedDir.resolve("child")));
+    }
+
+    @Test
+    void testCreateDirectoriesSymlinkInCurrentDirectory() throws IOException {
+        final Path fixture = Files.createTempDirectory(current().toAbsolutePath().normalize(), "path-utils-");
+        final Path link = fixture.resolveSibling(fixture.getFileName() + "-link");
+        try {
+            final Path target = fixture.getFileName().resolve("target");
+            Files.createSymbolicLink(link, target);
+            assertEquals(target, PathUtils.createParentDirectories(link.getFileName().resolve("file.txt"), PathUtils.NULL_LINK_OPTION));
+            assertTrue(Files.isDirectory(fixture.resolve("target")));
+        } finally {
+            Files.deleteIfExists(link);
+            PathUtils.deleteDirectory(fixture);
+        }
+    }
+
+    @ParameterizedTest
+    @ValueSource(booleans = { false, true })
+    void testCreateDirectoriesSymlinkParentTraversal(final boolean absoluteTarget) throws IOException {
+        final Path fixture = Files.createTempDirectory(current().toAbsolutePath().normalize(), "path-utils-");
+        try {
+            final Path linkDir = Files.createDirectories(fixture.resolve("linkDir"));
+            final Path nested = Files.createDirectories(linkDir.resolve("other/nested"));
+            final Path targetDir = Files.createDirectories(linkDir.resolve(fixture.getFileName()));
+            Files.createSymbolicLink(targetDir.resolve("hop"), nested);
+            final Path relativeTarget = fixture.getFileName().resolve("hop/../target");
+            final Path target = absoluteTarget ? linkDir.resolve(relativeTarget) : relativeTarget;
+            final Path link = Files.createSymbolicLink(linkDir.resolve("link"), target);
+            assertEquals(linkDir.resolve(relativeTarget), PathUtils.createParentDirectories(link.resolve("file.txt"), PathUtils.NULL_LINK_OPTION));
+            assertTrue(Files.isDirectory(linkDir.resolve("other/target")));
+            assertFalse(Files.exists(targetDir.resolve("target")));
+            assertFalse(Files.exists(fixture.resolve("target")));
+        } finally {
+            PathUtils.deleteDirectory(fixture);
+        }
+    }
+
+    @ParameterizedTest
+    @CsvSource({ "false,false", "false,true", "true,false", "true,true" })
+    void testCreateDirectoriesSymlinkRelativeTarget(final boolean existingTarget, final boolean relativeInput) throws IOException {
+        // Keep both the intended target and any incorrectly CWD-relative target inside a unique, owned fixture.
+        final Path fixture = Files.createTempDirectory(current().toAbsolutePath().normalize(), "path-utils-");
+        try {
+            final Path linkDir = Files.createDirectories(fixture.resolve("linkDir"));
+            final Path target = fixture.getFileName().resolve("target");
+            final Path expected = linkDir.resolve(target);
+            if (existingTarget) {
+                Files.createDirectories(expected);
+            }
+            final Path link = Files.createSymbolicLink(linkDir.resolve("link"), target);
+            final Path input = relativeInput ? current().toAbsolutePath().normalize().relativize(link) : link;
+            assertEquals(input.resolveSibling(target), PathUtils.createParentDirectories(input.resolve("file.txt"), PathUtils.NULL_LINK_OPTION));
+            assertTrue(Files.isDirectory(expected));
+            assertFalse(Files.exists(fixture.resolve("target")));
+        } finally {
+            PathUtils.deleteDirectory(fixture);
+        }
+    }
+
+    @Test
+    void testCreateDirectoriesSymlinkRelativeTargetNoFollow() throws IOException {
+        final Path link = Files.createSymbolicLink(tempDirPath.resolve("link"), Paths.get("target"));
+        assertEquals(link, PathUtils.createParentDirectories(link.resolve("file.txt")));
+        assertEquals(link, PathUtils.createParentDirectories(link.resolve("file.txt"), LinkOption.NOFOLLOW_LINKS));
+        assertFalse(Files.exists(tempDirPath.resolve("target")));
     }
 
     @Test
@@ -421,6 +490,23 @@ class PathUtilsTest extends AbstractTempDirTest {
         }
         try (OutputStream outputStream = PathUtils.newOutputStream(file, false)) {
             // empty
+        }
+    }
+
+    @Test
+    void testNewOutputStreamSymlinkRelativeTarget() throws IOException {
+        final Path fixture = Files.createTempDirectory(current().toAbsolutePath().normalize(), "path-utils-");
+        try {
+            final Path linkDir = Files.createDirectories(fixture.resolve("linkDir"));
+            final Path target = fixture.getFileName().resolve("target");
+            final Path link = Files.createSymbolicLink(linkDir.resolve("link"), target);
+            try (OutputStream output = PathUtils.newOutputStream(link.resolve("file.txt"), false)) {
+                output.write(BYTE_ARRAY_FIXTURE);
+            }
+            assertArrayEquals(BYTE_ARRAY_FIXTURE, Files.readAllBytes(linkDir.resolve(target).resolve("file.txt")));
+            assertFalse(Files.exists(fixture.resolve("target")));
+        } finally {
+            PathUtils.deleteDirectory(fixture);
         }
     }
 
