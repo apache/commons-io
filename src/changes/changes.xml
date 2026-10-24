@@ -97,6 +97,7 @@ The <action> type attribute can be add,update,fix,remove.
       <action type="fix" dev="ggregory" due-to="Claude Security, Gary Gregory">Fix cross-filesystem directory comparisons in PathUtils (f031) (#915).</action>
       <action type="fix" dev="ggregory" due-to="Claude Security, Gary Gregory">Javadoc: Clarify XML encoding precedence and strict detection limitations (f032).</action>
       <action type="fix" dev="ggregory" due-to="Claude Security, Gary Gregory">Preserve symlink target attributes during deletion (f033) (#916).</action>
+      <action type="fix" dev="ggregory" due-to="Claude Security, Gary Gregory">Fix relative symbolic link target resolution (f034) (#917).</action>
       <!-- ADD -->
       <action type="add" dev="ggregory" due-to="Gary Gregory">Add IOConsumer.accept(IOConsumer, T) (#846).</action>
       <action type="add" dev="ggregory" due-to="Gary Gregory">Add UnsynchronizedBufferedReader.unwrap() (#850).</action>
