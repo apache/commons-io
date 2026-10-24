@@ -92,6 +92,7 @@ The <action> type attribute can be add,update,fix,remove.
       <action type="fix" dev="ggregory" due-to="Claude Security, Gary Gregory">Javadoc: Clarify serialization class-name matching semantics (f026) (#910).</action>
       <action type="fix" dev="ggregory" due-to="Claude Security, Gary Gregory">Javadoc: Clarify Tailer ignoreTouch behavior and add regression tests (f027) (#911).</action>
       <action type="fix" dev="ggregory" due-to="Claude Security, Gary Gregory">Preserve FileEntry timestamps when last-modified reads fail (f028) (#912).</action>
+      <action type="fix" dev="ggregory" due-to="Claude Security, Gary Gregory">Fix FileCleaningTracker reaper interrupt busy-spin (f029) (#913).</action>
       <!-- ADD -->
       <action type="add" dev="ggregory" due-to="Gary Gregory">Add IOConsumer.accept(IOConsumer, T) (#846).</action>
       <action type="add" dev="ggregory" due-to="Gary Gregory">Add UnsynchronizedBufferedReader.unwrap() (#850).</action>
