@@ -261,14 +261,15 @@ class PathUtilsCopyTest extends AbstractTempDirTest {
         final Path sub = Files.createDirectory(source.resolve("sub"));
         final byte[] content = { 1, 2, 3 };
         Files.write(source.resolve("file"), content);
-        final Path alias = Files.createSymbolicLink(tempDirPath.resolve("alias"), sub);
+        // Keep the link and its referent under the same parent: Windows resolves link/.. lexically.
+        final Path alias = Files.createSymbolicLink(source.resolve("alias"), sub);
         final Path target = Files.createDirectory(source.resolve("dest"));
         final PathCounters counters = PathUtils.copyDirectory(alias.resolve(".."), target);
         assertArrayEquals(content, Files.readAllBytes(target.resolve("file")));
         assertFalse(Files.exists(target.resolve("dest")));
         assertEquals(2, counters.getDirectoryCounter().get());
-        assertEquals(1, counters.getFileCounter().get());
-        assertEquals(3, counters.getByteCounter().get());
+        assertEquals(2, counters.getFileCounter().get());
+        assertTrue(Files.isDirectory(target.resolve("alias")));
     }
 
     @Test
@@ -329,18 +330,22 @@ class PathUtilsCopyTest extends AbstractTempDirTest {
 
     @Test
     void testCopyDirectoryTargetInsideSourceWithRelativePaths() throws Exception {
-        final Path source = Files.createDirectory(tempDirPath.resolve("source"));
-        final byte[] content = { 1, 2, 3 };
-        Files.write(source.resolve("file"), content);
-        final Path target = Files.createDirectory(source.resolve("dest"));
         final Path workingDirectory = Paths.get("").toAbsolutePath();
-        final PathCounters counters = PathUtils.copyDirectory(workingDirectory.relativize(source.toAbsolutePath()),
-                workingDirectory.relativize(target.toAbsolutePath()));
-        assertArrayEquals(content, Files.readAllBytes(target.resolve("file")));
-        assertFalse(Files.exists(target.resolve("dest")));
-        assertEquals(1, counters.getDirectoryCounter().get());
-        assertEquals(1, counters.getFileCounter().get());
-        assertEquals(3, counters.getByteCounter().get());
+        // The default temporary directory can be on a different Windows drive from the working directory.
+        final Path source = Files.createTempDirectory(workingDirectory, "PathUtilsCopyTest-");
+        try {
+            final byte[] content = { 1, 2, 3 };
+            Files.write(source.resolve("file"), content);
+            final Path target = Files.createDirectory(source.resolve("dest"));
+            final PathCounters counters = PathUtils.copyDirectory(workingDirectory.relativize(source), workingDirectory.relativize(target));
+            assertArrayEquals(content, Files.readAllBytes(target.resolve("file")));
+            assertFalse(Files.exists(target.resolve("dest")));
+            assertEquals(1, counters.getDirectoryCounter().get());
+            assertEquals(1, counters.getFileCounter().get());
+            assertEquals(3, counters.getByteCounter().get());
+        } finally {
+            PathUtils.deleteDirectory(source);
+        }
     }
 
     @Test
@@ -357,19 +362,20 @@ class PathUtilsCopyTest extends AbstractTempDirTest {
 
     @ParameterizedTest
     @CsvSource({ "false,false", "false,true", "true,false", "true,true" })
-    void testCopyDirectoryTargetSymbolicLinkAliasInsideSource(final boolean parent, final boolean existing) throws Exception {
+    void testCopyDirectoryTargetSymbolicLinkAlias(final boolean parent, final boolean existing) throws Exception {
         final Path source = Files.createDirectory(tempDirPath.resolve("source"));
         final Path sub = Files.createDirectory(source.resolve("sub"));
         final byte[] content = { 1, 2, 3 };
         Files.write(source.resolve("file"), content);
         final Path alias = Files.createSymbolicLink(tempDirPath.resolve("alias"), parent ? sub : source);
         final Path target = (parent ? alias.resolve("..") : alias).resolve("dest");
+        // On Unix, alias/.. refers to the source; on Windows, it refers to the alias's lexical parent.
+        final Path actualTarget = target.getParent().toRealPath().resolve("dest");
         if (existing) {
             Files.createDirectory(target);
             Files.write(target.resolve("old"), content);
         }
         final PathCounters counters = PathUtils.copyDirectory(source, target);
-        final Path actualTarget = source.resolve("dest");
         assertArrayEquals(content, Files.readAllBytes(actualTarget.resolve("file")));
         assertFalse(Files.exists(actualTarget.resolve("dest")));
         assertEquals(existing, Files.exists(actualTarget.resolve("old")));
