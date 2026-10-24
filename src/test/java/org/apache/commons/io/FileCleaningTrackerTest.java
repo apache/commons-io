@@ -30,11 +30,14 @@ import java.io.RandomAccessFile;
 import java.lang.ref.Reference;
 import java.lang.ref.ReferenceQueue;
 import java.nio.file.Files;
+import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.commons.io.file.AbstractTempDirTest;
 import org.apache.commons.io.test.TestUtils;
@@ -142,6 +145,39 @@ class FileCleaningTrackerTest extends AbstractTempDirTest {
     }
 
     @Test
+    void testExitWhenFinishedClearsInterruptBeforeWaitingForPendingTrackers() throws Exception {
+        final CountDownLatch firstRemove = new CountDownLatch(1);
+        final CountDownLatch secondRemove = new CountDownLatch(1);
+        final AtomicInteger calls = new AtomicInteger();
+        final AtomicBoolean interruptedOnRetry = new AtomicBoolean();
+        fileCleaningTracker.refQueue = new ReferenceQueue<Object>() {
+            @Override
+            public Reference<?> remove() throws InterruptedException {
+                final int call = calls.incrementAndGet();
+                if (call == 1) {
+                    firstRemove.countDown();
+                } else if (call == 2) {
+                    interruptedOnRetry.set(Thread.currentThread().isInterrupted());
+                    secondRemove.countDown();
+                }
+                return super.remove();
+            }
+        };
+        TestUtils.createFile(testFile, 16);
+        // Keep the marker reachable until the assertions finish; enqueue it explicitly for cleanup.
+        fileCleaningTracker.track(testFile, this);
+        assertTrue(firstRemove.await(TIMEOUT_MILLIS, TimeUnit.MILLISECONDS), "Reaper did not wait for a tracker");
+        fileCleaningTracker.exitWhenFinished();
+        assertTrue(secondRemove.await(TIMEOUT_MILLIS, TimeUnit.MILLISECONDS), "Reaper did not retry after interruption");
+        assertFalse(interruptedOnRetry.get(), "Reaper must clear the interrupt before waiting again");
+        assertEquals(1, fileCleaningTracker.getTrackCount());
+        assertTrue(testFile.exists());
+        finishTracking();
+        assertFalse(testFile.exists(), showFailures());
+        assertTrue(fileCleaningTracker.getDeleteFailures().isEmpty(), showFailures());
+    }
+
+    @Test
     void testExitWhenFinishedTestMatchesField() {
         // Before calling exitWhenFinished()
         assertEquals(fileCleaningTracker.exitWhenFinished, fileCleaningTracker.exitWhenFinishedTest(),
@@ -175,6 +211,24 @@ class FileCleaningTrackerTest extends AbstractTempDirTest {
         assertTrue(fileCleaningTracker.exitWhenFinishedTest(),
                 "exitWhenFinishedTest() should return true after exitWhenFinished() is called with active reaper");
         raf.close();
+    }
+
+    @Test
+    void testFileCleanerDirectory_ForceStrategy_DoesNotFollowSymbolicLink() throws Exception {
+        final Path victimDirectory = Files.createDirectory(tempDirPath.resolve("victim"));
+        final Path victimFile = victimDirectory.resolve("important.txt");
+        TestUtils.createFile(victimFile, 16);
+        final Path trackedDirectory = Files.createDirectory(tempDirPath.resolve("tracked"));
+        fileCleaningTracker.track(trackedDirectory, this, FileDeleteStrategy.FORCE);
+        Files.delete(trackedDirectory);
+        Files.createSymbolicLink(trackedDirectory, victimDirectory);
+
+        finishTracking();
+
+        assertFalse(Files.exists(trackedDirectory, LinkOption.NOFOLLOW_LINKS), showFailures());
+        assertTrue(Files.isDirectory(victimDirectory));
+        assertEquals(16, Files.size(victimFile));
+        assertTrue(fileCleaningTracker.getDeleteFailures().isEmpty(), showFailures());
     }
 
     @Test
