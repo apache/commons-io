@@ -139,17 +139,34 @@ public class FileWriterWithEncoding extends ProxyWriter {
             return this;
         }
 
+        /**
+         * Sets the charset.
+         * <p>
+         * Preserves an existing encoder and its configuration if it uses the selected charset. Otherwise, replaces an existing encoder with a new encoder
+         * for the selected charset, resetting error actions and replacement bytes to the new encoder's defaults. If the encoder was cleared with
+         * {@link #setCharsetEncoder(CharsetEncoder)}, it remains cleared.
+         * </p>
+         *
+         * @param charset The charset, null resets to the default.
+         * @return {@code this} instance.
+         */
         @Override
         public Builder setCharset(final Charset charset) {
             super.setCharset(charset);
-            charsetEncoder = getCharset().newEncoder();
+            if (charsetEncoder != null && !charsetEncoder.charset().equals(getCharset())) {
+                charsetEncoder = getCharset().newEncoder();
+            }
             return this;
         }
 
         /**
-         * Sets charsetEncoder to use for encoding.
+         * Sets the charset encoder.
+         * <p>
+         * A non-null encoder also sets the charset and retains its configured error actions and replacement bytes. A null encoder clears the encoder,
+         * leaving the charset unchanged. In that case, the writer uses the selected charset and replaces malformed and unmappable input.
+         * </p>
          *
-         * @param charsetEncoder The charsetEncoder to use for encoding.
+         * @param charsetEncoder The charset encoder, null clears the encoder.
          * @return {@code this} instance.
          */
         public Builder setCharsetEncoder(final CharsetEncoder charsetEncoder) {

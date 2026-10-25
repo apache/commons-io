@@ -31,6 +31,7 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
+import java.nio.charset.CodingErrorAction;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.Arrays;
@@ -54,6 +55,13 @@ class FileWriterWithEncodingTest {
     private File file2;
     private String textContent;
     private final char[] anotherTestContent = {'f', 'z', 'x'};
+
+    private void checkBuilderOutput(final FileWriterWithEncoding.Builder builder, final String text, final byte[] expected) throws Exception {
+        try (Writer writer = builder.setFile(file2).get()) {
+            writer.write(text);
+        }
+        assertArrayEquals(expected, Files.readAllBytes(file2.toPath()));
+    }
 
     @BeforeEach
     public void setUp() throws Exception {
@@ -79,6 +87,93 @@ class FileWriterWithEncodingTest {
         }
         assertTrue(file1.exists());
         assertTrue(file2.exists());
+    }
+
+    @Test
+    void testBuilder_charsetThenEncoder() throws Exception {
+        final Charset charset = StandardCharsets.UTF_16;
+        checkBuilderOutput(FileWriterWithEncoding.builder().setCharset(StandardCharsets.ISO_8859_1).setCharsetEncoder(charset.newEncoder()),
+                NON_ASCII, NON_ASCII.getBytes(charset));
+    }
+
+    @Test
+    void testBuilder_encoderThenDifferentCharset() throws Exception {
+        final Charset charset = StandardCharsets.ISO_8859_1;
+        checkBuilderOutput(FileWriterWithEncoding.builder().setCharsetEncoder(StandardCharsets.UTF_16.newEncoder()).setCharset(charset),
+                NON_ASCII, NON_ASCII.getBytes(charset));
+    }
+
+    @Test
+    void testBuilder_encoderThenSameCharset() throws Exception {
+        final Charset charset = StandardCharsets.US_ASCII;
+        final CharsetEncoder encoder = charset.newEncoder().onMalformedInput(CodingErrorAction.REPLACE)
+                .onUnmappableCharacter(CodingErrorAction.REPLACE).replaceWith(new byte[] {'!'});
+        checkBuilderOutput(FileWriterWithEncoding.builder().setCharsetEncoder(encoder).setCharset(charset), "\uD800\u00e9", new byte[] {'!', '!'});
+    }
+
+    @Test
+    void testBuilder_encoderThenSameCharsetName() throws Exception {
+        final Charset charset = StandardCharsets.US_ASCII;
+        final CharsetEncoder encoder = charset.newEncoder().onMalformedInput(CodingErrorAction.REPLACE)
+                .onUnmappableCharacter(CodingErrorAction.REPLACE).replaceWith(new byte[] {'!'});
+        checkBuilderOutput(FileWriterWithEncoding.builder().setCharsetEncoder(encoder).setCharset(charset.name()), "\uD800\u00e9", new byte[] {'!', '!'});
+    }
+
+    @Test
+    void testBuilder_nonDefaultCharset() throws Exception {
+        for (final Charset charset : Arrays.asList(StandardCharsets.UTF_16, StandardCharsets.ISO_8859_1)) {
+            try (Writer writer = FileWriterWithEncoding.builder().setFile(file2).setCharset(charset).get()) {
+                writer.write(NON_ASCII);
+            }
+            assertArrayEquals(NON_ASCII.getBytes(charset), Files.readAllBytes(file2.toPath()));
+        }
+    }
+
+    @Test
+    void testBuilder_nonDefaultCharsetEncoder() throws Exception {
+        for (final Charset charset : Arrays.asList(StandardCharsets.UTF_16, StandardCharsets.ISO_8859_1)) {
+            try (Writer writer = FileWriterWithEncoding.builder().setFile(file2).setCharsetEncoder(charset.newEncoder()).get()) {
+                writer.write(NON_ASCII);
+            }
+            assertArrayEquals(NON_ASCII.getBytes(charset), Files.readAllBytes(file2.toPath()));
+        }
+    }
+
+    @Test
+    void testBuilder_nonDefaultCharsetName() throws Exception {
+        final Charset charset = StandardCharsets.UTF_16;
+        checkBuilderOutput(FileWriterWithEncoding.builder().setCharset(charset.name()), NON_ASCII, NON_ASCII.getBytes(charset));
+    }
+
+    @Test
+    void testBuilder_nullCharset() throws Exception {
+        final Charset charset = Charset.defaultCharset();
+        final Charset other = charset.equals(StandardCharsets.UTF_16) ? StandardCharsets.ISO_8859_1 : StandardCharsets.UTF_16;
+        checkBuilderOutput(FileWriterWithEncoding.builder().setCharsetEncoder(other.newEncoder()).setCharset((Charset) null),
+                NON_ASCII, NON_ASCII.getBytes(charset));
+    }
+
+    @Test
+    void testBuilder_nullCharsetName() throws Exception {
+        final Charset charset = Charset.defaultCharset();
+        final Charset other = charset.equals(StandardCharsets.UTF_16) ? StandardCharsets.ISO_8859_1 : StandardCharsets.UTF_16;
+        checkBuilderOutput(FileWriterWithEncoding.builder().setCharsetEncoder(other.newEncoder()).setCharset((String) null),
+                NON_ASCII, NON_ASCII.getBytes(charset));
+    }
+
+    @Test
+    void testBuilder_nullEncoderAfterCharset() throws Exception {
+        final Charset charset = StandardCharsets.UTF_16;
+        final String text = NON_ASCII + "\uD800";
+        checkBuilderOutput(FileWriterWithEncoding.builder().setCharset(charset).setCharsetEncoder(null), text, text.getBytes(charset));
+    }
+
+    @Test
+    void testBuilder_nullEncoderBeforeCharset() throws Exception {
+        for (final Charset charset : Arrays.asList(Charset.defaultCharset(), StandardCharsets.US_ASCII, StandardCharsets.UTF_16)) {
+            final String text = NON_ASCII + "\uD800";
+            checkBuilderOutput(FileWriterWithEncoding.builder().setCharsetEncoder(null).setCharset(charset), text, text.getBytes(charset));
+        }
     }
 
     @Test
@@ -205,26 +300,6 @@ class FileWriterWithEncodingTest {
             }
             assertTrue(file1.exists());
             assertTrue(file2.exists());
-        }
-    }
-
-    @Test
-    void testBuilder_nonDefaultCharset() throws Exception {
-        for (final Charset charset : Arrays.asList(StandardCharsets.UTF_16, StandardCharsets.ISO_8859_1)) {
-            try (Writer writer = FileWriterWithEncoding.builder().setFile(file2).setCharset(charset).get()) {
-                writer.write(NON_ASCII);
-            }
-            assertArrayEquals(NON_ASCII.getBytes(charset), Files.readAllBytes(file2.toPath()));
-        }
-    }
-
-    @Test
-    void testBuilder_nonDefaultCharsetEncoder() throws Exception {
-        for (final Charset charset : Arrays.asList(StandardCharsets.UTF_16, StandardCharsets.ISO_8859_1)) {
-            try (Writer writer = FileWriterWithEncoding.builder().setFile(file2).setCharsetEncoder(charset.newEncoder()).get()) {
-                writer.write(NON_ASCII);
-            }
-            assertArrayEquals(NON_ASCII.getBytes(charset), Files.readAllBytes(file2.toPath()));
         }
     }
 

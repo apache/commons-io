@@ -99,6 +99,7 @@ The <action> type attribute can be add,update,fix,remove.
       <action type="fix" dev="ggregory" due-to="Claude Security, Gary Gregory">Preserve symlink target attributes during deletion (f033) (#916).</action>
       <action type="fix" dev="ggregory" due-to="Claude Security, Gary Gregory">Fix relative symbolic link target resolution (f034) (#917).</action>
       <action type="fix" dev="ggregory" due-to="Jeff Lenamon, Gary Gregory">Fix MemoryMappedFileInputStream.read() returning values outside the unsigned byte range (#875).</action>
+      <action type="fix" dev="ggregory" due-to="Jeff Lenamon, Gary Gregory">Fix FileWriterWithEncoding.Builder ignoring any Charset but the default (#877).</action>
       <!-- ADD -->
       <action type="add" dev="ggregory" due-to="Gary Gregory">Add IOConsumer.accept(IOConsumer, T) (#846).</action>
       <action type="add" dev="ggregory" due-to="Gary Gregory">Add UnsynchronizedBufferedReader.unwrap() (#850).</action>
