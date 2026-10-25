@@ -73,7 +73,7 @@ public class FileWriterWithEncoding extends ProxyWriter {
      * FileWriterWithEncoding w = FileWriterWithEncoding.builder()
      *   .setPath(path)
      *   .setAppend(false)
-     *   .setCharsetEncoder(StandardCharsets.UTF_8)
+     *   .setCharset(StandardCharsets.UTF_8)
      *   .get();}
      * </pre>
      *
@@ -125,9 +125,6 @@ public class FileWriterWithEncoding extends ProxyWriter {
         }
 
         private Object getEncoder() {
-            if (charsetEncoder != null && getCharset() != null && !charsetEncoder.charset().equals(getCharset())) {
-                throw new IllegalStateException(String.format("Mismatched Charset(%s) and CharsetEncoder(%s)", getCharset(), charsetEncoder.charset()));
-            }
             return charsetEncoder != null ? charsetEncoder : getCharset();
         }
 
@@ -142,6 +139,13 @@ public class FileWriterWithEncoding extends ProxyWriter {
             return this;
         }
 
+        @Override
+        public Builder setCharset(final Charset charset) {
+            super.setCharset(charset);
+            charsetEncoder = getCharset().newEncoder();
+            return this;
+        }
+
         /**
          * Sets charsetEncoder to use for encoding.
          *
@@ -150,6 +154,9 @@ public class FileWriterWithEncoding extends ProxyWriter {
          */
         public Builder setCharsetEncoder(final CharsetEncoder charsetEncoder) {
             this.charsetEncoder = charsetEncoder;
+            if (charsetEncoder != null) {
+                super.setCharset(charsetEncoder.charset());
+            }
             return this;
         }
 
