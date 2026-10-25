@@ -23,6 +23,7 @@ import java.nio.file.Files;
 import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.nio.file.attribute.PosixFileAttributes;
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -126,16 +127,23 @@ public class CleaningPathVisitor extends CountingPathVisitor {
     public FileVisitResult visitFile(final Path file, final BasicFileAttributes attributes) throws IOException {
         // Files.deleteIfExists() never follows links, so use LinkOption.NOFOLLOW_LINKS in other calls to Files.
         if (accept(file) && Files.exists(file, LinkOption.NOFOLLOW_LINKS)) {
-            boolean readOnlyCleared = false;
+            final Path parent = file.getParent();
+            final PosixFileAttributes parentAttributes = overrideReadOnly ? PathUtils.readPosixFileAttributes(parent, LinkOption.NOFOLLOW_LINKS) : null;
+            boolean fileWasReadOnly = false;
             try {
                 if (overrideReadOnly) {
+                    fileWasReadOnly = PathUtils.isReadOnly(file, LinkOption.NOFOLLOW_LINKS);
                     PathUtils.setReadOnly(file, false, LinkOption.NOFOLLOW_LINKS);
-                    readOnlyCleared = true;
                 }
                 Files.deleteIfExists(file);
             } finally {
-                if (readOnlyCleared && Files.exists(file, LinkOption.NOFOLLOW_LINKS)) {
-                    PathUtils.setReadOnly(file, true, LinkOption.NOFOLLOW_LINKS);
+                if (Files.exists(file, LinkOption.NOFOLLOW_LINKS)) {
+                    if (fileWasReadOnly) {
+                        PathUtils.setReadOnly(file, true, LinkOption.NOFOLLOW_LINKS);
+                    }
+                    if (parentAttributes != null) {
+                        Files.setPosixFilePermissions(parent, parentAttributes.permissions());
+                    }
                 }
             }
         }

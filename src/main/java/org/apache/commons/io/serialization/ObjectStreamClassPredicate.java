@@ -59,6 +59,11 @@ public class ObjectStreamClassPredicate implements Predicate<ObjectStreamClass> 
      * The reject list takes precedence over the accept list.
      * </p>
      *
+     * <p>
+     * Classes are matched by their exact names. Array classes must be accepted separately from their element classes.
+     * For example, accepting {@code Foo.class} does not accept {@code Foo[].class}.
+     * </p>
+     *
      * @param classes Classes to accept.
      * @return this object.
      */
@@ -87,6 +92,11 @@ public class ObjectStreamClassPredicate implements Predicate<ObjectStreamClass> 
      * The reject list takes precedence over the accept list.
      * </p>
      *
+     * <p>
+     * The pattern must match the entire class name, as defined by {@link java.util.regex.Matcher#matches()}.
+     * For example, {@code foo\.Bar} matches {@code foo.Bar}, but not {@code foo.BarExtra}. Use {@code .*foo\.Bar.*} to match a substring.
+     * </p>
+     *
      * @param pattern A Pattern for compiled regular expression.
      * @return {@code this} instance.
      */
@@ -99,6 +109,16 @@ public class ObjectStreamClassPredicate implements Predicate<ObjectStreamClass> 
      * Accepts the wildcard specified classes for deserialization, unless they are otherwise rejected.
      * <p>
      * The reject list takes precedence over the accept list.
+     * </p>
+     *
+     * <p>
+     * Matching is case-sensitive. The wildcard {@code *} matches zero or more characters and {@code ?} matches one character, including {@code '.'} in both
+     * cases. Unlike <a href="https://openjdk.org/jeps/290">JEP 290</a> serialization filter patterns, these patterns do not treat package boundaries specially:
+     * {@code com.example.*} matches classes in {@code com.example} and all its subpackages, and {@code **} is equivalent to {@code *}.
+     * </p>
+     *
+     * <p>
+     * Use {@link #accept(Pattern)} with a regular expression to match only classes directly in a package.
      * </p>
      *
      * @param patterns Wildcard file name patterns as defined by {@link org.apache.commons.io.FilenameUtils#wildcardMatch(String, String)
@@ -114,6 +134,12 @@ public class ObjectStreamClassPredicate implements Predicate<ObjectStreamClass> 
      * Rejects the specified classes for deserialization, even if they are otherwise accepted.
      * <p>
      * The reject list takes precedence over the accept list.
+     * </p>
+     *
+     * <p>
+     * Classes are matched by their exact names. Rejecting {@code Foo.class} does not reject {@code Foo[].class}, so an otherwise accepted
+     * empty or null-only array can still be deserialized. Element class descriptors encountered while reading array contents are checked separately.
+     * To reject the array class itself, also reject {@code Foo[].class}.
      * </p>
      *
      * @param classes Classes to reject.
@@ -144,6 +170,11 @@ public class ObjectStreamClassPredicate implements Predicate<ObjectStreamClass> 
      * The reject list takes precedence over the accept list.
      * </p>
      *
+     * <p>
+     * The pattern must match the entire class name, as defined by {@link java.util.regex.Matcher#matches()}.
+     * For example, {@code foo\.Bar} matches {@code foo.Bar}, but not {@code foo.BarExtra}. Use {@code .*foo\.Bar.*} to match a substring.
+     * </p>
+     *
      * @param pattern standard Java regexp.
      * @return {@code this} instance.
      */
@@ -156,6 +187,16 @@ public class ObjectStreamClassPredicate implements Predicate<ObjectStreamClass> 
      * Rejects the wildcard specified classes for deserialization, even if they are otherwise accepted.
      * <p>
      * The reject list takes precedence over the accept list.
+     * </p>
+     *
+     * <p>
+     * Matching is case-sensitive. The wildcard {@code *} matches zero or more characters and {@code ?} matches one character, including {@code '.'} in both
+     * cases. Unlike <a href="https://openjdk.org/jeps/290">JEP 290</a> serialization filter patterns, these patterns do not treat package boundaries specially:
+     * {@code com.example.*} matches classes in {@code com.example} and all its subpackages, and {@code **} is equivalent to {@code *}.
+     * </p>
+     *
+     * <p>
+     * Use {@link #reject(Pattern)} with a regular expression to match only classes directly in a package.
      * </p>
      *
      * @param patterns Wildcard file name patterns as defined by {@link org.apache.commons.io.FilenameUtils#wildcardMatch(String, String)
@@ -185,6 +226,11 @@ public class ObjectStreamClassPredicate implements Predicate<ObjectStreamClass> 
      * Tests that the class name conforms to requirements.
      * <p>
      * The reject list takes precedence over the accept list.
+     * </p>
+     *
+     * <p>
+     * Matchers receive the class name unchanged, including array descriptors such as {@code [Lcom.example.Foo;} for {@code com.example.Foo[]}.
+     * Array descriptors are not converted to element class names.
      * </p>
      *
      * @param name The class name to test.

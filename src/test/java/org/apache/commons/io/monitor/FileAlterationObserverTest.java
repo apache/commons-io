@@ -20,10 +20,17 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.CALLS_REAL_METHODS;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.mockStatic;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.attribute.FileTime;
 import java.util.Arrays;
 import java.util.Iterator;
 
@@ -36,6 +43,8 @@ import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.io.monitor.FileAlterationObserver.Builder;
 import org.apache.commons.lang3.SerializationUtils;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
+import org.mockito.MockedStatic;
 
 /**
  * {@link FileAlterationObserver} Test Case.
@@ -309,6 +318,42 @@ class FileAlterationObserverTest extends AbstractMonitorTest {
 
         checkAndNotify();
         checkCollectionsEmpty("G");
+    }
+
+    @Test
+    void testDirectoryInitiallyMissing() throws Exception {
+        final File rootDirectory = new File(testDir, "initially-missing");
+        final File childDirectory = new File(rootDirectory, "child-directory");
+        final File childFile = new File(rootDirectory, "child.java");
+        final File nestedFile = new File(childDirectory, "nested.java");
+        assertFalse(rootDirectory.exists());
+        createObserver(rootDirectory, null);
+        checkAndNotify();
+        checkCollectionsEmpty("Initially missing");
+
+        for (int cycle = 0; cycle < 2; cycle++) {
+            assertTrue(rootDirectory.mkdir());
+            assertTrue(childDirectory.mkdir());
+            assertTrue(childFile.createNewFile());
+            assertTrue(nestedFile.createNewFile());
+            checkAndNotify();
+            checkCollectionSizes("Created " + cycle, 1, 0, 0, 2, 0, 0);
+            assertTrue(listener.getCreatedDirectories().contains(childDirectory));
+            assertTrue(listener.getCreatedFiles().contains(childFile));
+            assertTrue(listener.getCreatedFiles().contains(nestedFile));
+            assertFalse(listener.getCreatedDirectories().contains(rootDirectory));
+
+            FileUtils.deleteDirectory(rootDirectory);
+            checkAndNotify();
+            checkCollectionSizes("Deleted " + cycle, 0, 0, 1, 0, 0, 2);
+            assertTrue(listener.getDeletedDirectories().contains(childDirectory));
+            assertTrue(listener.getDeletedFiles().contains(childFile));
+            assertTrue(listener.getDeletedFiles().contains(nestedFile));
+            assertFalse(listener.getDeletedDirectories().contains(rootDirectory));
+
+            checkAndNotify();
+            checkCollectionsEmpty("Still missing " + cycle);
+        }
     }
 
     /**
@@ -631,6 +676,29 @@ class FileAlterationObserverTest extends AbstractMonitorTest {
         assertTrue(listener.getDeletedFiles().contains(testDirAFile1), "E deleted");
         assertFalse(listener.getDeletedFiles().contains(testDirAFile2), "E deleted");
         assertFalse(listener.getDeletedFiles().contains(testDirAFile3), "E deleted");
+    }
+
+    @Test
+    void testTimestampErrorCallbacks(@TempDir final File directory) throws Exception {
+        final File file = Files.createFile(directory.toPath().resolve("file.txt")).toFile();
+        final FileAlterationObserver observer = FileAlterationObserver.builder().setFile(directory).get();
+        final FileAlterationListener listener = mock(FileAlterationListener.class);
+        observer.addListener(listener);
+        observer.initialize();
+        final FileTime timestamp = FileUtils.lastModifiedFileTime(file);
+        final FileTime changedTimestamp = FileTime.fromMillis(timestamp.toMillis() + 10000);
+        final IOException exception = new IOException("Timestamp unavailable");
+        try (MockedStatic<FileUtils> utils = mockStatic(FileUtils.class, CALLS_REAL_METHODS)) {
+            utils.when(() -> FileUtils.lastModifiedFileTime(file)).thenThrow(exception).thenReturn(timestamp).thenThrow(exception)
+                    .thenReturn(changedTimestamp);
+            observer.checkAndNotify();
+            observer.checkAndNotify();
+            observer.checkAndNotify();
+            verify(listener, never()).onFileChange(file);
+            observer.checkAndNotify();
+            observer.checkAndNotify();
+            verify(listener).onFileChange(file);
+        }
     }
 
     /**

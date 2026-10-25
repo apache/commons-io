@@ -21,6 +21,7 @@ import static org.apache.commons.io.file.CounterAssertions.assertCounts;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
@@ -30,6 +31,8 @@ import java.nio.file.Paths;
 
 import org.apache.commons.io.file.Counters.PathCounters;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledOnOs;
+import org.junit.jupiter.api.condition.OS;
 import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -136,6 +139,23 @@ class CleaningPathVisitorTest extends TestArguments {
         assertNotEquals(visitFileTree.hashCode(), CleaningPathVisitor.withLongCounters().hashCode());
         assertEquals(visitFileTree, visitFileTree);
         assertEquals(visitFileTree.hashCode(), visitFileTree.hashCode());
+    }
+
+    @Test
+    @EnabledOnOs(OS.WINDOWS)
+    void testOverrideReadOnlyRestoresWritableFileAfterFailedDelete() throws IOException {
+        final Path file = Files.createFile(tempDir.resolve("writable.txt"));
+        assertTrue(Files.isWritable(file));
+        PathUtils.setReadOnly(tempDir, true);
+        try {
+            final CleaningPathVisitor visitor = new CleaningPathVisitor(Counters.longPathCounters(),
+                    new DeleteOption[] {StandardDeleteOption.OVERRIDE_READ_ONLY});
+            assertThrows(IOException.class, () -> Files.walkFileTree(tempDir, visitor));
+        } finally {
+            PathUtils.setReadOnly(tempDir, false);
+        }
+        assertTrue(Files.exists(file));
+        assertTrue(Files.isWritable(file), "A failed deletion must preserve the file's writable state");
     }
 
     @Test

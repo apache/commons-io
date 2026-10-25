@@ -18,11 +18,9 @@
 package org.apache.commons.io;
 
 import java.io.File;
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Deque;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -190,8 +188,10 @@ public class FilenameUtils {
      * {@code ..} is handled.
      * </p>
      * <p>
-     * If {@code pathToAdd} is absolute (has an absolute prefix), then it will be normalized and returned. Otherwise, the paths will be joined, normalized and
-     * returned.
+     * If {@code fullFileNameToAdd} has a prefix for which {@link #getPrefixLength(String)} returns a positive length, then {@code basePath} is ignored and
+     * {@code fullFileNameToAdd} is normalized and returned. Otherwise, the paths will be joined, normalized and returned. Both Unix and Windows prefixes are
+     * recognized on every platform, including tilde prefixes such as {@code ~/} and {@code ~user/}, drive-relative prefixes such as {@code C:}, and UNC
+     * prefixes. UNC prefixes may begin with any combination of two forward or backward slashes, including {@code \/} and {@code /\}.
      * </p>
      * <p>
      * The output will be the same on both Unix and Windows except for the separator character.
@@ -216,6 +216,13 @@ public class FilenameUtils {
      * <p>
      * [2] Note that the first parameter must be a path. If it ends with a name, then the name will be built into the concatenated path. If this might be a
      * problem, use {@link #getFullPath(String)} on the base path argument.
+     * </p>
+     *
+     * <p>
+     * <strong>Security note:</strong> This method does not ensure that the result stays within {@code basePath}. Callers handling untrusted paths must validate
+     * the result against the intended base directory. Rejecting names for which {@code getPrefixLength(name) != 0} prevents prefix-based replacement of the
+     * base, but is not sufficient to ensure containment: for example, {@code concat("/base", "../outside")} returns a path to {@code /outside}. Normalization
+     * only manipulates the path string; it does not resolve symbolic links or establish containment in the file system.
      * </p>
      *
      * @param basePath          The base path to attach to, always treated as a path.
@@ -246,16 +253,22 @@ public class FilenameUtils {
     }
 
     /**
-     * Determines whether the {@code parent} directory contains the {@code child} (a file or directory). This does not read from the file system, and there is
-     * no guarantee or expectation that these paths actually exist.
+     * Determines whether the {@code parent} directory contains the {@code child} (a file or directory).
+     *
      * <p>
-     * The files names are expected to be normalized.
+     * The file names are expected to be normalized. This method does not read from the file system, and there is no guarantee or expectation that these paths
+     * actually exist. It does not resolve symbolic links or establish containment in the file system.
      * </p>
+     *
+     * <p>
+     * Comparisons use {@link IOCase#SYSTEM}, whose case sensitivity follows the operating system of the running JVM. This method does not detect the case
+     * sensitivity of the target file system, which may differ from these conventions, for example for a remote file system.
+     * </p>
+     *
      * Edge cases:
      * <ul>
-     * <li>A {@code directory} must not be null: if null, throw IllegalArgumentException</li>
+     * <li>A null or empty parent or child path: return false</li>
      * <li>A directory does not contain itself: return false</li>
-     * <li>A null child file is not contained in any parent: return false</li>
      * </ul>
      *
      * @param canonicalParent The path string to consider as the parent.
@@ -562,12 +575,15 @@ public class FilenameUtils {
      * a/b/c/    --&gt; ""
      * </pre>
      * <p>
-     * The output will be the same irrespective of the machine that the code is running on.
+     * The output will be the same irrespective of the machine that the code is running on, with the exception of a possible {@link IllegalArgumentException} on
+     * Windows (see below).
      * </p>
      *
      * @param fileName The file name, null returns null.
      * @return The name of the file without the path, or an empty string if none exists.
-     * @throws IllegalArgumentException if the file name contains the null character ({@code U+0000}).
+     * @throws IllegalArgumentException if the file name contains the null character ({@code U+0000}), or, on Windows only, its last path component contains a
+     *                                  colon, for example {@code "foo.exe:bar.txt"} or {@code "C:report.txt"}.
+     * @see #getExtension(String)
      */
     public static String getBaseName(final String fileName) {
         return removeExtension(getName(fileName));
@@ -590,15 +606,20 @@ public class FilenameUtils {
      * Windows (see below).
      * </p>
      * <p>
-     * <strong>Note:</strong> This method used to have a hidden problem for names like "foo.exe:bar.txt". In this case, the name wouldn't be the name of a file,
-     * but the identifier of an alternate data stream (bar.txt) on the file foo.exe. The method used to return ".txt" here, which would be misleading. Commons
-     * IO 2.7 and later throw an {@link IllegalArgumentException} for names like this.
+     * On Windows, names like {@code "foo.exe:bar.txt"} identify an alternate data stream ({@code bar.txt}) on the file {@code foo.exe}. Before Commons IO 2.7,
+     * this method returned {@code "txt"} for that name on Windows. Commons IO 2.7 and later throw an {@link IllegalArgumentException} on Windows instead.
+     * On other operating systems, this method continues to treat the name as text and returns {@code "txt"}.
+     * </p>
+     *
+     * <p>
+     * Extension extraction does not validate whether a file name is safe or legal for a destination file system. Callers transferring files between systems
+     * must validate names against the destination's rules separately.
      * </p>
      *
      * @param fileName The file name to retrieve the extension of.
      * @return The extension of the file or an empty string if none exists or {@code null} if the file name is {@code null}.
-     * @throws IllegalArgumentException <strong>Windows only:</strong> the file name parameter is, in fact, the identifier of an Alternate Data Stream, for
-     *                                  example "foo.exe:bar.txt".
+     * @throws IllegalArgumentException <strong>Windows only:</strong> the last path component contains a colon, for example {@code "foo.exe:bar.txt"} or
+     *                                  {@code "C:report.txt"}.
      */
     public static String getExtension(final String fileName) throws IllegalArgumentException {
         if (fileName == null) {
@@ -840,8 +861,8 @@ public class FilenameUtils {
      * The output will be the same irrespective of the machine that the code is running on. ie. both Unix and Windows prefixes are matched regardless.
      * </p>
      * <p>
-     * Note that a leading // (or \\) is used to indicate a UNC name on Windows. These must be followed by a server name, so double-slashes are not collapsed to
-     * a single slash at the start of the file name.
+     * Note that a leading // (or \\) is used to indicate a UNC name on Windows. Mixed leading separators ({@code \/} or {@code /\}) are also recognized.
+     * These must be followed by a server name and a separator, so double-slashes are not collapsed to a single slash at the start of the file name.
      * </p>
      *
      * @param fileName The file name to find the prefix in, null returns -1.
@@ -918,15 +939,15 @@ public class FilenameUtils {
      * Windows (see below).
      * </p>
      * <p>
-     * <strong>Note:</strong> This method used to have a hidden problem for names like "foo.exe:bar.txt". In this case, the name wouldn't be the name of a file,
-     * but the identifier of an alternate data stream (bar.txt) on the file foo.exe. The method used to return ".txt" here, which would be misleading. Commons
-     * IO 2.7, and later versions, are throwing an {@link IllegalArgumentException} for names like this.
+     * On Windows, names like {@code "foo.exe:bar.txt"} identify an alternate data stream ({@code bar.txt}) on the file {@code foo.exe}. Before Commons IO 2.7,
+     * this method returned {@code 11} for that name on Windows. Commons IO 2.7 and later throw an {@link IllegalArgumentException} on Windows instead.
+     * On other operating systems, this method continues to treat the name as text and returns {@code 11}.
      * </p>
      *
      * @param fileName The file name to find the last extension separator in, null returns -1.
      * @return The index of the last extension separator character, or -1 if there is no such character.
-     * @throws IllegalArgumentException <strong>Windows only:</strong> the file name parameter is, in fact, the identifier of an Alternate Data Stream, for
-     *                                  example "foo.exe:bar.txt".
+     * @throws IllegalArgumentException <strong>Windows only:</strong> the last path component contains a colon, for example {@code "foo.exe:bar.txt"} or
+     *                                  {@code "C:report.txt"}.
      */
     public static int indexOfExtension(final String fileName) throws IllegalArgumentException {
         if (fileName == null) {
@@ -979,7 +1000,9 @@ public class FilenameUtils {
      * @param fileName   The file name, null returns false.
      * @param extensions The extensions to check for, null checks for no extension.
      * @return true if the file name is one of the extensions.
-     * @throws IllegalArgumentException if the file name contains the null character ({@code U+0000}).
+     * @throws IllegalArgumentException if the file name contains the null character ({@code U+0000}), or, on Windows only, its last path component contains a
+     *                                  colon, for example {@code "foo.exe:bar.txt"} or {@code "C:report.txt"}.
+     * @see #getExtension(String)
      */
     public static boolean isExtension(final String fileName, final Collection<String> extensions) {
         if (fileName == null) {
@@ -1002,7 +1025,9 @@ public class FilenameUtils {
      * @param fileName  The file name, null returns false.
      * @param extension The extension to check for, null or empty checks for no extension.
      * @return true if the file name has the specified extension.
-     * @throws IllegalArgumentException if the file name contains the null character ({@code U+0000}).
+     * @throws IllegalArgumentException if the file name contains the null character ({@code U+0000}), or, on Windows only, its last path component contains a
+     *                                  colon, for example {@code "foo.exe:bar.txt"} or {@code "C:report.txt"}.
+     * @see #getExtension(String)
      */
     public static boolean isExtension(final String fileName, final String extension) {
         if (fileName == null) {
@@ -1025,7 +1050,9 @@ public class FilenameUtils {
      * @param fileName   The file name, null returns false.
      * @param extensions The extensions to check for, null checks for no extension.
      * @return true if the file name is one of the extensions.
-     * @throws IllegalArgumentException if the file name contains the null character ({@code U+0000}).
+     * @throws IllegalArgumentException if the file name contains the null character ({@code U+0000}), or, on Windows only, its last path component contains a
+     *                                  colon, for example {@code "foo.exe:bar.txt"} or {@code "C:report.txt"}.
+     * @see #getExtension(String)
      */
     public static boolean isExtension(final String fileName, final String... extensions) {
         if (fileName == null) {
@@ -1377,6 +1404,7 @@ public class FilenameUtils {
      * Removes the extension from a fileName.
      * <p>
      * This method returns the textual part of the file name before the last period. There must be no directory separator after the period.
+     * </p>
      *
      * <pre>
      * foo.txt    --&gt; foo
@@ -1387,11 +1415,15 @@ public class FilenameUtils {
      * a.b\c      --&gt; a.b\c
      * </pre>
      * <p>
-     * The output will be the same irrespective of the machine that the code is running on.
+     * The output will be the same irrespective of the machine that the code is running on, with the exception of a possible {@link IllegalArgumentException} on
+     * Windows (see below).
+     * </p>
      *
      * @param fileName The file name, null returns null.
      * @return The file name minus the extension.
-     * @throws IllegalArgumentException if the file name contains the null character ({@code U+0000}).
+     * @throws IllegalArgumentException if the file name contains the null character ({@code U+0000}), or, on Windows only, its last path component contains a
+     *                                  colon, for example {@code "foo.exe:bar.txt"} or {@code "C:report.txt"}.
+     * @see #getExtension(String)
      */
     public static String removeExtension(final String fileName) {
         if (fileName == null) {
@@ -1413,10 +1445,9 @@ public class FilenameUtils {
      * @return The input.
      * @throws IllegalArgumentException if path contains the null character ({@code U+0000}).
      */
-    private static String requireNonNullChars(final String path) {
+    static String requireNonNullChars(final String path) {
         if (path.indexOf(0) >= 0) {
-            throw new IllegalArgumentException(
-                    "Null character present in file/path name; there are no legitimate use cases, but several injection attacks may use it");
+            throw new IllegalArgumentException("Null character present in file path");
         }
         return path;
     }
@@ -1514,7 +1545,7 @@ public class FilenameUtils {
      * wildcardMatch("c.txt", "*.????")     --&gt; false
      * </pre>
      * <p>
-     * The sequence "*?" does not work properly at present in match strings.
+     * The sequence {@code *?} matches one or more characters.
      * </p>
      *
      * @param fileName        The file name to match on, may be null.
@@ -1529,8 +1560,12 @@ public class FilenameUtils {
     /**
      * Checks a fileName to see if it matches the specified wildcard matcher allowing control over case-sensitivity.
      * <p>
-     * The wildcard matcher uses the characters '?' and '*' to represent a single or multiple (zero or more) wildcard characters. The sequence "*?" does not
-     * work properly at present in match strings.
+     * The wildcard matcher uses the characters '?' and '*' to represent a single or multiple (zero or more) wildcard characters. The sequence {@code *?}
+     * matches one or more characters.
+     * </p>
+     *
+     * <p>
+     * Matching uses O(nm) time in the worst case and O(m) temporary space, where n is the file name length and m is the wildcard matcher length.
      * </p>
      *
      * @param fileName        The file name to match on, may be null.
@@ -1547,64 +1582,57 @@ public class FilenameUtils {
             return false;
         }
         ioCase = IOCase.value(ioCase, IOCase.SENSITIVE);
-        final String[] wcs = splitOnTokens(wildcardMatcher);
-        boolean anyChars = false;
-        int textIdx = 0;
-        int wcsIdx = 0;
-        final Deque<int[]> backtrack = new ArrayDeque<>(wcs.length);
-        // loop around a backtrack stack, to handle complex * matching
-        do {
-            if (!backtrack.isEmpty()) {
-                final int[] array = backtrack.pop();
-                wcsIdx = array[0];
-                textIdx = array[1];
-                anyChars = true;
-            }
-            // loop whilst tokens and text left to process
-            while (wcsIdx < wcs.length) {
-                if (wcs[wcsIdx].equals("?")) {
-                    // ? so move to next text char
-                    textIdx++;
-                    if (textIdx > fileName.length()) {
-                        break;
+        if (wildcardMatcher.indexOf('*') == NOT_FOUND && wildcardMatcher.indexOf('?') == NOT_FOUND) {
+            return ioCase.checkEquals(fileName, wildcardMatcher);
+        }
+        final String[] tokens = splitOnTokens(wildcardMatcher);
+        int textIndex = 0;
+        int tokenIndex = 0;
+        // Once a later star is reached, it can absorb every later starting position for the
+        // remaining suffix. Retrying earlier stars would only repeat work already covered by this star.
+        int starTokenIndex = NOT_FOUND;
+        int starTextIndex = NOT_FOUND;
+        while (tokenIndex < tokens.length || textIndex < fileName.length()) {
+            if (tokenIndex < tokens.length) {
+                final String token = tokens[tokenIndex];
+                if ("*".equals(token)) {
+                    if (tokenIndex == tokens.length - 1) {
+                        return true;
                     }
-                    anyChars = false;
-                } else if (wcs[wcsIdx].equals("*")) {
-                    // set any chars status
-                    anyChars = true;
-                    if (wcsIdx == wcs.length - 1) {
-                        textIdx = fileName.length();
-                    }
-                } else {
-                    // matching text token
-                    if (anyChars) {
-                        // any chars then try to locate text token
-                        textIdx = ioCase.checkIndexOf(fileName, textIdx, wcs[wcsIdx]);
-                        if (textIdx == NOT_FOUND) {
-                            // token not found
-                            break;
-                        }
-                        final int repeat = ioCase.checkIndexOf(fileName, textIdx + 1, wcs[wcsIdx]);
-                        if (repeat >= 0) {
-                            backtrack.push(new int[] { wcsIdx, repeat });
-                        }
-                    } else if (!ioCase.checkRegionMatches(fileName, textIdx, wcs[wcsIdx])) {
-                        // matching from current position
-                        // couldn't match token
-                        break;
-                    }
-                    // matched text token, move text index to end of matched token
-                    textIdx += wcs[wcsIdx].length();
-                    anyChars = false;
+                    starTokenIndex = tokenIndex + 1;
+                    starTextIndex = textIndex;
+                    tokenIndex++;
+                    continue;
                 }
-                wcsIdx++;
+                if ("?".equals(token)) {
+                    if (textIndex < fileName.length()) {
+                        textIndex++;
+                        tokenIndex++;
+                        continue;
+                    }
+                } else if (tokenIndex == starTokenIndex) {
+                    // Search directly after the most recent star, rather than retrying each character in the outer loop.
+                    textIndex = ioCase.checkIndexOf(fileName, textIndex, token);
+                    if (textIndex == NOT_FOUND) {
+                        return false;
+                    }
+                    starTextIndex = textIndex;
+                    textIndex += token.length();
+                    tokenIndex++;
+                    continue;
+                } else if (ioCase.checkRegionMatches(fileName, textIndex, token)) {
+                    textIndex += token.length();
+                    tokenIndex++;
+                    continue;
+                }
             }
-            // full match
-            if (wcsIdx == wcs.length && textIdx == fileName.length()) {
-                return true;
+            if (starTokenIndex == NOT_FOUND || starTextIndex == fileName.length()) {
+                return false;
             }
-        } while (!backtrack.isEmpty());
-        return false;
+            textIndex = ++starTextIndex;
+            tokenIndex = starTokenIndex;
+        }
+        return true;
     }
 
     /**
@@ -1622,7 +1650,7 @@ public class FilenameUtils {
      * wildcardMatch("c.txt", "*.????")     --&gt; false
      * </pre>
      * <p>
-     * The sequence "*?" does not work properly at present in match strings.
+     * The sequence {@code *?} matches one or more characters.
      * </p>
      *
      * @param fileName        The file name to match on.

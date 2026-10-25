@@ -21,9 +21,12 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.CALLS_REAL_METHODS;
+import static org.mockito.Mockito.mockStatic;
 
 import java.io.File;
 import java.io.IOException;
@@ -35,6 +38,9 @@ import org.apache.commons.io.file.attribute.FileTimes;
 import org.apache.commons.lang3.SerializationUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
+import org.mockito.MockedStatic;
 
 /**
  * Tests {@link FileEntry}.
@@ -113,6 +119,11 @@ class FileEntryTest {
     void testGetLastModifiedFileTime() {
         final FileEntry fe = new FileEntry(FileUtils.current());
         assertEquals(FileTimes.EPOCH, fe.getLastModifiedFileTime(), "Default lastModifiedFileTime should be EPOCH");
+    }
+
+    @Test
+    void testGetLastModifiedIOException() {
+        assertNull(new FileEntry(testDir).getLastModifiedIOException());
     }
 
     @Test
@@ -237,6 +248,103 @@ class FileEntryTest {
     }
 
     @Test
+    void testRefreshTimestampErrorClearedOnDeletion() throws IOException {
+        final File file = Files.createFile(testDir.toPath().resolve("deleted.txt")).toFile();
+        final FileEntry entry = new FileEntry(file);
+        entry.refresh(file);
+        final IOException exception = new IOException("Timestamp unavailable");
+        try (MockedStatic<FileUtils> utils = mockStatic(FileUtils.class, CALLS_REAL_METHODS)) {
+            utils.when(() -> FileUtils.lastModifiedFileTime(file)).thenThrow(exception);
+            assertFalse(entry.refresh(file));
+            assertSame(exception, entry.getLastModifiedIOException());
+            Files.delete(file.toPath());
+            assertTrue(entry.refresh(file));
+            assertFalse(entry.isExists());
+            assertEquals(FileTimes.EPOCH, entry.getLastModifiedFileTime());
+            assertNull(entry.getLastModifiedIOException());
+        }
+    }
+
+    @Test
+    void testRefreshTimestampErrorDoesNotHideLengthChange() throws IOException {
+        final File file = Files.createFile(testDir.toPath().resolve("length.txt")).toFile();
+        final FileEntry entry = new FileEntry(file);
+        entry.refresh(file);
+        final FileTime timestamp = entry.getLastModifiedFileTime();
+        final IOException exception = new IOException("Timestamp unavailable");
+        try (MockedStatic<FileUtils> utils = mockStatic(FileUtils.class, CALLS_REAL_METHODS)) {
+            utils.when(() -> FileUtils.lastModifiedFileTime(file)).thenThrow(exception);
+            Files.write(file.toPath(), new byte[] { 1 });
+            assertTrue(entry.refresh(file));
+            assertEquals(1, entry.getLength());
+            assertEquals(timestamp, entry.getLastModifiedFileTime());
+            assertSame(exception, entry.getLastModifiedIOException());
+        }
+    }
+
+    @Test
+    void testRefreshTimestampErrorOnFirstRefresh() throws IOException {
+        final File file = Files.createFile(testDir.toPath().resolve("first-refresh.txt")).toFile();
+        final FileEntry entry = new FileEntry(file);
+        final IOException exception = new IOException("Timestamp unavailable");
+        try (MockedStatic<FileUtils> utils = mockStatic(FileUtils.class, CALLS_REAL_METHODS)) {
+            utils.when(() -> FileUtils.lastModifiedFileTime(file)).thenThrow(exception);
+            assertTrue(entry.refresh(file), "The existence change must still be reported");
+            assertTrue(entry.isExists());
+            assertEquals(FileTimes.EPOCH, entry.getLastModifiedFileTime());
+            assertSame(exception, entry.getLastModifiedIOException());
+            assertFalse(entry.refresh(file));
+        }
+    }
+
+    @ParameterizedTest
+    @ValueSource(booleans = { false, true })
+    void testRefreshTimestampErrorRecovery(final boolean timestampChanged) throws IOException {
+        final File file = Files.createFile(testDir.toPath().resolve("recovery.txt")).toFile();
+        final FileEntry entry = new FileEntry(file);
+        entry.refresh(file);
+        final FileTime timestamp = entry.getLastModifiedFileTime();
+        final FileTime recoveredTimestamp = timestampChanged ? FileTime.fromMillis(timestamp.toMillis() + 10000) : timestamp;
+        final IOException exception = new IOException("Timestamp unavailable");
+        try (MockedStatic<FileUtils> utils = mockStatic(FileUtils.class, CALLS_REAL_METHODS)) {
+            final IOException nextException = new IOException("Timestamp still unavailable");
+            utils.when(() -> FileUtils.lastModifiedFileTime(file)).thenThrow(exception).thenThrow(nextException).thenReturn(recoveredTimestamp);
+            assertFalse(entry.refresh(file));
+            assertEquals(timestamp, entry.getLastModifiedFileTime());
+            assertSame(exception, entry.getLastModifiedIOException());
+            assertFalse(entry.refresh(file));
+            assertEquals(timestamp, entry.getLastModifiedFileTime());
+            assertSame(nextException, entry.getLastModifiedIOException());
+            assertEquals(timestampChanged, entry.refresh(file));
+            assertEquals(recoveredTimestamp, entry.getLastModifiedFileTime());
+            assertNull(entry.getLastModifiedIOException());
+            assertFalse(entry.refresh(file));
+        }
+    }
+
+    @Test
+    void testRefreshUnknownExistenceClearsTimestampError() throws IOException {
+        final File file = Files.createFile(testDir.toPath().resolve("unknown.txt")).toFile();
+        final FileEntry entry = new FileEntry(file);
+        entry.refresh(file);
+        final IOException exception = new IOException("Timestamp unavailable");
+        try (MockedStatic<FileUtils> utils = mockStatic(FileUtils.class, CALLS_REAL_METHODS)) {
+            utils.when(() -> FileUtils.lastModifiedFileTime(file)).thenThrow(exception);
+            assertFalse(entry.refresh(file));
+            assertSame(exception, entry.getLastModifiedIOException());
+        }
+        // Files.exists also returns false when existence cannot be determined.
+        try (MockedStatic<Files> files = mockStatic(Files.class, CALLS_REAL_METHODS)) {
+            files.when(() -> Files.exists(file.toPath())).thenReturn(false);
+            assertTrue(entry.refresh(file));
+            assertFalse(entry.isExists());
+            assertEquals(FileTimes.EPOCH, entry.getLastModifiedFileTime());
+            assertNull(entry.getLastModifiedIOException());
+        }
+        assertTrue(Files.exists(file.toPath()));
+    }
+
+    @Test
     void testSerializable() {
         final FileEntry fe = new FileEntry(FileUtils.current());
         assertArrayEquals(fe.getChildren(), SerializationUtils.roundtrip(fe).getChildren());
@@ -248,6 +356,22 @@ class FileEntryTest {
         assertEquals(fe.getLevel(), SerializationUtils.roundtrip(fe).getLevel());
         assertEquals(fe.getName(), SerializationUtils.roundtrip(fe).getName());
         assertEquals(fe.getParent(), SerializationUtils.roundtrip(fe).getParent());
+    }
+
+    @Test
+    void testSerializableTimestampError() throws IOException {
+        final File file = Files.createFile(testDir.toPath().resolve("serialized.txt")).toFile();
+        final FileEntry entry = new FileEntry(file);
+        entry.refresh(file);
+        final IOException exception = new IOException("Timestamp unavailable");
+        try (MockedStatic<FileUtils> utils = mockStatic(FileUtils.class, CALLS_REAL_METHODS)) {
+            utils.when(() -> FileUtils.lastModifiedFileTime(file)).thenThrow(exception);
+            assertFalse(entry.refresh(file));
+            assertSame(exception, entry.getLastModifiedIOException());
+        }
+        final FileEntry copy = SerializationUtils.roundtrip(entry);
+        assertEquals(entry.getLastModifiedFileTime(), copy.getLastModifiedFileTime());
+        assertNull(copy.getLastModifiedIOException());
     }
 
     @Test

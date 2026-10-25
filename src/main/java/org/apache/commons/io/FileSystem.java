@@ -46,11 +46,13 @@ public enum FileSystem {
      * Generic file system.
      */
     GENERIC(4096, false, false, 1020, 1024 * 1024, new int[] {
+            // KEEP THIS ARRAY SORTED!
             // @formatter:off
             // ASCII NUL
-            0
+            0,
+            '/'
             // @formatter:on
-    }, new String[] {}, false, false, '/', NameLengthStrategy.BYTES),
+    }, new String[] {}, false, false, false, '/', NameLengthStrategy.BYTES),
 
     /**
      * Linux file system.
@@ -62,7 +64,7 @@ public enum FileSystem {
             0,
              '/'
             // @formatter:on
-    }, new String[] {}, false, false, '/', NameLengthStrategy.BYTES),
+    }, new String[] {}, false, false, false, '/', NameLengthStrategy.BYTES),
 
     /**
      * MacOS file system.
@@ -75,7 +77,7 @@ public enum FileSystem {
             '/',
              ':'
             // @formatter:on
-    }, new String[] {}, false, false, '/', NameLengthStrategy.BYTES),
+    }, new String[] {}, false, false, false, '/', NameLengthStrategy.BYTES),
 
     /**
      * Windows file system.
@@ -109,7 +111,7 @@ public enum FileSystem {
                     "LPT1", "LPT2", "LPT3", "LPT4", "LPT5", "LPT6", "LPT7", "LPT8", "LPT9",
                     "LPT\u00b2", "LPT\u00b3", "LPT\u00b9", // Superscript 2 3 1 in that order
                     "NUL", "PRN"
-            }, true, true, '\\', NameLengthStrategy.UTF16_CODE_UNITS);
+            }, true, true, true, '\\', NameLengthStrategy.UTF16_CODE_UNITS);
     // @formatter:on
 
     /**
@@ -339,6 +341,18 @@ public enum FileSystem {
     }
 
     /**
+     * Tests whether the given name is the current-directory name {@code "."} or the parent-directory name {@code ".."}; neither is a legal name for a new
+     * file on any file system, and passing {@code ".."} through a file name gate enables path traversal.
+     *
+     * @param candidate the name to test, not null.
+     * @return {@code true} if the name is {@code "."} or {@code ".."}.
+     */
+    private static boolean isDotName(final CharSequence candidate) {
+        final int len = candidate.length();
+        return (len == 1 || len == 2) && candidate.chars().allMatch(c -> c == '.');
+    }
+
+    /**
      * Decides if the operating system matches.
      * <p>
      * This method is package private instead of private to support unit test invocation.
@@ -368,7 +382,6 @@ public enum FileSystem {
     private static String replace(final String path, final char oldChar, final char newChar) {
         return path == null ? null : path.replace(oldChar, newChar);
     }
-
     /**
      * Truncates a string respecting grapheme cluster boundaries.
      *
@@ -412,9 +425,15 @@ public enum FileSystem {
     private final int maxFileNameLength;
     private final int maxPathLength;
     private final String[] reservedFileNames;
+
     private final boolean reservedFileNamesExtensions;
 
     private final boolean supportsDriveLetter;
+
+    /**
+     * Whether the file system strips trailing dots and spaces from a file name when creating it.
+     */
+    private final boolean trimsTrailingDotsAndSpaces;
 
     private final char nameSeparator;
 
@@ -434,13 +453,14 @@ public enum FileSystem {
      * @param reservedFileNames The reserved file names.
      * @param reservedFileNamesExtensions The reserved file name extensions.
      * @param supportsDriveLetter Whether this file system support driver letters.
+     * @param trimsTrailingDotsAndSpaces Whether trailing dots and spaces must be removed from file names.
      * @param nameSeparator The name separator, '\\' on Windows, '/' on Linux.
      * @param nameLengthStrategy The strategy for measuring and truncating file and path names.
      */
     FileSystem(final int blockSize, final boolean caseSensitive, final boolean casePreserving,
         final int maxFileLength, final int maxPathLength, final int[] illegalFileNameChars,
         final String[] reservedFileNames, final boolean reservedFileNamesExtensions, final boolean supportsDriveLetter,
-        final char nameSeparator, final NameLengthStrategy nameLengthStrategy) {
+        final boolean trimsTrailingDotsAndSpaces, final char nameSeparator, final NameLengthStrategy nameLengthStrategy) {
         this.blockSize = blockSize;
         this.maxFileNameLength = maxFileLength;
         this.maxPathLength = maxPathLength;
@@ -451,6 +471,7 @@ public enum FileSystem {
         this.caseSensitive = caseSensitive;
         this.casePreserving = casePreserving;
         this.supportsDriveLetter = supportsDriveLetter;
+        this.trimsTrailingDotsAndSpaces = trimsTrailingDotsAndSpaces;
         this.nameSeparator = nameSeparator;
         this.nameSeparatorOther = FilenameUtils.flipSeparator(nameSeparator);
         this.nameLengthStrategy = nameLengthStrategy;
@@ -570,6 +591,21 @@ public enum FileSystem {
     }
 
     /**
+     * Tests whether the given name ends in a dot or a space on a file system that silently strips them (Windows), which would alias the name to a different
+     * string than the one checked.
+     *
+     * @param candidate the name to test, not null.
+     * @return {@code true} if the name has a trailing dot or space this file system would strip.
+     */
+    private boolean hasTrailingDotOrSpace(final CharSequence candidate) {
+        if (!trimsTrailingDotsAndSpaces || candidate.length() == 0) {
+            return false;
+        }
+        final char last = candidate.charAt(candidate.length() - 1);
+        return last == '.' || last == ' ';
+    }
+
+    /**
      * Tests whether this file system preserves case.
      *
      * @return Whether this file system preserves case.
@@ -603,14 +639,16 @@ public enum FileSystem {
      *
      * <p>Takes a file name like {@code "filename.ext"} or {@code "filename"} and checks:</p>
      * <ul>
+     * <li>if the file name is neither null nor empty, nor {@code "."} or {@code ".."}</li>
      * <li>if the file name length is legal</li>
      * <li>if the file name is not a reserved file name</li>
      * <li>if the file name does not contain illegal characters</li>
+     * <li>on Windows, if the file name does not end with an ASCII dot or space</li>
      * </ul>
      *
      * @param candidate
      *            A candidate file name (without a path) like {@code "filename.ext"} or {@code "filename"}.
-     * @return {@code true} if the candidate name is legal.
+     * @return {@code true} if the candidate name is legal, {@code false} for null, empty, or illegal names.
      */
     public boolean isLegalFileName(final CharSequence candidate) {
         return isLegalFileName(candidate, Charset.defaultCharset());
@@ -621,36 +659,54 @@ public enum FileSystem {
      *
      * <p>Takes a file name like {@code "filename.ext"} or {@code "filename"} and checks:</p>
      * <ul>
+     * <li>if the file name is neither null nor empty, nor {@code "."} or {@code ".."}</li>
      * <li>if the file name length is legal</li>
      * <li>if the file name is not a reserved file name</li>
      * <li>if the file name does not contain illegal characters</li>
+     * <li>on Windows, if the file name does not end with an ASCII dot or space</li>
      * </ul>
      *
      * @param candidate
      *            A candidate file name (without a path) like {@code "filename.ext"} or {@code "filename"}.
      * @param charset
      *            The charset to use when the file name length is measured in bytes.
-     * @return {@code true} if the candidate name is legal.
+     * @return {@code true} if the candidate name is legal, {@code false} for null, empty, or illegal names.
      * @since 2.21.0
      */
     public boolean isLegalFileName(final CharSequence candidate, final Charset charset) {
         return candidate != null
                 && candidate.length() != 0
+                && !isDotName(candidate)
                 && nameLengthStrategy.isWithinLimit(candidate, getMaxFileNameLength(), charset)
                 && !isReservedFileName(candidate)
+                && !hasTrailingDotOrSpace(candidate)
                 && candidate.chars().noneMatch(this::isIllegalFileNameChar);
     }
 
     /**
      * Tests whether the given string is a reserved file name.
+     * <p>
+     * The check is case-insensitive: Windows treats device names such as {@code CON} as reserved in any case ({@code con}, {@code Con.txt}, ...).
+     * ASCII spaces at the end of the base name are ignored, including before an extension, so {@code "CON .txt"} is also reserved.
+     * </p>
      *
      * @param candidate
-     *            the string to test.
-     * @return {@code true} if the given string is a reserved file name.
+     *            the string to test, may be null.
+     * @return {@code true} if the given string is a reserved file name, {@code false} for null.
      */
     public boolean isReservedFileName(final CharSequence candidate) {
+        if (candidate == null || reservedFileNames.length == 0) {
+            return false;
+        }
         final CharSequence test = reservedFileNamesExtensions ? trimExtension(candidate) : candidate;
-        return Arrays.binarySearch(reservedFileNames, test) >= 0;
+        int end = test.length();
+        if (reservedFileNamesExtensions) {
+            while (end > 0 && test.charAt(end - 1) == ' ') {
+                end--;
+            }
+        }
+        // toString() also avoids a ClassCastException from comparing a non-String CharSequence in the binary search.
+        return Arrays.binarySearch(reservedFileNames, test.subSequence(0, end).toString().toUpperCase(Locale.ROOT)) >= 0;
     }
 
     /**
@@ -685,17 +741,32 @@ public enum FileSystem {
      *
      * <p>Takes a file name like {@code "filename.ext"} or {@code "filename"} and:</p>
      * <ul>
-     *     <li>replaces illegal characters by the given replacement character</li>
      *     <li>truncates the name to {@link #getMaxFileNameLength()} if necessary</li>
+     *     <li>replaces illegal characters with the given replacement character</li>
+     *     <li>on Windows, strips trailing ASCII dots and spaces, using the replacement character if the result is empty</li>
+     *     <li>prefixes reserved names and any remaining dot-names ({@code "."} or {@code ".."}) with the replacement character until they are legal</li>
+     *     <li>truncates again if replacement or prefixing exceeds the maximum length</li>
      * </ul>
+     *
+     * <p>
+     * Sanitization follows this file system's rules. For a name destined for another system, use that system's enum value rather than
+     * {@link #getCurrent()}.
+     * </p>
+     *
+     * <p>
+     * Different candidates can produce the same result. For example, on Windows, both {@code "CON"} and {@code "_CON"} become {@code "_CON"} when
+     * the replacement is {@code '_'}. Callers must handle name collisions when creating files.
+     * </p>
      *
      * @param candidate
      *            A candidate file name (without a path) like {@code "filename.ext"} or {@code "filename"}.
      * @param replacement
-     *            Illegal characters in the candidate name are replaced by this character.
+     *            The character used for replacement and prefixing. Must be legal for this file system, and must not be an ASCII dot or space on Windows.
      * @param charset
      *            The charset to use when the file name length is measured in bytes.
-     * @return A String without illegal characters.
+     * @return A legal file name.
+     * @throws NullPointerException if the candidate is null.
+     * @throws IllegalArgumentException if the candidate is empty, the replacement is unsuitable, or a legal name cannot be produced.
      * @since 2.21.0
      */
     public String toLegalFileName(final CharSequence candidate, final char replacement, final Charset charset) {
@@ -708,29 +779,71 @@ public enum FileSystem {
             throw new IllegalArgumentException(String.format("The replacement character '%s' cannot be one of the %s illegal characters: %s",
                 replacement == '\0' ? "\\0" : replacement, name(), Arrays.toString(illegalFileNameChars)));
         }
+        if (trimsTrailingDotsAndSpaces && (replacement == '.' || replacement == ' ')) {
+            throw new IllegalArgumentException("The replacement character must not be an ASCII dot or space on " + name());
+        }
         final CharSequence truncated = nameLengthStrategy.truncate(candidate, getMaxFileNameLength(), charset);
         final int[] array = truncated.chars().map(i -> isIllegalFileNameChar(i) ? replacement : i).toArray();
-        return new String(array, 0, array.length);
+        String name = new String(array, 0, array.length);
+        name = trimTrailingDotsAndSpaces(name);
+        if (name.isEmpty()) {
+            // The candidate consisted only of characters this file system strips.
+            name = String.valueOf(replacement);
+        }
+        // A reserved name (or "."/"..") is not made legal by character replacement alone: break the match by prefixing the replacement character.
+        // The loop terminates: prefixing grows the name, dot-names are at most two characters, and no reserved name is a suffix of another prefixed form.
+        while (isDotName(name) || isReservedFileName(name)) {
+            name = replacement + name;
+        }
+        if (!nameLengthStrategy.isWithinLimit(name, getMaxFileNameLength(), charset)) {
+            name = trimTrailingDotsAndSpaces(nameLengthStrategy.truncate(name, getMaxFileNameLength(), charset).toString());
+        }
+        if (!isLegalFileName(name, charset)) {
+            throw new IllegalArgumentException("Cannot convert the candidate to a legal file name: " + candidate);
+        }
+        return name;
     }
-
 
     /**
      * Converts a candidate file name (without a path) to a legal file name.
      *
-     * <p>Takes a file name like {@code "filename.ext"} or {@code "filename"} and:</p>
-     * <ul>
-     *     <li>replaces illegal characters by the given replacement character</li>
-     *     <li>truncates the name to {@link #getMaxFileNameLength()} if necessary</li>
-     * </ul>
+     * <p>
+     * Uses the default charset and the replacement, truncation, reserved-name, and Windows trailing-dot/space rules described by
+     * {@link #toLegalFileName(CharSequence, char, Charset)}. On Windows, a dot-name becomes the replacement character after trimming. Different candidates can
+     * produce the same result; callers must handle name collisions.
+     * </p>
      *
-     * @param candidate
-     *            A candidate file name (without a path) like {@code "filename.ext"} or {@code "filename"}.
-     * @param replacement
-     *            Illegal characters in the candidate name are replaced by this character.
-     * @return A String without illegal characters.
+     * <p>
+     * For a name destined for another system, use that system's enum value rather than {@link #getCurrent()}.
+     * </p>
+     *
+     * @param candidate   A candidate file name (without a path) like {@code "filename.ext"} or {@code "filename"}.
+     * @param replacement The character used for replacement and prefixing. Must be legal for this file system, and must not be an ASCII dot or space on
+     *                    Windows.
+     * @return A legal file name.
+     * @throws NullPointerException     if the candidate is null.
+     * @throws IllegalArgumentException if the candidate is empty, the replacement is unsuitable, or a legal name cannot be produced.
      */
     public String toLegalFileName(final String candidate, final char replacement) {
         return toLegalFileName(candidate, replacement, Charset.defaultCharset());
+    }
+
+
+    /**
+     * Strips trailing dots and spaces on file systems that silently strip them when creating a file (Windows); no-op on other file systems.
+     *
+     * @param name The name to trim, not null.
+     * @return The trimmed name.
+     */
+    private String trimTrailingDotsAndSpaces(final String name) {
+        if (!trimsTrailingDotsAndSpaces) {
+            return name;
+        }
+        int end = name.length();
+        while (end > 0 && (name.charAt(end - 1) == '.' || name.charAt(end - 1) == ' ')) {
+            end--;
+        }
+        return end == name.length() ? name : name.substring(0, end);
     }
 
 }

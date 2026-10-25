@@ -69,6 +69,42 @@ The <action> type attribute can be add,update,fix,remove.
       <action type="fix" dev="ggregory" due-to="Gary Gregory">Fix SpotBugs USO_UNSAFE_METHOD_SYNCHRONIZATION in ProxyInputStream.mark()/reset().</action>
       <action type="fix" dev="ggregory" due-to="Gary Gregory">Fix SpotBugs USO_UNSAFE_METHOD_SYNCHRONIZATION in ProxyReader.mark()/reset().</action>
       <action type="fix" dev="ggregory" due-to="Marcono1234, Tanvir Alam, Gary Gregory" issue="IO-780">Do not discard CharsetEncoder errors in ReaderInputStream (#874).</action>
+      <action type="fix" dev="ggregory" due-to="Gary Gregory">Relax QueueInputStream timeout test for busy CI hosts.</action>
+      <action type="fix" dev="ggregory" due-to="Claude Security, Gary Gregory">Fix FileSystem filename validation and sanitization (f005) (#890).</action>
+      <action type="fix" dev="ggregory" due-to="Claude Security, Gary Gregory">Clarify FilenameUtils.concat() prefix and containment behavior (f006) (#891).</action>
+      <action type="fix" dev="ggregory" due-to="Claude Security, Gary Gregory">Bound wildcard matching backtracking and memory use (f008) (#892).</action>
+      <action type="fix" dev="ggregory" due-to="Claude Security, Gary Gregory">Fix NIO error handling in visible and non-empty file filters (f009) (#894).</action>
+      <action type="fix" dev="ggregory" due-to="Claude Security, Gary Gregory">Fix directory deletion through Windows junctions (f010) (#895).</action>
+      <action type="fix" dev="ggregory" due-to="Claude Security, Gary Gregory">Fix FilenameUtils wildcard matching for *? sequences. Affected patterns can now match more names, including in file filters and serialization accept and reject lists.</action>
+      <action type="fix" dev="ggregory" due-to="Claude Security, Gary Gregory">Document FileUtils URL decoding and containment checks (f011).</action>
+      <action type="fix" dev="ggregory" due-to="Claude Security, Gary Gregory">FileUtils.toFile(URL) and toFiles(URL...) now reject decoded file paths containing the NUL character (f011).</action>
+      <action type="fix" dev="ggregory" due-to="Claude Security, Gary Gregory">Fix *? matching in FilenameUtils.wildcardMatch() (f012) (#896).</action>
+      <action type="fix" dev="ggregory" due-to="Claude Security, Gary Gregory">Avoid quadratic processing in ReversedLinesFileReader (f013) (#901).</action>
+      <action type="fix" dev="ggregory" due-to="Claude Security, Gary Gregory">Fix inverted rate conversion in ThrottledInputStream (f015) (#902).</action>
+      <action type="fix" dev="ggregory" due-to="Claude Security, Gary Gregory">Fix RandomAccessFileInputStream skip clamping and overflow (f016) (#904).</action>
+      <action type="fix" dev="ggregory" due-to="Claude Security, Gary Gregory">Fix BOMInputStream afterRead byte accounting (f017) (#905).</action>
+      <action type="fix" dev="ggregory" due-to="Claude Security, Gary Gregory">Fix SwappedDataInputStream single-byte reads at EOF (f018) (#906).</action>
+      <action type="fix" dev="ggregory" due-to="Claude Security, Gary Gregory">Fix CharSequenceInputStream encoding completion and stream state (f019) (#907).</action>
+      <action type="fix" dev="ggregory" due-to="Claude Security, Gary Gregory">Fix strict validation of dynamic proxy interfaces (f020) (#908).</action>
+      <action type="fix" dev="ggregory" due-to="Claude Security, Gary Gregory">Fix circular buffer peek comparisons and range validation (f021) (#909).</action>
+      <action type="fix" dev="ggregory" due-to="Claude Security, Gary Gregory">Document LockableFileWriter lock-directory security considerations (f022).</action>
+      <action type="fix" dev="ggregory" due-to="Claude Security, Gary Gregory">Clarify FilenameUtils platform-dependent behavior (f025).</action>
+      <action type="fix" dev="ggregory" due-to="Claude Security, Gary Gregory">Javadoc: Clarify serialization class-name matching semantics (f026) (#910).</action>
+      <action type="fix" dev="ggregory" due-to="Claude Security, Gary Gregory">Javadoc: Clarify Tailer ignoreTouch behavior and add regression tests (f027) (#911).</action>
+      <action type="fix" dev="ggregory" due-to="Claude Security, Gary Gregory">Preserve FileEntry timestamps when last-modified reads fail (f028) (#912).</action>
+      <action type="fix" dev="ggregory" due-to="Claude Security, Gary Gregory">Fix FileCleaningTracker reaper interrupt busy-spin (f029) (#913).</action>
+      <action type="fix" dev="ggregory" due-to="Claude Security, Gary Gregory">Prevent PathUtils.copyDirectory from copying into itself (f030) (#914).</action>
+      <action type="fix" dev="ggregory" due-to="Claude Security, Gary Gregory">Fix cross-filesystem directory comparisons in PathUtils (f031) (#915).</action>
+      <action type="fix" dev="ggregory" due-to="Claude Security, Gary Gregory">Javadoc: Clarify XML encoding precedence and strict detection limitations (f032).</action>
+      <action type="fix" dev="ggregory" due-to="Claude Security, Gary Gregory">Preserve symlink target attributes during deletion (f033) (#916).</action>
+      <action type="fix" dev="ggregory" due-to="Claude Security, Gary Gregory">Fix relative symbolic link target resolution (f034) (#917).</action>
+      <action type="fix" dev="ggregory" due-to="Jeff Lenamon, Gary Gregory">Fix MemoryMappedFileInputStream.read() returning values outside the unsigned byte range (#875).</action>
+      <action type="fix" dev="ggregory" due-to="Jeff Lenamon, Gary Gregory">Fix FileWriterWithEncoding.Builder ignoring any Charset but the default (#877).</action>
+      <action type="fix" dev="ggregory" due-to="Joerg Pacher, Kyon, Gary Gregory" issue="IO-420">Preserve child deletion events for initially absent roots (#888).</action>
+      <action type="fix" dev="ggregory" due-to="Joerg Pacher, Kyon, Gary Gregory" issue="IO-420">Avoid sorting mixed OpenOption types (#887).</action>
+      <action type="fix" dev="ggregory" due-to="Aryan Ganjoo, Gary Gregory" issue="IO-894" >ByteArraySeekableByteChannel.Builder accepts mixed OpenOption types without sorting them (#887).</action>
+      <action type="fix" dev="ggregory" due-to="Ivan Kurnosov, Hyun Lee, Gary Gregory" issue="IO-460" >Fix Tailer startup after missing-file retries (#880, #918).</action>
+      <action type="fix" dev="ggregory" due-to="Kapil Verma, Jake Wang, Gary Gregory" issue="IO-893" >Rebuild the BOM buffer when resetting without a mark (#879).</action>
       <!-- ADD -->
       <action type="add" dev="ggregory" due-to="Gary Gregory">Add IOConsumer.accept(IOConsumer, T) (#846).</action>
       <action type="add" dev="ggregory" due-to="Gary Gregory">Add UnsynchronizedBufferedReader.unwrap() (#850).</action>
@@ -84,10 +120,14 @@ The <action> type attribute can be add,update,fix,remove.
       <action type="add" dev="ggregory" due-to="Gary Gregory">Add PathUtils.touch(Path, FileTime).</action>
       <action type="add" dev="ggregory" due-to="Xu Zhao, zx8410-ops, Gary Gregory" issue="IO-892">Add FileAlterationObserver.Builder.setMaxDepth(int) to limit directory traversal depth.</action>
       <action type="add" dev="ggregory" due-to="Gary Gregory, maxxedev">Make the call to the "sun." packages optional when cleaning byte buffers (#872).</action>
+      <action type="add" dev="ggregory" due-to="Claude Security, Gary Gregory">Add optional deserialization resource limits to ValidatingObjectInputStream while preserving existing filter restrictions (f003).</action>
+      <action type="add" dev="ggregory" due-to="Gary Gregory">Add AGENTS.md.</action>
       <!-- UPDATE -->
-      <action type="update" dev="ggregory" due-to="Gary Gregory">Bump org.apache.commons:commons-parent from 98 to 105 (#849).</action>
-      <action type="update" dev="ggregory" due-to="Gary Gregory">[test] Bump commons-codec:commons-codec from 1.21.0 to 1.22.1.</action>
-      <action type="update" dev="ggregory" due-to="Gary Gregory, Dependabot">[test] Bump commons.bytebuddy.version from 1.18.8 to 1.18.10 (#4655).</action>
+      <action type="update" dev="ggregory" due-to="Gary Gregory">Bump org.apache.commons:commons-parent from 98 to 106 (#849).</action>
+      <action type="update" dev="ggregory" due-to="Gary Gregory">[test] Bump commons-codec:commons-codec from 1.21.0 to 1.23.0.</action>
+      <action type="update" dev="ggregory" due-to="Gary Gregory, Dependabot">[test] Bump commons.bytebuddy.version from 1.18.8 to 1.18.14.</action>
+      <action type="update" dev="ggregory" due-to="Gary Gregory">[test] Bump commons-lang3 from 3.20.0 to 3.21.0.</action>
+      <action type="update" dev="ggregory" due-to="Gary Gregory">[test] Bump com.google.jimfs:jimfs from 1.3.1 to 1.3.2 (#884).</action>
     </release>
     <release version="2.22.0" date="2026-04-19" description="This is a feature and maintenance release. Java 8 or later is required.">
       <!-- FIX -->

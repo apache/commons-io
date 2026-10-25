@@ -153,4 +153,20 @@ class PathUtilsDeleteFileTest extends AbstractTempDirTest {
         }
         assertFalse(Files.isWritable(file), "Failed deletion must preserve the read-only attribute");
     }
+
+    @Test
+    void testDeleteWritableFileRemainsWritableAfterFailure() throws IOException {
+        assumeTrue(SystemUtils.IS_OS_WINDOWS);
+        final Path file = tempDirPath.resolve("writable.txt");
+        Files.createFile(file);
+        assertTrue(Files.isWritable(file), "The regression must start with a writable file");
+        PathUtils.setReadOnly(tempDirPath, true);
+        try {
+            assertThrows(IOException.class, () -> PathUtils.deleteFile(file, StandardDeleteOption.OVERRIDE_READ_ONLY));
+        } finally {
+            PathUtils.setReadOnly(tempDirPath, false);
+        }
+        assertTrue(Files.exists(file));
+        assertTrue(Files.isWritable(file), "A failed deletion must preserve the file's writable state");
+    }
 }
