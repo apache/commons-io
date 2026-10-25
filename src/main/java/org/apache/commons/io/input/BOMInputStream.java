@@ -232,6 +232,8 @@ public class BOMInputStream extends ProxyInputStream {
         return new Builder();
     }
 
+    private boolean beforeFirstMark = true;
+
     /**
      * BOMs are sorted from longest to shortest.
      */
@@ -240,7 +242,6 @@ public class BOMInputStream extends ProxyInputStream {
     private int fbIndex;
     private int[] firstBytes;
     private final boolean include;
-    private boolean markedAtStart = true;
     private int markFbIndex;
 
     /**
@@ -384,7 +385,7 @@ public class BOMInputStream extends ProxyInputStream {
     @Override
     public synchronized void mark(final int readLimit) {
         markFbIndex = fbIndex;
-        markedAtStart = false;
+        beforeFirstMark = false;
         in.mark(readLimit);
     }
 
@@ -508,15 +509,26 @@ public class BOMInputStream extends ProxyInputStream {
     }
 
     /**
-     * Invokes the delegate's {@link InputStream#reset()} method.
+     * Resets the stream to the last marked position.
      *
-     * @throws IOException Thrown if an I/O error occurs.
+     * <p>
+     * Invokes the delegate's {@link InputStream#reset()} method, so reset support and mark validity depend on the delegate. Before an explicit call to
+     * {@link #mark(int)}, rebuilds the initial BOM buffer by reading from the delegate's reset position and applying the configured BOM inclusion policy.
+     * These reads invoke {@link #afterRead(int)} and may block or throw an {@link IOException}.
+     * </p>
+     *
+     * <p>
+     * After an explicit mark, restores the saved position in the existing BOM buffer without rereading the prefix or invoking {@code afterRead(int)}.
+     * If the delegate's reset fails, the buffered position is unchanged.
+     * </p>
+     *
+     * @throws IOException if the delegate cannot reset or an error occurs while rebuilding the initial BOM buffer.
      */
     @Override
     public synchronized void reset() throws IOException {
         in.reset();
         fbIndex = markFbIndex;
-        if (markedAtStart) {
+        if (beforeFirstMark) {
             readBom();
         }
     }

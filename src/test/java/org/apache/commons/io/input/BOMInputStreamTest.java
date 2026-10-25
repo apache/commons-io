@@ -28,6 +28,7 @@ import static org.junit.jupiter.api.Assumptions.assumeFalse;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import java.io.ByteArrayInputStream;
+import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
@@ -404,6 +405,24 @@ class BOMInputStreamTest {
         }
     }
 
+    @ParameterizedTest
+    @CsvSource({ "false, false", "false, true", "true, false", "true, true" })
+    void testAfterReadResetWithoutMark(final boolean addBom, final boolean include) throws Exception {
+        final byte[] data = { 'A', 'B', 'C', 'D', 'E' };
+        final List<Integer> calls = new ArrayList<>();
+        try (BOMInputStream in = BOMInputStream.builder().setInputStream(createUtf8Input(data, addBom)).setInclude(include)
+                .setAfterRead(calls::add).get()) {
+            calls.clear();
+            in.reset();
+            assertEquals(Arrays.asList(1, 1, 1), calls);
+            calls.clear();
+            assertArrayEquals(IOUtils.toByteArray(createUtf8Input(data, addBom && include)), IOUtils.toByteArray(in));
+            calls.clear();
+            in.reset();
+            assertEquals(Arrays.asList(1, 1, 1), calls);
+        }
+    }
+
     @Test
     void testAfterReadSkip() throws Exception {
         final List<Integer> calls = new ArrayList<>();
@@ -634,36 +653,6 @@ class BOMInputStreamTest {
             in.read();
             in.reset();
             assertEquals('A', in.read());
-        }
-    }
-
-    @ParameterizedTest
-    @CsvSource({ "false, false", "false, true", "true, false", "true, true" })
-    void testResetWithoutMark(final boolean addBom, final boolean include) throws Exception {
-        final byte[] data = { 'A', 'B', 'C', 'D', 'E' };
-        final byte[] expected = IOUtils.toByteArray(createUtf8Input(data, addBom && include));
-        try (BOMInputStream in = BOMInputStream.builder()
-                .setInputStream(createUtf8Input(data, addBom))
-                .setByteOrderMarks(ByteOrderMark.UTF_8, ByteOrderMark.UTF_16BE, ByteOrderMark.UTF_32BE)
-                .setInclude(include)
-                .get()) {
-            in.reset();
-            assertArrayEquals(expected, IOUtils.toByteArray(in));
-            in.reset();
-            assertEquals(expected[0] & 0xFF, in.read());
-            in.reset();
-            assertArrayEquals(expected, IOUtils.toByteArray(in));
-        }
-    }
-
-    @Test
-    void testResetWithoutMarkShortStream() throws Exception {
-        final byte[] data = { 'A' };
-        try (BOMInputStream in = BOMInputStream.builder().setInputStream(new ByteArrayInputStream(data)).get()) {
-            in.reset();
-            assertArrayEquals(data, IOUtils.toByteArray(in));
-            in.reset();
-            assertArrayEquals(data, IOUtils.toByteArray(in));
         }
     }
 
@@ -981,6 +970,107 @@ class BOMInputStreamTest {
             parseXml(in);
         }
         parseXml(createUtf32BeDataStream(data, false));
+    }
+
+    @Test
+    void testResetFailurePreservesBufferedPosition() throws Exception {
+        final byte[] data = { 'A', 'B', 'C', 'D' };
+        final InputStream delegate = new FilterInputStream(new ByteArrayInputStream(data)) {
+            @Override
+            public void reset() throws IOException {
+                throw new CustomIOException("reset failed");
+            }
+        };
+        try (BOMInputStream in = BOMInputStream.builder().setInputStream(delegate).get()) {
+            assertEquals('A', in.read());
+            assertThrowsExactly(CustomIOException.class, in::reset);
+            assertArrayEquals(new byte[] { 'B', 'C', 'D' }, IOUtils.toByteArray(in));
+        }
+    }
+
+    @ParameterizedTest
+    @CsvSource({ "false, false", "false, true", "true, false", "true, true" })
+    void testResetWithoutMark(final boolean addBom, final boolean include) throws Exception {
+        final byte[] data = { 'A', 'B', 'C', 'D', 'E' };
+        final byte[] expected = IOUtils.toByteArray(createUtf8Input(data, addBom && include));
+        try (BOMInputStream in = BOMInputStream.builder()
+                .setInputStream(createUtf8Input(data, addBom))
+                .setByteOrderMarks(ByteOrderMark.UTF_8, ByteOrderMark.UTF_16BE, ByteOrderMark.UTF_32BE)
+                .setInclude(include)
+                .get()) {
+            in.reset();
+            assertArrayEquals(expected, IOUtils.toByteArray(in));
+            in.reset();
+            assertEquals(expected[0] & 0xFF, in.read());
+            in.reset();
+            assertArrayEquals(expected, IOUtils.toByteArray(in));
+        }
+    }
+
+    @ParameterizedTest
+    @CsvSource({ "false, 0", "false, 5", "true, 0", "true, 5" })
+    void testResetWithoutMarkAllBoms(final boolean include, final int dataLength) throws Exception {
+        final ByteOrderMark[] boms = { ByteOrderMark.UTF_8, ByteOrderMark.UTF_16BE, ByteOrderMark.UTF_16LE,
+                ByteOrderMark.UTF_32BE, ByteOrderMark.UTF_32LE };
+        final byte[] data = Arrays.copyOf(new byte[] { 'A', 'B', 'C', 'D', 'E' }, dataLength);
+        for (final ByteOrderMark bom : boms) {
+            final byte[] prefix = bom.getBytes();
+            final byte[] input = Arrays.copyOf(prefix, prefix.length + data.length);
+            System.arraycopy(data, 0, input, prefix.length, data.length);
+            try (BOMInputStream in = BOMInputStream.builder().setInputStream(new ByteArrayInputStream(input)).setByteOrderMarks(boms)
+                    .setInclude(include).get()) {
+                for (int pass = 0; pass < 2; pass++) {
+                    in.reset();
+                    assertEquals(bom, in.getBOM());
+                    assertArrayEquals(include ? input : data, IOUtils.toByteArray(in), bom.getCharsetName());
+                }
+            }
+        }
+    }
+
+    @Test
+    void testResetWithoutMarkEmptyStream() throws Exception {
+        try (BOMInputStream in = BOMInputStream.builder().setInputStream(new ByteArrayInputStream(new byte[0])).get()) {
+            for (int pass = 0; pass < 2; pass++) {
+                in.reset();
+                assertNull(in.getBOM());
+                assertEquals(-1, in.read());
+                assertEquals(-1, in.read(new byte[1]));
+            }
+        }
+    }
+
+    @Test
+    void testResetWithoutMarkShortStream() throws Exception {
+        final byte[] data = { 'A' };
+        try (BOMInputStream in = BOMInputStream.builder().setInputStream(new ByteArrayInputStream(data)).get()) {
+            in.reset();
+            assertArrayEquals(data, IOUtils.toByteArray(in));
+            in.reset();
+            assertArrayEquals(data, IOUtils.toByteArray(in));
+        }
+    }
+
+    @Test
+    void testResetWithoutMarkThenMark() throws Exception {
+        final byte[] data = { 'A', 'B', 'C', 'D', 'E' };
+        final List<Integer> calls = new ArrayList<>();
+        try (BOMInputStream in = BOMInputStream.builder().setInputStream(new ByteArrayInputStream(data)).setAfterRead(calls::add).get()) {
+            in.reset();
+            assertEquals('A', in.read());
+            in.mark(data.length);
+            final byte[] expected = { 'B', 'C', 'D', 'E' };
+            assertArrayEquals(expected, IOUtils.toByteArray(in));
+            for (int pass = 0; pass < 2; pass++) {
+                calls.clear();
+                in.reset();
+                assertTrue(calls.isEmpty());
+                assertEquals('B', in.read());
+                assertEquals('C', in.read());
+                assertTrue(calls.isEmpty());
+                assertArrayEquals(new byte[] { 'D', 'E' }, IOUtils.toByteArray(in));
+            }
+        }
     }
 
     @Test

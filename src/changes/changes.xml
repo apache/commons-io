@@ -104,6 +104,7 @@ The <action> type attribute can be add,update,fix,remove.
       <action type="fix" dev="ggregory" due-to="Joerg Pacher, Kyon, Gary Gregory" issue="IO-420">Avoid sorting mixed OpenOption types (#887).</action>
       <action type="fix" dev="ggregory" due-to="Aryan Ganjoo, Gary Gregory" issue="IO-894" >ByteArraySeekableByteChannel.Builder accepts mixed OpenOption types without sorting them (#887).</action>
       <action type="fix" dev="ggregory" due-to="Ivan Kurnosov, Hyun Lee, Gary Gregory" issue="IO-460" >Fix Tailer startup after missing-file retries (#880, #918).</action>
+      <action type="fix" dev="ggregory" due-to="Ivan Kurnosov, Hyun Lee, Gary Gregory" issue="IO-893" >Rebuild the BOM buffer when resetting without a mark (#879).</action>
       <!-- ADD -->
       <action type="add" dev="ggregory" due-to="Gary Gregory">Add IOConsumer.accept(IOConsumer, T) (#846).</action>
       <action type="add" dev="ggregory" due-to="Gary Gregory">Add UnsynchronizedBufferedReader.unwrap() (#850).</action>
