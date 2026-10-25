@@ -29,6 +29,7 @@ import java.io.RandomAccessFile;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.attribute.FileTime;
 import java.time.Duration;
@@ -327,7 +328,14 @@ public class Tailer implements Runnable, AutoCloseable {
         /**
          * Sets the tail start behavior.
          *
-         * @param end Set to true to tail from the end of the file, false to tail from the beginning of the file.
+         * <p>
+         * When an initial open fails and the tailable's last-modified-time lookup confirms absence with {@link NoSuchFileException}, the file is read from the
+         * beginning when it becomes available, even if {@code end} is {@code true}. Other open failures preserve the configured start position. The decision
+         * is made while {@link Tailer#run()} attempts to open the file, not when the tailer is constructed. Reopening between polling cycles retains the
+         * current read position, and rotation handling is unchanged.
+         * </p>
+         *
+         * @param end Set to true to tail from the end of an existing file, false to tail from the beginning.
          * @return {@code this} instance.
          */
         public Builder setTailFromEnd(final boolean end) {
@@ -422,7 +430,7 @@ public class Tailer implements Runnable, AutoCloseable {
          *
          * @param mode The access mode, by default this is for {@link RandomAccessFile}.
          * @return A random access file stream to read.
-         * @throws FileNotFoundException if the tailable object does not exist.
+         * @throws FileNotFoundException if the tailable object does not exist or cannot be opened.
          */
         RandomAccessResourceBridge getRandomAccess(String mode) throws FileNotFoundException;
 
@@ -439,7 +447,8 @@ public class Tailer implements Runnable, AutoCloseable {
          * Gets the last modification {@link FileTime}.
          *
          * @return See {@link java.nio.file.Files#getLastModifiedTime(Path, LinkOption...)}.
-         * @throws IOException Thrown if an I/O error occurs.
+         * @throws NoSuchFileException if the tailable does not exist. This confirms absence after an initial open failure, allowing tailing from the beginning.
+         * @throws IOException Thrown if an I/O error occurs. Other exceptions do not confirm absence and preserve the configured start position.
          */
         FileTime lastModifiedFileTime() throws IOException;
 
@@ -524,7 +533,7 @@ public class Tailer implements Runnable, AutoCloseable {
      * @param charset The character set to use for reading the file.
      * @param tailerListener The TailerListener to use.
      * @param delayMillis The delay between checks of the file for new content in milliseconds.
-     * @param end Set to true to tail from the end of the file, false to tail from the beginning of the file.
+     * @param end Set to true to tail from the end of an existing file, false to tail from the beginning. See {@link Builder#setTailFromEnd(boolean)}.
      * @param reOpen whether to close/reopen the file between chunks.
      * @param bufferSize buffer size.
      * @return The new tailer.
@@ -590,7 +599,7 @@ public class Tailer implements Runnable, AutoCloseable {
      * @param file The file to follow.
      * @param tailerListener The TailerListener to use.
      * @param delayMillis The delay between checks of the file for new content in milliseconds.
-     * @param end Set to true to tail from the end of the file, false to tail from the beginning of the file.
+     * @param end Set to true to tail from the end of an existing file, false to tail from the beginning. See {@link Builder#setTailFromEnd(boolean)}.
      * @return The new tailer.
      * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}.
      */
@@ -612,7 +621,7 @@ public class Tailer implements Runnable, AutoCloseable {
      * @param file The file to follow.
      * @param tailerListener The TailerListener to use.
      * @param delayMillis The delay between checks of the file for new content in milliseconds.
-     * @param end Set to true to tail from the end of the file, false to tail from the beginning of the file.
+     * @param end Set to true to tail from the end of an existing file, false to tail from the beginning. See {@link Builder#setTailFromEnd(boolean)}.
      * @param reOpen whether to close/reopen the file between chunks.
      * @return The new tailer.
      * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}.
@@ -636,7 +645,7 @@ public class Tailer implements Runnable, AutoCloseable {
      * @param file The file to follow.
      * @param tailerListener The TailerListener to use.
      * @param delayMillis The delay between checks of the file for new content in milliseconds.
-     * @param end Set to true to tail from the end of the file, false to tail from the beginning of the file.
+     * @param end Set to true to tail from the end of an existing file, false to tail from the beginning. See {@link Builder#setTailFromEnd(boolean)}.
      * @param reOpen whether to close/reopen the file between chunks.
      * @param bufferSize buffer size.
      * @return The new tailer.
@@ -663,7 +672,7 @@ public class Tailer implements Runnable, AutoCloseable {
      * @param file The file to follow.
      * @param tailerListener The TailerListener to use.
      * @param delayMillis The delay between checks of the file for new content in milliseconds.
-     * @param end Set to true to tail from the end of the file, false to tail from the beginning of the file.
+     * @param end Set to true to tail from the end of an existing file, false to tail from the beginning. See {@link Builder#setTailFromEnd(boolean)}.
      * @param bufferSize buffer size.
      * @return The new tailer.
      * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}.
@@ -751,7 +760,7 @@ public class Tailer implements Runnable, AutoCloseable {
      * @param charset The Charset to be used for reading the file.
      * @param tailerListener The TailerListener to use.
      * @param delayMillis The delay between checks of the file for new content in milliseconds.
-     * @param end Set to true to tail from the end of the file, false to tail from the beginning of the file.
+     * @param end Set to true to tail from the end of an existing file, false to tail from the beginning. See {@link Builder#setTailFromEnd(boolean)}.
      * @param reOpen if true, close and reopen the file between reading chunks.
      * @param bufSize Buffer size.
      * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}.
@@ -793,7 +802,7 @@ public class Tailer implements Runnable, AutoCloseable {
      * @param file The file to follow.
      * @param tailerListener The TailerListener to use.
      * @param delayMillis The delay between checks of the file for new content in milliseconds.
-     * @param end Set to true to tail from the end of the file, false to tail from the beginning of the file.
+     * @param end Set to true to tail from the end of an existing file, false to tail from the beginning. See {@link Builder#setTailFromEnd(boolean)}.
      * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}.
      */
     @Deprecated
@@ -807,7 +816,7 @@ public class Tailer implements Runnable, AutoCloseable {
      * @param file The file to follow.
      * @param tailerListener The TailerListener to use.
      * @param delayMillis The delay between checks of the file for new content in milliseconds.
-     * @param end Set to true to tail from the end of the file, false to tail from the beginning of the file.
+     * @param end Set to true to tail from the end of an existing file, false to tail from the beginning. See {@link Builder#setTailFromEnd(boolean)}.
      * @param reOpen if true, close and reopen the file between reading chunks.
      * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}.
      */
@@ -822,7 +831,7 @@ public class Tailer implements Runnable, AutoCloseable {
      * @param file The file to follow.
      * @param tailerListener The TailerListener to use.
      * @param delayMillis The delay between checks of the file for new content in milliseconds.
-     * @param end Set to true to tail from the end of the file, false to tail from the beginning of the file.
+     * @param end Set to true to tail from the end of an existing file, false to tail from the beginning. See {@link Builder#setTailFromEnd(boolean)}.
      * @param reOpen if true, close and reopen the file between reading chunks.
      * @param bufferSize Buffer size.
      * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}.
@@ -838,7 +847,7 @@ public class Tailer implements Runnable, AutoCloseable {
      * @param file The file to follow.
      * @param tailerListener The TailerListener to use.
      * @param delayMillis The delay between checks of the file for new content in milliseconds.
-     * @param end Set to true to tail from the end of the file, false to tail from the beginning of the file.
+     * @param end Set to true to tail from the end of an existing file, false to tail from the beginning. See {@link Builder#setTailFromEnd(boolean)}.
      * @param bufferSize Buffer size.
      * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}.
      */
@@ -854,7 +863,7 @@ public class Tailer implements Runnable, AutoCloseable {
      * @param charset The Charset to be used for reading the file.
      * @param tailerListener The TailerListener to use.
      * @param delayDuration The delay between checks of the file for new content in milliseconds.
-     * @param tailAtEnd Set to true to tail from the end of the file, false to tail from the beginning of the file.
+     * @param tailAtEnd Set to true to tail from the end of an existing file, false to tail from the beginning. See {@link Builder#setTailFromEnd(boolean)}.
      * @param reOpen if true, close and reopen the file between reading chunks.
      * @param ignoreTouch if true, timestamp advances are ignored when the file length equals the current read position.
      * @param bufferSize Buffer size.
@@ -936,6 +945,22 @@ public class Tailer implements Runnable, AutoCloseable {
     }
 
     /**
+     * Tests whether the tailable can be confirmed absent after an open failure.
+     *
+     * @return whether the last-modified-time lookup reports that the tailable does not exist.
+     */
+    private boolean isTailableMissing() {
+        try {
+            tailable.lastModifiedFileTime();
+        } catch (final NoSuchFileException e) {
+            return true;
+        } catch (final IOException e) {
+            // An inaccessible tailable may still exist. Preserve the configured start position.
+        }
+        return false;
+    }
+
+    /**
      * Reads new lines.
      *
      * @param reader The file to read.
@@ -996,18 +1021,22 @@ public class Tailer implements Runnable, AutoCloseable {
         try {
             FileTime last = FileTimes.EPOCH; // The last time the file was checked for changes
             long position = 0; // position within the file
+            boolean tailFromEndOnOpen = tailFromEnd;
             // Open the file
             while (getRun() && reader == null) {
                 try {
                     reader = tailable.getRandomAccess(RAF_READ_ONLY_MODE);
                 } catch (final FileNotFoundException e) {
+                    if (tailFromEndOnOpen && isTailableMissing()) {
+                        tailFromEndOnOpen = false;
+                    }
                     listener.fileNotFound();
                 }
                 if (reader == null) {
                     ThreadUtils.sleep(delayDuration);
                 } else {
                     // The current position in the file
-                    position = tailFromEnd ? tailable.size() : 0;
+                    position = tailFromEndOnOpen ? tailable.size() : 0;
                     last = tailable.lastModifiedFileTime();
                     reader.seek(position);
                 }

@@ -22,6 +22,11 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -34,19 +39,26 @@ import java.io.RandomAccessFile;
 import java.io.Writer;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.AccessDeniedException;
+import java.nio.file.FileSystemException;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.StandardOpenOption;
 import java.nio.file.attribute.FileTime;
+import java.nio.file.attribute.PosixFileAttributeView;
+import java.nio.file.attribute.PosixFilePermission;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
@@ -56,6 +68,9 @@ import org.apache.commons.io.test.TestUtils;
 import org.apache.commons.lang3.SystemProperties;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 /**
  * Test for {@link Tailer}.
@@ -193,6 +208,59 @@ class TailerTest {
     @TempDir
     public static File temporaryFolder;
 
+    private void checkInitialOpen(final int failedOpens, final boolean tailFromEnd, final boolean reOpen, final IOException metadataFailure) throws Exception {
+        final File file = Files.createTempFile(temporaryFolder.toPath(), "tailer-initial-open", ".txt").toFile();
+        writeLines(file, "first", "second");
+        final NonStandardTailable delegate = new NonStandardTailable(file);
+        final Tailer.Tailable tailable = mock(Tailer.Tailable.class);
+        final AtomicInteger opens = new AtomicInteger();
+        when(tailable.getRandomAccess(anyString())).thenAnswer(invocation -> {
+            if (opens.getAndIncrement() < failedOpens) {
+                throw new FileNotFoundException(file.toString());
+            }
+            return delegate.getRandomAccess(invocation.getArgument(0));
+        });
+        when(tailable.size()).thenAnswer(invocation -> delegate.size());
+        when(tailable.lastModifiedFileTime()).thenAnswer(invocation -> {
+            if (opens.get() <= failedOpens && metadataFailure != null) {
+                throw metadataFailure;
+            }
+            return FileTime.fromMillis(1);
+        });
+        final boolean readInitial = !tailFromEnd || failedOpens > 0 && metadataFailure instanceof NoSuchFileException;
+        final List<String> expected = new ArrayList<>();
+        if (readInitial) {
+            expected.addAll(Arrays.asList("first", "second"));
+        }
+        final TestTailerListener listener = new TestTailerListener();
+        final AtomicInteger polls = new AtomicInteger();
+        try (Tailer tailer = Tailer.builder().setTailable(tailable).setTailerListener(listener).setCharset(StandardCharsets.UTF_8)
+                .setTailFromEnd(tailFromEnd).setReOpen(reOpen).setStartThread(false).setDelayDuration(Duration.ZERO).get()) {
+            when(tailable.isNewer(any())).thenAnswer(invocation -> {
+                switch (polls.incrementAndGet()) {
+                case 2:
+                    assertEquals(expected, listener.getLines());
+                    writeLines(file, "third");
+                    expected.add("third");
+                    break;
+                case 3:
+                    tailer.close();
+                    break;
+                default:
+                    break;
+                }
+                return false;
+            });
+            tailer.run();
+        }
+        assertNull(listener.exception);
+        assertEquals(failedOpens, listener.notFound);
+        assertEquals(failedOpens + (reOpen ? 3 : 1), opens.get());
+        assertEquals(0, listener.rotated);
+        assertEquals(3, polls.get());
+        assertEquals(expected, listener.getLines());
+    }
+
     protected void createFile(final File file, final long size) throws IOException {
         assertTrue(file.getParentFile().exists(), () -> "Cannot create file " + file + " as the parent directory does not exist");
         try (BufferedOutputStream output = new BufferedOutputStream(Files.newOutputStream(file.toPath()))) {
@@ -228,6 +296,20 @@ class TailerTest {
         }
         fail("Waiting for TestTailerListener.getLines() timed out after " + count * minDelay + " ms");
         return null;
+    }
+
+    private void runWithBoundedPolls(final File file, final TailerListener listener, final boolean reOpen) {
+        try (Tailer tailer = new Tailer(file, StandardCharsets.UTF_8, listener, 0, true, reOpen, TEST_BUFFER_SIZE) {
+            private int checks;
+
+            @Override
+            protected boolean getRun() {
+                // Bound synchronous execution even when no lines are delivered.
+                return super.getRun() && ++checks < 50;
+            }
+        }) {
+            tailer.run();
+        }
     }
 
     @Test
@@ -686,6 +768,99 @@ class TailerTest {
             assertEquals(1, lines.size(), "1 line count");
             assertEquals("Line one", lines.get(0), "1 line 1");
             listener.clear();
+        }
+    }
+
+    @ParameterizedTest
+    @CsvSource({"0, true, false", "1, true, false", "2, true, false", "0, false, false", "1, false, false", "2, false, false",
+        "0, true, true", "1, true, true", "2, true, true", "0, false, true", "1, false, true", "2, false, true"})
+    void testTailFromEndAfterInitialOpen(final int failedOpens, final boolean tailFromEnd, final boolean reOpen) throws Exception {
+        checkInitialOpen(failedOpens, tailFromEnd, reOpen, new NoSuchFileException("missing"));
+    }
+
+    @ParameterizedTest
+    @ValueSource(booleans = {false, true})
+    void testTailFromEndAfterUnconfirmedAbsence(final boolean reOpen) throws Exception {
+        checkInitialOpen(1, true, reOpen, null);
+        checkInitialOpen(1, true, reOpen, new AccessDeniedException("denied"));
+        checkInitialOpen(1, true, reOpen, new FileNotFoundException("cannot open"));
+        checkInitialOpen(1, true, reOpen, new FileSystemException("file", null, "sharing violation"));
+        checkInitialOpen(1, true, reOpen, new IOException("metadata unavailable"));
+    }
+
+    @ParameterizedTest
+    @CsvSource({"false, false", "false, true", "true, false", "true, true"})
+    void testTailFromEndNewFile(final boolean reOpen, final boolean missingParent) throws Exception {
+        final File parent = missingParent ? new File(temporaryFolder, "new-parent-" + reOpen) : temporaryFolder;
+        final File file = new File(parent, "new-file-" + reOpen);
+        assertFalse(file.exists());
+        final List<String> lines = new ArrayList<>();
+        final AtomicInteger failures = new AtomicInteger();
+        final TailerListener listener = new TailerListenerAdapter() {
+            @Override
+            public void fileNotFound() {
+                failures.incrementAndGet();
+                try {
+                    Files.createDirectories(file.toPath().getParent());
+                    Files.write(file.toPath(), "first\nsecond\n".getBytes(StandardCharsets.UTF_8));
+                } catch (final IOException e) {
+                    fail(e);
+                }
+            }
+
+            @Override
+            public void handle(final Exception exception) {
+                fail(exception);
+            }
+
+            @Override
+            public void handle(final String line) {
+                lines.add(line);
+            }
+        };
+        runWithBoundedPolls(file, listener, reOpen);
+        assertEquals(1, failures.get());
+        assertEquals(Arrays.asList("first", "second"), lines);
+    }
+
+    @ParameterizedTest
+    @ValueSource(booleans = {false, true})
+    void testTailFromEndPermissionRecovery(final boolean reOpen) throws Exception {
+        final File file = Files.createTempFile(temporaryFolder.toPath(), "tailer-permissions", ".txt").toFile();
+        assumeTrue(Files.getFileAttributeView(file.toPath(), PosixFileAttributeView.class) != null);
+        writeLines(file, "historical");
+        final Set<PosixFilePermission> permissions = Files.getPosixFilePermissions(file.toPath());
+        final List<String> lines = new ArrayList<>();
+        final AtomicInteger failures = new AtomicInteger();
+        try {
+            Files.setPosixFilePermissions(file.toPath(), Collections.emptySet());
+            assumeTrue(!Files.isReadable(file.toPath()), "Requires a user subject to file permissions");
+            final TailerListener listener = new TailerListenerAdapter() {
+                @Override
+                public void fileNotFound() {
+                    failures.incrementAndGet();
+                    try {
+                        Files.setPosixFilePermissions(file.toPath(), permissions);
+                    } catch (final IOException e) {
+                        fail(e);
+                    }
+                }
+
+                @Override
+                public void handle(final Exception exception) {
+                    fail(exception);
+                }
+
+                @Override
+                public void handle(final String line) {
+                    lines.add(line);
+                }
+            };
+            runWithBoundedPolls(file, listener, reOpen);
+            assertEquals(1, failures.get());
+            assertTrue(lines.isEmpty());
+        } finally {
+            Files.setPosixFilePermissions(file.toPath(), permissions);
         }
     }
 
