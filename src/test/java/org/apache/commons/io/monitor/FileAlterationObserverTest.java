@@ -325,6 +325,7 @@ class FileAlterationObserverTest extends AbstractMonitorTest {
         final File rootDirectory = new File(testDir, "initially-missing");
         final File childDirectory = new File(rootDirectory, "child-directory");
         final File childFile = new File(rootDirectory, "child.java");
+        final File nestedFile = new File(childDirectory, "nested.java");
         assertFalse(rootDirectory.exists());
         createObserver(rootDirectory, null);
         checkAndNotify();
@@ -334,17 +335,20 @@ class FileAlterationObserverTest extends AbstractMonitorTest {
             assertTrue(rootDirectory.mkdir());
             assertTrue(childDirectory.mkdir());
             assertTrue(childFile.createNewFile());
+            assertTrue(nestedFile.createNewFile());
             checkAndNotify();
-            checkCollectionSizes("Created " + cycle, 1, 0, 0, 1, 0, 0);
+            checkCollectionSizes("Created " + cycle, 1, 0, 0, 2, 0, 0);
             assertTrue(listener.getCreatedDirectories().contains(childDirectory));
             assertTrue(listener.getCreatedFiles().contains(childFile));
+            assertTrue(listener.getCreatedFiles().contains(nestedFile));
             assertFalse(listener.getCreatedDirectories().contains(rootDirectory));
 
             FileUtils.deleteDirectory(rootDirectory);
             checkAndNotify();
-            checkCollectionSizes("Deleted " + cycle, 0, 0, 1, 0, 0, 1);
+            checkCollectionSizes("Deleted " + cycle, 0, 0, 1, 0, 0, 2);
             assertTrue(listener.getDeletedDirectories().contains(childDirectory));
             assertTrue(listener.getDeletedFiles().contains(childFile));
+            assertTrue(listener.getDeletedFiles().contains(nestedFile));
             assertFalse(listener.getDeletedDirectories().contains(rootDirectory));
 
             checkAndNotify();

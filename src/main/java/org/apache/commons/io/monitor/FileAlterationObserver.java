@@ -431,7 +431,12 @@ public class FileAlterationObserver implements Serializable {
     }
 
     /**
-     * Checks whether the file and its children have been created, modified or deleted.
+     * Checks for created, modified or deleted files and directories below the root directory.
+     *
+     * <p>
+     * Notifies listeners of changes to descendants of the root directory. No create, change or delete notifications are generated for the root directory
+     * itself.
+     * </p>
      */
     public void checkAndNotify() {
         // fire onStart()
