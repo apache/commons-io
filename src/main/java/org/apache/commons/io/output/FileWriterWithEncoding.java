@@ -73,7 +73,7 @@ public class FileWriterWithEncoding extends ProxyWriter {
      * FileWriterWithEncoding w = FileWriterWithEncoding.builder()
      *   .setPath(path)
      *   .setAppend(false)
-     *   .setCharsetEncoder(StandardCharsets.UTF_8)
+     *   .setCharset(StandardCharsets.UTF_8)
      *   .get();}
      * </pre>
      *
@@ -125,9 +125,6 @@ public class FileWriterWithEncoding extends ProxyWriter {
         }
 
         private Object getEncoder() {
-            if (charsetEncoder != null && getCharset() != null && !charsetEncoder.charset().equals(getCharset())) {
-                throw new IllegalStateException(String.format("Mismatched Charset(%s) and CharsetEncoder(%s)", getCharset(), charsetEncoder.charset()));
-            }
             return charsetEncoder != null ? charsetEncoder : getCharset();
         }
 
@@ -143,13 +140,40 @@ public class FileWriterWithEncoding extends ProxyWriter {
         }
 
         /**
-         * Sets charsetEncoder to use for encoding.
+         * Sets the charset.
+         * <p>
+         * Preserves an existing encoder and its configuration if it uses the selected charset. Otherwise, replaces an existing encoder with a new encoder
+         * for the selected charset, resetting error actions and replacement bytes to the new encoder's defaults. If the encoder was cleared with
+         * {@link #setCharsetEncoder(CharsetEncoder)}, it remains cleared.
+         * </p>
          *
-         * @param charsetEncoder The charsetEncoder to use for encoding.
+         * @param charset The charset, null resets to the default.
+         * @return {@code this} instance.
+         */
+        @Override
+        public Builder setCharset(final Charset charset) {
+            super.setCharset(charset);
+            if (charsetEncoder != null && !charsetEncoder.charset().equals(getCharset())) {
+                charsetEncoder = getCharset().newEncoder();
+            }
+            return this;
+        }
+
+        /**
+         * Sets the charset encoder.
+         * <p>
+         * A non-null encoder also sets the charset and retains its configured error actions and replacement bytes. A null encoder clears the encoder,
+         * leaving the charset unchanged. In that case, the writer uses the selected charset and replaces malformed and unmappable input.
+         * </p>
+         *
+         * @param charsetEncoder The charset encoder, null clears the encoder.
          * @return {@code this} instance.
          */
         public Builder setCharsetEncoder(final CharsetEncoder charsetEncoder) {
             this.charsetEncoder = charsetEncoder;
+            if (charsetEncoder != null) {
+                super.setCharset(charsetEncoder.charset());
+            }
             return this;
         }
 

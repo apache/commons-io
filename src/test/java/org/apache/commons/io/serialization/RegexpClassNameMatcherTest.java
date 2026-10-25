@@ -32,6 +32,24 @@ import org.junit.jupiter.api.Test;
 class RegexpClassNameMatcherTest {
 
     @Test
+    void testExactClassName() {
+        final ClassNameMatcher matcher = new RegexpClassNameMatcher(Pattern.compile("foo\\.Bar"));
+        assertTrue(matcher.matches("foo.Bar"));
+        assertFalse(matcher.matches("foo.BarExtra"));
+        assertFalse(matcher.matches("prefix.foo.Bar"));
+        assertFalse(matcher.matches("[Lfoo.Bar;"));
+    }
+
+    @Test
+    void testExplicitSubstringPattern() {
+        final ClassNameMatcher matcher = new RegexpClassNameMatcher(Pattern.compile(".*foo\\.Bar.*"));
+        assertTrue(matcher.matches("foo.Bar"));
+        assertTrue(matcher.matches("foo.BarExtra"));
+        assertTrue(matcher.matches("prefix.foo.Bar"));
+        assertTrue(matcher.matches("[Lfoo.Bar;"));
+    }
+
+    @Test
     void testNullPatternPattern() {
         assertThrows(NullPointerException.class, () -> new RegexpClassNameMatcher((Pattern) null));
     }

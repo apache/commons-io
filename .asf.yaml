@@ -16,6 +16,8 @@
 github:
   description: "Apache Commons IO"
   homepage: https://commons.apache.org/io/
+  autolink_jira:
+    - IO
   
   pull_requests:
     # allow auto-merge

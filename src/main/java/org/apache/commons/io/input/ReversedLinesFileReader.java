@@ -27,9 +27,11 @@ import java.nio.charset.CharsetEncoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Deque;
 import java.util.Iterator;
 import java.util.List;
 
@@ -128,24 +130,65 @@ public class ReversedLinesFileReader implements Closeable, IOIterable<String> {
     private final class FilePart {
         private final long partNumber;
 
+        /**
+         * This block's bytes, plus a small "bridge" of up to {@code avoidNewlineSplitBufferSize} bytes copied from the head of {@link #tail} so newline
+         * sequences split across the block boundary can be matched.
+         */
         private final byte[] data;
 
-        private byte[] leftOver;
+        /**
+         * The number of bytes in {@link #data} belonging to this block; the remainder is the bridge.
+         */
+        private final int blockLength;
 
-        private int currentLastBytePos;
+        /**
+         * The accumulated remainder of the following (later-in-file) blocks, in file order, or null.
+         *
+         * <p>
+         * The prefix can contain deferred newline bytes that still need to be checked across a block boundary. The rest has already been scanned.
+         * These bytes virtually follow this block's bytes and are joined when a line is emitted, instead of being re-copied into every preceding block's
+         * buffer.
+         * </p>
+         */
+        private final Deque<byte[]> tail;
+
+        /**
+         * The total number of bytes across the {@link #tail} segments.
+         */
+        private final long tailLength;
+
+        /**
+         * The unemitted remainder of this part, as segments in file order, to hand to the preceding part; null if none.
+         */
+        private Deque<byte[]> leftOver;
+
+        /**
+         * The total number of bytes across the {@link #leftOver} segments.
+         */
+        private long leftOverLength;
+
+        /**
+         * Index of the last unemitted byte in the virtual buffer formed by {@code data[0..blockLength - 1]} followed by the {@link #tail} bytes.
+         */
+        private long currentLastBytePos;
 
         /**
          * Constructs a new instance.
          *
-         * @param partNumber             The part number.
-         * @param length                 its length.
-         * @param leftOverOfLastFilePart remainder.
+         * @param partNumber The part number.
+         * @param length     its length.
+         * @param tail       remainder of the following file parts, as segments in file order, or null.
+         * @param tailLength The total number of bytes across the {@code tail} segments.
          * @throws IOException Thrown if there is a problem reading the file.
          */
-        private FilePart(final long partNumber, final int length, final byte[] leftOverOfLastFilePart) throws IOException {
+        private FilePart(final long partNumber, final int length, final Deque<byte[]> tail, final long tailLength) throws IOException {
             this.partNumber = partNumber;
-            final int dataLength = length + (leftOverOfLastFilePart != null ? leftOverOfLastFilePart.length : 0);
-            this.data = new byte[dataLength];
+            this.blockLength = length;
+            this.tail = tail;
+            this.tailLength = tailLength;
+            // Copy only a tiny bridge from the tail's head; the rest of the tail is never re-copied per block.
+            final int bridgeLength = (int) Math.min(tailLength, avoidNewlineSplitBufferSize);
+            this.data = new byte[length + bridgeLength];
             final long off = (partNumber - 1) * blockSize;
 
             // read data
@@ -156,24 +199,82 @@ public class ReversedLinesFileReader implements Closeable, IOIterable<String> {
                     throw new IllegalStateException("Count of requested bytes and actually read bytes don't match");
                 }
             }
-            // copy left over part into data arr
-            if (leftOverOfLastFilePart != null) {
-                System.arraycopy(leftOverOfLastFilePart, 0, data, length, leftOverOfLastFilePart.length);
+            // copy the bridge bytes from the head of the tail segments into data arr
+            int bridgePos = length;
+            int bridgeRemaining = bridgeLength;
+            if (bridgeRemaining > 0) {
+                for (final byte[] segment : tail) {
+                    final int n = Math.min(segment.length, bridgeRemaining);
+                    System.arraycopy(segment, 0, data, bridgePos, n);
+                    bridgePos += n;
+                    bridgeRemaining -= n;
+                    if (bridgeRemaining == 0) {
+                        break;
+                    }
+                }
             }
-            this.currentLastBytePos = data.length - 1;
+            this.currentLastBytePos = length + tailLength - 1;
             this.leftOver = null;
         }
 
         /**
-         * Constructs the buffer containing any leftover bytes.
+         * Copies an inclusive range of the virtual buffer ({@code data[0..blockLength - 1]} followed by the {@link #tail} bytes) into a new array.
+         *
+         * @param from        Start index in the virtual buffer, inclusive.
+         * @param toInclusive End index in the virtual buffer, inclusive.
+         * @return A new byte array holding the requested range.
+         */
+        private byte[] copyVirtual(final long from, final long toInclusive) {
+            final long count = toInclusive - from + 1;
+            if (count > MAX_LINE_BYTES) {
+                throw new IllegalStateException("Line too long: " + count + " bytes exceed the maximum array size");
+            }
+            final byte[] result = new byte[(int) count];
+            int resultPos = 0;
+            if (from < blockLength) {
+                final int n = (int) (Math.min(toInclusive + 1, blockLength) - from);
+                System.arraycopy(data, (int) from, result, 0, n);
+                resultPos = n;
+            }
+            if (toInclusive >= blockLength && tail != null) {
+                long skip = Math.max(0, from - blockLength);
+                long remaining = toInclusive - blockLength + 1 - skip;
+                for (final byte[] segment : tail) {
+                    if (skip >= segment.length) {
+                        skip -= segment.length;
+                        continue;
+                    }
+                    final int n = (int) Math.min(segment.length - skip, remaining);
+                    System.arraycopy(segment, (int) skip, result, resultPos, n);
+                    resultPos += n;
+                    remaining -= n;
+                    skip = 0;
+                    if (remaining == 0) {
+                        break;
+                    }
+                }
+            }
+            return result;
+        }
+
+        /**
+         * Records the unemitted remainder of this part, as segments, for the preceding part.
          */
         private void createLeftOver() {
-            final int lineLengthBytes = currentLastBytePos + 1;
-            if (lineLengthBytes > 0) {
-                // create left over for next block
-                leftOver = Arrays.copyOf(data, lineLengthBytes);
+            if (currentLastBytePos >= data.length) {
+                // Nothing was emitted from this part: keep the accumulated tail segments as-is and prepend this block's
+                // bytes - O(blockSize) work instead of re-copying the whole accumulated remainder.
+                leftOver = tail;
+                leftOver.addFirst(Arrays.copyOf(data, blockLength));
+                leftOverLength = blockLength + tailLength;
+            } else if (currentLastBytePos > -1) {
+                // The remainder lies entirely within data (this block plus at most the bridge bytes).
+                leftOver = new ArrayDeque<>();
+                leftOver.add(copyVirtual(0, currentLastBytePos));
+                leftOverLength = currentLastBytePos + 1;
             } else {
                 leftOver = null;
+                leftOverLength = 0;
             }
             currentLastBytePos = -1;
         }
@@ -200,6 +301,24 @@ public class ReversedLinesFileReader implements Closeable, IOIterable<String> {
         }
 
         /**
+         * Joins the leftOver segments into a single array.
+         *
+         * @return A new byte array holding the leftOver bytes.
+         */
+        private byte[] joinLeftOver() {
+            if (leftOverLength > MAX_LINE_BYTES) {
+                throw new IllegalStateException("Line too long: " + leftOverLength + " bytes exceed the maximum array size");
+            }
+            final byte[] result = new byte[(int) leftOverLength];
+            int resultPos = 0;
+            for (final byte[] segment : leftOver) {
+                System.arraycopy(segment, 0, result, resultPos, segment.length);
+                resultPos += segment.length;
+            }
+            return result;
+        }
+
+        /**
          * Reads a line.
          *
          * @return The line or null.
@@ -211,10 +330,15 @@ public class ReversedLinesFileReader implements Closeable, IOIterable<String> {
 
             final boolean isLastFilePart = partNumber == 1;
 
-            int i = currentLastBytePos;
+            long i = currentLastBytePos;
+            if (i >= data.length) {
+                // Bytes deeper in the tail were already scanned and found newline-free by the file parts that
+                // produced them; skip whole byteDecrement steps so the scan stays on the original cursor positions.
+                i -= (i - data.length + byteDecrement) / byteDecrement * byteDecrement;
+            }
 
-            if (i == -1 && isLastFilePart && leftOver != null) {
-                line = new String(leftOver, charset);
+            if (currentLastBytePos == -1 && isLastFilePart && leftOver != null) {
+                line = new String(joinLeftOver(), charset);
                 leftOver = null;
                 return line;
             }
@@ -229,21 +353,20 @@ public class ReversedLinesFileReader implements Closeable, IOIterable<String> {
                 }
 
                 // check for newline
-                if ((newLineMatchByteCount = getNewLineMatchByteCount(data, i)) > 0 /* found newline */) {
-                    final int lineStart = i + 1;
-                    final int lineLengthBytes = currentLastBytePos - lineStart + 1;
+                if ((newLineMatchByteCount = getNewLineMatchByteCount(data, (int) i)) > 0 /* found newline */) {
+                    final long lineStart = i + 1;
+                    final long lineLengthBytes = currentLastBytePos - lineStart + 1;
 
                     if (lineLengthBytes < 0) {
                         throw new IllegalStateException("Unexpected negative line length=" + lineLengthBytes);
                     }
-                    final byte[] lineData = Arrays.copyOfRange(data, lineStart, lineStart + lineLengthBytes);
-
-                    line = new String(lineData, charset);
+                    line = new String(copyVirtual(lineStart, currentLastBytePos), charset);
 
                     currentLastBytePos = i - newLineMatchByteCount;
 
                     if (isLastFilePart && currentLastBytePos == -1 && i == 0) {
-                        leftOver = new byte[0];
+                        leftOver = new ArrayDeque<>();
+                        leftOverLength = 0;
                     }
                     break; // found line
                 }
@@ -254,10 +377,9 @@ public class ReversedLinesFileReader implements Closeable, IOIterable<String> {
                 // end of file part handling
                 if (i < 0) {
                     if (isLastFilePart) {
-                        final int lineLengthBytes = currentLastBytePos + 1;
+                        final long lineLengthBytes = currentLastBytePos + 1;
                         if (lineLengthBytes > 0) {
-                            final byte[] lineData = Arrays.copyOf(data, lineLengthBytes);
-                            line = new String(lineData, charset);
+                            line = new String(copyVirtual(0, currentLastBytePos), charset);
                         }
                         currentLastBytePos = -1;
                     } else {
@@ -269,7 +391,7 @@ public class ReversedLinesFileReader implements Closeable, IOIterable<String> {
 
             // there will be partNumber line break anymore, this is the first line of the file
             if (line == null && isLastFilePart && leftOver != null) {
-                line = new String(leftOver, charset);
+                line = new String(joinLeftOver(), charset);
                 leftOver = null;
             }
 
@@ -290,12 +412,12 @@ public class ReversedLinesFileReader implements Closeable, IOIterable<String> {
             }
 
             if (partNumber > 1) {
-                return new FilePart(partNumber - 1, blockSize, leftOver);
+                return new FilePart(partNumber - 1, blockSize, leftOver, leftOverLength);
             }
             // NO 1 was the last FilePart, we're finished
             if (leftOver != null) {
                 throw new IllegalStateException("Unexpected leftover of the last block: leftOverOfThisFilePart="
-                        + new String(leftOver, charset));
+                        + new String(joinLeftOver(), charset));
             }
             return null;
         }
@@ -304,6 +426,11 @@ public class ReversedLinesFileReader implements Closeable, IOIterable<String> {
     private static final String EMPTY_STRING = "";
 
     private static final int DEFAULT_BLOCK_SIZE = FileSystem.getCurrent().getBlockSize();
+
+    /**
+     * A conservative maximum byte array size.
+     */
+    private static final long MAX_LINE_BYTES = Integer.MAX_VALUE - 8;
 
     /**
      * Constructs a new {@link Builder}.
@@ -369,7 +496,7 @@ public class ReversedLinesFileReader implements Closeable, IOIterable<String> {
                 lastBlockLength = blockSize;
             }
         }
-        this.currentFilePart = new FilePart(totalBlockCount, lastBlockLength, null);
+        this.currentFilePart = new FilePart(totalBlockCount, lastBlockLength, null, 0);
     }
 
     /**
@@ -526,10 +653,16 @@ public class ReversedLinesFileReader implements Closeable, IOIterable<String> {
     }
 
     /**
-     * Returns the lines of the file from bottom to top.
+     * Gets the next line of the file from bottom to top.
+     *
+     * <p>
+     * A line can contain at most {@code Integer.MAX_VALUE - 8} encoded bytes, excluding its line separator. The reader accumulates a line in memory
+     * before returning it, so available heap can impose a smaller limit.
+     * </p>
      *
      * @return The next line or null if the start of the file is reached.
      * @throws IOException Thrown if an I/O error occurs.
+     * @throws IllegalStateException if the line exceeds the maximum supported number of encoded bytes.
      */
     public String readLine() throws IOException {
         String line = currentFilePart.readLine();

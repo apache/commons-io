@@ -169,4 +169,13 @@ class ValidatingObjectInputStreamStrictTest {
             assertThrows(InvalidClassException.class, vois::readObject);
         }
     }
+
+    @Test
+    void testStrictAcceptAnnotatedInterface() throws IOException, ClassNotFoundException {
+        final byte[] serialized = SerializationUtils.serialize(new FixtureObject());
+        // IFoo's FunctionalInterface annotation reaches cyclic standard meta-annotations.
+        try (ValidatingObjectInputStream vois = ValidatingObjectInputStream.builder().setByteArray(serialized).accept("*").setStrict(true).get()) {
+            assertInstanceOf(IFoo.class, vois.readObject());
+        }
+    }
 }

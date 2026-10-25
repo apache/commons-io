@@ -32,6 +32,17 @@ import org.apache.commons.io.file.Counters.PathCounters;
 /**
  * Deletes files and directories as a visit proceeds.
  *
+ * <p>
+ * Read-only overrides use {@link LinkOption#NOFOLLOW_LINKS}, independently of the constructor's link options, so DOS attribute changes apply to the
+ * link itself instead of its target. On POSIX file systems, the parent directory may be made writable and searchable to allow deletion.
+ * The caller controls whether the file tree walk follows symbolic links.
+ * </p>
+ *
+ * <p>
+ * Directory reparse points reported as {@link BasicFileAttributes#isOther()} are deleted without visiting their contents. Checks and deletion are
+ * not atomic, so this visitor does not guarantee confinement when directories or path components can be replaced concurrently.
+ * </p>
+ *
  * @since 2.7
  */
 public class DeletingPathVisitor extends CountingPathVisitor {
@@ -144,16 +155,26 @@ public class DeletingPathVisitor extends CountingPathVisitor {
     @Override
     public FileVisitResult preVisitDirectory(final Path dir, final BasicFileAttributes attrs) throws IOException {
         super.preVisitDirectory(dir, attrs);
-        return accept(dir) ? FileVisitResult.CONTINUE : FileVisitResult.SKIP_SUBTREE;
+        if (!accept(dir)) {
+            return FileVisitResult.SKIP_SUBTREE;
+        }
+        if (attrs.isOther()) {
+            // Windows junctions are directories as well as other file system objects, even without FOLLOW_LINKS.
+            Files.delete(dir);
+            updateDirCounter(dir, null);
+            return FileVisitResult.SKIP_SUBTREE;
+        }
+        return FileVisitResult.CONTINUE;
     }
 
     @Override
     public FileVisitResult visitFile(final Path file, final BasicFileAttributes attrs) throws IOException {
         if (accept(file)) {
-            // delete files and valid links, respecting linkOptions
-            if (Files.exists(file, linkOptions)) {
+            // Include dangling links so their parent permissions can also be overridden.
+            if (Files.exists(file, linkOptions) || Files.isSymbolicLink(file)) {
                 if (overrideReadOnly) {
-                    PathUtils.setReadOnly(file, false, linkOptions);
+                    // An absolute path supplies the parent needed by the POSIX permission override.
+                    PathUtils.setReadOnly(file.toAbsolutePath(), false, PathUtils.noFollowLinkOptionArray());
                 }
                 Files.deleteIfExists(file);
             }

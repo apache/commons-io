@@ -45,6 +45,11 @@ import org.apache.commons.io.function.Uncheck;
  * To build an instance, use {@link Builder}.
  * </p>
  *
+ * <p>
+ * Instances are not thread-safe. If an instance is shared between threads, callers must externally synchronize all access using the same lock.
+ * The synchronization of {@link #mark(int)} and {@link #reset()} alone does not make other operations thread-safe.
+ * </p>
+ *
  * @see Builder
  * @since 2.2
  */
@@ -161,10 +166,13 @@ public class CharSequenceInputStream extends InputStream {
     }
 
     private final ByteBuffer bBuf;
-    private int bBufMark; // position in bBuf
     private final CharBuffer cBuf;
-    private int cBufMark; // position in cBuf
     private final CharsetEncoder charsetEncoder;
+    private boolean endOfInputDrained; // all chars encoded (endOfInput=true returned UNDERFLOW with no input left)
+    private boolean encoderFlushed; // CharsetEncoder.flush() completed (returned UNDERFLOW)
+    private boolean closed;
+    private long position;
+    private long mark = NO_MARK;
 
     private CharSequenceInputStream(final Builder builder) {
         this.charsetEncoder = builder.charsetEncoder;
@@ -172,13 +180,14 @@ public class CharSequenceInputStream extends InputStream {
         this.bBuf = ByteBuffer.allocate(ReaderInputStream.checkMinBufferSize(builder.charsetEncoder, builder.getBufferSize()));
         this.bBuf.flip();
         this.cBuf = CharBuffer.wrap(Uncheck.get(() -> builder.getCharSequence()));
-        this.cBufMark = NO_MARK;
-        this.bBufMark = NO_MARK;
         try {
             fillBuffer();
         } catch (final CharacterCodingException ex) {
             // Reset everything without filling the buffer
             // so the same exception can be thrown again later.
+            this.charsetEncoder.reset();
+            this.endOfInputDrained = false;
+            this.encoderFlushed = false;
             this.bBuf.clear();
             this.bBuf.flip();
             this.cBuf.rewind();
@@ -250,24 +259,68 @@ public class CharSequenceInputStream extends InputStream {
         return this.bBuf.remaining();
     }
 
+    /**
+     * Closes this stream.
+     *
+     * <p>
+     * Once closed, {@link #available()} returns 0, reads return EOF (except zero-length reads, which return 0), and {@link #skip(long)} returns 0.
+     * Calls to {@link #mark(int)} and {@link #reset()} have no effect.
+     * </p>
+     *
+     * @throws IOException if an I/O error occurs.
+     */
     @Override
     public void close() throws IOException {
         bBuf.position(bBuf.limit());
+        closed = true;
     }
 
     /**
      * Fills the byte output buffer from the input char buffer.
+     * <p>
+     * Once all input characters have been encoded, this method flushes the encoder so that any final bytes a stateful
+     * charset requires (for example the shift-back sequence of the ISO-2022 family) are emitted, matching
+     * {@link java.io.OutputStreamWriter} and {@link ReaderInputStream}.
+     * </p>
      *
      * @throws CharacterCodingException
      *             an error encoding data.
      */
     private void fillBuffer() throws CharacterCodingException {
         this.bBuf.compact();
-        final CoderResult result = this.charsetEncoder.encode(this.cBuf, this.bBuf, true);
-        if (result.isError()) {
-            result.throwException();
+        if (!endOfInputDrained) {
+            final CoderResult result = this.charsetEncoder.encode(this.cBuf, this.bBuf, true);
+            if (result.isError()) {
+                result.throwException();
+            }
+            if (result.isUnderflow() && !this.cBuf.hasRemaining()) {
+                endOfInputDrained = true;
+            }
+        }
+        if (endOfInputDrained && !encoderFlushed) {
+            final CoderResult result = this.charsetEncoder.flush(this.bBuf);
+            if (result.isError()) {
+                result.throwException();
+            }
+            if (result.isUnderflow()) {
+                encoderFlushed = true;
+            }
+            // on OVERFLOW, the next call flushes the remainder.
         }
         this.bBuf.flip();
+    }
+
+    /**
+     * Tests whether the encoder has consumed all input and completed flushing.
+     *
+     * <p>
+     * Buffered bytes may still remain to be read. An open stream reaches EOF only when encoding is complete and the byte buffer is empty.
+     * </p>
+     *
+     * @return whether no additional encoded bytes can be produced.
+     */
+    private boolean encodingComplete() {
+        return !cBuf.hasRemaining() && endOfInputDrained && encoderFlushed;
     }
 
     /**
@@ -286,12 +339,9 @@ public class CharSequenceInputStream extends InputStream {
      */
     @Override
     public synchronized void mark(final int readLimit) {
-        this.cBufMark = this.cBuf.position();
-        this.bBufMark = this.bBuf.position();
-        this.cBuf.mark();
-        this.bBuf.mark();
-        // It would be nice to be able to use mark & reset on the cBuf and bBuf;
-        // however the bBuf is re-used so that won't work
+        if (!closed) {
+            mark = position;
+        }
     }
 
     @Override
@@ -301,12 +351,16 @@ public class CharSequenceInputStream extends InputStream {
 
     @Override
     public int read() throws IOException {
+        if (closed) {
+            return EOF;
+        }
         for (;;) {
             if (this.bBuf.hasRemaining()) {
+                position++;
                 return this.bBuf.get() & 0xFF;
             }
             fillBuffer();
-            if (!this.bBuf.hasRemaining() && !this.cBuf.hasRemaining()) {
+            if (!this.bBuf.hasRemaining() && encodingComplete()) {
                 return EOF;
             }
         }
@@ -323,7 +377,10 @@ public class CharSequenceInputStream extends InputStream {
         if (len == 0) {
             return 0; // must return 0 for zero length read
         }
-        if (!this.bBuf.hasRemaining() && !this.cBuf.hasRemaining()) {
+        if (closed) {
+            return EOF;
+        }
+        if (!this.bBuf.hasRemaining() && encodingComplete()) {
             return EOF;
         }
         int bytesRead = 0;
@@ -334,63 +391,61 @@ public class CharSequenceInputStream extends InputStream {
                 off += chunk;
                 len -= chunk;
                 bytesRead += chunk;
+                position += chunk;
             } else {
                 fillBuffer();
-                if (!this.bBuf.hasRemaining() && !this.cBuf.hasRemaining()) {
+                if (!this.bBuf.hasRemaining() && encodingComplete()) {
                     break;
                 }
             }
         }
-        return bytesRead == 0 && !this.cBuf.hasRemaining() ? EOF : bytesRead;
+        return bytesRead == 0 && encodingComplete() ? EOF : bytesRead;
     }
 
     @Override
     public synchronized void reset() throws IOException {
-        //
-        // This is not the most efficient implementation, as it re-encodes from the beginning.
-        //
-        // Since the bBuf is re-used, in general it's necessary to re-encode the data.
-        //
-        // It should be possible to apply some optimizations however:
-        // + use mark/reset on the cBuf and bBuf. This would only work if the buffer had not been (re)filled since
-        // the mark. The code would have to catch InvalidMarkException - does not seem possible to check if mark is
-        // valid otherwise. + Try saving the state of the cBuf before each fillBuffer; it might be possible to
-        // restart from there.
-        //
-        if (this.cBufMark != NO_MARK) {
-            // if cBuf is at 0, we have not started reading anything, so skip re-encoding
-            if (this.cBuf.position() != 0) {
-                this.charsetEncoder.reset();
-                this.cBuf.rewind();
-                this.bBuf.rewind();
-                this.bBuf.limit(0); // rewind does not clear the buffer
-                while (this.cBuf.position() < this.cBufMark) {
-                    this.bBuf.rewind(); // empty the buffer (we only refill when empty during normal processing)
-                    this.bBuf.limit(0);
-                    fillBuffer();
-                }
+        if (closed) {
+            return;
+        }
+        if (mark != NO_MARK) {
+            // Replay to the byte offset: multiple buffers can share the same character position while the encoder is flushing.
+            final long markedPosition = mark;
+            charsetEncoder.reset();
+            endOfInputDrained = false;
+            encoderFlushed = false;
+            cBuf.rewind();
+            bBuf.clear();
+            bBuf.flip();
+            position = 0;
+            // Fill even at offset zero to restore the initial buffer and its availability.
+            fillBuffer();
+            if (skipBytes(markedPosition) != markedPosition) {
+                throw new IOException("Cannot restore marked byte position: " + markedPosition);
             }
-            if (this.cBuf.position() != this.cBufMark) {
-                throw new IllegalStateException("Unexpected CharBuffer position: actual=" + cBuf.position() + " " +
-                        "expected=" + this.cBufMark);
-            }
-            this.bBuf.position(this.bBufMark);
-            this.cBufMark = NO_MARK;
-            this.bBufMark = NO_MARK;
         }
         mark(0);
     }
 
     @Override
-    public long skip(long n) throws IOException {
-        //
-        // This could be made more efficient by using position to skip within the current buffer.
-        //
+    public long skip(final long n) throws IOException {
+        return closed ? 0 : skipBytes(n);
+    }
+
+    private long skipBytes(long n) throws IOException {
         long skipped = 0;
-        while (n > 0 && available() > 0) {
-            this.read();
-            n--;
-            skipped++;
+        while (n > 0) {
+            if (this.bBuf.hasRemaining()) {
+                final int chunk = (int) Math.min(n, bBuf.remaining());
+                bBuf.position(bBuf.position() + chunk);
+                n -= chunk;
+                skipped += chunk;
+                position += chunk;
+            } else {
+                fillBuffer();
+                if (!this.bBuf.hasRemaining() && encodingComplete()) {
+                    break;
+                }
+            }
         }
         return skipped;
     }

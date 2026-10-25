@@ -1192,6 +1192,11 @@ public class FileUtils {
      * result string. Except for rare edge cases, this will make unencoded URLs
      * pass through unaltered.
      *
+     * <p>
+     * Decoding can introduce path segments such as {@code ..} and path separators. This method does not normalize or validate the resulting path. See
+     * {@link #toFile(URL)} for guidance on directory containment checks.
+     * </p>
+     *
      * @param url The URL to decode, may be {@code null}.
      * @return The decoded URL or {@code null} if the input was
      * {@code null}.
@@ -1249,6 +1254,16 @@ public class FileUtils {
     /**
      * Deletes a directory recursively.
      *
+     * <p>
+     * Symbolic links and directory reparse points such as Windows junctions are deleted without deleting their target's contents. If the given directory does
+     * not exist, including when it is a symbolic link to a missing target, this method does nothing.
+     * </p>
+     *
+     * <p>
+     * The link checks and deletion are not atomic. Do not rely on this method to confine deletion when an untrusted party can concurrently replace directories
+     * or path components.
+     * </p>
+     *
      * @param directory directory to delete.
      * @throws IOException              in case deletion is unsuccessful.
      * @throws NullPointerException     if the parameter is {@code null}.
@@ -1259,7 +1274,7 @@ public class FileUtils {
         if (!directory.exists()) {
             return;
         }
-        if (!isSymlink(directory)) {
+        if (!isLinkLikeDirectory(directory)) {
             cleanDirectory(directory);
         }
         delete(directory);
@@ -1277,7 +1292,7 @@ public class FileUtils {
             return;
         }
         directory.deleteOnExit();
-        if (!isSymlink(directory)) {
+        if (!isLinkLikeDirectory(directory)) {
             cleanDirectoryOnExit(directory);
         }
     }
@@ -1440,8 +1455,13 @@ public class FileUtils {
     }
 
     /**
-     * Requests a file to be deleted when the virtual machine terminates.
-     * If file is directory delete it and all subdirectories.
+     * Requests a file to be deleted when the virtual machine terminates. If file is directory delete it and all subdirectories.
+     *
+     * <p>
+     * Symbolic links and directory reparse points such as Windows junctions are scheduled without enumerating their targets. Directory enumeration and deletion
+     * at JVM termination are not atomic. Do not rely on this method to confine deletion when an untrusted party can replace directories or path components
+     * before the JVM terminates.
+     * </p>
      *
      * @param file file or directory to delete, must not be {@code null}.
      * @throws NullPointerException if the file is {@code null}.
@@ -2057,6 +2077,30 @@ public class FileUtils {
      */
     private static boolean isFileProtocol(final URL url) {
         return PROTOCOL_FILE.equalsIgnoreCase(url.getProtocol());
+    }
+
+    /**
+     * Tests whether a file is a symbolic link or another link-like directory.
+     *
+     * <p>
+     * Attributes are read without following symbolic links. Windows junctions report {@code isOther()} as true, but their {@code isDirectory()} attribute
+     * depends on the JDK version. A separate {@link File#isDirectory()} check recognizes directory targets while preserving the rejection of non-directory
+     * special files such as FIFOs.
+     * </p>
+     *
+     * @param file the file to test.
+     * @return true for a symbolic link, another link-like directory, or an entry that disappeared before its attributes could be read.
+     * @throws IOException if the attributes cannot be read for a reason other than a missing entry.
+     */
+    private static boolean isLinkLikeDirectory(final File file) throws IOException {
+        final BasicFileAttributes attributes;
+        try {
+            attributes = Files.readAttributes(file.toPath(), BasicFileAttributes.class, LinkOption.NOFOLLOW_LINKS);
+        } catch (final NoSuchFileException e) {
+            // Skip enumeration if the entry disappeared. Immediate deletion will report the missing entry.
+            return true;
+        }
+        return attributes.isSymbolicLink() || attributes.isOther() && file.isDirectory();
     }
 
     /**
@@ -3054,18 +3098,25 @@ public class FileUtils {
      * Converts from a {@link URL} to a {@link File}.
      * <p>
      * Syntax such as {@code file:///my%20docs/file.txt} will be correctly decoded to {@code /my docs/file.txt}. UTF-8 is used to decode percent-encoded octets
-     * to characters. Additionally, malformed percent-encoded octets are handled leniently by passing them through literally.
+     * to characters. Additionally, malformed percent-encoded octets are handled leniently by passing them through literally. Paths containing the NUL
+     * character ({@code U+0000}) are rejected.
      * </p>
+     *
+     * <p>Percent-decoding can introduce path segments such as {@code ..} (from {@code %2e%2e}) and path separators (for example, {@code /} from {@code %2f}).
+     * This method does not normalize the path or check whether it is contained in a particular directory. Callers requiring directory containment must
+     * validate the resolved file system path, accounting for symbolic links where applicable. Checking only the raw URL text is insufficient.</p>
      *
      * @param url The file URL to convert, {@code null} returns {@code null}.
      * @return The equivalent {@link File} object, or {@code null} if the URL's protocol is not {@code file}.
+     * @throws IllegalArgumentException if the decoded file path contains the NUL character ({@code U+0000}).
      */
     public static File toFile(final URL url) {
         if (url == null || !isFileProtocol(url)) {
             return null;
         }
         final String fileName = url.getFile().replace('/', File.separatorChar);
-        return new File(decodeUrl(fileName));
+        final String decodedFileName = decodeUrl(fileName);
+        return new File(FilenameUtils.requireNonNullChars(decodedFileName));
     }
 
     /**
@@ -3075,13 +3126,14 @@ public class FileUtils {
      * array contains {@code null} at the same index.
      * </p>
      * <p>
-     * This method will decode the URL. Syntax such as {@code file:///my%20docs/file.txt} will be correctly decoded to {@code /my docs/file.txt}.
+     * This method will decode the URL. Syntax such as {@code file:///my%20docs/file.txt} will be correctly decoded to {@code /my docs/file.txt}. See
+     * {@link #toFile(URL)} for the decoding behavior and guidance on directory containment checks.
      * </p>
      *
      * @param urls The file URLs to convert, {@code null} returns empty array.
      * @return A non-{@code null} array of Files matching the input, with a {@code null} item if there was a {@code null} at that index in the input array.
-     * @throws IllegalArgumentException if any file is not a URL file.
-     * @throws IllegalArgumentException if any file is incorrectly encoded.
+     * @throws IllegalArgumentException if any non-{@code null} URL's protocol is not {@code file}, or any decoded file path contains the NUL character
+     *         ({@code U+0000}).
      * @since 1.1
      */
     public static File[] toFiles(final URL... urls) {

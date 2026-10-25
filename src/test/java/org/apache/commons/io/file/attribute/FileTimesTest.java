@@ -161,6 +161,7 @@ class FileTimesTest {
         assertEquals(isUnixTime, FileTimes.isUnixTime(FileTime.from(Instant.parse(instant))));
     }
 
+    @Test
     void testIsUnixTimeFileTimeNull() {
         assertTrue(FileTimes.isUnixTime(null));
     }
