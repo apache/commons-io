@@ -38,15 +38,20 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.commons.io.file.PathUtils;
+import org.apache.commons.io.filefilter.AndFileFilter;
+import org.apache.commons.io.filefilter.FalseFileFilter;
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
+import org.apache.commons.io.filefilter.TrueFileFilter;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.apache.commons.lang3.JavaVersion;
 import org.apache.commons.lang3.SystemUtils;
@@ -54,6 +59,8 @@ import org.apache.commons.lang3.function.Consumers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 /**
  * Tests {@link FileUtils#listFiles(File, IOFileFilter, IOFileFilter)} and friends.
@@ -105,7 +112,27 @@ class FileUtilsListFilesTest {
         FileUtils.touch(new File(directory, "test2.PDF"));
         FileUtils.touch(new File(directory, "test2.TXT"));
         FileUtils.touch(new File(directory, "ignored.xml"));
+        FileUtils.touch(new File(directory, "skip.txt"));
         final IOFileFilter filter = new WildcardFileFilter("*.pdf", "*.txt") {
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public boolean accept(final File file) {
+                return !file.getName().startsWith("skip") && super.accept(file.getParentFile(), file.getName().toLowerCase(Locale.ROOT));
+            }
+        };
+        final Set<String> expected = Stream.of("test1.pdf", "test1.txt", "test2.PDF", "test2.TXT").collect(Collectors.toSet());
+        assertEquals(expected, new HashSet<>(toFileNames(FileUtils.iterateFiles(directory, filter, null))));
+        expected.add(directory.getName());
+        assertEquals(expected, new HashSet<>(toFileNames(FileUtils.listFilesAndDirs(directory, filter, null))));
+        assertEquals(expected, new HashSet<>(toFileNames(FileUtils.iterateFilesAndDirs(directory, filter, null))));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = { "and", "or", "not", "nested" })
+    void testIterateFilesWithComposedFileFilterOverride(final String operator) throws IOException {
+        FileUtils.touch(new File(temporaryFolder, "UPPER.XML"));
+        final IOFileFilter filter = new WildcardFileFilter("*.xml") {
             private static final long serialVersionUID = 1L;
 
             @Override
@@ -113,8 +140,77 @@ class FileUtilsListFilesTest {
                 return super.accept(file.getParentFile(), file.getName().toLowerCase(Locale.ROOT));
             }
         };
-        assertEquals(Stream.of("test1.pdf", "test1.txt", "test2.PDF", "test2.TXT").collect(Collectors.toSet()),
-                new HashSet<>(toFileNames(FileUtils.iterateFiles(directory, filter, null))));
+        final IOFileFilter composed;
+        switch (operator) {
+        case "and":
+            composed = filter.and(TrueFileFilter.INSTANCE);
+            break;
+        case "or":
+            composed = filter.or(FalseFileFilter.INSTANCE);
+            break;
+        case "not":
+            composed = filter.negate();
+            break;
+        default:
+            composed = filter.negate().or(FalseFileFilter.INSTANCE).negate().and(TrueFileFilter.INSTANCE);
+            break;
+        }
+        final Set<String> expected = "not".equals(operator) ? Collections.singleton("README")
+                : Stream.of("dummy-build.xml", "UPPER.XML").collect(Collectors.toSet());
+        assertEquals(expected, new HashSet<>(toFileNames(FileUtils.iterateFiles(temporaryFolder, composed, null))));
+    }
+
+    @Test
+    void testIterateFilesWithFileFilterDelegatingToSuperFile() {
+        final IOFileFilter filter = new WildcardFileFilter("*.xml") {
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public boolean accept(final File file) {
+                return !super.accept(file);
+            }
+        };
+        assertEquals(Collections.singleton("README"),
+                new HashSet<>(toFileNames(FileUtils.iterateFiles(temporaryFolder, filter, null))));
+    }
+
+    @Test
+    void testIterateFilesWithFileFilterDelegatingToSuperPath() {
+        final AtomicInteger calls = new AtomicInteger();
+        final IOFileFilter filter = new WildcardFileFilter("*.xml") {
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public boolean accept(final File file) {
+                calls.incrementAndGet();
+                return super.accept(file.toPath(), null) == FileVisitResult.CONTINUE;
+            }
+        };
+        assertEquals(Collections.singleton("dummy-build.xml"),
+                new HashSet<>(toFileNames(FileUtils.iterateFiles(temporaryFolder, filter, null))));
+        assertEquals(2, calls.get());
+    }
+
+    @Test
+    void testIterateFilesWithBothFilterOverrides() {
+        final IOFileFilter filter = new WildcardFileFilter("*.xml") {
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public boolean accept(final File file) {
+                return false;
+            }
+
+            @Override
+            public FileVisitResult accept(final Path path, final BasicFileAttributes attributes) {
+                assertNotNull(attributes);
+                return path.getFileName().toString().equals("README") ? FileVisitResult.CONTINUE : FileVisitResult.TERMINATE;
+            }
+        };
+        assertEquals(Collections.singleton("README"),
+                new HashSet<>(toFileNames(FileUtils.iterateFiles(temporaryFolder, filter, null))));
+        assertEquals(Collections.singleton("README"),
+                new HashSet<>(toFileNames(FileUtils.iterateFiles(temporaryFolder, filter.and(TrueFileFilter.INSTANCE), null))));
     }
 
     @Test
@@ -124,11 +220,43 @@ class FileUtilsListFilesTest {
 
             @Override
             public FileVisitResult accept(final Path path, final BasicFileAttributes attributes) {
+                assertNotNull(attributes);
                 return path.getFileName().toString().equals("README") ? FileVisitResult.CONTINUE : FileVisitResult.TERMINATE;
             }
         };
         assertEquals(Collections.singleton("README"),
                 new HashSet<>(toFileNames(FileUtils.iterateFiles(temporaryFolder, filter, null))));
+        assertEquals(Collections.singleton("README"),
+                new HashSet<>(toFileNames(FileUtils.iterateFiles(temporaryFolder, filter.and(TrueFileFilter.INSTANCE), null))));
+    }
+
+    @Test
+    void testListFilesWithDirectoryFileFilterOverride() {
+        final IOFileFilter directoryFilter = new WildcardFileFilter("SUB*") {
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public boolean accept(final File file) {
+                assertFalse(file.equals(temporaryFolder), "The root directory must short-circuit the directory filter");
+                return super.accept(file.getParentFile(), file.getName().toUpperCase(Locale.ROOT));
+            }
+        };
+        final IOFileFilter fileFilter = WildcardFileFilter.builder().setWildcards("*.txt").get();
+        final Set<String> expected = Stream.of("dummy-readme.txt", "dummy-file.txt").collect(Collectors.toSet());
+        assertEquals(expected, new HashSet<>(toFileNames(FileUtils.listFiles(temporaryFolder, fileFilter, directoryFilter))));
+        assertEquals(expected,
+                new HashSet<>(toFileNames(FileUtils.listFiles(temporaryFolder, fileFilter, directoryFilter.and(TrueFileFilter.INSTANCE)))));
+        expected.addAll(Stream.of(temporaryFolder.getName(), "subdir1", "subsubdir1").collect(Collectors.toSet()));
+        assertEquals(expected, new HashSet<>(toFileNames(FileUtils.listFilesAndDirs(temporaryFolder, fileFilter, directoryFilter))));
+        assertEquals(expected,
+                new HashSet<>(toFileNames(FileUtils.listFilesAndDirs(temporaryFolder, fileFilter, directoryFilter.and(TrueFileFilter.INSTANCE)))));
+    }
+
+    @Test
+    void testListFilesWithShortCircuitingCyclicFilter() {
+        final AndFileFilter filter = new AndFileFilter(FalseFileFilter.INSTANCE);
+        filter.addFileFilter(filter);
+        assertTrue(FileUtils.listFiles(temporaryFolder, filter, null).isEmpty());
     }
 
     @Test

@@ -31,7 +31,6 @@ import java.nio.file.Path;
 import java.time.Duration;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
 
 import org.apache.commons.io.IOCase;
 import org.apache.commons.lang3.StringUtils;
@@ -55,21 +54,6 @@ class WildcardFileFilterTest extends AbstractFilterTest {
         // Calling the File override from the superclass Path method would cause a StackOverflowError (IO-754, PR #893).
         assertTrue(filter.accept(new File("log.txt")));
         assertFalse(filter.accept(new File("log.xml")));
-    }
-
-    @Test
-    void testAcceptPathWithFileOverride() {
-        final IOFileFilter filter = new WildcardFileFilter("*.txt") {
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            public boolean accept(final File file) {
-                return !file.getName().startsWith("skip") && super.accept(file.getParentFile(), file.getName().toLowerCase(Locale.ROOT));
-            }
-        };
-        assertFiltering(filter, new File("log.TXT").toPath(), true);
-        assertFiltering(filter, new File("skip.txt").toPath(), false);
-        assertFiltering(filter, new File("log.xml").toPath(), false);
     }
 
     @Test
