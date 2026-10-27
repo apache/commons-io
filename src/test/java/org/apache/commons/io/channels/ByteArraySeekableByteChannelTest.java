@@ -30,6 +30,8 @@ import java.nio.channels.NonWritableChannelException;
 import java.nio.channels.SeekableByteChannel;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.LinkOption;
+import java.nio.file.OpenOption;
 import java.nio.file.StandardOpenOption;
 import java.util.stream.Stream;
 
@@ -75,6 +77,16 @@ public class ByteArraySeekableByteChannelTest extends AbstractSeekableByteChanne
     }
 
     @Test
+    void testBuilderAppendMixedOptionTypes() throws IOException {
+        try (ByteArraySeekableByteChannel channel = ByteArraySeekableByteChannel.builder()
+                .setByteArray(BYTE_ARRAY)
+                .setOpenOptions(LinkOption.NOFOLLOW_LINKS, StandardOpenOption.APPEND)
+                .get()) {
+            testBuilderReadWrite(channel);
+        }
+    }
+
+    @Test
     void testBuilderDefaultConstructor() throws IOException {
         try (ByteArraySeekableByteChannel channel = new ByteArraySeekableByteChannel.Builder().get()) {
             assertEquals(0, channel.position());
@@ -93,6 +105,16 @@ public class ByteArraySeekableByteChannelTest extends AbstractSeekableByteChanne
     }
 
     @Test
+    void testBuilderPreservesOpenOptionOrder() throws IOException {
+        final OpenOption[] options = {StandardOpenOption.WRITE, StandardOpenOption.READ};
+        final ByteArraySeekableByteChannel.Builder builder = ByteArraySeekableByteChannel.builder().setOpenOptions(options);
+        try (ByteArraySeekableByteChannel channel = builder.get()) {
+            assertTrue(channel.isOpen());
+            assertArrayEquals(options, builder.getOpenOptions());
+        }
+    }
+
+    @Test
     void testBuilderReadOnly() throws IOException {
         try (ByteArraySeekableByteChannel channel = ByteArraySeekableByteChannel.builder()
                 .setByteArray(BYTE_ARRAY)
@@ -101,6 +123,30 @@ public class ByteArraySeekableByteChannelTest extends AbstractSeekableByteChanne
             assertEquals(0, channel.position());
             assertEquals(9, channel.size());
             assertEquals(9, channel.array().length);
+            assertThrows(NonWritableChannelException.class, () -> channel.write(ByteBuffer.wrap(BYTE_ARRAY)));
+            assertThrows(NonWritableChannelException.class, () -> channel.truncate(0));
+        }
+    }
+
+    @Test
+    void testBuilderReadOnlyCustomOption() throws IOException {
+        try (ByteArraySeekableByteChannel channel = ByteArraySeekableByteChannel.builder()
+                .setByteArray(BYTE_ARRAY)
+                .setOpenOptions(new OpenOption() { })
+                .get()) {
+            assertEquals(BYTE_ARRAY.length, channel.size());
+            assertThrows(NonWritableChannelException.class, () -> channel.write(ByteBuffer.wrap(BYTE_ARRAY)));
+            assertThrows(NonWritableChannelException.class, () -> channel.truncate(0));
+        }
+    }
+
+    @Test
+    void testBuilderReadOnlyMixedOptionTypes() throws IOException {
+        try (ByteArraySeekableByteChannel channel = ByteArraySeekableByteChannel.builder()
+                .setByteArray(BYTE_ARRAY)
+                .setOpenOptions(StandardOpenOption.READ, LinkOption.NOFOLLOW_LINKS)
+                .get()) {
+            assertEquals(9, channel.size());
             assertThrows(NonWritableChannelException.class, () -> channel.write(ByteBuffer.wrap(BYTE_ARRAY)));
             assertThrows(NonWritableChannelException.class, () -> channel.truncate(0));
         }
@@ -118,6 +164,16 @@ public class ByteArraySeekableByteChannelTest extends AbstractSeekableByteChanne
     }
 
     @Test
+    void testBuilderReadWriteCustomOption() throws IOException {
+        try (ByteArraySeekableByteChannel channel = ByteArraySeekableByteChannel.builder()
+                .setByteArray(BYTE_ARRAY)
+                .setOpenOptions(new OpenOption() { }, StandardOpenOption.WRITE)
+                .get()) {
+            testBuilderReadWrite(channel);
+        }
+    }
+
+    @Test
     void testBuilderReadWriteExplict() throws IOException {
         try (ByteArraySeekableByteChannel channel = ByteArraySeekableByteChannel.builder()
                 .setByteArray(BYTE_ARRAY)
@@ -131,6 +187,16 @@ public class ByteArraySeekableByteChannelTest extends AbstractSeekableByteChanne
     void testBuilderReadWriteImplicit() throws IOException {
         try (ByteArraySeekableByteChannel channel = ByteArraySeekableByteChannel.builder()
                 .setByteArray(BYTE_ARRAY)
+                .get()) {
+            testBuilderReadWrite(channel);
+        }
+    }
+
+    @Test
+    void testBuilderReadWriteMixedOptionTypes() throws IOException {
+        try (ByteArraySeekableByteChannel channel = ByteArraySeekableByteChannel.builder()
+                .setByteArray(BYTE_ARRAY)
+                .setOpenOptions(LinkOption.NOFOLLOW_LINKS, StandardOpenOption.READ, StandardOpenOption.WRITE)
                 .get()) {
             testBuilderReadWrite(channel);
         }

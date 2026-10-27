@@ -22,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.ByteArrayInputStream;
+import java.io.EOFException;
 import java.io.IOException;
 
 import org.junit.jupiter.api.AfterEach;
@@ -65,6 +66,32 @@ class SwappedDataInputStreamTest {
     }
 
     @Test
+    void testReadAtEofThrowsEOFException() throws IOException {
+        // A truncated stream must throw EOFException per the DataInput contract, never fabricate values.
+        try (ByteArrayInputStream bais = new ByteArrayInputStream(new byte[0]);
+                SwappedDataInputStream empty = new SwappedDataInputStream(bais)) {
+            assertThrows(EOFException.class, empty::readByte);
+            assertThrows(EOFException.class, empty::readUnsignedByte);
+            assertThrows(EOFException.class, empty::readBoolean);
+            assertThrows(EOFException.class, empty::readChar);
+            assertThrows(EOFException.class, empty::readShort);
+            assertThrows(EOFException.class, empty::readUnsignedShort);
+            assertThrows(EOFException.class, empty::readInt);
+            assertThrows(EOFException.class, empty::readLong);
+            assertThrows(EOFException.class, empty::readFloat);
+            assertThrows(EOFException.class, empty::readDouble);
+        }
+        // Exhausting the stream then reading again also throws.
+        try (ByteArrayInputStream bais = new ByteArrayInputStream(new byte[] { 0x01 });
+                SwappedDataInputStream one = new SwappedDataInputStream(bais)) {
+            assertEquals(0x01, one.readByte());
+            assertThrows(EOFException.class, one::readByte);
+            assertThrows(EOFException.class, one::readUnsignedByte);
+            assertThrows(EOFException.class, one::readBoolean);
+        }
+    }
+
+    @Test
     void testReadBoolean() throws IOException {
         bytes = new byte[] { 0x00, 0x01, 0x02, };
         try (ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
@@ -78,6 +105,21 @@ class SwappedDataInputStreamTest {
     @Test
     void testReadByte() throws IOException {
         assertEquals(0x01, this.sdis.readByte());
+    }
+
+    @Test
+    void testReadByteValues() throws IOException {
+        for (int value = 0; value <= 0xFF; value++) {
+            final byte[] data = { (byte) value, (byte) value, (byte) value };
+            try (SwappedDataInputStream input = new SwappedDataInputStream(new ByteArrayInputStream(data))) {
+                assertEquals((byte) value, input.readByte());
+                assertEquals(value, input.readUnsignedByte());
+                assertEquals(value != 0, input.readBoolean());
+                assertThrows(EOFException.class, input::readByte);
+                assertThrows(EOFException.class, input::readUnsignedByte);
+                assertThrows(EOFException.class, input::readBoolean);
+            }
+        }
     }
 
     @Test
@@ -127,6 +169,23 @@ class SwappedDataInputStreamTest {
     @Test
     void testReadUnsignedByte() throws IOException {
         assertEquals(0x01, this.sdis.readUnsignedByte());
+    }
+
+    @Test
+    void testReadUnsignedByteOverride() throws IOException {
+        try (SwappedDataInputStream input = new SwappedDataInputStream(new ByteArrayInputStream(new byte[] { 0x2A, (byte) 0xFF, 0x01 })) {
+            @Override
+            public int readUnsignedByte() throws IOException {
+                return Byte.toUnsignedInt(readByte());
+            }
+        }) {
+            assertEquals(0x2A, input.readByte());
+            assertEquals(0xFF, input.readUnsignedByte());
+            assertTrue(input.readBoolean());
+            assertThrows(EOFException.class, input::readByte);
+            assertThrows(EOFException.class, input::readUnsignedByte);
+            assertThrows(EOFException.class, input::readBoolean);
+        }
     }
 
     @Test

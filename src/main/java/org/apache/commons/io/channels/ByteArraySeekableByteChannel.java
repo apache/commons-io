@@ -60,6 +60,12 @@ public class ByteArraySeekableByteChannel implements SeekableByteChannel {
 
     /**
      * Builds for {@link ByteArraySeekableByteChannel}.
+     *
+     * <p>
+     * With no open options, the channel is writable. Otherwise, only {@link StandardOpenOption#WRITE} and {@link StandardOpenOption#APPEND} enable writing;
+     * all other options are ignored. The {@code APPEND} option does not move the position to the end of the channel before writing.
+     * </p>
+     *
      * <p>
      * Building a read-only channel from an existing byte array is supported with:
      * </p>
@@ -146,9 +152,9 @@ public class ByteArraySeekableByteChannel implements SeekableByteChannel {
         this.data = builder.getByteArray();
         this.size = data.length;
         final OpenOption[] openOptions = builder.getOpenOptions();
-        Arrays.sort(openOptions);
-        this.isWritable = openOptions.length == 0 || Arrays.binarySearch(openOptions, StandardOpenOption.WRITE) >= 0
-                || Arrays.binarySearch(openOptions, StandardOpenOption.APPEND) >= 0;
+        // Don't sort: options may mix types (StandardOpenOption, LinkOption, ...) or not be Comparable at all.
+        this.isWritable = openOptions.length == 0
+                || Arrays.stream(openOptions).anyMatch(option -> option == StandardOpenOption.WRITE || option == StandardOpenOption.APPEND);
     }
 
     private ByteArraySeekableByteChannel(final byte[] data) {

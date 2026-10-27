@@ -1192,6 +1192,11 @@ public class FileUtils {
      * result string. Except for rare edge cases, this will make unencoded URLs
      * pass through unaltered.
      *
+     * <p>
+     * Decoding can introduce path segments such as {@code ..} and path separators. This method does not normalize or validate the resulting path. See
+     * {@link #toFile(URL)} for guidance on directory containment checks.
+     * </p>
+     *
      * @param url The URL to decode, may be {@code null}.
      * @return The decoded URL or {@code null} if the input was
      * {@code null}.
@@ -3093,18 +3098,25 @@ public class FileUtils {
      * Converts from a {@link URL} to a {@link File}.
      * <p>
      * Syntax such as {@code file:///my%20docs/file.txt} will be correctly decoded to {@code /my docs/file.txt}. UTF-8 is used to decode percent-encoded octets
-     * to characters. Additionally, malformed percent-encoded octets are handled leniently by passing them through literally.
+     * to characters. Additionally, malformed percent-encoded octets are handled leniently by passing them through literally. Paths containing the NUL
+     * character ({@code U+0000}) are rejected.
      * </p>
+     *
+     * <p>Percent-decoding can introduce path segments such as {@code ..} (from {@code %2e%2e}) and path separators (for example, {@code /} from {@code %2f}).
+     * This method does not normalize the path or check whether it is contained in a particular directory. Callers requiring directory containment must
+     * validate the resolved file system path, accounting for symbolic links where applicable. Checking only the raw URL text is insufficient.</p>
      *
      * @param url The file URL to convert, {@code null} returns {@code null}.
      * @return The equivalent {@link File} object, or {@code null} if the URL's protocol is not {@code file}.
+     * @throws IllegalArgumentException if the decoded file path contains the NUL character ({@code U+0000}).
      */
     public static File toFile(final URL url) {
         if (url == null || !isFileProtocol(url)) {
             return null;
         }
         final String fileName = url.getFile().replace('/', File.separatorChar);
-        return new File(decodeUrl(fileName));
+        final String decodedFileName = decodeUrl(fileName);
+        return new File(FilenameUtils.requireNonNullChars(decodedFileName));
     }
 
     /**
@@ -3114,13 +3126,14 @@ public class FileUtils {
      * array contains {@code null} at the same index.
      * </p>
      * <p>
-     * This method will decode the URL. Syntax such as {@code file:///my%20docs/file.txt} will be correctly decoded to {@code /my docs/file.txt}.
+     * This method will decode the URL. Syntax such as {@code file:///my%20docs/file.txt} will be correctly decoded to {@code /my docs/file.txt}. See
+     * {@link #toFile(URL)} for the decoding behavior and guidance on directory containment checks.
      * </p>
      *
      * @param urls The file URLs to convert, {@code null} returns empty array.
      * @return A non-{@code null} array of Files matching the input, with a {@code null} item if there was a {@code null} at that index in the input array.
-     * @throws IllegalArgumentException if any file is not a URL file.
-     * @throws IllegalArgumentException if any file is incorrectly encoded.
+     * @throws IllegalArgumentException if any non-{@code null} URL's protocol is not {@code file}, or any decoded file path contains the NUL character
+     *         ({@code U+0000}).
      * @since 1.1
      */
     public static File[] toFiles(final URL... urls) {

@@ -24,6 +24,10 @@ import java.util.regex.Pattern;
 /**
  * A {@link ClassNameMatcher} that uses regular expressions.
  * <p>
+ * The pattern must match the entire class name, as defined by {@link java.util.regex.Matcher#matches()}.
+ * Use explicit wildcards, such as {@code .*Bar.*}, to match a substring.
+ * </p>
+ * <p>
  * This object is immutable and thread-safe.
  * </p>
  */

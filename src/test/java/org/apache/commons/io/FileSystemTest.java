@@ -311,6 +311,28 @@ class FileSystemTest {
         assertEquals(SystemProperties.getFileSeparator(), Character.toString(current.getNameSeparator()));
     }
 
+    @Test
+    void testIsLegalFileNameDotNames() {
+        for (final FileSystem fs : FileSystem.values()) {
+            assertFalse(fs.isLegalFileName("."), fs.name());
+            assertFalse(fs.isLegalFileName(".."), fs.name());
+            assertTrue(fs.isLegalFileName(".profile"), fs.name());
+            // "." and ".." never survive sanitization
+            assertTrue(fs.isLegalFileName(fs.toLegalFileName(".", '_')), fs.name());
+            assertTrue(fs.isLegalFileName(fs.toLegalFileName("..", '_')), fs.name());
+        }
+        assertEquals("_.", FileSystem.LINUX.toLegalFileName(".", '_'));
+        assertEquals("_", FileSystem.WINDOWS.toLegalFileName(".", '_'));
+    }
+
+    @Test
+    void testIsLegalFileNameGenericSeparator() {
+        // GENERIC (the unknown-OS fallback) must at least reject its own name separator
+        assertFalse(FileSystem.GENERIC.isLegalFileName("a/../b"));
+        assertFalse(FileSystem.GENERIC.isLegalFileName("a/b"));
+        assertEquals("a_b", FileSystem.GENERIC.toLegalFileName("a/b", '_'));
+    }
+
     @ParameterizedTest
     @EnumSource(FileSystem.class)
     void testIsLegalName(final FileSystem fs) {
@@ -339,34 +361,34 @@ class FileSystemTest {
     }
 
     @Test
-    void testIsLegalFileNameDotNames() {
-        for (final FileSystem fs : FileSystem.values()) {
-            assertFalse(fs.isLegalFileName("."), fs.name());
-            assertFalse(fs.isLegalFileName(".."), fs.name());
-            assertTrue(fs.isLegalFileName(".profile"), fs.name());
-            // "." and ".." never survive sanitization
-            assertTrue(fs.isLegalFileName(fs.toLegalFileName(".", '_')), fs.name());
-            assertTrue(fs.isLegalFileName(fs.toLegalFileName("..", '_')), fs.name());
-        }
-        assertEquals("_.", FileSystem.LINUX.toLegalFileName(".", '_'));
-        assertEquals("_", FileSystem.WINDOWS.toLegalFileName(".", '_'));
-    }
-
-    @Test
-    void testIsLegalFileNameGenericSeparator() {
-        // GENERIC (the unknown-OS fallback) must at least reject its own name separator
-        assertFalse(FileSystem.GENERIC.isLegalFileName("a/../b"));
-        assertFalse(FileSystem.GENERIC.isLegalFileName("a/b"));
-        assertEquals("a_b", FileSystem.GENERIC.toLegalFileName("a/b", '_'));
-    }
-
-    @Test
     void testIsReservedFileName() {
         for (final FileSystem fs : FileSystem.values()) {
             for (final String candidate : fs.getReservedFileNames()) {
                 assertTrue(fs.isReservedFileName(candidate));
             }
         }
+    }
+
+    @Test
+    void testIsReservedFileNameCaseInsensitive() {
+        final FileSystem fs = FileSystem.WINDOWS;
+        // Windows device names are reserved in any case
+        assertTrue(fs.isReservedFileName("con"));
+        assertTrue(fs.isReservedFileName("Nul"));
+        assertTrue(fs.isReservedFileName("lpt1.log"));
+        assertFalse(fs.isLegalFileName("con"));
+        assertFalse(fs.isLegalFileName("Nul.txt"));
+        // A non-String CharSequence must not throw ClassCastException
+        assertFalse(fs.isReservedFileName(new StringBuilder("hello")));
+        assertTrue(fs.isReservedFileName(new StringBuilder("con")));
+    }
+
+    @ParameterizedTest
+    @EnumSource(FileSystem.class)
+    void testIsReservedFileNameNull(final FileSystem fs) {
+        assertFalse(fs.isReservedFileName(null));
+        assertFalse(fs.isReservedFileName(""));
+        assertFalse(fs.isReservedFileName(new StringBuilder("ordinary.txt")));
     }
 
     @Test
@@ -483,17 +505,82 @@ class FileSystemTest {
     }
 
     @Test
-    void testIsReservedFileNameCaseInsensitive() {
+    void testReplacementWithNUL() {
+        for (final FileSystem fs : FileSystem.values()) {
+            try {
+                fs.toLegalFileName("Test", '\0'); // Assume NUL is always illegal
+            } catch (final IllegalArgumentException iae) {
+                assertTrue(iae.getMessage().startsWith("The replacement character '\\0'"), iae.getMessage());
+            }
+        }
+    }
+
+    @Test
+    void testSorted() {
+        for (final FileSystem fs : FileSystem.values()) {
+            final char[] chars = fs.getIllegalFileNameChars();
+            for (int i = 0; i < chars.length - 1; i++) {
+                assertTrue(chars[i] < chars[i + 1], fs.name());
+            }
+        }
+    }
+
+    @Test
+    void testSupportsDriveLetter() {
+        assertTrue(FileSystem.WINDOWS.supportsDriveLetter());
+        assertFalse(FileSystem.GENERIC.supportsDriveLetter());
+        assertFalse(FileSystem.LINUX.supportsDriveLetter());
+        assertFalse(FileSystem.MAC_OSX.supportsDriveLetter());
+    }
+
+    @ParameterizedTest
+    @EnumSource(FileSystem.class)
+    void testToLegalFileNameExplicitCharset(final FileSystem fs) {
+        for (final String candidate : new String[] {".", "..", "...", " ", "NUL ", "con.txt", "a/b"}) {
+            final String name = fs.toLegalFileName(new StringBuilder(candidate), '_', UTF_8);
+            assertTrue(fs.isLegalFileName(name, UTF_8), candidate);
+            assertEquals(fs.toLegalFileName(candidate, '_'), name, candidate);
+        }
+    }
+
+    @Test
+    void testToLegalFileNameNamesMadeReserved() {
         final FileSystem fs = FileSystem.WINDOWS;
-        // Windows device names are reserved in any case
-        assertTrue(fs.isReservedFileName("con"));
-        assertTrue(fs.isReservedFileName("Nul"));
-        assertTrue(fs.isReservedFileName("lpt1.log"));
-        assertFalse(fs.isLegalFileName("con"));
-        assertFalse(fs.isLegalFileName("Nul.txt"));
-        // A non-String CharSequence must not throw ClassCastException
-        assertFalse(fs.isReservedFileName(new StringBuilder("hello")));
-        assertTrue(fs.isReservedFileName(new StringBuilder("con")));
+        assertEquals("NCON", fs.toLegalFileName("CO?", 'N', UTF_8));
+        assertEquals("_NUL", fs.toLegalFileName("NUL . ", '_', UTF_8));
+        assertEquals("_con", fs.toLegalFileName("con...", '_', UTF_8));
+        assertEquals("_", fs.toLegalFileName(" . . ", '_', UTF_8));
+        assertEquals("_", fs.toLegalFileName("?", '_', UTF_8));
+    }
+
+    @Test
+    void testToLegalFileNamePrefixAtLengthLimit() {
+        final FileSystem fs = FileSystem.WINDOWS;
+        final String extension = "." + repeat('x', fs.getMaxFileNameLength() - 4);
+        final String name = fs.toLegalFileName("CON" + extension, '_', UTF_8);
+        assertEquals("_CO" + extension, name);
+        assertEquals(fs.getMaxFileNameLength(), name.length());
+        assertTrue(fs.isLegalFileName(name, UTF_8));
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = FileSystem.class, names = {"GENERIC", "LINUX", "MAC_OSX"})
+    void testToLegalFileNamePreservesTrailingDotsAndSpaces(final FileSystem fs) {
+        for (final String candidate : new String[] {"name.", "name ", "...", " "}) {
+            assertEquals(candidate, fs.toLegalFileName(candidate, '_', UTF_8));
+            assertTrue(fs.isLegalFileName(candidate, UTF_8));
+        }
+        assertEquals("name.", fs.toLegalFileName("name.", '.', UTF_8));
+        assertEquals("name ", fs.toLegalFileName("name ", ' ', UTF_8));
+    }
+
+    @Test
+    void testToLegalFileNameReplacementExpandsBytes() {
+        final FileSystem fs = FileSystem.LINUX;
+        final String name = fs.toLegalFileName(repeat('/', fs.getMaxFileNameLength()), 'é', UTF_8);
+        assertEquals(repeat('é', fs.getMaxFileNameLength() / 2), name);
+        assertTrue(fs.isLegalFileName(name, UTF_8));
+        assertThrows(IllegalArgumentException.class, () -> fs.toLegalFileName("/", 'é', US_ASCII));
     }
 
     @Test
@@ -531,64 +618,6 @@ class FileSystemTest {
         assertTrue(FileSystem.LINUX.isLegalFileName("evil.txt "));
     }
 
-    @ParameterizedTest
-    @EnumSource(FileSystem.class)
-    void testIsReservedFileNameNull(final FileSystem fs) {
-        assertFalse(fs.isReservedFileName(null));
-        assertFalse(fs.isReservedFileName(""));
-        assertFalse(fs.isReservedFileName(new StringBuilder("ordinary.txt")));
-    }
-
-    @ParameterizedTest
-    @EnumSource(FileSystem.class)
-    void testToLegalFileNameExplicitCharset(final FileSystem fs) {
-        for (final String candidate : new String[] {".", "..", "...", " ", "NUL ", "con.txt", "a/b"}) {
-            final String name = fs.toLegalFileName(new StringBuilder(candidate), '_', UTF_8);
-            assertTrue(fs.isLegalFileName(name, UTF_8), candidate);
-            assertEquals(fs.toLegalFileName(candidate, '_'), name, candidate);
-        }
-    }
-
-    @Test
-    void testToLegalFileNameNamesMadeReserved() {
-        final FileSystem fs = FileSystem.WINDOWS;
-        assertEquals("NCON", fs.toLegalFileName("CO?", 'N', UTF_8));
-        assertEquals("_NUL", fs.toLegalFileName("NUL . ", '_', UTF_8));
-        assertEquals("_con", fs.toLegalFileName("con...", '_', UTF_8));
-        assertEquals("_", fs.toLegalFileName(" . . ", '_', UTF_8));
-        assertEquals("_", fs.toLegalFileName("?", '_', UTF_8));
-    }
-
-    @Test
-    void testToLegalFileNamePrefixAtLengthLimit() {
-        final FileSystem fs = FileSystem.WINDOWS;
-        final String extension = "." + repeat('x', fs.getMaxFileNameLength() - 4);
-        final String name = fs.toLegalFileName("CON" + extension, '_', UTF_8);
-        assertEquals("_CO" + extension, name);
-        assertEquals(fs.getMaxFileNameLength(), name.length());
-        assertTrue(fs.isLegalFileName(name, UTF_8));
-    }
-
-    @Test
-    void testToLegalFileNameReplacementExpandsBytes() {
-        final FileSystem fs = FileSystem.LINUX;
-        final String name = fs.toLegalFileName(repeat('/', fs.getMaxFileNameLength()), 'é', UTF_8);
-        assertEquals(repeat('é', fs.getMaxFileNameLength() / 2), name);
-        assertTrue(fs.isLegalFileName(name, UTF_8));
-        assertThrows(IllegalArgumentException.class, () -> fs.toLegalFileName("/", 'é', US_ASCII));
-    }
-
-    @ParameterizedTest
-    @EnumSource(value = FileSystem.class, names = {"GENERIC", "LINUX", "MAC_OSX"})
-    void testToLegalFileNamePreservesTrailingDotsAndSpaces(final FileSystem fs) {
-        for (final String candidate : new String[] {"name.", "name ", "...", " "}) {
-            assertEquals(candidate, fs.toLegalFileName(candidate, '_', UTF_8));
-            assertTrue(fs.isLegalFileName(candidate, UTF_8));
-        }
-        assertEquals("name.", fs.toLegalFileName("name.", '.', UTF_8));
-        assertEquals("name ", fs.toLegalFileName("name ", ' ', UTF_8));
-    }
-
     @Test
     void testToLegalFileNameUnsuitableWindowsReplacement() {
         final FileSystem fs = FileSystem.WINDOWS;
@@ -598,53 +627,6 @@ class FileSystemTest {
                 assertThrows(IllegalArgumentException.class, () -> fs.toLegalFileName(candidate, replacement, UTF_8), candidate);
             }
         }
-    }
-
-    @Test
-    void testToLegalFileNameWindowsCreation(@TempDir final Path tempDir) throws IOException {
-        assumeTrue(SystemUtils.IS_OS_WINDOWS);
-        final FileSystem fs = FileSystem.WINDOWS;
-        int index = 0;
-        final String[] candidates = {"CON", "nul.txt", ".", "..", "...", " ", "name. ", "CON .txt", "nul  .log", "CON." + repeat('x', 251)};
-        for (final String candidate : candidates) {
-            final Path directory = Files.createDirectory(tempDir.resolve(Integer.toString(index++)));
-            final String name = fs.toLegalFileName(candidate, '_', UTF_8);
-            assertTrue(fs.isLegalFileName(name, UTF_8), candidate);
-            final Path file = Files.createFile(directory.resolve(name));
-            assertTrue(Files.isRegularFile(file), candidate);
-            try (Stream<Path> files = Files.list(directory)) {
-                assertEquals(name, files.findFirst().get().getFileName().toString(), candidate);
-            }
-        }
-    }
-
-    @Test
-    void testReplacementWithNUL() {
-        for (final FileSystem fs : FileSystem.values()) {
-            try {
-                fs.toLegalFileName("Test", '\0'); // Assume NUL is always illegal
-            } catch (final IllegalArgumentException iae) {
-                assertTrue(iae.getMessage().startsWith("The replacement character '\\0'"), iae.getMessage());
-            }
-        }
-    }
-
-    @Test
-    void testSorted() {
-        for (final FileSystem fs : FileSystem.values()) {
-            final char[] chars = fs.getIllegalFileNameChars();
-            for (int i = 0; i < chars.length - 1; i++) {
-                assertTrue(chars[i] < chars[i + 1], fs.name());
-            }
-        }
-    }
-
-    @Test
-    void testSupportsDriveLetter() {
-        assertTrue(FileSystem.WINDOWS.supportsDriveLetter());
-        assertFalse(FileSystem.GENERIC.supportsDriveLetter());
-        assertFalse(FileSystem.LINUX.supportsDriveLetter());
-        assertFalse(FileSystem.MAC_OSX.supportsDriveLetter());
     }
 
     @Test
@@ -673,6 +655,24 @@ class FileSystemTest {
         // Illegal replacement
         assertThrows(IllegalArgumentException.class, () -> fs.toLegalFileName("test", '\0'));
         assertThrows(IllegalArgumentException.class, () -> fs.toLegalFileName("test", ':'));
+    }
+
+    @Test
+    void testToLegalFileNameWindowsCreation(@TempDir final Path tempDir) throws IOException {
+        assumeTrue(SystemUtils.IS_OS_WINDOWS);
+        final FileSystem fs = FileSystem.WINDOWS;
+        int index = 0;
+        final String[] candidates = {"CON", "nul.txt", ".", "..", "...", " ", "name. ", "CON .txt", "nul  .log", "CON." + repeat('x', 251)};
+        for (final String candidate : candidates) {
+            final Path directory = Files.createDirectory(tempDir.resolve(Integer.toString(index++)));
+            final String name = fs.toLegalFileName(candidate, '_', UTF_8);
+            assertTrue(fs.isLegalFileName(name, UTF_8), candidate);
+            final Path file = Files.createFile(directory.resolve(name));
+            assertTrue(Files.isRegularFile(file), candidate);
+            try (Stream<Path> files = Files.list(directory)) {
+                assertEquals(name, files.findFirst().get().getFileName().toString(), candidate);
+            }
+        }
     }
 
     @ParameterizedTest
