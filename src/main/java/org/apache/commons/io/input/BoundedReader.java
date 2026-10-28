@@ -22,6 +22,8 @@ import static org.apache.commons.io.IOUtils.EOF;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.nio.CharBuffer;
+import java.nio.ReadOnlyBufferException;
 
 import org.apache.commons.io.IOUtils;
 
@@ -92,6 +94,11 @@ public class BoundedReader extends ProxyReader {
         return super.read();
     }
 
+    @Override
+    public int read(final char[] cbuf) throws IOException {
+        return read(cbuf, 0, cbuf.length);
+    }
+
     /**
      * Reads into an array.
      *
@@ -116,6 +123,23 @@ public class BoundedReader extends ProxyReader {
             cbuf[off + i] = (char) c;
         }
         return len;
+    }
+
+    @Override
+    public int read(final CharBuffer target) throws IOException {
+        if (target.isReadOnly()) {
+            throw new ReadOnlyBufferException();
+        }
+        int count = 0;
+        while (target.hasRemaining()) {
+            final int c = read();
+            if (c == EOF) {
+                return count == 0 ? EOF : count;
+            }
+            target.put((char) c);
+            count++;
+        }
+        return count;
     }
 
     /**
