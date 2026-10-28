@@ -111,7 +111,7 @@ public class HexDump {
                     "illegal index: " + index + " into array of length "
                     + data.length);
         }
-        long display_offset = offset + index;
+        long displayOffset = offset + index;
         final StringBuilder buffer = new StringBuilder(74);
 
         // TODO Use Objects.checkFromIndexSize(index, length, data.length) when upgrading to JDK9
@@ -121,24 +121,24 @@ public class HexDump {
 
         final int endIndex = index + length;
 
-        for (int j = index; j < endIndex; j += 16) {
-            int chars_read = endIndex - j;
+        for (int lineStart = index; lineStart < endIndex; lineStart += 16) {
+            int bytesInLine = endIndex - lineStart;
 
-            if (chars_read > 16) {
-                chars_read = 16;
+            if (bytesInLine > 16) {
+                bytesInLine = 16;
             }
-            dump(buffer, display_offset).append(' ');
-            for (int k = 0; k < 16; k++) {
-                if (k < chars_read) {
-                    dump(buffer, data[k + j]);
+            appendHex(buffer, displayOffset).append(' ');
+            for (int column = 0; column < 16; column++) {
+                if (column < bytesInLine) {
+                    appendHex(buffer, data[column + lineStart]);
                 } else {
                     buffer.append("  ");
                 }
                 buffer.append(' ');
             }
-            for (int k = 0; k < chars_read; k++) {
-                if (data[k + j] >= ' ' && data[k + j] < 127) {
-                    buffer.append((char) data[k + j]);
+            for (int column = 0; column < bytesInLine; column++) {
+                if (data[column + lineStart] >= ' ' && data[column + lineStart] < 127) {
+                    buffer.append((char) data[column + lineStart]);
                 } else {
                     buffer.append('.');
                 }
@@ -146,7 +146,7 @@ public class HexDump {
             buffer.append(System.lineSeparator());
             appendable.append(buffer);
             buffer.setLength(0);
-            display_offset += chars_read;
+            displayOffset += bytesInLine;
         }
     }
 
@@ -195,29 +195,29 @@ public class HexDump {
     }
 
     /**
-     * Dumps a byte value into a StringBuilder.
+     * Appends a byte as two hexadecimal digits to a StringBuilder.
      *
      * @param builder The StringBuilder to dump the value in.
      * @param value  The byte value to be dumped.
      * @return StringBuilder containing the dumped value.
      */
-    private static StringBuilder dump(final StringBuilder builder, final byte value) {
-        for (int j = 0; j < 2; j++) {
-            builder.append(HEX_CODES[value >> SHIFTS[j + 6] & 15]);
+    private static StringBuilder appendHex(final StringBuilder builder, final byte value) {
+        for (int digit = 0; digit < 2; digit++) {
+            builder.append(HEX_CODES[value >> SHIFTS[digit + 6] & 15]);
         }
         return builder;
     }
 
     /**
-     * Dumps a long value into a StringBuilder.
+     * Appends the 32 least significant bits of a long as eight hexadecimal digits to a StringBuilder.
      *
      * @param builder The StringBuilder to dump the value in.
      * @param value  The long value to be dumped.
      * @return StringBuilder containing the dumped value.
      */
-    private static StringBuilder dump(final StringBuilder builder, final long value) {
-        for (int j = 0; j < 8; j++) {
-            builder.append(HEX_CODES[(int) (value >> SHIFTS[j]) & 15]);
+    private static StringBuilder appendHex(final StringBuilder builder, final long value) {
+        for (int digit = 0; digit < 8; digit++) {
+            builder.append(HEX_CODES[(int) (value >> SHIFTS[digit]) & 15]);
         }
         return builder;
     }
