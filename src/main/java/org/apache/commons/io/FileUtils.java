@@ -64,6 +64,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.IdentityHashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
@@ -79,11 +80,17 @@ import org.apache.commons.io.file.Counters;
 import org.apache.commons.io.file.PathFilter;
 import org.apache.commons.io.file.PathUtils;
 import org.apache.commons.io.file.StandardDeleteOption;
+import org.apache.commons.io.filefilter.AndFileFilter;
+import org.apache.commons.io.filefilter.ConditionalFileFilter;
+import org.apache.commons.io.filefilter.DelegateFileFilter;
 import org.apache.commons.io.filefilter.FileEqualsFileFilter;
 import org.apache.commons.io.filefilter.FileFileFilter;
 import org.apache.commons.io.filefilter.IOFileFilter;
+import org.apache.commons.io.filefilter.NotFileFilter;
+import org.apache.commons.io.filefilter.OrFileFilter;
 import org.apache.commons.io.filefilter.SuffixFileFilter;
 import org.apache.commons.io.filefilter.TrueFileFilter;
+import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.apache.commons.io.function.IOConsumer;
 import org.apache.commons.io.function.Uncheck;
 
@@ -2342,11 +2349,11 @@ public class FileUtils {
             final FileVisitOption... options) throws IOException {
         final boolean isDirFilterSet = dirFilter != null;
         final FileEqualsFileFilter rootDirFilter = new FileEqualsFileFilter(directory);
-        final PathFilter dirPathFilter = isDirFilterSet ? rootDirFilter.or(dirFilter) : rootDirFilter;
+        final PathFilter dirPathFilter = isDirFilterSet ? rootDirFilter.or(toPathFilter(dirFilter)) : rootDirFilter;
         // @formatter:off
         final AccumulatorPathVisitor visitor = AccumulatorPathVisitor.builder()
                 .setPathCounters(Counters.noopPathCounters())
-                .setFileFilter(fileFilter)
+                .setFileFilter(toPathFilter(fileFilter))
                 .setDirectoryFilter(dirPathFilter)
                 .setVisitFileFailedFunction((p, e) -> FileVisitResult.CONTINUE)
                 .get();
@@ -2412,7 +2419,7 @@ public class FileUtils {
      */
     public static Collection<File> listFiles(final File directory, final IOFileFilter fileFilter, final IOFileFilter dirFilter) {
         final AccumulatorPathVisitor visitor = Uncheck
-            .apply(d -> listAccumulate(d, FileFileFilter.INSTANCE.and(fileFilter), dirFilter, FileVisitOption.FOLLOW_LINKS), directory);
+            .apply(d -> listAccumulate(d, FileFileFilter.INSTANCE.and(toPathFilter(fileFilter)), dirFilter, FileVisitOption.FOLLOW_LINKS), directory);
         return toList(visitor.getFileList().stream().map(Path::toFile));
     }
 
@@ -3174,6 +3181,58 @@ public class FileUtils {
      */
     private static int toMaxDepth(final boolean recursive) {
         return recursive ? Integer.MAX_VALUE : 1;
+    }
+
+    /**
+     * Adapts wildcard File overrides within standard combinations for File-based traversal.
+     *
+     * @param fileFilter The filter to adapt, may be null.
+     * @return An adapted filter, or the original filter when no adaptation is needed.
+     */
+    private static IOFileFilter toPathFilter(final IOFileFilter fileFilter) {
+        return toPathFilter(fileFilter, Collections.newSetFromMap(new IdentityHashMap<>()));
+    }
+
+    private static IOFileFilter toPathFilter(final IOFileFilter fileFilter, final Set<IOFileFilter> visiting) {
+        if (fileFilter == null || !visiting.add(fileFilter)) {
+            // A short-circuiting combination may contain itself without evaluating the cycle.
+            return fileFilter;
+        }
+        try {
+            final Class<?> type = fileFilter.getClass();
+            if (type == AndFileFilter.class || type == OrFileFilter.class) {
+                final List<IOFileFilter> filters = ((ConditionalFileFilter) fileFilter).getFileFilters();
+                final List<IOFileFilter> adapted = new ArrayList<>(filters.size());
+                boolean changed = false;
+                for (final IOFileFilter filter : filters) {
+                    final IOFileFilter pathFilter = toPathFilter(filter, visiting);
+                    adapted.add(pathFilter);
+                    changed |= pathFilter != filter;
+                }
+                if (changed) {
+                    return type == AndFileFilter.class ? new AndFileFilter(adapted) : new OrFileFilter(adapted);
+                }
+            } else if (type == NotFileFilter.class) {
+                final IOFileFilter filter = ((NotFileFilter) fileFilter).getFileFilter();
+                final IOFileFilter adapted = toPathFilter(filter, visiting);
+                if (adapted != filter) {
+                    return new NotFileFilter(adapted);
+                }
+            } else if (fileFilter instanceof WildcardFileFilter && type != WildcardFileFilter.class) {
+                try {
+                    if (type.getMethod("accept", File.class).getDeclaringClass() != WildcardFileFilter.class
+                            && type.getMethod("accept", Path.class, BasicFileAttributes.class).getDeclaringClass() == WildcardFileFilter.class) {
+                        return new DelegateFileFilter((FileFilter) fileFilter);
+                    }
+                } catch (final NoSuchMethodException e) {
+                    // Both overloads are required by IOFileFilter.
+                    throw new IllegalStateException(e);
+                }
+            }
+            return fileFilter;
+        } finally {
+            visiting.remove(fileFilter);
+        }
     }
 
     /**
