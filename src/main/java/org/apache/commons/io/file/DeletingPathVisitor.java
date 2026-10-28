@@ -176,6 +176,7 @@ public class DeletingPathVisitor extends CountingPathVisitor {
             final LinkOption[] noFollowLinkOptions = PathUtils.noFollowLinkOptionArray();
             final PosixFileAttributes parentAttributes = overrideReadOnly ? PathUtils.readPosixFileAttributes(parent, noFollowLinkOptions) : null;
             boolean fileWasReadOnly = false;
+            Throwable failure = null;
             try {
                 // Include dangling links so their parent permissions can also be overridden.
                 if (Files.exists(file, linkOptions) || Files.isSymbolicLink(file)) {
@@ -194,18 +195,53 @@ public class DeletingPathVisitor extends CountingPathVisitor {
                         // Ignore.
                     }
                 }
+            } catch (final IOException | RuntimeException | Error e) {
+                failure = e;
+                throw e;
             } finally {
-                if (Files.exists(file, noFollowLinkOptions) || Files.isSymbolicLink(file)) {
-                    if (fileWasReadOnly) {
+                Throwable restorationFailure = null;
+                try {
+                    if ((Files.exists(file, noFollowLinkOptions) || Files.isSymbolicLink(file)) && fileWasReadOnly) {
                         PathUtils.setReadOnly(absoluteFile, true, noFollowLinkOptions);
                     }
+                } catch (final IOException | RuntimeException | Error e) {
+                    restorationFailure = e;
+                }
+                try {
                     if (parentAttributes != null) {
                         Files.setPosixFilePermissions(parent, parentAttributes.permissions());
+                    }
+                } catch (final IOException | RuntimeException | Error e) {
+                    if (restorationFailure == null) {
+                        restorationFailure = e;
+                    } else if (restorationFailure != e) {
+                        restorationFailure.addSuppressed(e);
+                    }
+                }
+                if (restorationFailure != null) {
+                    if (failure == null) {
+                        throwRestorationFailure(restorationFailure);
+                    }
+                    if (failure != restorationFailure) {
+                        failure.addSuppressed(restorationFailure);
                     }
                 }
             }
         }
         updateFileCounters(file, attrs);
         return FileVisitResult.CONTINUE;
+    }
+
+    private static void throwRestorationFailure(final Throwable failure) throws IOException {
+        if (failure instanceof IOException) {
+            throw (IOException) failure;
+        }
+        if (failure instanceof RuntimeException) {
+            throw (RuntimeException) failure;
+        }
+        if (failure instanceof Error) {
+            throw (Error) failure;
+        }
+        throw new IOException(failure);
     }
 }

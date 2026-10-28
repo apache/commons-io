@@ -21,10 +21,13 @@ import static org.apache.commons.io.file.CounterAssertions.assertCounts;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
+import static org.mockito.Answers.CALLS_REAL_METHODS;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
@@ -50,6 +53,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.mockito.MockedStatic;
 
 import com.google.common.jimfs.Configuration;
 import com.google.common.jimfs.Jimfs;
@@ -308,6 +312,82 @@ class DeletingPathVisitorTest extends AbstractTempDirTest {
         }
         assertTrue(Files.exists(file));
         assertTrue(Files.isWritable(file), "A failed deletion must preserve the file's writable state");
+    }
+
+    @Test
+    void testOverrideReadOnlyRestoresParentPermissionsAfterSuccessfulDelete() throws IOException {
+        final Path parent = Files.createDirectory(tempDirPath.resolve("read-only-parent"));
+        final Path file = Files.write(parent.resolve("file.txt"), new byte[] {1});
+        assumeTrue(Files.getFileAttributeView(parent, PosixFileAttributeView.class) != null);
+        final Set<PosixFilePermission> tempPermissions = Files.getPosixFilePermissions(parent);
+        final Set<PosixFilePermission> originalPermissions = PosixFilePermissions.fromString("r-x------");
+        try {
+            Files.setPosixFilePermissions(parent, originalPermissions);
+            final DeletingPathVisitor visitor = new DeletingPathVisitor(Counters.longPathCounters(),
+                    new DeleteOption[] {StandardDeleteOption.OVERRIDE_READ_ONLY});
+            Files.walkFileTree(file, visitor);
+            assertTrue(Files.notExists(file));
+            assertEquals(originalPermissions, Files.getPosixFilePermissions(parent));
+        } finally {
+            if (Files.exists(parent)) {
+                Files.setPosixFilePermissions(parent, tempPermissions);
+            }
+        }
+    }
+
+    @ParameterizedTest
+    @ValueSource(booleans = { false, true })
+    void testOverrideReadOnlyRestoresFileAndParentPermissionsAfterFailedDelete(final boolean readOnly) throws IOException {
+        final Path parent = Files.createDirectory(tempDirPath.resolve("failed-delete-parent"));
+        final Path file = Files.write(parent.resolve("file.txt"), new byte[] {1});
+        assumeTrue(Files.getFileAttributeView(parent, PosixFileAttributeView.class) != null);
+        final Set<PosixFilePermission> tempPermissions = Files.getPosixFilePermissions(parent);
+        final Set<PosixFilePermission> originalFilePermissions = PosixFilePermissions.fromString(readOnly ? "r--------" : "rw-------");
+        final Set<PosixFilePermission> originalParentPermissions = PosixFilePermissions.fromString("r-x------");
+        final IOException deleteFailure = new IOException("Cannot delete file");
+        try {
+            Files.setPosixFilePermissions(file, originalFilePermissions);
+            Files.setPosixFilePermissions(parent, originalParentPermissions);
+            final DeletingPathVisitor visitor = new DeletingPathVisitor(Counters.longPathCounters(),
+                    new DeleteOption[] {StandardDeleteOption.OVERRIDE_READ_ONLY});
+            try (MockedStatic<Files> files = mockStatic(Files.class, CALLS_REAL_METHODS)) {
+                files.when(() -> Files.deleteIfExists(file)).thenThrow(deleteFailure);
+                assertSame(deleteFailure, assertThrows(IOException.class, () -> Files.walkFileTree(file, visitor)));
+            }
+            assertTrue(Files.exists(file));
+            assertEquals(originalFilePermissions, Files.getPosixFilePermissions(file));
+            assertEquals(originalParentPermissions, Files.getPosixFilePermissions(parent));
+        } finally {
+            if (Files.exists(parent)) {
+                Files.setPosixFilePermissions(parent, tempPermissions);
+            }
+        }
+    }
+
+    @Test
+    void testOverrideReadOnlyDoesNotHideDeleteFailureWhenParentRestorationFails() throws IOException {
+        final Path parent = Files.createDirectory(tempDirPath.resolve("restore-failure-parent"));
+        final Path file = Files.write(parent.resolve("file.txt"), new byte[] {1});
+        assumeTrue(Files.getFileAttributeView(parent, PosixFileAttributeView.class) != null);
+        final Set<PosixFilePermission> tempPermissions = Files.getPosixFilePermissions(parent);
+        final Set<PosixFilePermission> originalParentPermissions = PosixFilePermissions.fromString("r-x------");
+        final IOException deleteFailure = new IOException("Cannot delete file");
+        final IOException restoreFailure = new IOException("Cannot restore parent permissions");
+        try {
+            Files.setPosixFilePermissions(parent, originalParentPermissions);
+            final DeletingPathVisitor visitor = new DeletingPathVisitor(Counters.longPathCounters(),
+                    new DeleteOption[] {StandardDeleteOption.OVERRIDE_READ_ONLY});
+            try (MockedStatic<Files> files = mockStatic(Files.class, CALLS_REAL_METHODS)) {
+                files.when(() -> Files.deleteIfExists(file)).thenThrow(deleteFailure);
+                files.when(() -> Files.setPosixFilePermissions(parent, originalParentPermissions)).thenThrow(restoreFailure);
+                assertSame(deleteFailure, assertThrows(IOException.class, () -> Files.walkFileTree(file, visitor)));
+            }
+            assertSame(restoreFailure, deleteFailure.getSuppressed()[0]);
+        } finally {
+            if (Files.exists(parent)) {
+                Files.setPosixFilePermissions(parent, tempPermissions);
+            }
+        }
     }
 
     @ParameterizedTest

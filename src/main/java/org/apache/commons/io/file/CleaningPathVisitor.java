@@ -130,24 +130,60 @@ public class CleaningPathVisitor extends CountingPathVisitor {
             final Path parent = file.getParent();
             final PosixFileAttributes parentAttributes = overrideReadOnly ? PathUtils.readPosixFileAttributes(parent, LinkOption.NOFOLLOW_LINKS) : null;
             boolean fileWasReadOnly = false;
+            Throwable failure = null;
             try {
                 if (overrideReadOnly) {
                     fileWasReadOnly = PathUtils.isReadOnly(file, LinkOption.NOFOLLOW_LINKS);
                     PathUtils.setReadOnly(file, false, LinkOption.NOFOLLOW_LINKS);
                 }
                 Files.deleteIfExists(file);
+            } catch (final IOException | RuntimeException | Error e) {
+                failure = e;
+                throw e;
             } finally {
-                if (Files.exists(file, LinkOption.NOFOLLOW_LINKS)) {
-                    if (fileWasReadOnly) {
+                Throwable restorationFailure = null;
+                try {
+                    if (Files.exists(file, LinkOption.NOFOLLOW_LINKS) && fileWasReadOnly) {
                         PathUtils.setReadOnly(file, true, LinkOption.NOFOLLOW_LINKS);
                     }
+                } catch (final IOException | RuntimeException | Error e) {
+                    restorationFailure = e;
+                }
+                try {
                     if (parentAttributes != null) {
                         Files.setPosixFilePermissions(parent, parentAttributes.permissions());
+                    }
+                } catch (final IOException | RuntimeException | Error e) {
+                    if (restorationFailure == null) {
+                        restorationFailure = e;
+                    } else if (restorationFailure != e) {
+                        restorationFailure.addSuppressed(e);
+                    }
+                }
+                if (restorationFailure != null) {
+                    if (failure == null) {
+                        throwRestorationFailure(restorationFailure);
+                    }
+                    if (failure != restorationFailure) {
+                        failure.addSuppressed(restorationFailure);
                     }
                 }
             }
         }
         updateFileCounters(file, attributes);
         return FileVisitResult.CONTINUE;
+    }
+
+    private static void throwRestorationFailure(final Throwable failure) throws IOException {
+        if (failure instanceof IOException) {
+            throw (IOException) failure;
+        }
+        if (failure instanceof RuntimeException) {
+            throw (RuntimeException) failure;
+        }
+        if (failure instanceof Error) {
+            throw (Error) failure;
+        }
+        throw new IOException(failure);
     }
 }
