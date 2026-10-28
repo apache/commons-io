@@ -19,4 +19,4 @@ limitations under the License.
 
 Guidance for AI coding agents working in this repository.
 
-The actual AGENTS.md file is https://raw.githubusercontent.com/apache/commons-parent/refs/heads/master/AGENTS.md
+The actual AGENTS.md file is [AGENTS.md](https://raw.githubusercontent.com/apache/commons-parent/refs/heads/master/AGENTS.md)

@@ -288,7 +288,7 @@ public class WildcardFileFilter extends AbstractFileFilter implements Serializab
      *
      * @param path The file to check.
      * @param attributes The path's basic attributes (may be null).
-     * @return true if the file name matches one of the wildcards.
+     * @return {@link FileVisitResult#CONTINUE} if accepted, otherwise {@link FileVisitResult#TERMINATE}.
      * @since 2.9.0
      */
     @Override

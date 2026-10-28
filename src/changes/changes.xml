@@ -105,6 +105,7 @@ The <action> type attribute can be add,update,fix,remove.
       <action type="fix" dev="ggregory" due-to="Aryan Ganjoo, Gary Gregory" issue="IO-894" >ByteArraySeekableByteChannel.Builder accepts mixed OpenOption types without sorting them (#887).</action>
       <action type="fix" dev="ggregory" due-to="Ivan Kurnosov, Hyun Lee, Gary Gregory" issue="IO-460" >Fix Tailer startup after missing-file retries (#880, #918).</action>
       <action type="fix" dev="ggregory" due-to="Kapil Verma, Jake Wang, Gary Gregory" issue="IO-893" >Rebuild the BOM buffer when resetting without a mark (#879).</action>
+      <action type="fix" dev="ggregory" due-to="Claude Security, Gary Gregory">Javadoc: Fix @return for WildcardFileFilter.accept(Path, BasicFileAttributes).</action>
       <!-- ADD -->
       <action type="add" dev="ggregory" due-to="Gary Gregory">Add IOConsumer.accept(IOConsumer, T) (#846).</action>
       <action type="add" dev="ggregory" due-to="Gary Gregory">Add UnsynchronizedBufferedReader.unwrap() (#850).</action>
@@ -122,6 +123,7 @@ The <action> type attribute can be add,update,fix,remove.
       <action type="add" dev="ggregory" due-to="Gary Gregory, maxxedev">Make the call to the "sun." packages optional when cleaning byte buffers (#872).</action>
       <action type="add" dev="ggregory" due-to="Claude Security, Gary Gregory">Add optional deserialization resource limits to ValidatingObjectInputStream while preserving existing filter restrictions (f003).</action>
       <action type="add" dev="ggregory" due-to="Gary Gregory">Add AGENTS.md.</action>
+      <action type="add" dev="ggregory" due-to="Gary Gregory">Add NotFileFilter.getFileFilter().</action>
       <!-- UPDATE -->
       <action type="update" dev="ggregory" due-to="Gary Gregory">Bump org.apache.commons:commons-parent from 98 to 106 (#849).</action>
       <action type="update" dev="ggregory" due-to="Gary Gregory">[test] Bump commons-codec:commons-codec from 1.21.0 to 1.23.0.</action>
