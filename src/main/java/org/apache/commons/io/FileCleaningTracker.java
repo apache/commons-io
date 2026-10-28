@@ -55,14 +55,7 @@ public class FileCleaningTracker {
     /**
      * The reaper thread.
      */
-    private final class Reaper extends Thread {
-
-        /** Constructs a new Reaper */
-        Reaper() {
-            super("commons-io-FileCleaningTracker-Reaper");
-            setPriority(MAX_PRIORITY);
-            setDaemon(true);
-        }
+    private final class Reaper implements Runnable {
 
         /**
          * Runs the reaper thread that will delete files as their associated
@@ -182,7 +175,9 @@ public class FileCleaningTracker {
             throw new IllegalStateException("No new trackers can be added once exitWhenFinished() is called");
         }
         if (reaper == null) {
-            reaper = new Reaper();
+            reaper = new Thread(new Reaper(), "commons-io-FileCleaningTracker-Reaper");
+            reaper.setPriority(Thread.MAX_PRIORITY);
+            reaper.setDaemon(true);
             reaper.start();
         }
         trackers.add(new Tracker(path, deleteStrategy, marker, refQueue));
