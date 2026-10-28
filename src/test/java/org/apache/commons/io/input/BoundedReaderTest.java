@@ -19,6 +19,7 @@
 package org.apache.commons.io.input;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTimeout;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -29,6 +30,10 @@ import java.io.IOException;
 import java.io.LineNumberReader;
 import java.io.Reader;
 import java.io.StringReader;
+import java.io.StringWriter;
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
+import java.nio.ReadOnlyBufferException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.time.Duration;
@@ -36,6 +41,7 @@ import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.file.TempFile;
 import org.junit.jupiter.api.Test;
 
@@ -186,6 +192,70 @@ class BoundedReaderTest {
                 br.readLine();
             }
         });
+    }
+
+    @Test
+    void testReadArrayRespectsBound() throws IOException {
+        try (StringReader source = new StringReader("01234567890"); BoundedReader reader = new BoundedReader(source, 3)) {
+            final char[] buffer = new char[8];
+            assertEquals(3, reader.read(buffer));
+            assertEquals("012", new String(buffer, 0, 3));
+            assertEquals(-1, reader.read(buffer));
+            assertEquals(0, reader.read(new char[0]));
+            assertEquals('3', source.read());
+        }
+    }
+
+    @Test
+    void testReadArrayUpdatesCount() throws IOException {
+        try (BoundedReader reader = new BoundedReader(new StringReader("01234567890"), 3)) {
+            assertEquals(2, reader.read(new char[2]));
+            assertEquals('2', reader.read());
+            assertEquals(-1, reader.read());
+        }
+    }
+
+    @Test
+    void testReadCharBufferRespectsBound() throws IOException {
+        for (final CharBuffer buffer : new CharBuffer[] {CharBuffer.allocate(8), ByteBuffer.allocateDirect(16).asCharBuffer()}) {
+            try (StringReader source = new StringReader("01234567890"); BoundedReader reader = new BoundedReader(source, 3)) {
+                buffer.position(1);
+                assertEquals(3, reader.read(buffer));
+                assertEquals(4, buffer.position());
+                assertEquals('0', buffer.get(1));
+                assertEquals('1', buffer.get(2));
+                assertEquals('2', buffer.get(3));
+                assertEquals(-1, reader.read(buffer));
+                assertEquals(0, reader.read(CharBuffer.allocate(0)));
+                assertEquals('3', source.read());
+            }
+        }
+    }
+
+    @Test
+    void testReadCharBufferUpdatesCount() throws IOException {
+        try (BoundedReader reader = new BoundedReader(new StringReader("01234567890"), 3)) {
+            assertEquals(2, reader.read(CharBuffer.allocate(2)));
+            assertEquals('2', reader.read());
+            assertEquals(-1, reader.read());
+        }
+    }
+
+    @Test
+    void testReadOnlyCharBufferDoesNotConsumeInput() throws IOException {
+        try (BoundedReader reader = new BoundedReader(new StringReader("012"), 3)) {
+            assertThrows(ReadOnlyBufferException.class, () -> reader.read(CharBuffer.allocate(3).asReadOnlyBuffer()));
+            assertEquals('0', reader.read());
+        }
+    }
+
+    @Test
+    void testCopyRespectsBound() throws IOException {
+        try (BoundedReader reader = new BoundedReader(new StringReader("01234567890"), 3)) {
+            final StringWriter output = new StringWriter();
+            assertEquals(3, IOUtils.copy(reader, output));
+            assertEquals("012", output.toString());
+        }
     }
 
     @Test
