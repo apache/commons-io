@@ -388,6 +388,7 @@ class ByteArraySeekableByteChannelCompressTest {
      * bytes at such a position will cause the entity to grow to accommodate the new bytes; the values of any bytes between the previous end-of-file and the
      * newly-written bytes are unspecified.</q>
      */
+    @Test
     public void writingToAPositionAfterEndGrowsChannel() throws Exception {
         try (SeekableByteChannel c = new ByteArraySeekableByteChannel()) {
             c.position(2);
