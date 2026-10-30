@@ -22,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assumptions.assumeFalse;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -136,5 +137,36 @@ class PathUtilsDeleteFileTest extends AbstractTempDirTest {
         PathUtils.deleteFile(resolved);
         // This will throw if not empty.
         PathUtils.deleteIfExists(tempDirPath);
+    }
+
+    @Test
+    void testDeleteReadOnlyFileRestoresAttributeAfterFailure() throws IOException {
+        assumeTrue(SystemUtils.IS_OS_WINDOWS);
+        final Path file = tempDirPath.resolve("read-only.txt");
+        Files.createFile(file);
+        PathUtils.setReadOnly(file, true);
+        PathUtils.setReadOnly(tempDirPath, true);
+        try {
+            assertThrows(IOException.class, () -> PathUtils.deleteFile(file, StandardDeleteOption.OVERRIDE_READ_ONLY));
+        } finally {
+            PathUtils.setReadOnly(tempDirPath, false);
+        }
+        assertFalse(Files.isWritable(file), "Failed deletion must preserve the read-only attribute");
+    }
+
+    @Test
+    void testDeleteWritableFileRemainsWritableAfterFailure() throws IOException {
+        assumeTrue(SystemUtils.IS_OS_WINDOWS);
+        final Path file = tempDirPath.resolve("writable.txt");
+        Files.createFile(file);
+        assertTrue(Files.isWritable(file), "The regression must start with a writable file");
+        PathUtils.setReadOnly(tempDirPath, true);
+        try {
+            assertThrows(IOException.class, () -> PathUtils.deleteFile(file, StandardDeleteOption.OVERRIDE_READ_ONLY));
+        } finally {
+            PathUtils.setReadOnly(tempDirPath, false);
+        }
+        assertTrue(Files.exists(file));
+        assertTrue(Files.isWritable(file), "A failed deletion must preserve the file's writable state");
     }
 }

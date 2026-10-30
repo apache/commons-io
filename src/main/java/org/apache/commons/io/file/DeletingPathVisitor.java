@@ -24,6 +24,7 @@ import java.nio.file.LinkOption;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.nio.file.attribute.PosixFileAttributes;
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -170,25 +171,77 @@ public class DeletingPathVisitor extends CountingPathVisitor {
     @Override
     public FileVisitResult visitFile(final Path file, final BasicFileAttributes attrs) throws IOException {
         if (accept(file)) {
-            // Include dangling links so their parent permissions can also be overridden.
-            if (Files.exists(file, linkOptions) || Files.isSymbolicLink(file)) {
-                if (overrideReadOnly) {
-                    // An absolute path supplies the parent needed by the POSIX permission override.
-                    PathUtils.setReadOnly(file.toAbsolutePath(), false, PathUtils.noFollowLinkOptionArray());
+            final Path absoluteFile = file.toAbsolutePath();
+            final Path parent = absoluteFile.getParent();
+            final LinkOption[] noFollowLinkOptions = PathUtils.noFollowLinkOptionArray();
+            final PosixFileAttributes parentAttributes = overrideReadOnly ? PathUtils.readPosixFileAttributes(parent, noFollowLinkOptions) : null;
+            boolean fileWasReadOnly = false;
+            Throwable failure = null;
+            try {
+                // Include dangling links so their parent permissions can also be overridden.
+                if (Files.exists(file, linkOptions) || Files.isSymbolicLink(file)) {
+                    if (overrideReadOnly) {
+                        fileWasReadOnly = PathUtils.isReadOnly(absoluteFile, noFollowLinkOptions);
+                        // An absolute path supplies the parent needed by the POSIX permission override.
+                        PathUtils.setReadOnly(absoluteFile, false, noFollowLinkOptions);
+                    }
+                    Files.deleteIfExists(file);
                 }
-                Files.deleteIfExists(file);
-            }
-            // invalid links will survive previous delete, different approach needed:
-            if (Files.isSymbolicLink(file)) {
+                // Invalid links may survive the previous delete, so try a direct deletion.
+                if (Files.isSymbolicLink(file)) {
+                    try {
+                        Files.delete(file);
+                    } catch (final NoSuchFileException ignored) {
+                        // Ignore.
+                    }
+                }
+            } catch (final IOException | RuntimeException | Error e) {
+                failure = e;
+                throw e;
+            } finally {
+                Throwable restorationFailure = null;
                 try {
-                    // deleteIfExists does not work for this case
-                    Files.delete(file);
-                } catch (final NoSuchFileException ignored) {
-                    // ignore
+                    if ((Files.exists(file, noFollowLinkOptions) || Files.isSymbolicLink(file)) && fileWasReadOnly) {
+                        PathUtils.setReadOnly(absoluteFile, true, noFollowLinkOptions);
+                    }
+                } catch (final IOException | RuntimeException | Error e) {
+                    restorationFailure = e;
+                }
+                try {
+                    if (parentAttributes != null) {
+                        Files.setPosixFilePermissions(parent, parentAttributes.permissions());
+                    }
+                } catch (final IOException | RuntimeException | Error e) {
+                    if (restorationFailure == null) {
+                        restorationFailure = e;
+                    } else if (restorationFailure != e) {
+                        restorationFailure.addSuppressed(e);
+                    }
+                }
+                if (restorationFailure != null) {
+                    if (failure == null) {
+                        throwRestorationFailure(restorationFailure);
+                    }
+                    if (failure != restorationFailure) {
+                        failure.addSuppressed(restorationFailure);
+                    }
                 }
             }
         }
         updateFileCounters(file, attrs);
         return FileVisitResult.CONTINUE;
+    }
+
+    private static void throwRestorationFailure(final Throwable failure) throws IOException {
+        if (failure instanceof IOException) {
+            throw (IOException) failure;
+        }
+        if (failure instanceof RuntimeException) {
+            throw (RuntimeException) failure;
+        }
+        if (failure instanceof Error) {
+            throw (Error) failure;
+        }
+        throw new IOException(failure);
     }
 }

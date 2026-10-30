@@ -736,9 +736,11 @@ public final class PathUtils {
         }
         final Path parent = getParent(file);
         PosixFileAttributes posixFileAttributes = null;
+        boolean fileWasReadOnly = false;
         try {
             if (overrideReadOnly(deleteOptions)) {
                 posixFileAttributes = readPosixFileAttributes(parent, linkOptions);
+                fileWasReadOnly = isReadOnly(file, linkOptions);
                 setReadOnly(file, false, linkOptions);
             }
             // Read size _after_ having read/execute access on POSIX.
@@ -749,6 +751,9 @@ public final class PathUtils {
                 pathCounts.getByteCounter().add(size);
             }
         } finally {
+            if (fileWasReadOnly && exists(file, linkOptions)) {
+                setReadOnly(file, true, linkOptions);
+            }
             if (posixFileAttributes != null) {
                 Files.setPosixFilePermissions(parent, posixFileAttributes.permissions());
             }
@@ -1611,6 +1616,15 @@ public final class PathUtils {
      */
     public static PosixFileAttributes readPosixFileAttributes(final Path path, final LinkOption... options) {
         return readAttributes(path, PosixFileAttributes.class, options);
+    }
+
+    static boolean isReadOnly(final Path path, final LinkOption... options) {
+        final DosFileAttributes dosFileAttributes = readDosFileAttributes(path, options);
+        if (dosFileAttributes != null) {
+            return dosFileAttributes.isReadOnly();
+        }
+        final PosixFileAttributes posixFileAttributes = readPosixFileAttributes(path, options);
+        return posixFileAttributes != null && !posixFileAttributes.permissions().contains(PosixFilePermission.OWNER_WRITE);
     }
 
     /**
