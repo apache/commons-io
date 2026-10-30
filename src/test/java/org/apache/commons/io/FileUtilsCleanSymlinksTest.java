@@ -264,4 +264,29 @@ class FileUtilsCleanSymlinksTest {
         assertEquals(0, randomDirectory.list().length);
     }
 
+
+    @Test
+    void testDeleteQuietlySymlinkDirDoesNotCleanTarget() throws Exception {
+        if (SystemProperties.getOsName().startsWith("Win")) {
+            // Can't use "ln" for symlinks on the command line in Windows.
+            return;
+        }
+
+        final File targetDir = new File(top, "targetDir");
+        assertTrue(targetDir.mkdirs());
+
+        final File targetFile = new File(targetDir, "targetFile.txt");
+        FileUtils.touch(targetFile);
+        assertEquals(1, targetDir.list().length);
+
+        final File symlinkDir = new File(top, "symlinkDir");
+        assertTrue(setupSymlink(targetDir, symlinkDir));
+
+        assertTrue(FileUtils.deleteQuietly(symlinkDir));
+        assertFalse(symlinkDir.exists());
+        assertTrue(targetDir.exists());
+        assertEquals(1, targetDir.list().length);
+        assertTrue(targetFile.exists());
+    }
+
 }
