@@ -120,6 +120,7 @@ class WriterStreamOriginTest extends AbstractOriginTest<Writer, WriterOrigin> {
     }
 
     @Override
+    @Test
     void testGetReadableByteChannel() throws IOException {
         // Cannot convert a Writer to a ReadableByteChannel.
         assertThrows(UnsupportedOperationException.class, super::testGetReadableByteChannel);

@@ -38,6 +38,22 @@ import org.junit.jupiter.api.Test;
 class WildcardFileFilterTest extends AbstractFilterTest {
 
     @Test
+    void testAcceptFileOverrideDelegatingToSuperPath() {
+        // The deprecated constructor is needed to reproduce an existing subclass; the builder cannot create this subclass.
+        final WildcardFileFilter filter = new WildcardFileFilter("*.txt") {
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public boolean accept(final File file) {
+                return super.accept(file.toPath(), null) == FileVisitResult.CONTINUE;
+            }
+        };
+        // Calling the File override from the superclass Path method would cause a StackOverflowError (IO-754, PR #893).
+        assertTrue(filter.accept(new File("log.txt")));
+        assertFalse(filter.accept(new File("log.xml")));
+    }
+
+    @Test
     void testRepeatedWildcards() {
         final String name = StringUtils.repeat("ab", 60) + "ac";
         final WildcardFileFilter filter = WildcardFileFilter.builder().setWildcards(StringUtils.repeat("*ab", 30) + "*ac*ad").get();
@@ -47,6 +63,15 @@ class WildcardFileFilterTest extends AbstractFilterTest {
             assertEquals(FileVisitResult.TERMINATE, filter.accept(new File(name).toPath(), null));
             assertTrue(filter.accept(new File(name + "ad")));
         });
+    }
+
+    @Test
+    void testStarQuestion() throws IOException {
+        final IOFileFilter filter = WildcardFileFilter.builder().setWildcards("log*?.txt").get();
+        assertFiltering(filter, new File("dir/logs.txt"), true);
+        assertFiltering(filter, new File("dir/logbook.txt"), true);
+        assertFiltering(filter, new File("dir/log.txt"), false);
+        assertFiltering(filter, new File("dir/logbook.TXT"), false);
     }
 
     @Test

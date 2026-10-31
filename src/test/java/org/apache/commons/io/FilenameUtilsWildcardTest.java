@@ -24,6 +24,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 import org.apache.commons.lang3.StringUtils;
@@ -36,8 +38,36 @@ class FilenameUtilsWildcardTest {
 
     private static final boolean WINDOWS = File.separatorChar == '\\';
 
-    // Testing:
-    //   FilenameUtils.wildcardMatch(String,String)
+    private static List<String> generateStrings(final String alphabet, final int maxLength) {
+        final List<String> strings = new ArrayList<>();
+        strings.add("");
+        for (int i = 0; i < strings.size(); i++) {
+            final String prefix = strings.get(i);
+            if (prefix.length() < maxLength) {
+                for (int j = 0; j < alphabet.length(); j++) {
+                    strings.add(prefix + alphabet.charAt(j));
+                }
+            }
+        }
+        return strings;
+    }
+
+    // Independent dynamic programming reference, without the production matcher's tokenization or backtracking.
+    private static boolean referenceMatch(final String text, final String pattern, final IOCase ioCase) {
+        final boolean[][] matches = new boolean[text.length() + 1][pattern.length() + 1];
+        matches[0][0] = true;
+        for (int i = 0; i <= text.length(); i++) {
+            for (int j = 1; j <= pattern.length(); j++) {
+                final char token = pattern.charAt(j - 1);
+                if (token == '*') {
+                    matches[i][j] = matches[i][j - 1] || i > 0 && matches[i - 1][j];
+                } else if (i > 0 && (token == '?' || ioCase.checkRegionMatches(text, i - 1, String.valueOf(token)))) {
+                    matches[i][j] = matches[i - 1][j - 1];
+                }
+            }
+        }
+        return matches[text.length()][pattern.length()];
+    }
 
     private void assertMatch(final String text, final String wildcard, final boolean expected) {
         assertEquals(expected, FilenameUtils.wildcardMatch(text, wildcard), text + " " + wildcard);
@@ -51,9 +81,8 @@ class FilenameUtilsWildcardTest {
 
         // Tests for "*?"
         assertMatch("aaa", "aa*?", true);
-        // these ought to work as well, but "*?" does not work properly at present
-//      assertMatch("aaa", "a*?", true);
-//      assertMatch("aaa", "*?", true);
+        assertMatch("aaa", "a*?", true);
+        assertMatch("aaa", "*?", true);
 
         // Tests for "?*"
         assertMatch("",    "?*",   false);
@@ -248,6 +277,30 @@ class FilenameUtilsWildcardTest {
     }
 
     @Test
+    void testMatchOnSystem() {
+        assertFalse(FilenameUtils.wildcardMatchOnSystem(null, "Foo"));
+        assertFalse(FilenameUtils.wildcardMatchOnSystem("Foo", null));
+        assertTrue(FilenameUtils.wildcardMatchOnSystem(null, null));
+        assertTrue(FilenameUtils.wildcardMatchOnSystem("Foo", "Foo"));
+        assertTrue(FilenameUtils.wildcardMatchOnSystem("", ""));
+        assertTrue(FilenameUtils.wildcardMatchOnSystem("Foo", "Fo*"));
+        assertTrue(FilenameUtils.wildcardMatchOnSystem("Foo", "Fo?"));
+        assertTrue(FilenameUtils.wildcardMatchOnSystem("Foo Bar and Catflap", "Fo*"));
+        assertTrue(FilenameUtils.wildcardMatchOnSystem("New Bookmarks", "N?w ?o?k??r?s"));
+        assertFalse(FilenameUtils.wildcardMatchOnSystem("Foo", "Bar"));
+        assertTrue(FilenameUtils.wildcardMatchOnSystem("Foo Bar Foo", "F*o Bar*"));
+        assertTrue(FilenameUtils.wildcardMatchOnSystem("Adobe Acrobat Installer", "Ad*er"));
+        assertTrue(FilenameUtils.wildcardMatchOnSystem("Foo", "*Foo"));
+        assertTrue(FilenameUtils.wildcardMatchOnSystem("BarFoo", "*Foo"));
+        assertTrue(FilenameUtils.wildcardMatchOnSystem("Foo", "Foo*"));
+        assertTrue(FilenameUtils.wildcardMatchOnSystem("FooBar", "Foo*"));
+        assertEquals(WINDOWS, FilenameUtils.wildcardMatchOnSystem("FOO", "*Foo"));
+        assertEquals(WINDOWS, FilenameUtils.wildcardMatchOnSystem("BARFOO", "*Foo"));
+        assertEquals(WINDOWS, FilenameUtils.wildcardMatchOnSystem("FOO", "Foo*"));
+        assertEquals(WINDOWS, FilenameUtils.wildcardMatchOnSystem("FOOBAR", "Foo*"));
+    }
+
+    @Test
     void testMatchOverlappingLiterals() {
         assertMatch("ababb", "*ab*ab*b", true);
         assertMatch("abab", "*ab*ab*b", false);
@@ -259,17 +312,35 @@ class FilenameUtilsWildcardTest {
     }
 
     @Test
-    void testMatchStarQuestionCompatibility() {
-        assertMatch("ab", "*?", false);
-        assertMatch("ab", "**?", false);
+    void testMatchStarQuestion() {
+        assertMatch("", "*?", false);
+        assertMatch("a", "*?", true);
+        assertMatch("a", "*??", false);
+        assertMatch("ab", "*??", true);
+        assertMatch("a.b", "*?", true);
+        assertMatch("a/b", "*?", true);
+        assertMatch("ab", "*?", true);
+        assertMatch("ab", "**?", true);
         assertMatch("ab", "a*?", true);
         assertMatch("abc", "a*?c", true);
-        assertMatch("abxc", "a*?c", false);
+        assertMatch("abxc", "a*?c", true);
         assertMatch("abc", "*?*", true);
         assertMatch("", "*?*", false);
         assertMatch("aab", "*a*?", true);
         assertMatch("ab", "*?*?", true);
-        assertMatch("abc", "*?*?", false);
+        assertMatch("abc", "*?*?", true);
+    }
+
+    @Test
+    void testMatchStarQuestionBacktracking() {
+        final String text = StringUtils.repeat('a', 4096);
+        final String pattern = StringUtils.repeat("*?", 64);
+        assertTimeoutPreemptively(Duration.ofSeconds(10), () -> {
+            assertTrue(FilenameUtils.wildcardMatch(text, pattern));
+            assertFalse(FilenameUtils.wildcardMatch(text, pattern + "b"));
+            assertFalse(FilenameUtils.wildcardMatch(text, pattern + "B", IOCase.INSENSITIVE));
+            assertFalse(FilenameUtils.wildcardMatchOnSystem(text, pattern + "b"));
+        });
     }
 
     @Test
@@ -295,27 +366,23 @@ class FilenameUtilsWildcardTest {
     }
 
     @Test
-    void testMatchOnSystem() {
-        assertFalse(FilenameUtils.wildcardMatchOnSystem(null, "Foo"));
-        assertFalse(FilenameUtils.wildcardMatchOnSystem("Foo", null));
-        assertTrue(FilenameUtils.wildcardMatchOnSystem(null, null));
-        assertTrue(FilenameUtils.wildcardMatchOnSystem("Foo", "Foo"));
-        assertTrue(FilenameUtils.wildcardMatchOnSystem("", ""));
-        assertTrue(FilenameUtils.wildcardMatchOnSystem("Foo", "Fo*"));
-        assertTrue(FilenameUtils.wildcardMatchOnSystem("Foo", "Fo?"));
-        assertTrue(FilenameUtils.wildcardMatchOnSystem("Foo Bar and Catflap", "Fo*"));
-        assertTrue(FilenameUtils.wildcardMatchOnSystem("New Bookmarks", "N?w ?o?k??r?s"));
-        assertFalse(FilenameUtils.wildcardMatchOnSystem("Foo", "Bar"));
-        assertTrue(FilenameUtils.wildcardMatchOnSystem("Foo Bar Foo", "F*o Bar*"));
-        assertTrue(FilenameUtils.wildcardMatchOnSystem("Adobe Acrobat Installer", "Ad*er"));
-        assertTrue(FilenameUtils.wildcardMatchOnSystem("Foo", "*Foo"));
-        assertTrue(FilenameUtils.wildcardMatchOnSystem("BarFoo", "*Foo"));
-        assertTrue(FilenameUtils.wildcardMatchOnSystem("Foo", "Foo*"));
-        assertTrue(FilenameUtils.wildcardMatchOnSystem("FooBar", "Foo*"));
-        assertEquals(WINDOWS, FilenameUtils.wildcardMatchOnSystem("FOO", "*Foo"));
-        assertEquals(WINDOWS, FilenameUtils.wildcardMatchOnSystem("BARFOO", "*Foo"));
-        assertEquals(WINDOWS, FilenameUtils.wildcardMatchOnSystem("FOO", "Foo*"));
-        assertEquals(WINDOWS, FilenameUtils.wildcardMatchOnSystem("FOOBAR", "Foo*"));
+    void testMatchWithReference() {
+        final List<String> texts = generateStrings("aAb.", 3);
+        final List<String> patterns = generateStrings("aAb.*?", 4);
+        for (final String text : texts) {
+            for (final String pattern : patterns) {
+                for (final IOCase ioCase : IOCase.values()) {
+                    final boolean expected = referenceMatch(text, pattern, ioCase);
+                    assertEquals(expected, FilenameUtils.wildcardMatch(text, pattern, ioCase),
+                            () -> "text=" + text + ", pattern=" + pattern + ", case=" + ioCase);
+                }
+                final boolean expected = referenceMatch(text, pattern, IOCase.SENSITIVE);
+                assertEquals(expected, FilenameUtils.wildcardMatch(text, pattern), () -> "text=" + text + ", pattern=" + pattern);
+                assertEquals(expected, FilenameUtils.wildcardMatch(text, pattern, null), () -> "text=" + text + ", pattern=" + pattern);
+                assertEquals(referenceMatch(text, pattern, IOCase.SYSTEM), FilenameUtils.wildcardMatchOnSystem(text, pattern),
+                        () -> "text=" + text + ", pattern=" + pattern);
+            }
+        }
     }
 
     @Test

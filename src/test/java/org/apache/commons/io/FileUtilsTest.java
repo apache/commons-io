@@ -3067,6 +3067,38 @@ class FileUtilsTest extends AbstractTempDirTest {
         assertEquals("both are 100 % true", file.toString());
     }
 
+    @ParameterizedTest
+    @ValueSource(ints = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 127 })
+    void testToFileControlCharacters(final int codePoint) throws Exception {
+        final File expected = new File("a" + (char) codePoint + "b");
+        final URL literal = new URL("file", null, "a" + (char) codePoint + "b");
+        final URL encoded = new URL("file", null, "a%" + String.format("%02X", codePoint) + "b");
+        assertEquals(expected, FileUtils.toFile(literal));
+        assertEquals(expected, FileUtils.toFile(encoded));
+        assertArrayEquals(new File[] { expected, expected }, FileUtils.toFiles(literal, encoded));
+    }
+
+    @Test
+    void testToFileEncodedPercent() throws Exception {
+        final URL url = new URL("file", null, "a%2500b");
+        final File expected = new File("a%00b");
+        assertEquals(expected, FileUtils.toFile(url));
+        assertArrayEquals(new File[] { expected }, FileUtils.toFiles(url));
+    }
+
+    @Test
+    void testToFileNonFileProtocolNul() throws Exception {
+        assertNull(FileUtils.toFile(new URL("http", "example.com", "/file%00.txt")));
+        assertNull(FileUtils.toFile(new URL("http", "example.com", "/file\0.txt")));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = { "\0", "\0file", "file\0", "a\0b", "%00", "%00file", "file%00", "a%00b", "%41%00%42", "%%00", "%00%", "%+0", "%-0" })
+    void testToFileNul(final String path) throws Exception {
+        final URL url = new URL("file", null, path);
+        assertThrows(IllegalArgumentException.class, () -> FileUtils.toFile(url));
+    }
+
     @Test
     void testToFiles1() throws Exception {
         final URL[] urls = {
@@ -3116,6 +3148,20 @@ class FileUtilsTest extends AbstractTempDirTest {
                 new URL("http", "jakarta.apache.org", "file1.txt"),
         };
         assertThrows(IllegalArgumentException.class, () -> FileUtils.toFiles(urls));
+    }
+
+    @Test
+    void testToFilesLenient() throws Exception {
+        final URL url = new URL("file", null, "a/b/c/file%%20%me.txt%");
+        assertArrayEquals(new File[] {new File("a/b/c/file% %me.txt%")}, FileUtils.toFiles(url));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"\0", "\0file", "file\0", "a\0b", "%00", "%00file", "file%00", "a%00b", "%41%00%42", "%%00", "%00%", "%+0", "%-0"})
+    void testToFilesNul(final String path) throws Exception {
+        final URL valid = new URL("file", null, "valid.txt");
+        final URL invalid = new URL("file", null, path);
+        assertThrows(IllegalArgumentException.class, () -> FileUtils.toFiles(valid, null, invalid));
     }
 
     @Test

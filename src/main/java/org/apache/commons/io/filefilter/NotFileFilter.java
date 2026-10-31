@@ -47,8 +47,7 @@ public class NotFileFilter extends AbstractFileFilter implements Serializable {
      * @throws NullPointerException if the filter is null.
      */
     public NotFileFilter(final IOFileFilter filter) {
-        Objects.requireNonNull(filter, "filter");
-        this.filter = filter;
+        this.filter = Objects.requireNonNull(filter, "filter");
     }
 
     /**
@@ -85,6 +84,16 @@ public class NotFileFilter extends AbstractFileFilter implements Serializable {
     @Override
     public FileVisitResult accept(final Path file, final BasicFileAttributes attributes) {
         return not(filter.accept(file, attributes));
+    }
+
+    /**
+     * Gets the filter being negated.
+     *
+     * @return The wrapped filter.
+     * @since 2.23.0
+     */
+    public IOFileFilter getFileFilter() {
+        return filter;
     }
 
     private FileVisitResult not(final FileVisitResult accept) {

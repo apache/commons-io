@@ -431,7 +431,12 @@ public class FileAlterationObserver implements Serializable {
     }
 
     /**
-     * Checks whether the file and its children have been created, modified or deleted.
+     * Checks for created, modified or deleted files and directories below the root directory.
+     *
+     * <p>
+     * Notifies listeners of changes to descendants of the root directory. No create, change or delete notifications are generated for the root directory
+     * itself.
+     * </p>
      */
     public void checkAndNotify() {
         // fire onStart()
@@ -440,10 +445,9 @@ public class FileAlterationObserver implements Serializable {
         final File rootFile = rootEntry.getFile();
         if (rootFile.exists()) {
             checkAndFire(rootEntry, rootEntry.getChildren(), listFiles(rootFile, rootEntry));
-        } else if (rootEntry.isExists()) {
+        } else {
             checkAndFire(rootEntry, rootEntry.getChildren(), FileUtils.EMPTY_FILE_ARRAY);
         }
-        // Else: Didn't exist and still doesn't fire onStop()
         forEachListener(FileAlterationListener::onStop);
     }
 

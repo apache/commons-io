@@ -27,6 +27,8 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 import org.apache.commons.io.build.AbstractStreamBuilder;
@@ -202,6 +204,11 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
          * The reject list takes precedence over the accept list.
          * </p>
          *
+         * <p>
+         * Classes are matched by their exact names. Array classes must be accepted separately from their element classes.
+         * For example, accepting {@code Foo.class} does not accept {@code Foo[].class}.
+         * </p>
+         *
          * @param classes Classes to accept.
          * @return this object.
          * @since 2.18.0
@@ -232,6 +239,11 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
          * The reject list takes precedence over the accept list.
          * </p>
          *
+         * <p>
+         * The pattern must match the entire class name, as defined by {@link java.util.regex.Matcher#matches()}.
+         * For example, {@code foo\.Bar} matches {@code foo.Bar}, but not {@code foo.BarExtra}. Use {@code .*foo\.Bar.*} to match a substring.
+         * </p>
+         *
          * @param pattern A Pattern for compiled regular expression.
          * @return {@code this} instance.
          * @since 2.18.0
@@ -245,6 +257,16 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
          * Accepts the wildcard specified classes for deserialization, unless they are otherwise rejected.
          * <p>
          * The reject list takes precedence over the accept list.
+         * </p>
+         *
+         * <p>
+         * Matching is case-sensitive. The wildcard {@code *} matches zero or more characters and {@code ?} matches one character, including {@code '.'} in both
+         * cases. Unlike <a href="https://openjdk.org/jeps/290">JEP 290</a> serialization filter patterns, these patterns do not treat package boundaries
+         * specially: {@code com.example.*} matches classes in {@code com.example} and all its subpackages, and {@code **} is equivalent to {@code *}.
+         * </p>
+         *
+         * <p>
+         * Use {@link #accept(Pattern)} with a regular expression to match only classes directly in a package.
          * </p>
          *
          * @param patterns Wildcard file name patterns as defined by {@link org.apache.commons.io.FilenameUtils#wildcardMatch(String, String)
@@ -302,6 +324,12 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
          * The reject list takes precedence over the accept list.
          * </p>
          *
+         * <p>
+         * Classes are matched by their exact names. Rejecting {@code Foo.class} does not reject {@code Foo[].class}, so an otherwise accepted
+         * empty or null-only array can still be deserialized. Element class descriptors encountered while reading array contents are checked separately.
+         * To reject the array class itself, also reject {@code Foo[].class}.
+         * </p>
+         *
          * @param classes Classes to reject.
          * @return {@code this} instance.
          * @since 2.18.0
@@ -332,6 +360,11 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
          * The reject list takes precedence over the accept list.
          * </p>
          *
+         * <p>
+         * The pattern must match the entire class name, as defined by {@link java.util.regex.Matcher#matches()}.
+         * For example, {@code foo\.Bar} matches {@code foo.Bar}, but not {@code foo.BarExtra}. Use {@code .*foo\.Bar.*} to match a substring.
+         * </p>
+         *
          * @param pattern standard Java regexp.
          * @return {@code this} instance.
          * @since 2.18.0
@@ -346,6 +379,13 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
          * <p>
          * The reject list takes precedence over the accept list.
          * </p>
+         *
+         * <p>Matching is case-sensitive. The wildcard {@code *} matches zero or more characters and {@code ?} matches one character, including
+         * {@code '.'} in both cases. Unlike <a href="https://openjdk.org/jeps/290">JEP 290</a> serialization filter patterns, these patterns do not
+         * treat package boundaries specially: {@code com.example.*} matches classes in {@code com.example} and all its subpackages, and
+         * {@code **} is equivalent to {@code *}.</p>
+         *
+         * <p>Use {@link #reject(Pattern)} with a regular expression to match only classes directly in a package.</p>
          *
          * @param patterns Wildcard file name patterns as defined by {@link org.apache.commons.io.FilenameUtils#wildcardMatch(String, String)
          *                 FilenameUtils.wildcardMatch}
@@ -425,7 +465,7 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
         }
 
         /**
-         * If true, checks that all interfaces and annotations for a given type are not rejected and accepted.
+         * Sets whether to validate interfaces and runtime-visible annotations recursively.
          * <p>
          * For compatibility with previous versions, this is false by default.
          * </p>
@@ -435,7 +475,7 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
          * <ol>
          * <li>The type name.</li>
          * <li>The interfaces implemented by the class, recursively.</li>
-         * <li>The annotation on this type, recursively.</li>
+         * <li>The runtime-visible annotations on this type, recursively.</li>
          * </ol>
          * <p>
          * The reject list takes precedence over the accept list.
@@ -600,6 +640,11 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
      * The reject list takes precedence over the accept list.
      * </p>
      *
+     * <p>
+     * Classes are matched by their exact names. Array classes must be accepted separately from their element classes.
+     * For example, accepting {@code Foo.class} does not accept {@code Foo[].class}.
+     * </p>
+     *
      * @param classes Classes to accept.
      * @return {@code this} instance.
      */
@@ -628,6 +673,11 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
      * The reject list takes precedence over the accept list.
      * </p>
      *
+     * <p>
+     * The pattern must match the entire class name, as defined by {@link java.util.regex.Matcher#matches()}.
+     * For example, {@code foo\.Bar} matches {@code foo.Bar}, but not {@code foo.BarExtra}. Use {@code .*foo\.Bar.*} to match a substring.
+     * </p>
+     *
      * @param pattern A Pattern for compiled regular expression.
      * @return {@code this} instance.
      */
@@ -642,6 +692,16 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
      * The reject list takes precedence over the accept list.
      * </p>
      *
+     * <p>
+     * Matching is case-sensitive. The wildcard {@code *} matches zero or more characters and {@code ?} matches one character, including {@code '.'} in both
+     * cases. Unlike <a href="https://openjdk.org/jeps/290">JEP 290</a> serialization filter patterns, these patterns do not treat package boundaries specially:
+     * {@code com.example.*} matches classes in {@code com.example} and all its subpackages, and {@code **} is equivalent to {@code *}.
+     * </p>
+     *
+     * <p>
+     * Use {@link #accept(Pattern)} with a regular expression to match only classes directly in a package.
+     * </p>
+     *
      * @param patterns Wildcard file name patterns as defined by {@link org.apache.commons.io.FilenameUtils#wildcardMatch(String, String)
      *                 FilenameUtils.wildcardMatch}.
      * @return {@code this} instance.
@@ -654,23 +714,34 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
     /**
      * Checks that the given type can be legally resolved as configured.
      * <p>
-     * Checks:
-     * <ol>
-     * <li>The type name.</li>
-     * <li>The interfaces implemented by the class, recursively.</li>
-     * <li>The annotation on this type, recursively.</li>
-     * </ol>
+     * Checks the type name, its interfaces, and its runtime-visible annotations recursively. Each type is visited once per traversal to avoid
+     * annotation cycles.
+     * </p>
      *
-     * @param result
-     * @throws InvalidClassException
+     * @param result The type to check.
+     * @throws InvalidClassException Thrown when a rejected or non-accepted type is found.
      */
     private void check(final Class<?> result) throws InvalidClassException {
+        check(result, new HashSet<>());
+    }
+
+    /**
+     * Checks a type and recursively checks its interfaces and runtime-visible annotations.
+     *
+     * @param result The type to check.
+     * @param visited The types already visited in this traversal.
+     * @throws InvalidClassException Thrown when a rejected or non-accepted type is found.
+     */
+    private void check(final Class<?> result, final Set<Class<?>> visited) throws InvalidClassException {
+        if (!visited.add(result)) {
+            return;
+        }
         checkTypeName(result.getName());
         for (final Class<?> iface : result.getInterfaces()) {
-            check(iface);
+            check(iface, visited);
         }
         for (final Annotation annotation : result.getAnnotations()) {
-            check(annotation.annotationType());
+            check(annotation.annotationType(), visited);
         }
     }
 
@@ -721,6 +792,12 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
      * The reject list takes precedence over the accept list.
      * </p>
      *
+     * <p>
+     * Classes are matched by their exact names. Rejecting {@code Foo.class} does not reject {@code Foo[].class}, so an otherwise accepted
+     * empty or null-only array can still be deserialized. Element class descriptors encountered while reading array contents are checked separately.
+     * To reject the array class itself, also reject {@code Foo[].class}.
+     * </p>
+     *
      * @param classes Classes to reject.
      * @return {@code this} instance.
      */
@@ -749,6 +826,11 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
      * The reject list takes precedence over the accept list.
      * </p>
      *
+     * <p>
+     * The pattern must match the entire class name, as defined by {@link java.util.regex.Matcher#matches()}.
+     * For example, {@code foo\.Bar} matches {@code foo.Bar}, but not {@code foo.BarExtra}. Use {@code .*foo\.Bar.*} to match a substring.
+     * </p>
+     *
      * @param pattern A Pattern for compiled regular expression.
      * @return {@code this} instance.
      */
@@ -761,6 +843,16 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
      * Rejects the wildcard specified classes for deserialization, even if they are otherwise accepted.
      * <p>
      * The reject list takes precedence over the accept list.
+     * </p>
+     *
+     * <p>
+     * Matching is case-sensitive. The wildcard {@code *} matches zero or more characters and {@code ?} matches one character, including {@code '.'} in both
+     * cases. Unlike <a href="https://openjdk.org/jeps/290">JEP 290</a> serialization filter patterns, these patterns do not treat package boundaries specially:
+     * {@code com.example.*} matches classes in {@code com.example} and all its subpackages, and {@code **} is equivalent to {@code *}.
+     * </p>
+     *
+     * <p>
+     * Use {@link #reject(Pattern)} with a regular expression to match only classes directly in a package.
      * </p>
      *
      * @param patterns An array of wildcard file name patterns as defined by {@link org.apache.commons.io.FilenameUtils#wildcardMatch(String, String)
@@ -795,12 +887,26 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
      * <p>
      * The reject list takes precedence over the accept list.
      * </p>
+     * <p>
+     * In strict mode, each interface of the resolved proxy class is checked recursively, including its super-interfaces and runtime-visible annotations,
+     * as described by {@link Builder#setStrict(boolean)}. The generated proxy class name is not checked. Without strict mode, only the interface names
+     * supplied by the stream are checked.
+     * </p>
      */
     @Override
     protected Class<?> resolveProxyClass(final String[] interfaces) throws IOException, ClassNotFoundException {
         for (final String interfaceName : interfaces) {
             checkTypeName(interfaceName);
         }
-        return super.resolveProxyClass(interfaces);
+        final Class<?> result = super.resolveProxyClass(interfaces);
+        if (strict) {
+            // The proxy class itself has a synthetic name; validate its interfaces recursively,
+            // exactly like resolveClass() validates a resolved class in strict mode.
+            final Set<Class<?>> visited = new HashSet<>();
+            for (final Class<?> iface : result.getInterfaces()) {
+                check(iface, visited);
+            }
+        }
+        return result;
     }
 }

@@ -50,4 +50,13 @@ class WildcardClassNameMatcherTest {
         assertFalse(ca.matches("org..apache_something.more"));
     }
 
+    @Test
+    void testStarThenQuestionMark() {
+        final ClassNameMatcher matcher = new WildcardClassNameMatcher("org.*?Class");
+        assertTrue(matcher.matches("org.TestClass"));
+        assertTrue(matcher.matches("org.example.TestClass"));
+        assertFalse(matcher.matches("org.Class"));
+        assertFalse(matcher.matches("com.example.TestClass"));
+    }
+
 }

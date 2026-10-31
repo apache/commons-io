@@ -84,7 +84,8 @@ public class CircularByteBuffer {
      * @param length length to copy.
      * @throws IllegalStateException    The buffer doesn't have sufficient space. Use
      *                                  {@link #getSpace()} to prevent this exception.
-     * @throws IllegalArgumentException Either of {@code offset}, or {@code length} is negative.
+     * @throws IllegalArgumentException The offset is outside the byte array, the length is negative, or
+     *                                  {@code offset + length} exceeds {@code targetBuffer.length}.
      * @throws NullPointerException     The byte array {@code targetBuffer} is null.
      */
     public void add(final byte[] targetBuffer, final int offset, final int length) {
@@ -94,6 +95,11 @@ public class CircularByteBuffer {
         }
         if (length < 0) {
             throw new IllegalArgumentException("Illegal length: " + length);
+        }
+        if (length > targetBuffer.length - offset) {
+            throw new IllegalArgumentException("The supplied byte array contains only "
+                    + targetBuffer.length + " bytes, but offset " + offset + " and length " + length
+                    + " would require " + (offset + (long) length));
         }
         if (currentNumberOfBytes + length > buffer.length) {
             throw new IllegalStateException("No space available");
@@ -173,13 +179,18 @@ public class CircularByteBuffer {
      * removed from the buffer. If the result is true, then the following invocations
      * of {@link #read()} are guaranteed to return exactly those bytes.
      *
+     * <p>
+     * This is an exact-match check against the bytes currently held: it returns false unless the buffer holds
+     * exactly {@code length} bytes ({@link #getCurrentNumberOfBytes()}). It never compares against positions
+     * past the valid bytes, so it cannot report a match for bytes that are not in the buffer. If the offset and length are otherwise valid
+     * but {@code offset + length} exceeds {@code sourceBuffer.length}, this method returns false.
+     * </p>
+     *
      * @param sourceBuffer The buffer to compare against.
      * @param offset start offset.
      * @param length length to compare.
-     * @return True, if the next invocations of {@link #read()} will return the
-     * bytes at offsets {@code sourceBuffer}+0, {@code offset}+1, ...,
-     * {@code offset}+{@code length}-1 of byte array {@code sourceBuffer}.
-     * @throws IllegalArgumentException Either of {@code sourceBuffer}, or {@code length} is negative.
+     * @return true if the buffer holds exactly {@code length} bytes and they match the requested range in {@code sourceBuffer}.
+     * @throws IllegalArgumentException The offset is outside the source array, or the length is negative or exceeds the buffer capacity.
      * @throws NullPointerException     The byte array {@code sourceBuffer} is null.
      */
     public boolean peek(final byte[] sourceBuffer, final int offset, final int length) {
@@ -190,7 +201,14 @@ public class CircularByteBuffer {
         if (length < 0 || length > buffer.length) {
             throw new IllegalArgumentException("Illegal length: " + length);
         }
-        if (length < currentNumberOfBytes) {
+        // A request that does not describe exactly the bytes currently held can never be a match:
+        // comparing past currentNumberOfBytes would read stale ring cells for bytes that are not
+        // in the buffer, and a shorter request is not an exact match either (see PeekableInputStream).
+        if (length != currentNumberOfBytes) {
+            return false;
+        }
+        // Bytes that do not exist in sourceBuffer cannot match.
+        if (length > sourceBuffer.length - offset) {
             return false;
         }
         int localOffset = startOffset;

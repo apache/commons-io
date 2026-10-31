@@ -44,6 +44,20 @@ import org.apache.commons.io.build.AbstractStreamBuilder;
  * By default, the file will be overwritten, but this may be changed to append. The lock directory may be specified, but defaults to the system property
  * {@code java.io.tmpdir}. The encoding may also be specified, and defaults to the platform default.
  * </p>
+ *
+ * <p>
+ * The lock file name is the target file's name followed by {@code .lck}. Files with the same name share a lock when they use the same lock directory,
+ * even if the target files are in different directories. Writers that need to coordinate access to the same target file must use the same lock directory.
+ * </p>
+ *
+ * <p>
+ * <strong>Security note:</strong> The default temporary directory may be shared with other users. A user who can write to the lock directory can
+ * pre-create a lock file and prevent this class from opening the corresponding target files until the lock file is removed. This class does not remove
+ * an existing lock file when lock acquisition fails. Configure a lock directory that untrusted users cannot write to using
+ * {@link Builder#setLockDirectory(File)} or {@link Builder#setLockDirectory(String)}. The target file's parent directory is suitable only if untrusted
+ * users cannot write to it.
+ * </p>
+ *
  * <p>
  * To build an instance, use {@link Builder}.
  * </p>
