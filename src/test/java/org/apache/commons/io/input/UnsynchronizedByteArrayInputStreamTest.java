@@ -361,4 +361,22 @@ class UnsynchronizedByteArrayInputStreamTest {
         assertEquals(0, is.available());
         assertEquals(END_OF_STREAM, is.read());
     }
+
+    @Test
+    void testSkipPastEndOfStream() {
+        // Skipping past the end of stream must not advance the position beyond the end of data.
+        UnsynchronizedByteArrayInputStream is = newStream(new byte[] { (byte) 0xa, (byte) 0xb, (byte) 0xc });
+        assertEquals(3, is.skip(999));
+        assertEquals(0, is.available());
+        assertEquals(END_OF_STREAM, is.read());
+        // Skipping at the end of stream must return 0, never a negative count (InputStream#skip contract).
+        assertEquals(0, is.skip(1));
+        assertEquals(0, is.skip(Long.MAX_VALUE));
+
+        // A very large skip count must not overflow.
+        is = newStream(new byte[] { (byte) 0xa, (byte) 0xb, (byte) 0xc });
+        assertEquals(3, is.skip(Long.MAX_VALUE));
+        assertEquals(END_OF_STREAM, is.read());
+        assertEquals(0, is.skip(1));
+    }
 }

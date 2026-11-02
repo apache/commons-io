@@ -318,12 +318,11 @@ public class UnsynchronizedByteArrayInputStream extends InputStream {
             throw new IllegalArgumentException("Skipping backward is not supported");
         }
 
-        long actualSkip = eod - offset;
-        if (n < actualSkip) {
-            actualSkip = n;
+        final long actualSkip = Math.min(n, Math.max(0L, (long) eod - offset));
+        if (actualSkip > 0) {
+            offset = Math.addExact(offset, Math.toIntExact(actualSkip));
         }
 
-        offset = Math.addExact(offset, Math.toIntExact(n));
         return actualSkip;
     }
 }
