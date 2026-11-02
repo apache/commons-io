@@ -212,7 +212,14 @@ class UnsynchronizedByteArrayInputStreamTest {
     void testInvalidSkipNUnder() {
         @SuppressWarnings("resource") // not necessary to close these resources
         final UnsynchronizedByteArrayInputStream is = newStream(new byte[] { (byte) 0xa, (byte) 0xb, (byte) 0xc });
-        assertThrows(IllegalArgumentException.class, () -> is.skip(-1));
+        // skip(long) documents this exception in its Javadoc: a negative count is rejected.
+        assertEquals("Skipping backward is not supported",
+                assertThrows(IllegalArgumentException.class, () -> is.skip(-1)).getMessage());
+        // The rejected skip must not consume anything.
+        assertEquals(3, is.available());
+        assertEquals("Skipping backward is not supported",
+                assertThrows(IllegalArgumentException.class, () -> is.skip(Long.MIN_VALUE)).getMessage());
+        assertEquals(0xa, is.read());
     }
 
     @Test
@@ -373,10 +380,43 @@ class UnsynchronizedByteArrayInputStreamTest {
         assertEquals(0, is.skip(1));
         assertEquals(0, is.skip(Long.MAX_VALUE));
 
-        // A very large skip count must not overflow.
+        // Skipping more than what is left after a read is clamped to the remaining bytes.
+        is = newStream(new byte[] { (byte) 0xa, (byte) 0xb, (byte) 0xc });
+        assertEquals(0xa, is.read());
+        assertEquals(2, is.skip(5));
+        assertEquals(0, is.skip(5));
+        assertEquals(END_OF_STREAM, is.read());
+
+        // skip(0) is a no-op, also at the end of the stream.
+        is = newStream(new byte[] { (byte) 0xa, (byte) 0xb, (byte) 0xc });
+        assertEquals(0, is.skip(0));
+        assertEquals(3, is.available());
+        assertEquals(3, is.skip(3));
+        assertEquals(0, is.skip(0));
+        assertEquals(0, is.skip(1));
+    }
+
+    @Test
+    void testSkipHugeCountDoesNotOverflow() {
+        // A skip count above Integer.MAX_VALUE must not overflow: the count is clamped to the bytes left.
+        UnsynchronizedByteArrayInputStream is = newStream(new byte[] { (byte) 0xa, (byte) 0xb, (byte) 0xc });
+        assertEquals(3, is.skip(Integer.MAX_VALUE + 1L));
+        assertEquals(0, is.available());
+        assertEquals(END_OF_STREAM, is.read());
+        assertEquals(0, is.skip(Long.MAX_VALUE));
+
         is = newStream(new byte[] { (byte) 0xa, (byte) 0xb, (byte) 0xc });
         assertEquals(3, is.skip(Long.MAX_VALUE));
         assertEquals(END_OF_STREAM, is.read());
         assertEquals(0, is.skip(1));
+    }
+
+    @Test
+    void testSkipOnClosedStream() throws IOException {
+        // close() is a no-op for this in-memory stream, like java.io.ByteArrayInputStream, so skipping still works.
+        final UnsynchronizedByteArrayInputStream is = newStream(new byte[] { (byte) 0xa, (byte) 0xb, (byte) 0xc });
+        is.close();
+        assertEquals(3, is.skip(5));
+        assertEquals(END_OF_STREAM, is.read());
     }
 }

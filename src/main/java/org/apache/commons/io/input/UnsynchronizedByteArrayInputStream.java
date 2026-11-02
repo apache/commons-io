@@ -312,16 +312,31 @@ public class UnsynchronizedByteArrayInputStream extends InputStream {
         this.offset = this.markedOffset;
     }
 
+    /**
+     * Skips over and discards {@code n} bytes of data from this input stream.
+     * <p>
+     * Reaching the end of the stream before {@code n} bytes have been skipped is not an error: the actual number of bytes skipped is returned, which may be
+     * {@code 0} and is never negative. The position of this stream never advances past the end of the data.
+     * </p>
+     * <p>
+     * Unlike {@link ByteArrayInputStream#skip(long)}, which skips nothing and returns {@code 0} for a negative count, this method rejects a negative count.
+     * {@link InputStream#skip(long)} allows subclasses to handle the negative case differently.
+     * </p>
+     *
+     * @param n The number of bytes to skip.
+     * @return The actual number of bytes skipped, which is never negative.
+     * @throws IllegalArgumentException if {@code n} is negative.
+     * @see InputStream#skip(long)
+     */
     @Override
     public long skip(final long n) {
         if (n < 0) {
             throw new IllegalArgumentException("Skipping backward is not supported");
         }
 
-        final long actualSkip = Math.min(n, Math.max(0L, (long) eod - offset));
-        if (actualSkip > 0) {
-            offset = Math.addExact(offset, Math.toIntExact(actualSkip));
-        }
+        // Clamp to the remaining bytes so that the actual skip is never negative and the offset never moves past eod.
+        final long actualSkip = Math.min(n, Math.max(0, eod - offset));
+        offset += (int) actualSkip;
 
         return actualSkip;
     }
