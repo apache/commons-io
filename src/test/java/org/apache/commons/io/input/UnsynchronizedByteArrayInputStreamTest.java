@@ -27,6 +27,8 @@ import java.io.IOException;
 
 import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 /**
  * Basic unit tests for the alternative ByteArrayInputStream implementation.
@@ -208,11 +210,17 @@ class UnsynchronizedByteArrayInputStreamTest {
         assertThrows(NullPointerException.class, () -> is.read(buf));
     }
 
-    @Test
-    void testInvalidSkipNUnder() {
-        @SuppressWarnings("resource") // not necessary to close these resources
-        final UnsynchronizedByteArrayInputStream is = newStream(new byte[] { (byte) 0xa, (byte) 0xb, (byte) 0xc });
-        assertThrows(IllegalArgumentException.class, () -> is.skip(-1));
+    @ParameterizedTest
+    @ValueSource(longs = { -1, Long.MIN_VALUE })
+    void testInvalidSkipNUnder(final long count) throws IOException {
+        try (UnsynchronizedByteArrayInputStream is = newStream(new byte[] { (byte) 0xa, (byte) 0xb, (byte) 0xc })) {
+            assertThrows(IllegalArgumentException.class, () -> is.skip(count));
+            assertEquals(3, is.available());
+            assertEquals(0xa, is.read());
+            assertEquals(2, is.skip(2));
+            assertThrows(IllegalArgumentException.class, () -> is.skip(count));
+            assertEquals(END_OF_STREAM, is.read());
+        }
     }
 
     @Test
@@ -328,37 +336,133 @@ class UnsynchronizedByteArrayInputStreamTest {
         UnsynchronizedByteArrayInputStream is = newStream(new byte[] { (byte) 0xa, (byte) 0xb, (byte) 0xc });
         assertEquals(3, is.available());
 
-        is.skip(1);
+        assertEquals(1, is.skip(1));
         assertEquals(2, is.available());
         assertEquals(0xb, is.read());
 
-        is.skip(1);
+        assertEquals(1, is.skip(1));
         assertEquals(0, is.available());
         assertEquals(END_OF_STREAM, is.read());
 
         is = newStream(new byte[] { (byte) 0xa, (byte) 0xb, (byte) 0xc });
         assertEquals(3, is.available());
-        is.skip(0);
+        assertEquals(0, is.skip(0));
         assertEquals(3, is.available());
         assertEquals(0xa, is.read());
 
         is = newStream(new byte[] { (byte) 0xa, (byte) 0xb, (byte) 0xc });
         assertEquals(3, is.available());
-        is.skip(2);
+        assertEquals(2, is.skip(2));
         assertEquals(1, is.available());
         assertEquals(0xc, is.read());
         assertEquals(END_OF_STREAM, is.read());
 
         is = newStream(new byte[] { (byte) 0xa, (byte) 0xb, (byte) 0xc });
         assertEquals(3, is.available());
-        is.skip(3);
+        assertEquals(3, is.skip(3));
         assertEquals(0, is.available());
         assertEquals(END_OF_STREAM, is.read());
 
         is = newStream(new byte[] { (byte) 0xa, (byte) 0xb, (byte) 0xc });
         assertEquals(3, is.available());
-        is.skip(999);
+        assertEquals(3, is.skip(999));
         assertEquals(0, is.available());
         assertEquals(END_OF_STREAM, is.read());
+    }
+
+    @Test
+    void testSkipAfterRead() throws IOException {
+        try (UnsynchronizedByteArrayInputStream is = newStream(new byte[] { (byte) 0xa, (byte) 0xb, (byte) 0xc })) {
+            assertEquals(0xa, is.read());
+            assertEquals(2, is.skip(Long.MAX_VALUE));
+            assertEquals(0, is.available());
+            assertEquals(0, is.skip(1));
+            assertEquals(END_OF_STREAM, is.read());
+        }
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = { 0, 1, 3 })
+    void testSkipEmptySlice(final int offset) throws IOException {
+        try (UnsynchronizedByteArrayInputStream is = newStream(new byte[] { (byte) 0xa, (byte) 0xb, (byte) 0xc }, offset, 0)) {
+            assertEquals(0, is.skip(Long.MAX_VALUE));
+            assertEquals(0, is.skip(1));
+            assertEquals(0, is.available());
+            assertEquals(END_OF_STREAM, is.read());
+        }
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = { 0, 1, Integer.MAX_VALUE })
+    void testSkipEmptyStream(final int offset) throws IOException {
+        try (UnsynchronizedByteArrayInputStream is = newStream(IOUtils.EMPTY_BYTE_ARRAY, offset, 0)) {
+            assertEquals(0, is.skip(0));
+            assertEquals(0, is.skip(1));
+            assertEquals(0, is.skip(Long.MAX_VALUE));
+            assertEquals(0, is.available());
+            assertEquals(END_OF_STREAM, is.read());
+            assertEquals(END_OF_STREAM, is.read(new byte[1]));
+            is.reset();
+            assertEquals(0, is.skip(1));
+        }
+    }
+
+    @Test
+    void testSkipOnClosedStream() throws IOException {
+        final UnsynchronizedByteArrayInputStream is = newStream(new byte[] { (byte) 0xa, (byte) 0xb, (byte) 0xc });
+        is.close();
+        assertEquals(3, is.skip(5));
+        assertEquals(0, is.skip(1));
+        assertEquals(END_OF_STREAM, is.read());
+    }
+
+    @ParameterizedTest
+    @ValueSource(longs = { 4, Integer.MAX_VALUE, Integer.MAX_VALUE + 1L, Long.MAX_VALUE })
+    void testSkipPastEndOfStream(final long count) throws IOException {
+        try (UnsynchronizedByteArrayInputStream is = newStream(new byte[] { (byte) 0xa, (byte) 0xb, (byte) 0xc })) {
+            assertEquals(3, is.skip(count));
+            assertEquals(0, is.available());
+            assertEquals(END_OF_STREAM, is.read());
+            assertEquals(END_OF_STREAM, is.read(new byte[1]));
+            assertEquals(0, is.skip(0));
+            assertEquals(0, is.skip(1));
+            assertEquals(0, is.skip(Long.MAX_VALUE));
+        }
+    }
+
+    @Test
+    void testSkipSlice() throws IOException {
+        try (UnsynchronizedByteArrayInputStream is = newStream(new byte[] { (byte) 0xa, (byte) 0xb, (byte) 0xc, (byte) 0xd, (byte) 0xe }, 1, 3)) {
+            assertEquals(1, is.skip(1));
+            final byte[] buffer = new byte[3];
+            assertEquals(2, is.read(buffer));
+            assertArrayEquals(new byte[] { (byte) 0xc, (byte) 0xd, 0 }, buffer);
+            assertEquals(END_OF_STREAM, is.read());
+            is.reset();
+            assertEquals(3, is.skip(Long.MAX_VALUE));
+            assertEquals(0, is.available());
+            assertEquals(0, is.skip(1));
+            assertEquals(END_OF_STREAM, is.read());
+        }
+    }
+
+    @Test
+    void testSkipWithMarkReset() throws IOException {
+        try (UnsynchronizedByteArrayInputStream is = newStream(new byte[] { (byte) 0xa, (byte) 0xb, (byte) 0xc })) {
+            assertEquals(0xa, is.read());
+            is.mark(0);
+            assertEquals(2, is.skip(999));
+            assertEquals(END_OF_STREAM, is.read());
+            is.reset();
+            assertEquals(2, is.available());
+            assertEquals(0xb, is.read());
+            assertEquals(1, is.skip(Long.MAX_VALUE));
+            assertEquals(END_OF_STREAM, is.read());
+            is.mark(0);
+            assertEquals(0, is.skip(1));
+            is.reset();
+            assertEquals(0, is.skip(0));
+            assertEquals(END_OF_STREAM, is.read());
+        }
     }
 }
