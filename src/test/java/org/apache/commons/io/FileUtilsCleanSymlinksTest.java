@@ -21,6 +21,8 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.LinkOption;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -186,6 +188,30 @@ class FileUtilsCleanSymlinksTest {
 
         assertTrue(FileUtils.isSymlink(symlinkChild));
         assertFalse(FileUtils.isSymlink(realChild));
+    }
+
+    @Test
+    void testDeleteQuietlyWithASymlinkDirDeletesOnlyLink() throws Exception {
+        if (SystemProperties.getOsName().startsWith("Win")) {
+            // Can't use "ln" for symlinks on the command line in Windows.
+            return;
+        }
+
+        final File randomDirectory = new File(top, "randomDir");
+        assertTrue(randomDirectory.mkdirs());
+
+        final File randomFile = new File(randomDirectory, "randomfile");
+        FileUtils.touch(randomFile);
+        assertEquals(1, randomDirectory.list().length);
+
+        final File symlinkDirectory = new File(top, "fakeDir");
+        assertTrue(setupSymlink(randomDirectory, symlinkDirectory));
+
+        assertTrue(FileUtils.deleteQuietly(symlinkDirectory));
+        assertFalse(Files.exists(symlinkDirectory.toPath(), LinkOption.NOFOLLOW_LINKS));
+        assertTrue(randomDirectory.exists());
+        assertTrue(randomFile.exists());
+        assertEquals(1, randomDirectory.list().length, "Contents of symbolic link should not have been removed");
     }
 
     @Test
