@@ -87,4 +87,14 @@ public class DemuxOutputStream extends OutputStream {
             output.write(ch);
         }
     }
+
+    @Override
+    public void write(final byte[] b, final int off, final int len) throws IOException {
+        IOUtils.checkFromIndexSize(b, off, len);
+        @SuppressWarnings("resource")
+        final OutputStream output = outputStreamThreadLocal.get();
+        if (output != null) {
+            output.write(b, off, len);
+        }
+    }
 }
