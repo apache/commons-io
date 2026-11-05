@@ -134,4 +134,9 @@ public final class RandomAccessFileOutputStream extends OutputStream {
         randomAccessFile.write(b);
     }
 
+    @Override
+    public void write(final byte[] b, final int off, final int len) throws IOException {
+        randomAccessFile.write(b, off, len);
+    }
+
 }

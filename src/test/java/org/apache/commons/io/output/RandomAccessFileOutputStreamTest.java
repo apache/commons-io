@@ -37,6 +37,29 @@ import org.junit.jupiter.api.io.TempDir;
  */
 class RandomAccessFileOutputStreamTest {
 
+    private static final class TrackingRandomAccessFile extends RandomAccessFile {
+
+        private int bulkWriteCalls;
+
+        private int singleByteWriteCalls;
+
+        TrackingRandomAccessFile(final Path path) throws IOException {
+            super(path.toFile(), "rw");
+        }
+
+        @Override
+        public void write(final byte[] b, final int off, final int len) throws IOException {
+            bulkWriteCalls++;
+            super.write(b, off, len);
+        }
+
+        @Override
+        public void write(final int b) throws IOException {
+            singleByteWriteCalls++;
+            super.write(b);
+        }
+    }
+
     private static final String EXPECTED = "Put the message in the box";
 
     /** A temporary folder. */
@@ -118,6 +141,17 @@ class RandomAccessFileOutputStreamTest {
         try (RandomAccessFileOutputStream os = RandomAccessFileOutputStream.builder().setPath(fixturePath).get()) {
             validateState(os);
         }
+    }
+
+    @Test
+    void testWriteByteArrayAtDelegatesAsBulkWrite() throws IOException {
+        final TrackingRandomAccessFile randomAccessFile = new TrackingRandomAccessFile(temporaryFolder.resolve("bulk.txt"));
+        final byte[] bytes = { 1, 2, 3, 4 };
+        try (RandomAccessFileOutputStream os = RandomAccessFileOutputStream.builder().setRandomAccessFile(randomAccessFile).get()) {
+            os.write(bytes, 1, 2);
+        }
+        assertEquals(1, randomAccessFile.bulkWriteCalls);
+        assertEquals(0, randomAccessFile.singleByteWriteCalls);
     }
 
     @Test
