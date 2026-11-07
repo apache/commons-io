@@ -18,21 +18,33 @@
 package org.apache.commons.io.file;
 
 import static org.apache.commons.io.file.CounterAssertions.assertCounts;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assumptions.assumeFalse;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
+import static org.mockito.Answers.CALLS_REAL_METHODS;
+import static org.mockito.Mockito.mockStatic;
 
 import java.io.IOException;
+import java.nio.file.AccessDeniedException;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.attribute.PosixFileAttributeView;
+import java.nio.file.attribute.PosixFilePermission;
+import java.util.Set;
 
 import org.apache.commons.io.file.Counters.PathCounters;
 import org.apache.commons.lang3.SystemUtils;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.mockito.MockedStatic;
 
 /**
  * Tests {@link DeletingPathVisitor}.
@@ -137,4 +149,98 @@ class PathUtilsDeleteFileTest extends AbstractTempDirTest {
         // This will throw if not empty.
         PathUtils.deleteIfExists(tempDirPath);
     }
+
+    @Test
+    void testDeleteReadOnlyFileRestoresAttributeAfterFailure() throws IOException {
+        assumeTrue(SystemUtils.IS_OS_WINDOWS);
+        final Path file = tempDirPath.resolve("read-only.txt");
+        Files.createFile(file);
+        PathUtils.setReadOnly(file, true);
+        PathUtils.setReadOnly(tempDirPath, true);
+        try {
+            assertThrows(IOException.class, () -> PathUtils.deleteFile(file, StandardDeleteOption.OVERRIDE_READ_ONLY));
+        } finally {
+            PathUtils.setReadOnly(tempDirPath, false);
+        }
+        assertFalse(Files.isWritable(file), "Failed deletion must preserve the read-only attribute");
+    }
+
+    @Test
+    void testDeleteWritableFileRemainsWritableAfterFailure() throws IOException {
+        assumeTrue(SystemUtils.IS_OS_WINDOWS);
+        final Path file = tempDirPath.resolve("writable.txt");
+        Files.createFile(file);
+        assertTrue(Files.isWritable(file), "The regression must start with a writable file");
+        PathUtils.setReadOnly(tempDirPath, true);
+        try {
+            assertThrows(IOException.class, () -> PathUtils.deleteFile(file, StandardDeleteOption.OVERRIDE_READ_ONLY));
+        } finally {
+            PathUtils.setReadOnly(tempDirPath, false);
+        }
+        assertTrue(Files.exists(file));
+        assertTrue(Files.isWritable(file), "A failed deletion must preserve the file's writable state");
+    }
+
+    @ParameterizedTest
+    @CsvSource({"false,true", "true,false", "true,true"})
+    void testDeleteFailurePreservedWhenRestorationFails(final boolean restoreFileFails, final boolean restoreParentFails) throws IOException {
+        final Path file = Files.createFile(tempDirPath.resolve("restore-failure.txt"));
+        assumeTrue(Files.getFileAttributeView(tempDirPath, PosixFileAttributeView.class) != null);
+        final Set<PosixFilePermission> parentPermissions = Files.getPosixFilePermissions(tempDirPath);
+        final LinkOption[] linkOptions = PathUtils.noFollowLinkOptionArray();
+        final IOException deleteFailure = new IOException("Cannot delete file");
+        final IOException fileRestoreFailure = new IOException("Cannot restore file permissions");
+        final IOException parentRestoreFailure = new IOException("Cannot restore parent permissions");
+        try (MockedStatic<Files> files = mockStatic(Files.class, CALLS_REAL_METHODS);
+                MockedStatic<PathUtils> paths = mockStatic(PathUtils.class, CALLS_REAL_METHODS)) {
+            files.when(() -> Files.deleteIfExists(file)).thenThrow(new AccessDeniedException(file.toString()), deleteFailure);
+            paths.when(() -> PathUtils.isReadOnly(file, linkOptions)).thenReturn(true);
+            paths.when(() -> PathUtils.setReadOnly(file, false, linkOptions)).thenReturn(file);
+            if (restoreFileFails) {
+                paths.when(() -> PathUtils.setReadOnly(file, true, linkOptions)).thenThrow(fileRestoreFailure);
+            } else {
+                paths.when(() -> PathUtils.setReadOnly(file, true, linkOptions)).thenReturn(file);
+            }
+            if (restoreParentFails) {
+                files.when(() -> Files.setPosixFilePermissions(tempDirPath, parentPermissions)).thenThrow(parentRestoreFailure);
+            }
+            // Real methods execute during static stubbing, so restore the fixture before exercising deletion.
+            Files.write(file, new byte[0]);
+            files.clearInvocations();
+            paths.clearInvocations();
+            assertSame(deleteFailure, assertThrows(IOException.class,
+                    () -> PathUtils.deleteFile(file, linkOptions, StandardDeleteOption.OVERRIDE_READ_ONLY)));
+            assertEquals(1, deleteFailure.getSuppressed().length);
+            assertSame(restoreFileFails ? fileRestoreFailure : parentRestoreFailure, deleteFailure.getSuppressed()[0]);
+            if (restoreFileFails && restoreParentFails) {
+                assertEquals(1, fileRestoreFailure.getSuppressed().length);
+                assertSame(parentRestoreFailure, fileRestoreFailure.getSuppressed()[0]);
+            }
+            files.verify(() -> Files.setPosixFilePermissions(tempDirPath, parentPermissions));
+            paths.verify(() -> PathUtils.setReadOnly(file, true, linkOptions));
+        }
+    }
+
+    @Test
+    void testSuccessfulDeleteReportsParentRestorationFailure() throws IOException {
+        final Path file = Files.createFile(tempDirPath.resolve("parent-restore-failure.txt"));
+        assumeTrue(Files.getFileAttributeView(tempDirPath, PosixFileAttributeView.class) != null);
+        final Set<PosixFilePermission> parentPermissions = Files.getPosixFilePermissions(tempDirPath);
+        final LinkOption[] linkOptions = PathUtils.noFollowLinkOptionArray();
+        final IOException restoreFailure = new IOException("Cannot restore parent permissions");
+        try (MockedStatic<Files> files = mockStatic(Files.class, CALLS_REAL_METHODS);
+                MockedStatic<PathUtils> paths = mockStatic(PathUtils.class, CALLS_REAL_METHODS)) {
+            files.when(() -> Files.deleteIfExists(file)).thenThrow(new AccessDeniedException(file.toString())).thenCallRealMethod();
+            paths.when(() -> PathUtils.setReadOnly(file, false, linkOptions)).thenReturn(file);
+            files.when(() -> Files.setPosixFilePermissions(tempDirPath, parentPermissions)).thenThrow(restoreFailure);
+            // Real methods execute during static stubbing, so restore the fixture before exercising deletion.
+            Files.write(file, new byte[0]);
+            files.clearInvocations();
+            paths.clearInvocations();
+            assertSame(restoreFailure, assertThrows(IOException.class,
+                    () -> PathUtils.deleteFile(file, linkOptions, StandardDeleteOption.OVERRIDE_READ_ONLY)));
+            assertFalse(Files.exists(file));
+        }
+    }
+
 }

@@ -736,9 +736,12 @@ public final class PathUtils {
         }
         final Path parent = getParent(file);
         PosixFileAttributes posixFileAttributes = null;
+        boolean fileWasReadOnly = false;
+        Throwable failure = null;
         try {
             if (overrideReadOnly(deleteOptions)) {
                 posixFileAttributes = readPosixFileAttributes(parent, linkOptions);
+                fileWasReadOnly = isReadOnly(file, linkOptions);
                 setReadOnly(file, false, linkOptions);
             }
             // Read size _after_ having read/execute access on POSIX.
@@ -748,12 +751,52 @@ public final class PathUtils {
                 pathCounts.getFileCounter().increment();
                 pathCounts.getByteCounter().add(size);
             }
+        } catch (final IOException | RuntimeException | Error e) {
+            failure = e;
+            throw e;
         } finally {
-            if (posixFileAttributes != null) {
-                Files.setPosixFilePermissions(parent, posixFileAttributes.permissions());
+            Throwable restorationFailure = null;
+            try {
+                if (fileWasReadOnly && exists(file, linkOptions)) {
+                    setReadOnly(file, true, linkOptions);
+                }
+            } catch (final IOException | RuntimeException | Error e) {
+                restorationFailure = e;
+            }
+            try {
+                if (posixFileAttributes != null) {
+                    Files.setPosixFilePermissions(parent, posixFileAttributes.permissions());
+                }
+            } catch (final IOException | RuntimeException | Error e) {
+                if (restorationFailure == null) {
+                    restorationFailure = e;
+                } else if (restorationFailure != e) {
+                    restorationFailure.addSuppressed(e);
+                }
+            }
+            if (restorationFailure != null) {
+                if (failure == null) {
+                    throwRestorationFailure(restorationFailure);
+                }
+                if (failure != restorationFailure) {
+                    failure.addSuppressed(restorationFailure);
+                }
             }
         }
         return pathCounts;
+    }
+
+    private static void throwRestorationFailure(final Throwable failure) throws IOException {
+        if (failure instanceof IOException) {
+            throw (IOException) failure;
+        }
+        if (failure instanceof RuntimeException) {
+            throw (RuntimeException) failure;
+        }
+        if (failure instanceof Error) {
+            throw (Error) failure;
+        }
+        throw new IOException(failure);
     }
 
     /**
@@ -1611,6 +1654,15 @@ public final class PathUtils {
      */
     public static PosixFileAttributes readPosixFileAttributes(final Path path, final LinkOption... options) {
         return readAttributes(path, PosixFileAttributes.class, options);
+    }
+
+    static boolean isReadOnly(final Path path, final LinkOption... options) {
+        final DosFileAttributes dosFileAttributes = readDosFileAttributes(path, options);
+        if (dosFileAttributes != null) {
+            return dosFileAttributes.isReadOnly();
+        }
+        final PosixFileAttributes posixFileAttributes = readPosixFileAttributes(path, options);
+        return posixFileAttributes != null && !posixFileAttributes.permissions().contains(PosixFilePermission.OWNER_WRITE);
     }
 
     /**
