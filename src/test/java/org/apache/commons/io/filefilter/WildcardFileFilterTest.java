@@ -25,6 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.FileSystem;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Path;
 import java.time.Duration;
@@ -34,6 +35,8 @@ import java.util.List;
 import org.apache.commons.io.IOCase;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
+
+import com.google.common.jimfs.Jimfs;
 
 class WildcardFileFilterTest extends AbstractFilterTest {
 
@@ -51,6 +54,23 @@ class WildcardFileFilterTest extends AbstractFilterTest {
         // Calling the File override from the superclass Path method would cause a StackOverflowError (IO-754, PR #893).
         assertTrue(filter.accept(new File("log.txt")));
         assertFalse(filter.accept(new File("log.xml")));
+    }
+
+    @Test
+    void testAcceptPathWithNonDefaultFileSystem() throws IOException {
+        final IOFileFilter filter = WildcardFileFilter.builder().setWildcards("*.txt").get();
+        try (FileSystem fileSystem = Jimfs.newFileSystem()) {
+            assertFiltering(filter, fileSystem.getPath("log.txt"), true);
+            assertFiltering(filter, fileSystem.getPath("log.TXT"), false);
+            assertFiltering(filter, fileSystem.getPath("log.xml"), false);
+        }
+    }
+
+    @Test
+    void testAcceptPathWithoutFileName() {
+        final IOFileFilter filter = WildcardFileFilter.builder().setWildcards("*").get();
+        assertFiltering(filter, (Path) null, false);
+        assertFiltering(filter, temporaryFolder.toPath().toAbsolutePath().getRoot(), false);
     }
 
     @Test
