@@ -325,7 +325,12 @@ class DeletingPathVisitorTest extends AbstractTempDirTest {
             Files.setPosixFilePermissions(parent, originalPermissions);
             final DeletingPathVisitor visitor = new DeletingPathVisitor(Counters.longPathCounters(),
                     new DeleteOption[] {StandardDeleteOption.OVERRIDE_READ_ONLY});
-            Files.walkFileTree(file, visitor);
+            try (MockedStatic<Files> files = mockStatic(Files.class, CALLS_REAL_METHODS)) {
+                // Linux may expose DOS attributes too; exercise the POSIX fallback without mocking permission changes or deletion.
+                files.when(() -> Files.getFileAttributeView(file, DosFileAttributeView.class, LinkOption.NOFOLLOW_LINKS)).thenReturn(null);
+                Files.walkFileTree(file, visitor);
+                files.verify(() -> Files.setPosixFilePermissions(parent, PosixFilePermissions.fromString("rwx------")));
+            }
             assertTrue(Files.notExists(file));
             assertEquals(originalPermissions, Files.getPosixFilePermissions(parent));
         } finally {
