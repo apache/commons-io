@@ -176,7 +176,8 @@ public class FilenameUtils {
 
     private static final int BASE_16 = 16;
 
-    private static final Pattern REG_NAME_PART_PATTERN = Pattern.compile("^[a-zA-Z0-9][a-zA-Z0-9-]*$");
+    // Possessive repetition avoids recursive backtracking for long registered names.
+    private static final Pattern REG_NAME_PATTERN = Pattern.compile("(?:[a-zA-Z0-9._~!$&'()*+,;=-]|%[a-fA-F0-9]{2})*+");
 
     /**
      * Concatenates a fileName to a base path using normal command line style rules.
@@ -863,6 +864,10 @@ public class FilenameUtils {
      * <p>
      * Note that a leading // (or \\) is used to indicate a UNC name on Windows. Mixed leading separators ({@code \/} or {@code /\}) are also recognized.
      * These must be followed by a server name and a separator, so double-slashes are not collapsed to a single slash at the start of the file name.
+     * Server names accept IPv6 addresses or RFC 3986 registered-name syntax, except for empty names and the path segments {@code .} and {@code ..}.
+     * Percent-encoded octets are preserved without decoding or UTF-8 validation. For example, {@code %FF} matches the grammar but is not valid UTF-8.
+     * Acceptance does not imply compliance with all URI host requirements, DNS validity, or operating-system support.
+     * The path segments {@code .} and {@code ..} are rejected so that normalization cannot preserve them as an opaque UNC server prefix.
      * </p>
      *
      * @param fileName The file name to find the prefix in, null returns -1.
@@ -1156,24 +1161,25 @@ public class FilenameUtils {
     }
 
     /**
-     * Checks whether a given string is a valid host name according to RFC 3986 - not accepting IP addresses.
+     * Checks whether a string matches the registered-name grammar in RFC 3986, section 3.2.2.
      *
-     * @see "https://tools.ietf.org/html/rfc3986#section-3.2.2"
-     * @param name The hostname to validate.
-     * @return true if the given name is a valid host name.
+     * <p>
+     * Accepts zero or more unreserved characters, percent-encoded octets, or sub-delimiters. This is a syntax check, not DNS or UNC name validation.
+     * Empty names, period-only names, and dotted numeric names match this grammar. Percent-encoded octets are neither decoded nor checked for valid UTF-8.
+     * For example, {@code %FF} matches the ABNF grammar but is not a valid UTF-8 sequence. Matching the grammar does not establish compliance with the
+     * additional requirements in RFC 3986 for applications producing URI hosts.
+     * </p>
+     *
+     * <p>
+     * UNC-specific restrictions belong to {@link #isValidHostName(String)}, which rejects empty names and the path segments {@code .} and {@code ..}.
+     * </p>
+     *
+     * @param name The non-null registered name to validate.
+     * @return true if the name matches the registered-name grammar.
+     * @see <a href="https://www.rfc-editor.org/rfc/rfc3986#section-3.2.2">RFC 3986, section 3.2.2</a>
      */
-    private static boolean isRFC3986HostName(final String name) {
-        final String[] parts = name.split("\\.", -1);
-        for (int i = 0; i < parts.length; i++) {
-            if (parts[i].isEmpty()) {
-                // trailing period is legal, otherwise we've hit a .. sequence
-                return i == parts.length - 1;
-            }
-            if (!REG_NAME_PART_PATTERN.matcher(parts[i]).matches()) {
-                return false;
-            }
-        }
-        return true;
+    static boolean isRFC3986HostName(final String name) {
+        return REG_NAME_PATTERN.matcher(name).matches();
     }
 
     /**
@@ -1196,17 +1202,25 @@ public class FilenameUtils {
     }
 
     /**
-     * Checks whether a given string is a valid host name according to RFC 3986.
+     * Checks whether a string is an accepted UNC server name.
+     *
      * <p>
-     * Accepted are IP addresses (v4 and v6) as well as what the RFC calls a "reg-name". Percent encoded names don't seem to be valid names in UNC paths.
+     * Accepts IPv6 addresses and RFC 3986 registered names, including dotted IPv4 addresses. Empty names and the path segments {@code .} and {@code ..}
+     * are rejected even though they match the registered-name grammar. Percent-encoded octets are preserved literally, without decoding.
+     * This syntax check does not guarantee that the name can be resolved or used by the operating system.
      * </p>
      *
-     * @see "https://tools.ietf.org/html/rfc3986#section-3.2.2"
-     * @param name The hostname to validate.
-     * @return true if the given name is a valid host name.
+     * <p>
+     * Normalization treats a UNC server prefix as opaque. Rejecting {@code .} and {@code ..} prevents those path segments from bypassing normalization,
+     * preserving the protection for paths such as {@code //../foo} described in IO-556.
+     * </p>
+     *
+     * @param name The non-null server name to validate.
+     * @return true if the name is accepted as a UNC server name.
+     * @see <a href="https://www.rfc-editor.org/rfc/rfc3986#section-3.2.2">RFC 3986, section 3.2.2</a>
      */
     private static boolean isValidHostName(final String name) {
-        return isIPv6Address(name) || isRFC3986HostName(name);
+        return !name.isEmpty() && !".".equals(name) && !"..".equals(name) && (isIPv6Address(name) || isRFC3986HostName(name));
     }
 
     /**
