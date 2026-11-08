@@ -176,7 +176,7 @@ public class FilenameUtils {
 
     private static final int BASE_16 = 16;
 
-    private static final Pattern REG_NAME_PART_PATTERN = Pattern.compile("^[a-zA-Z0-9][a-zA-Z0-9-]*$");
+    private static final Pattern REG_NAME_PART_PATTERN = Pattern.compile("^[a-zA-Z0-9_][a-zA-Z0-9_-]*$");
 
     /**
      * Concatenates a fileName to a base path using normal command line style rules.

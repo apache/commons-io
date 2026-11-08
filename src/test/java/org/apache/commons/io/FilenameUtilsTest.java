@@ -355,6 +355,17 @@ class FilenameUtilsTest {
     }
 
     /**
+     * Test for https://issues.apache.org/jira/browse/IO-770
+     */
+    @Test
+    void testGetFullPathNoEndSeparator_IO_770() {
+        assertEquals("\\\\my_server\\share", FilenameUtils.getFullPathNoEndSeparator("\\\\my_server\\share\\f.txt"));
+        assertEquals("\\\\sub_1.example.com\\path\\subfolder",
+                FilenameUtils.getFullPathNoEndSeparator("\\\\sub_1.example.com\\path\\subfolder\\test.pdf"));
+        assertEquals("//my_server/share/f.txt", FilenameUtils.normalize("\\\\my_server\\share\\f.txt", true));
+    }
+
+    /**
      * Test for https://issues.apache.org/jira/browse/IO-248
      */
     @Test
