@@ -126,10 +126,7 @@ public class CleaningPathVisitor extends CountingPathVisitor {
     public FileVisitResult visitFile(final Path file, final BasicFileAttributes attributes) throws IOException {
         // Files.deleteIfExists() never follows links, so use LinkOption.NOFOLLOW_LINKS in other calls to Files.
         if (accept(file) && Files.exists(file, LinkOption.NOFOLLOW_LINKS)) {
-            if (overrideReadOnly) {
-                PathUtils.setReadOnly(file, false, LinkOption.NOFOLLOW_LINKS);
-            }
-            Files.deleteIfExists(file);
+            PathUtils.withReadOnlyOverride(file, PathUtils.noFollowLinkOptionArray(), overrideReadOnly, () -> Files.deleteIfExists(file));
         }
         updateFileCounters(file, attributes);
         return FileVisitResult.CONTINUE;
