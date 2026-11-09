@@ -109,6 +109,7 @@ The <action> type attribute can be add,update,fix,remove.
       <action type="fix" dev="ggregory" due-to="Gary Gregory, simpleqt">Fix UnsynchronizedByteArrayInputStream.skip(long) advancing past the end of the stream and overflowing for large counts.</action>
       <action type="fix" dev="ggregory" due-to="Sita Geßner, Gary Gregory" issue="IO-770">Support RFC 3986 registered-name syntax in FilenameUtils (#926).</action>
       <action type="fix" dev="ggregory" due-to="Gary Gregory, Piotr Karwasz" issue="IO-879">Restore the DOS read-only attribute after an override-enabled deletion fails (#927).</action>
+      <action type="fix" dev="ggregory" due-to="Gary Gregory">Fix Windows file deletion races in TailerTest (#928).</action>
       <!-- ADD -->
       <action type="add" dev="ggregory" due-to="Gary Gregory">Add IOConsumer.accept(IOConsumer, T) (#846).</action>
       <action type="add" dev="ggregory" due-to="Gary Gregory">Add UnsynchronizedBufferedReader.unwrap() (#850).</action>
