@@ -144,6 +144,9 @@ file comparators, endian transformation classes, and much more.
     <commons.jacoco.complexityRatio>0.85</commons.jacoco.complexityRatio>
     <!-- Java 21 and up -->
     <EnableDynamicAgentLoading></EnableDynamicAgentLoading>
+    <!-- Surefire: Limit memory size see IO-161 -->
+    <!-- Mockito inline may need -XX:+EnableDynamicAgentLoading -->
+    <commons.surefire.defaultArgLine>@{argLine} -Xmx25M ${EnableDynamicAgentLoading}</commons.surefire.defaultArgLine>
   </properties>
   <build>
     <!-- japicmp:cmp needs package to work from a jar -->
@@ -201,9 +204,7 @@ file comparators, endian transformation classes, and much more.
           </classpathDependencyExcludes>
           <forkCount>1</forkCount>
           <reuseForks>false</reuseForks>
-          <!-- Limit memory size see IO-161 -->
-          <!-- Mockito inline may need -XX:+EnableDynamicAgentLoading -->
-          <argLine>@{argLine} -Xmx25M ${EnableDynamicAgentLoading}</argLine>
+          <argLine>${commons.surefire.defaultArgLine}</argLine>
         </configuration>
       </plugin>
       <plugin>
@@ -320,6 +321,35 @@ file comparators, endian transformation classes, and much more.
       <properties>
         <maven.compiler.release>8</maven.compiler.release>
       </properties>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>default-test-on-classpath</id>
+                <configuration>
+                  <useModulePath>false</useModulePath>
+                  <reportsDirectory>${project.build.directory}/surefire-reports/classpath</reportsDirectory>
+                </configuration>
+              </execution>
+              <execution>
+                <id>test-on-module-path</id>
+                <phase>test</phase>
+                <goals>
+                  <goal>test</goal>
+                </goals>
+                <configuration>
+                  <useModulePath>true</useModulePath>
+                  <argLine>${commons.surefire.defaultArgLine} --add-opens=java.base/sun.nio.ch=ALL-UNNAMED --add-opens=jdk.unsupported/sun.misc=ALL-UNNAMED</argLine>
+                  <reportsDirectory>${project.build.directory}/surefire-reports/modulepath</reportsDirectory>
+                </configuration>
+              </execution>
+            </executions>
+         </plugin>
+      </plugins>
+    </build>
     </profile>
     <profile>
       <id>java21-up</id>

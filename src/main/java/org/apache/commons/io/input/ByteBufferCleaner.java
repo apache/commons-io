@@ -113,7 +113,7 @@ final class ByteBufferCleaner {
             try {
                 return new Java9Cleaner();
             } catch (final Exception e1) {
-                throw new IllegalStateException("Failed to initialize a direct ByteBuffer Cleaner.", e);
+                throw new IllegalStateException("Failed to initialize a direct ByteBuffer Cleaner.", e1);
             }
         }
     }
