@@ -89,6 +89,20 @@ import org.apache.commons.io.IOUtils;
  * <p>
  * This class is not thread-safe.
  * </p>
+ * <p>
+ * The {@link #afterRead(int)} hook, including a consumer configured with {@link Builder#setAfterRead}, reports bytes read from the underlying stream.
+ * BOM detection invokes this hook during construction, counting each byte read, including an excluded BOM. Buffered bytes are not counted again when
+ * returned to the caller. Consequently, callback counts can differ from the number of bytes returned by a public read method.
+ * </p>
+ * <p>
+ * The hook reports {@link IOUtils#EOF} when an underlying read reaches the end of the stream, including during construction. A bulk read can report EOF
+ * while still returning buffered bytes, or report zero when the requested bytes come entirely from the buffer. Repeated underlying reads at EOF can
+ * produce repeated EOF notifications.
+ * </p>
+ * <p>
+ * Neither skipping bytes nor resetting the stream invokes the hook. After a reset, bytes reread from the underlying stream are counted again, while
+ * replayed buffered bytes are not. An exception thrown by the hook propagates after the underlying read has consumed its bytes.
+ * </p>
  *
  * @see Builder
  * @see org.apache.commons.io.ByteOrderMark
@@ -218,6 +232,8 @@ public class BOMInputStream extends ProxyInputStream {
         return new Builder();
     }
 
+    private boolean beforeFirstMark = true;
+
     /**
      * BOMs are sorted from longest to shortest.
      */
@@ -226,7 +242,6 @@ public class BOMInputStream extends ProxyInputStream {
     private int fbIndex;
     private int[] firstBytes;
     private final boolean include;
-    private boolean markedAtStart;
     private int markFbIndex;
 
     /**
@@ -370,7 +385,7 @@ public class BOMInputStream extends ProxyInputStream {
     @Override
     public synchronized void mark(final int readLimit) {
         markFbIndex = fbIndex;
-        markedAtStart = firstBytes == null;
+        beforeFirstMark = false;
         in.mark(readLimit);
     }
 
@@ -394,7 +409,13 @@ public class BOMInputStream extends ProxyInputStream {
     public int read() throws IOException {
         checkOpen();
         final int b = readFirstBytes();
-        return b >= 0 ? b : in.read();
+        if (b >= 0) {
+            // First bytes were already reported to afterRead() when they were read from the delegate in readBom().
+            return b;
+        }
+        final int read = in.read();
+        afterRead(read >= 0 ? 1 : EOF);
+        return read;
     }
 
     /**
@@ -456,7 +477,8 @@ public class BOMInputStream extends ProxyInputStream {
         // Read first maxBomSize bytes
         for (int i = 0; i < tmp.length; i++) {
             tmp[i] = in.read();
-            afterRead(tmp[i]);
+            // Report the byte COUNT (1 per byte read, EOF at end of stream), never the byte value.
+            afterRead(tmp[i] >= 0 ? 1 : EOF);
             fbLength++;
             if (tmp[i] < 0) {
                 break;
@@ -487,17 +509,28 @@ public class BOMInputStream extends ProxyInputStream {
     }
 
     /**
-     * Invokes the delegate's {@link InputStream#reset()} method.
+     * Resets the stream to the last marked position.
      *
-     * @throws IOException Thrown if an I/O error occurs.
+     * <p>
+     * Invokes the delegate's {@link InputStream#reset()} method, so reset support and mark validity depend on the delegate. Before an explicit call to
+     * {@link #mark(int)}, rebuilds the initial BOM buffer by reading from the delegate's reset position and applying the configured BOM inclusion policy.
+     * These reads invoke {@link #afterRead(int)} and may block or throw an {@link IOException}.
+     * </p>
+     *
+     * <p>
+     * After an explicit mark, restores the saved position in the existing BOM buffer without rereading the prefix or invoking {@code afterRead(int)}.
+     * If the delegate's reset fails, the buffered position is unchanged.
+     * </p>
+     *
+     * @throws IOException if the delegate cannot reset or an error occurs while rebuilding the initial BOM buffer.
      */
     @Override
     public synchronized void reset() throws IOException {
-        fbIndex = markFbIndex;
-        if (markedAtStart) {
-            firstBytes = null;
-        }
         in.reset();
+        fbIndex = markFbIndex;
+        if (beforeFirstMark) {
+            readBom();
+        }
     }
 
     /**

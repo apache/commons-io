@@ -36,6 +36,11 @@ import java.util.Set;
  * When the handler object is garbage collected, the file is deleted.
  * </p>
  * <p>
+ * Deletion uses the tracked pathname when the background thread processes the marker, and does not guarantee deletion of the originally tracked file.
+ * Another file may occupy that pathname, or a parent directory may have been replaced by a symbolic link. Only track files whose parent directories cannot
+ * be replaced or modified by untrusted parties. This class does not provide atomic protection against concurrent filesystem changes.
+ * </p>
+ * <p>
  * In an environment with multiple class loaders (a servlet container, for
  * example), you should consider stopping the background thread if it is no
  * longer needed. This is done by invoking the method
@@ -76,9 +81,7 @@ public class FileCleaningTracker {
                     }
                     tracker.clear();
                 } catch (final InterruptedException e) {
-                    // interrupted removing from the queue.
-                    interrupt();
-                    continue;
+                    // Recheck the exit condition. Leave the interrupt cleared so pending trackers can wait on the queue.
                 }
             }
         }

@@ -37,6 +37,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 /**
  * Tests {@link FilenameUtils}.
@@ -127,6 +129,22 @@ class FilenameUtilsTest {
         assertEquals("~user" + SEP + "c" + SEP + "d", FilenameUtils.concat("a/b/", "~user/c/d"));
         assertEquals("~" + SEP, FilenameUtils.concat("a/b/", "~"));
         assertEquals("~user" + SEP, FilenameUtils.concat("a/b/", "~user"));
+    }
+
+    @Test
+    void testConcatDoesNotEnforceContainment() {
+        assertEquals(0, FilenameUtils.getPrefixLength("../outside"));
+        assertEquals(SEP + "outside", FilenameUtils.concat("/base", "../outside"));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = { "//server/share/x", "\\\\server\\share\\x", "\\/server/share/x", "/\\server\\share\\x", "\\\\server/share\\x" })
+    void testConcatUncSeparators(final String fileName) {
+        final String expected = SEP + SEP + "server" + SEP + "share" + SEP + "x";
+        assertEquals(9, FilenameUtils.getPrefixLength(fileName), fileName);
+        assertEquals(expected, FilenameUtils.concat("/base", fileName), fileName);
+        assertEquals("//server/share/x", FilenameUtils.normalize(fileName, true), fileName);
+        assertEquals("\\\\server\\share\\x", FilenameUtils.normalize(fileName, false), fileName);
     }
 
     @Test
@@ -575,7 +593,7 @@ class FilenameUtilsTest {
         assertEquals(21, FilenameUtils.getPrefixLength("\\\\server.example.org\\a\\b\\c.txt"));
         assertEquals(10, FilenameUtils.getPrefixLength("\\\\server.\\a\\b\\c.txt"));
 
-        assertEquals(-1, FilenameUtils.getPrefixLength("\\\\-server\\a\\b\\c.txt"));
+        assertEquals(10, FilenameUtils.getPrefixLength("\\\\-server\\a\\b\\c.txt"));
         assertEquals(-1, FilenameUtils.getPrefixLength("\\\\.\\a\\b\\c.txt"));
         assertEquals(-1, FilenameUtils.getPrefixLength("\\\\..\\a\\b\\c.txt"));
     }
@@ -758,6 +776,55 @@ class FilenameUtilsTest {
         assertFalse(FilenameUtils.isExtension("a.b\\file.txt", "TXT", "RTF"));
     }
 
+    @ParameterizedTest
+    @ValueSource(strings = { "", ".", "..", "...", ".server", "server.", "a..b", "-server", "server-", "_server", "server_", "a_b",
+            "a._b", "127.0.0.1", "127.0.0.256", "a~b", "!$&'()*+,;=", "%00", "%2f", "%2F", "%5C", "%FF", "%C3%A9", "a%20b%25c" })
+    void testIsRFC3986HostName(final String name) {
+        assertTrue(FilenameUtils.isRFC3986HostName(name), name);
+    }
+
+    @Test
+    void testIsRFC3986HostNameAsciiCharacters() {
+        final String allowed = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~!$&'()*+,;=";
+        for (int c = 0; c < 128; c++) {
+            final String character = Character.toString((char) c);
+            final boolean expected = allowed.indexOf(c) >= 0;
+            assertEquals(expected, FilenameUtils.isRFC3986HostName(character), "Single character: " + c);
+            assertEquals(expected, FilenameUtils.isRFC3986HostName(character + "host"), "Leading character: " + c);
+            assertEquals(expected, FilenameUtils.isRFC3986HostName("a" + character + "b"), "Interior character: " + c);
+            assertEquals(expected, FilenameUtils.isRFC3986HostName("host" + character), "Trailing character: " + c);
+        }
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = { "%", "%0", "%GG", "%0G", "%G0", "a%20b%", "%%20", "%u0041", "%123%", "a b", "a\tb", "a\nb", "a\r\n",
+            "a/b", "a\\b", "user@host", "host:80", "[::1]", "::1", "caf\u00e9", "\uD83D\uDE00", "\uD800", "%\uFF10\uFF10" })
+    void testIsRFC3986HostNameInvalid(final String name) {
+        assertFalse(FilenameUtils.isRFC3986HostName(name), name);
+    }
+
+    @Test
+    void testIsRFC3986HostNameLong() {
+        final StringBuilder name = new StringBuilder();
+        for (int i = 0; i < 10000; i++) {
+            name.append("a%20");
+        }
+        assertTrue(FilenameUtils.isRFC3986HostName(name.toString()));
+        assertFalse(FilenameUtils.isRFC3986HostName(name.append('%').toString()));
+    }
+
+    @Test
+    void testIsRFC3986HostNamePercentEncodedOctets() {
+        final String hex = "0123456789ABCDEFabcdef";
+        for (int i = 0; i < hex.length(); i++) {
+            for (int j = 0; j < hex.length(); j++) {
+                final String octet = "%" + hex.charAt(i) + hex.charAt(j);
+                assertTrue(FilenameUtils.isRFC3986HostName(octet), octet);
+                assertTrue(FilenameUtils.isRFC3986HostName(octet + "a" + octet), octet);
+            }
+        }
+    }
+
     @Test
     void testNormalize() {
         assertNull(FilenameUtils.normalize(null));
@@ -916,14 +983,14 @@ class FilenameUtilsTest {
         assertEquals(SEP + SEP + "server." + SEP + "a" + SEP + "b" + SEP + "c.txt", FilenameUtils.normalize("\\\\server.\\a\\b\\c.txt"));
         assertEquals(SEP + SEP + "1::127.0.0.1" + SEP + "a" + SEP + "b" + SEP + "c.txt", FilenameUtils.normalize("\\\\1::127.0.0.1\\a\\b\\c.txt"));
 
-        // not valid IPv4 addresses but technically a valid "reg-name"s according to RFC1034
+        // not valid IPv4 addresses but technically a valid "reg-name"s according to RFC 3986
         assertEquals(SEP + SEP + "127.0.0.256" + SEP + "a" + SEP + "b" + SEP + "c.txt", FilenameUtils.normalize("\\\\127.0.0.256\\a\\b\\c.txt"));
         assertEquals(SEP + SEP + "127.0.0.01" + SEP + "a" + SEP + "b" + SEP + "c.txt", FilenameUtils.normalize("\\\\127.0.0.01\\a\\b\\c.txt"));
 
-        assertNull(FilenameUtils.normalize("\\\\-server\\a\\b\\c.txt"));
+        assertEquals("//-server/a/b/c.txt", FilenameUtils.normalize("\\\\-server\\a\\b\\c.txt", true));
         assertNull(FilenameUtils.normalize("\\\\.\\a\\b\\c.txt"));
         assertNull(FilenameUtils.normalize("\\\\..\\a\\b\\c.txt"));
-        assertNull(FilenameUtils.normalize("\\\\127.0..1\\a\\b\\c.txt"));
+        assertEquals("//127.0..1/a/b/c.txt", FilenameUtils.normalize("\\\\127.0..1\\a\\b\\c.txt", true));
         assertNull(FilenameUtils.normalize("\\\\::1::2\\a\\b\\c.txt"));
         assertNull(FilenameUtils.normalize("\\\\:1\\a\\b\\c.txt"));
         assertNull(FilenameUtils.normalize("\\\\1:\\a\\b\\c.txt"));
@@ -1142,6 +1209,40 @@ class FilenameUtilsTest {
         // Normalize (Windows Separator)
         assertEquals("\\a\\c\\", FilenameUtils.normalize("/a/b/../c/", false));
         assertEquals("\\a\\c\\", FilenameUtils.normalize("\\a\\b\\..\\c\\", false));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = { "my_server", "sub_1.example.com", "_server", "server_", "a._b", "-server", "server-", ".server", "a..b", "...",
+            "a~b", "!$&'()*+,;=", "%00", "%2E", "%2e%2e", "%2F", "%5C", "%C3%A9", "a%20b" })
+    void testRegisteredNameUncPaths(final String host) {
+        for (final String leading : new String[] { "//", "\\\\", "/\\", "\\/" }) {
+            for (final char separator : new char[] { '/', '\\' }) {
+                final String prefix = leading + host + separator;
+                final String path = prefix + "share" + separator + "f.txt";
+                assertEquals(prefix.length(), FilenameUtils.getPrefixLength(path));
+                assertEquals(prefix, FilenameUtils.getPrefix(path));
+                assertEquals(prefix + "share", FilenameUtils.getFullPathNoEndSeparator(path));
+                assertEquals("share" + separator, FilenameUtils.getPath(path));
+                assertEquals("//" + host + "/share/f.txt", FilenameUtils.normalize(path, true));
+                assertEquals("\\\\" + host + "\\share\\f.txt", FilenameUtils.normalize(path, false));
+                assertEquals("//" + host + "/share", FilenameUtils.normalizeNoEndSeparator(prefix + "share" + separator, true));
+                assertEquals(FilenameUtils.normalize(path), FilenameUtils.concat("base", path));
+                assertEquals("//" + host + "/file", FilenameUtils.normalize(prefix + "share/../file", true));
+                assertNull(FilenameUtils.normalize(prefix + "../file", true));
+            }
+        }
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = { "", ".", "..", "bad%", "bad%0", "bad%GG", "bad host", "bad@host", "bad#host", "bad?host", "caf\u00e9" })
+    void testRegisteredNameUncPathsInvalid(final String host) {
+        for (final String leading : new String[] { "//", "\\\\", "/\\", "\\/" }) {
+            final String path = leading + host + "/share/file";
+            assertEquals(-1, FilenameUtils.getPrefixLength(path));
+            assertNull(FilenameUtils.getFullPathNoEndSeparator(path));
+            assertNull(FilenameUtils.normalize(path, true));
+            assertNull(FilenameUtils.concat("base", path));
+        }
     }
 
     @Test

@@ -31,6 +31,19 @@ import org.junit.jupiter.api.Test;
 class CircularByteBufferTest {
 
     @Test
+    void testAddByteArrayOffsetPlusLengthOutOfBounds() {
+        final CircularByteBuffer cbb = new CircularByteBuffer();
+        // offset + length walks past the end of the source array: must fail up front,
+        // without advancing the ring state.
+        assertThrows(IllegalArgumentException.class, () -> cbb.add(new byte[] { 1, 2, 3 }, 1, 3));
+        assertEquals(0, cbb.getCurrentNumberOfBytes());
+        // The ring invariants are intact: a valid add/read still works.
+        cbb.add(new byte[] { 4, 5 }, 0, 2);
+        assertEquals(4, cbb.read());
+        assertEquals(5, cbb.read());
+    }
+
+    @Test
     void testAddByteSmallestBuffer() {
         final CircularByteBuffer cbb = new CircularByteBuffer(1);
         cbb.add((byte) 1);
@@ -43,6 +56,24 @@ class CircularByteBufferTest {
     void testAddInvalidOffset() {
         final CircularByteBuffer cbb = new CircularByteBuffer();
         assertThrows(IllegalArgumentException.class, () -> cbb.add(new byte[] { 1, 2, 3 }, -1, 3));
+    }
+
+    @Test
+    void testAddInvalidRangePreservesWrappedContents() {
+        final CircularByteBuffer buffer = new CircularByteBuffer(4);
+        buffer.add(new byte[] { 1, 2, 3, 4 }, 0, 4);
+        assertEquals(1, buffer.read());
+        assertEquals(2, buffer.read());
+        assertEquals(3, buffer.read());
+        buffer.add((byte) 5);
+        assertThrows(IllegalArgumentException.class, () -> buffer.add(new byte[] { 9 }, 0, 2));
+        assertEquals(2, buffer.getCurrentNumberOfBytes());
+        assertEquals(2, buffer.getSpace());
+        buffer.add(new byte[] { 6, 7 }, 0, 2);
+        for (int expected = 4; expected <= 7; expected++) {
+            assertEquals(expected, buffer.read());
+        }
+        assertFalse(buffer.hasBytes());
     }
 
     @Test
@@ -115,6 +146,40 @@ class CircularByteBufferTest {
         assertFalse(cbb.hasSpace(1));
         assertEquals(2, cbb.read());
         assertTrue(cbb.hasSpace(1));
+    }
+
+    @Test
+    void testPeekDoesNotMatchStaleBytesAfterWrap() {
+        final CircularByteBuffer buffer = new CircularByteBuffer(4);
+        buffer.add(new byte[] { 1, 2, 3, 4 }, 0, 4);
+        assertEquals(1, buffer.read());
+        assertEquals(2, buffer.read());
+        assertEquals(3, buffer.read());
+        buffer.add((byte) 5);
+        assertFalse(buffer.peek(new byte[] { 4, 5, 2, 3 }, 0, 4));
+        assertTrue(buffer.peek(new byte[] { 4, 5 }, 0, 2));
+        assertEquals(4, buffer.read());
+        assertEquals(5, buffer.read());
+        assertFalse(buffer.peek(new byte[] { 2, 3 }, 0, 2));
+    }
+
+    @Test
+    void testPeekDoesNotMatchStaleBytesPastValidData() {
+        final CircularByteBuffer cbb = new CircularByteBuffer();
+        cbb.add(new byte[] { 1, 2 }, 0, 2);
+        // Only 2 bytes are in the buffer; a 4-byte peek must not compare the (zero-initialized)
+        // cells past the valid data and report a match.
+        assertFalse(cbb.peek(new byte[] { 1, 2, 0, 0 }, 0, 4));
+        // Exact match still works.
+        assertTrue(cbb.peek(new byte[] { 1, 2 }, 0, 2));
+    }
+
+    @Test
+    void testPeekSourceRangePastEndOfSourceBuffer() {
+        final CircularByteBuffer cbb = new CircularByteBuffer();
+        cbb.add(new byte[] { 1, 2, 3 }, 0, 3);
+        // offset + length exceeds sourceBuffer.length: bytes that do not exist cannot match.
+        assertFalse(cbb.peek(new byte[] { 9, 1 }, 1, 3));
     }
 
     @Test

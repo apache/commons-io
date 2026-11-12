@@ -17,9 +17,10 @@
 
 package org.apache.commons.io.input.buffer;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -85,10 +86,59 @@ class PeekableInputStreamTest {
     }
 
     @Test
+    void testPeekLengthExceedsBufferCapacity() throws IOException {
+        final ByteArrayInputStream source = new ByteArrayInputStream(new byte[] { 1, 2 });
+        try (PeekableInputStream stream = new PeekableInputStream(source, 2)) {
+            assertThrows(IllegalArgumentException.class, () -> stream.peek(new byte[] { 1, 2, 3 }, 0, 3));
+            assertEquals(2, source.available());
+        }
+    }
+
+    @Test
     void testPeekPrefixDoesNotMatchLongerInput() throws IOException {
         try (PeekableInputStream inputStream = new PeekableInputStream(
                 new ByteArrayInputStream("Some text buffer".getBytes(StandardCharsets.UTF_8)))) {
             assertFalse(inputStream.peek("Some".getBytes(StandardCharsets.UTF_8)));
+        }
+    }
+
+    @Test
+    void testPeekRejectsTruncatedAndEmptyStreams() throws IOException {
+        for (final byte[] input : new byte[][] { {}, { 1, 2 } }) {
+            try (PeekableInputStream stream = new PeekableInputStream(new ByteArrayInputStream(input), 4)) {
+                final byte[] probe = input.length == 0 ? new byte[] { 0, 0, 0, 0 } : new byte[] { 1, 2, 0, 0 };
+                assertFalse(stream.peek(probe));
+                for (final byte value : input) {
+                    assertEquals(value, stream.read());
+                }
+                assertEquals(-1, stream.read());
+            }
+        }
+    }
+
+    @Test
+    void testPeekSliceDoesNotRefillWhenAlreadyBuffered() throws IOException {
+        final ByteArrayInputStream source = new ByteArrayInputStream(new byte[] { 0, 1, 2, 3, 4, 5 });
+        try (PeekableInputStream stream = new PeekableInputStream(source, 4)) {
+            assertEquals(0, stream.read());
+            assertEquals(1, stream.read());
+            assertEquals(2, source.available());
+            assertTrue(stream.peek(new byte[] { 9, 2, 3 }, 1, 2));
+            assertEquals(2, source.available());
+            for (int expected = 2; expected <= 5; expected++) {
+                assertEquals(expected, stream.read());
+            }
+            assertEquals(-1, stream.read());
+        }
+    }
+
+    @Test
+    void testPeekSliceFromArrayLargerThanBuffer() throws IOException {
+        try (PeekableInputStream stream = new PeekableInputStream(new ByteArrayInputStream(new byte[] { 1, 2 }), 2)) {
+            assertTrue(stream.peek(new byte[] { 9, 1, 2, 9 }, 1, 2));
+            assertEquals(1, stream.read());
+            assertEquals(2, stream.read());
+            assertEquals(-1, stream.read());
         }
     }
 

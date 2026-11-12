@@ -17,6 +17,7 @@
 
 package org.apache.commons.io.file;
 
+import java.io.Closeable;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -63,8 +64,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.Function;
@@ -110,44 +111,45 @@ public final class PathUtils {
             if (list1.size() != list2.size()) {
                 return false;
             }
-            // compare both lists using iterators
-            final Iterator<Path> iterator1 = list1.iterator();
-            final Iterator<Path> iterator2 = list2.iterator();
-            while (iterator1.hasNext() && iterator2.hasNext()) {
-                if (!equalsIgnoreFileSystem(iterator1.next(), iterator2.next())) {
-                    return false;
-                }
+            if (list1.isEmpty() || isSameFileSystem(list1.get(0), list2.get(0))) {
+                return list1.equals(list2);
             }
-            return true;
-        }
-
-        private static boolean equalsIgnoreFileSystem(final Path path1, final Path path2) {
-            final FileSystem fileSystem1 = path1.getFileSystem();
-            final FileSystem fileSystem2 = path2.getFileSystem();
-            if (fileSystem1 == fileSystem2) {
-                return path1.equals(path2);
-            }
-            final String separator1 = fileSystem1.getSeparator();
-            final String separator2 = fileSystem2.getSeparator();
-            final String string1 = path1.toString();
-            final String string2 = path2.toString();
-            if (Objects.equals(separator1, separator2)) {
-                // Separators are the same, so we can use toString comparison
-                return Objects.equals(string1, string2);
-            }
-            // Compare paths from different file systems component by component.
-            return extractKey(separator1, string1).equals(extractKey(separator2, string2));
+            // Providers can sort the same relative names differently, so compare keys without relying on their path ordering.
+            return list1.stream().map(RelativeSortedPaths::nameKey).collect(Collectors.toSet())
+                    .equals(list2.stream().map(RelativeSortedPaths::nameKey).collect(Collectors.toSet()));
         }
 
         /**
-         * Replaces the file separator in a path string with a string that is not legal in a path on Windows, Linux, and macOS.
+         * Extracts a separator-independent key for a relative path.
          *
-         * @param separator The file separator.
-         * @param string A path.
-         * @return A key.
+         * <p>
+         * The key contains the path's name segments. Replacing separators with a character permitted in file names can merge distinct paths: for example,
+         * {@code a>b} is a legal POSIX file name and must remain distinct from the two-segment path {@code a/b}.
+         * </p>
+         *
+         * <p>
+         * Splits the string form using the path's own file system separator because some providers retain trailing separators in directory name elements
+         * (for example, the Java 8 ZIP file system). Trailing empty segments are discarded.
+         * </p>
+         *
+         * @param path A relative path.
+         * @return The name segments, independent of the file system's separator.
          */
-        static String extractKey(final String separator, final String string) {
-            return string.replace(separator, ">");
+        static List<String> nameKey(final Path path) {
+            final String separator = path.getFileSystem().getSeparator();
+            final String string = path.toString();
+            final List<String> key = new ArrayList<>();
+            int start = 0;
+            int end;
+            while ((end = string.indexOf(separator, start)) >= 0) {
+                key.add(string.substring(start, end));
+                start = end + separator.length();
+            }
+            key.add(string.substring(start));
+            while (!key.isEmpty() && key.get(key.size() - 1).isEmpty()) {
+                key.remove(key.size() - 1);
+            }
+            return key;
         }
 
         final boolean equals;
@@ -410,16 +412,38 @@ public final class PathUtils {
     /**
      * Copies a directory to another directory.
      *
+     * <p>
+     * If the target directory is strictly inside the source directory, the target subtree, including any existing contents, is excluded from the copy.
+     * Symbolic links are resolved when comparing the source and target locations. The comparison does not protect against concurrent changes to the file
+     * system.
+     * </p>
+     *
      * @param sourceDirectory The source directory.
      * @param targetDirectory The target directory.
      * @param copyOptions     Specifies how the copying should be done.
      * @return The visitation path counters.
-     * @throws IOException Thrown if an I/O error is thrown by a visitor method.
+     * @throws IOException Thrown if resolving a path or copying an entry fails.
      */
     public static PathCounters copyDirectory(final Path sourceDirectory, final Path targetDirectory, final CopyOption... copyOptions) throws IOException {
         final Path absoluteSource = sourceDirectory.toAbsolutePath();
-        return visitFileTree(new CopyDirectoryVisitor(Counters.longPathCounters(), absoluteSource, targetDirectory, copyOptions), absoluteSource)
-                .getPathCounters();
+        // Paths from different file systems cannot be compared by all providers.
+        // The walker does not descend into a source that is itself a symbolic link.
+        final Path realSource = isSameFileSystem(sourceDirectory, targetDirectory) && Files.isDirectory(absoluteSource, LinkOption.NOFOLLOW_LINKS)
+                ? absoluteSource.toRealPath() : null;
+        final Path realTarget = realSource != null ? toRealPathOfExistingPrefix(targetDirectory.toAbsolutePath()) : null;
+        final CopyDirectoryVisitor visitor;
+        if (realSource != null && realTarget.startsWith(realSource) && !realTarget.equals(realSource)) {
+            visitor = new CopyDirectoryVisitor(Counters.longPathCounters(), absoluteSource, targetDirectory, copyOptions) {
+                @Override
+                public FileVisitResult preVisitDirectory(final Path directory, final BasicFileAttributes attributes) throws IOException {
+                    // Do not walk the destination, whether it already existed or was created by this copy.
+                    return directory.toRealPath().equals(realTarget) ? FileVisitResult.SKIP_SUBTREE : super.preVisitDirectory(directory, attributes);
+                }
+            };
+        } else {
+            visitor = new CopyDirectoryVisitor(Counters.longPathCounters(), absoluteSource, targetDirectory, copyOptions);
+        }
+        return visitFileTree(visitor, absoluteSource).getPathCounters();
     }
 
     /**
@@ -515,10 +539,16 @@ public final class PathUtils {
      * If the parent directory already exists, then return it.
      * </p>
      *
+     * <p>
+     * When {@code linkOption} is {@code null} and the parent is a symbolic link, resolves its target against the link's directory before checking for
+     * existence or creating directories. The returned path is this resolved target, which may be relative or absolute. The path is not normalized,
+     * because removing {@code ..} components can change its meaning when symbolic links are present.
+     * </p>
+     *
      * @param path       The path to a file (or directory).
-     * @param linkOption A {@link LinkOption} or null.
+     * @param linkOption {@link LinkOption#NOFOLLOW_LINKS} to retain the parent symbolic link, or {@code null} to resolve its target.
      * @param attrs      An optional list of file attributes to set atomically when creating the directories.
-     * @return The Path for the {@code path}'s parent directory or null if the given path has no parent.
+     * @return The parent path, or its resolved symbolic link target when following links, or {@code null} if the given path has no parent.
      * @throws IOException Thrown if an I/O error occurs.
      * @since 2.12.0
      */
@@ -694,8 +724,8 @@ public final class PathUtils {
             throw new NoSuchFileException(file.toString());
         }
         final PathCounters pathCounts = Counters.longPathCounters();
-        boolean exists = exists(file, linkOptions);
-        long size = exists && !Files.isSymbolicLink(file) ? Files.size(file) : 0;
+        final boolean exists = exists(file, linkOptions);
+        final long size = exists && !Files.isSymbolicLink(file) ? Files.size(file) : 0;
         try {
             if (Files.deleteIfExists(file)) {
                 pathCounts.getFileCounter().increment();
@@ -705,26 +735,26 @@ public final class PathUtils {
         } catch (final AccessDeniedException ignored) {
             // Ignore and try again below.
         }
+        final boolean override = overrideReadOnly(deleteOptions);
         final Path parent = getParent(file);
-        PosixFileAttributes posixFileAttributes = null;
-        try {
-            if (overrideReadOnly(deleteOptions)) {
-                posixFileAttributes = readPosixFileAttributes(parent, linkOptions);
-                setReadOnly(file, false, linkOptions);
+        final PosixFileAttributes parentAttributes = override ? readPosixFileAttributes(parent, linkOptions) : null;
+        // Preserve the deletion failure if restoring parent permissions also fails.
+        try (Closeable restoreParent = () -> { // NOPMD UnusedLocalVariable: Closing this resource restores permissions.
+            if (parentAttributes != null) {
+                Files.setPosixFilePermissions(parent, parentAttributes.permissions());
             }
-            // Read size _after_ having read/execute access on POSIX.
-            exists = exists(file, linkOptions);
-            size = exists && !Files.isSymbolicLink(file) ? Files.size(file) : 0;
-            if (Files.deleteIfExists(file)) {
-                pathCounts.getFileCounter().increment();
-                pathCounts.getByteCounter().add(size);
-            }
-        } finally {
-            if (posixFileAttributes != null) {
-                Files.setPosixFilePermissions(parent, posixFileAttributes.permissions());
-            }
+        }) {
+            return withReadOnlyOverride(file, linkOptions, override, () -> {
+                // Read size after having read/execute access on POSIX.
+                final boolean fileExists = exists(file, linkOptions);
+                final long fileSize = fileExists && !Files.isSymbolicLink(file) ? Files.size(file) : 0;
+                if (Files.deleteIfExists(file)) {
+                    pathCounts.getFileCounter().increment();
+                    pathCounts.getByteCounter().add(fileSize);
+                }
+                return pathCounts;
+            });
         }
-        return pathCounts;
     }
 
     /**
@@ -795,17 +825,15 @@ public final class PathUtils {
         final List<Path> fileList1 = relativeSortedPaths.relativeFileList1;
         final List<Path> fileList2 = relativeSortedPaths.relativeFileList2;
         final boolean sameFileSystem = isSameFileSystem(path1, path2);
+        final Map<List<String>, Path> pathsByName2 = sameFileSystem ? null
+                : fileList2.stream().collect(Collectors.toMap(RelativeSortedPaths::nameKey, Function.identity()));
         for (final Path path : fileList1) {
-            final int binarySearch = sameFileSystem ? Collections.binarySearch(fileList2, path)
-                    : Collections.binarySearch(fileList2, path,
-                            Comparator.comparing(p -> RelativeSortedPaths.extractKey(p.getFileSystem().getSeparator(), p.toString())));
-            if (binarySearch < 0) {
+            // Resolve each relative path on its own file system; the other provider may interpret its separator as a file name character.
+            final Path relativePath2 = sameFileSystem ? path : pathsByName2.get(RelativeSortedPaths.nameKey(path));
+            if (relativePath2 == null) {
                 throw new IllegalStateException("Unexpected mismatch.");
             }
-            if (sameFileSystem && !fileContentEquals(path1.resolve(path), path2.resolve(path), linkOptions, openOptions)) {
-                return false;
-            }
-            if (!fileContentEquals(path1.resolve(path.toString()), path2.resolve(path.toString()), linkOptions, openOptions)) {
+            if (!fileContentEquals(path1.resolve(path), path2.resolve(relativePath2), linkOptions, openOptions)) {
                 return false;
             }
         }
@@ -1554,7 +1582,11 @@ public final class PathUtils {
     }
 
     private static Path readIfSymbolicLink(final Path path) throws IOException {
-        return path != null ? Files.isSymbolicLink(path) ? Files.readSymbolicLink(path) : path : null;
+        if (path == null || !Files.isSymbolicLink(path)) {
+            return path;
+        }
+        // Relative targets are relative to the link's directory. Preserve symlink-sensitive components such as "..".
+        return path.resolveSibling(Files.readSymbolicLink(path));
     }
 
     /**
@@ -1876,6 +1908,36 @@ public final class PathUtils {
         return StreamSupport.stream(iterable.spliterator(), false).collect(Collectors.toList());
     }
 
+    /**
+     * Resolves symbolic links in the longest existing prefix of an absolute path.
+     *
+     * <p>
+     * Missing name elements are appended unchanged. The path is not normalized before resolving symbolic links because doing so can change the meaning of
+     * {@code ..} following a symbolic link.
+     * </p>
+     *
+     * @param absolutePath An absolute path whose final name elements may not exist.
+     * @return The real path of the existing prefix with the missing name elements appended.
+     * @throws IOException Thrown if resolving the existing prefix fails.
+     */
+    private static Path toRealPathOfExistingPrefix(final Path absolutePath) throws IOException {
+        Path existing = absolutePath;
+        Path remainder = absolutePath.getFileSystem().getPath("");
+        while (true) {
+            try {
+                return existing.toRealPath().resolve(remainder);
+            } catch (final NoSuchFileException e) {
+                final Path parent = existing.getParent();
+                final Path fileName = existing.getFileName();
+                if (parent == null || fileName == null) {
+                    throw e;
+                }
+                remainder = fileName.resolve(remainder);
+                existing = parent;
+            }
+        }
+    }
+
     private static List<Path> toSortedList(final Iterable<Path> rootDirectories) {
         final List<Path> list = toList(rootDirectories);
         Collections.sort(list);
@@ -2059,6 +2121,63 @@ public final class PathUtils {
             if (posixFileAttributes != null && path != null && Files.exists(path, linkOptions)) {
                 Files.setPosixFilePermissions(path, posixFileAttributes.permissions());
             }
+        }
+    }
+
+    /**
+     * Overrides read-only state for an operation, restoring DOS state on failure.
+     *
+     * @param path the file to operate on.
+     * @param linkOptions how to handle symbolic links.
+     * @param override whether to override read-only state.
+     * @param action the operation.
+     * @param <R> the result type.
+     * @return the operation result.
+     * @throws IOException if the operation or restoration fails.
+     */
+    static <R> R withReadOnlyOverride(final Path path, final LinkOption[] linkOptions, final boolean override, final IOSupplier<R> action)
+            throws IOException {
+        if (!override) {
+            return action.get();
+        }
+        final DosFileAttributes dosAttributes;
+        try {
+            dosAttributes = Files.readAttributes(path, DosFileAttributes.class, linkOptions);
+        } catch (final UnsupportedOperationException ignored) {
+            // The provider has no DOS attributes; preserve the existing POSIX override behavior.
+            setReadOnly(path, false, linkOptions);
+            return action.get();
+        } catch (final IOException failure) {
+            final Path parent = getParent(path);
+            if (!isPosix(parent, linkOptions)) {
+                // Do not clear a DOS attribute when its original value could not be saved.
+                throw failure;
+            }
+            // DOS views may be unavailable for individual paths, such as POSIX symbolic links.
+            // Override only the parent permissions, leaving the unknown DOS state untouched.
+            setPosixDeletePermissions(parent, true, linkOptions);
+            return action.get();
+        }
+        try {
+            setReadOnly(path, false, linkOptions);
+            return action.get();
+        } catch (final IOException | RuntimeException | Error failure) {
+            if (dosAttributes != null && dosAttributes.isReadOnly()) {
+                try {
+                    // Do not use setReadOnly: its POSIX fallback can change file permissions.
+                    final DosFileAttributeView view = Files.getFileAttributeView(path, DosFileAttributeView.class, linkOptions);
+                    if (view != null) {
+                        view.setReadOnly(true);
+                    }
+                } catch (final NoSuchFileException ignored) {
+                    // The file no longer exists, so there is no attribute to restore.
+                } catch (final IOException | RuntimeException | Error restorationFailure) {
+                    if (failure != restorationFailure) {
+                        failure.addSuppressed(restorationFailure);
+                    }
+                }
+            }
+            throw failure;
         }
     }
 

@@ -106,6 +106,7 @@ public class CharsetsTest {
         charset.aliases().forEach(n -> assertFalse(Charsets.isUTF8(Charset.forName(n))));
     }
 
+    @Test
     void testIsUTF8CharsetUTF8() {
         assertTrue(Charsets.isUTF8(StandardCharsets.UTF_8));
         StandardCharsets.UTF_8.aliases().forEach(n -> assertTrue(Charsets.isUTF8(Charset.forName(n))));

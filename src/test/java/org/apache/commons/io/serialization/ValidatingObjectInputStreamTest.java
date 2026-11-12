@@ -18,17 +18,22 @@
  */
 package org.apache.commons.io.serialization;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTimeoutPreemptively;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InvalidClassException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.ObjectStreamConstants;
+import java.time.Duration;
 import java.util.HashMap;
 import java.util.UUID;
 import java.util.regex.Pattern;
@@ -36,6 +41,7 @@ import java.util.regex.Pattern;
 import org.apache.commons.io.input.BoundedInputStream;
 import org.apache.commons.io.serialization.ValidatingObjectInputStream.Builder;
 import org.apache.commons.lang3.SerializationUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -69,6 +75,20 @@ class ValidatingObjectInputStreamTest extends AbstractCloseableListTest {
         final ObjectOutputStream oos = addCloseable(new ObjectOutputStream(bos));
         oos.writeObject(testObject);
         testStream = addCloseable(new ByteArrayInputStream(bos.toByteArray()));
+    }
+
+    @Test
+    void testAcceptArrayClassSeparately() throws Exception {
+        final byte[] serialized = SerializationUtils.serialize(new MockSerializedClass[0]);
+        try (ValidatingObjectInputStream vois = ValidatingObjectInputStream.builder().setByteArray(serialized)
+                .accept(MockSerializedClass.class).get()) {
+            final InvalidClassException exception = assertThrows(InvalidClassException.class, vois::readObject);
+            assertTrue(exception.getMessage().contains(MockSerializedClass[].class.getName()));
+        }
+        try (ValidatingObjectInputStream vois = ValidatingObjectInputStream.builder().setByteArray(serialized)
+                .accept(MockSerializedClass[].class).get()) {
+            assertArrayEquals(new MockSerializedClass[0], (MockSerializedClass[]) vois.readObject());
+        }
     }
 
     @Test
@@ -112,8 +132,44 @@ class ValidatingObjectInputStreamTest extends AbstractCloseableListTest {
     }
 
     @Test
+    void testAcceptWildcardHostileClassName() throws IOException {
+        final String name = StringUtils.repeat("ab", 60) + "ac";
+        final ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        try (DataOutputStream out = new DataOutputStream(bytes)) {
+            out.writeShort(ObjectStreamConstants.STREAM_MAGIC);
+            out.writeShort(ObjectStreamConstants.STREAM_VERSION);
+            out.writeByte(ObjectStreamConstants.TC_OBJECT);
+            out.writeByte(ObjectStreamConstants.TC_CLASSDESC);
+            out.writeUTF(name);
+            out.writeLong(1);
+            out.writeByte(ObjectStreamConstants.SC_SERIALIZABLE);
+            out.writeShort(0);
+            out.writeByte(ObjectStreamConstants.TC_ENDBLOCKDATA);
+            out.writeByte(ObjectStreamConstants.TC_NULL);
+        }
+        assertTimeoutPreemptively(Duration.ofSeconds(10), () -> {
+            try (ValidatingObjectInputStream in = ValidatingObjectInputStream.builder()
+                    .setInputStream(new ByteArrayInputStream(bytes.toByteArray()))
+                    .accept(StringUtils.repeat("*ab", 30) + "*ac*ad").get()) {
+                final InvalidClassException exception = assertThrows(InvalidClassException.class, in::readObject);
+                assertTrue(exception.getMessage().contains(name));
+            }
+        });
+    }
+
+    @Test
     void testAcceptWildcardInstance() throws Exception {
         assertSerialization(addCloseable(newFixture()).accept("org.apache.commons.io.*"));
+    }
+
+    @Test
+    void testAcceptWildcardStarQuestionBuilder() throws Exception {
+        assertSerialization(addCloseable(newBuilder().accept("org.*?MockSerializedClass").get()));
+    }
+
+    @Test
+    void testAcceptWildcardStarQuestionInstance() throws Exception {
+        assertSerialization(addCloseable(newFixture()).accept("org.*?MockSerializedClass"));
     }
 
     @Test
@@ -228,6 +284,85 @@ class ValidatingObjectInputStreamTest extends AbstractCloseableListTest {
     }
 
     @Test
+    void testMaxArrayLength() throws Exception {
+        final byte[] bytes = SerializationUtils.serialize(new byte[1000]);
+        // Passes without a limit and with a large enough limit
+        try (ValidatingObjectInputStream vois = ValidatingObjectInputStream.builder()
+                .accept(byte[].class)
+                .setInputStream(new ByteArrayInputStream(bytes))
+                .get()) {
+            assertEquals(1000, ((byte[]) vois.readObject()).length);
+        }
+        try (ValidatingObjectInputStream vois = ValidatingObjectInputStream.builder()
+                .accept(byte[].class)
+                .setMaxArrayLength(1000)
+                .setInputStream(new ByteArrayInputStream(bytes))
+                .get()) {
+            assertEquals(1000, ((byte[]) vois.readObject()).length);
+        }
+        // The declared array length exceeds the limit: rejected before the allocation is honored
+        try (ValidatingObjectInputStream vois = ValidatingObjectInputStream.builder()
+                .accept(byte[].class)
+                .setMaxArrayLength(999)
+                .setInputStream(new ByteArrayInputStream(bytes))
+                .get()) {
+            assertThrows(InvalidClassException.class, vois::readObject);
+        }
+    }
+
+    @Test
+    void testMaxDepth() throws Exception {
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("k", "v");
+        for (int i = 0; i < 20; i++) {
+            final HashMap<String, Object> outer = new HashMap<>();
+            outer.put("k", map);
+            map = outer;
+        }
+        final byte[] bytes = SerializationUtils.serialize(map);
+        // Passes without a limit
+        try (ValidatingObjectInputStream vois = ValidatingObjectInputStream.builder()
+                .accept(HashMap.class)
+                .setInputStream(new ByteArrayInputStream(bytes))
+                .get()) {
+            assertEquals(HashMap.class, vois.readObject().getClass());
+        }
+        // Nesting depth exceeds the limit
+        try (ValidatingObjectInputStream vois = ValidatingObjectInputStream.builder()
+                .accept(HashMap.class)
+                .setMaxDepth(3)
+                .setInputStream(new ByteArrayInputStream(bytes))
+                .get()) {
+            assertThrows(InvalidClassException.class, vois::readObject);
+        }
+    }
+
+    @Test
+    void testMaxRefs() throws Exception {
+        // Integer values are ordinary objects and count toward the reference limit on every JDK; bare strings may not.
+        final HashMap<String, Integer> map = new HashMap<>();
+        for (int i = 0; i < 20; i++) {
+            map.put("key" + i, i);
+        }
+        final byte[] bytes = SerializationUtils.serialize(map);
+        // Passes without a limit
+        try (ValidatingObjectInputStream vois = ValidatingObjectInputStream.builder()
+                .accept(HashMap.class, Number.class, Integer.class)
+                .setInputStream(new ByteArrayInputStream(bytes))
+                .get()) {
+            assertEquals(HashMap.class, vois.readObject().getClass());
+        }
+        // Reference count exceeds the limit
+        try (ValidatingObjectInputStream vois = ValidatingObjectInputStream.builder()
+                .accept(HashMap.class, Number.class, Integer.class)
+                .setMaxRefs(5)
+                .setInputStream(new ByteArrayInputStream(bytes))
+                .get()) {
+            assertThrows(InvalidClassException.class, vois::readObject);
+        }
+    }
+
+    @Test
     void testNoAccept() {
         assertThrows(InvalidClassException.class, () -> assertSerialization(addCloseable(newFixture())));
     }
@@ -260,6 +395,38 @@ class ValidatingObjectInputStreamTest extends AbstractCloseableListTest {
     @Test
     void testOurTestClassOnlyAccepted() throws Exception {
         assertSerialization(addCloseable(newFixture()).accept(MockSerializedClass.class));
+    }
+
+    @Test
+    void testRejectArrayClass() throws Exception {
+        final byte[] serialized = SerializationUtils.serialize(new MockSerializedClass[0]);
+        try (ValidatingObjectInputStream vois = ValidatingObjectInputStream.builder().setByteArray(serialized)
+                .accept("*").reject(MockSerializedClass[].class).get()) {
+            final InvalidClassException exception = assertThrows(InvalidClassException.class, vois::readObject);
+            assertTrue(exception.getMessage().contains(MockSerializedClass[].class.getName()));
+        }
+    }
+
+    @Test
+    void testRejectArrayElementClass() throws Exception {
+        final byte[] serialized = SerializationUtils.serialize(new MockSerializedClass[] { testObject });
+        try (ValidatingObjectInputStream vois = ValidatingObjectInputStream.builder().setByteArray(serialized)
+                .accept("*").reject(MockSerializedClass.class).get()) {
+            final InvalidClassException exception = assertThrows(InvalidClassException.class, vois::readObject);
+            assertEquals("Class name not accepted: " + MockSerializedClass.class.getName(), exception.getMessage());
+        }
+    }
+
+    @Test
+    void testRejectArrayElementClassAllowsEmptyAndNullOnlyArrays() throws Exception {
+        for (final int length : new int[] { 0, 1 }) {
+            final MockSerializedClass[] array = new MockSerializedClass[length];
+            final byte[] serialized = SerializationUtils.serialize(array);
+            try (ValidatingObjectInputStream vois = ValidatingObjectInputStream.builder().setByteArray(serialized)
+                    .accept("*").reject(MockSerializedClass.class).get()) {
+                assertArrayEquals(array, (MockSerializedClass[]) vois.readObject());
+            }
+        }
     }
 
     @Test
@@ -323,6 +490,18 @@ class ValidatingObjectInputStreamTest extends AbstractCloseableListTest {
     @Test
     void testRejectWildcardInstance() {
         assertThrows(InvalidClassException.class, () -> assertSerialization(addCloseable(newFixture()).accept(MockSerializedClass.class).reject("org.*")));
+    }
+
+    @Test
+    void testRejectWildcardStarQuestionBuilder() {
+        assertThrows(InvalidClassException.class,
+                () -> assertSerialization(addCloseable(newBuilder().accept("*").reject("org.*?MockSerializedClass").get())));
+    }
+
+    @Test
+    void testRejectWildcardStarQuestionInstance() {
+        assertThrows(InvalidClassException.class,
+                () -> assertSerialization(addCloseable(newFixture()).accept("*").reject("org.*?MockSerializedClass")));
     }
 
     @Test

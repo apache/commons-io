@@ -22,6 +22,11 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -34,28 +39,38 @@ import java.io.RandomAccessFile;
 import java.io.Writer;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.AccessDeniedException;
+import java.nio.file.FileSystemException;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.StandardOpenOption;
 import java.nio.file.attribute.FileTime;
+import java.nio.file.attribute.PosixFileAttributeView;
+import java.nio.file.attribute.PosixFilePermission;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.RandomAccessFileMode;
 import org.apache.commons.io.TestResources;
 import org.apache.commons.io.test.TestUtils;
-import org.apache.commons.lang3.SystemProperties;
+import org.apache.commons.lang3.SystemUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 /**
  * Test for {@link Tailer}.
@@ -193,6 +208,63 @@ class TailerTest {
     @TempDir
     public static File temporaryFolder;
 
+    static boolean isOsWindows() {
+        return SystemUtils.IS_OS_WINDOWS;
+    }
+
+    private void checkInitialOpen(final int failedOpens, final boolean tailFromEnd, final boolean reOpen, final IOException metadataFailure) throws Exception {
+        final File file = Files.createTempFile(temporaryFolder.toPath(), "tailer-initial-open", ".txt").toFile();
+        writeLines(file, "first", "second");
+        final NonStandardTailable delegate = new NonStandardTailable(file);
+        final Tailer.Tailable tailable = mock(Tailer.Tailable.class);
+        final AtomicInteger opens = new AtomicInteger();
+        when(tailable.getRandomAccess(anyString())).thenAnswer(invocation -> {
+            if (opens.getAndIncrement() < failedOpens) {
+                throw new FileNotFoundException(file.toString());
+            }
+            return delegate.getRandomAccess(invocation.getArgument(0));
+        });
+        when(tailable.size()).thenAnswer(invocation -> delegate.size());
+        when(tailable.lastModifiedFileTime()).thenAnswer(invocation -> {
+            if (opens.get() <= failedOpens && metadataFailure != null) {
+                throw metadataFailure;
+            }
+            return FileTime.fromMillis(1);
+        });
+        final boolean readInitial = !tailFromEnd || failedOpens > 0 && metadataFailure instanceof NoSuchFileException;
+        final List<String> expected = new ArrayList<>();
+        if (readInitial) {
+            expected.addAll(Arrays.asList("first", "second"));
+        }
+        final TestTailerListener listener = new TestTailerListener();
+        final AtomicInteger polls = new AtomicInteger();
+        try (Tailer tailer = Tailer.builder().setTailable(tailable).setTailerListener(listener).setCharset(StandardCharsets.UTF_8)
+                .setTailFromEnd(tailFromEnd).setReOpen(reOpen).setStartThread(false).setDelayDuration(Duration.ZERO).get()) {
+            when(tailable.isNewer(any())).thenAnswer(invocation -> {
+                switch (polls.incrementAndGet()) {
+                case 2:
+                    assertEquals(expected, listener.getLines());
+                    writeLines(file, "third");
+                    expected.add("third");
+                    break;
+                case 3:
+                    tailer.close();
+                    break;
+                default:
+                    break;
+                }
+                return false;
+            });
+            tailer.run();
+        }
+        assertNull(listener.exception);
+        assertEquals(failedOpens, listener.notFound);
+        assertEquals(failedOpens + (reOpen ? 3 : 1), opens.get());
+        assertEquals(0, listener.rotated);
+        assertEquals(3, polls.get());
+        assertEquals(expected, listener.getLines());
+    }
+
     protected void createFile(final File file, final long size) throws IOException {
         assertTrue(file.getParentFile().exists(), () -> "Cannot create file " + file + " as the parent directory does not exist");
         try (BufferedOutputStream output = new BufferedOutputStream(Files.newOutputStream(file.toPath()))) {
@@ -218,6 +290,25 @@ class TailerTest {
         assertEquals(size, file.length());
     }
 
+    private void deleteWhenReleased(final File file) throws IOException, InterruptedException {
+        final long deadline = System.nanoTime() + TimeUnit.SECONDS.toNanos(5);
+        while (true) {
+            try {
+                Files.delete(file.toPath());
+                return;
+            } catch (final NoSuchFileException e) {
+                throw e;
+            } catch (final FileSystemException e) {
+                // Windows rejects deletion while the tailer has an open handle. Keep the
+                // original exception if the file remains locked or another error persists.
+                if (!isOsWindows() || System.nanoTime() >= deadline) {
+                    throw e;
+                }
+                TestUtils.sleep(10);
+            }
+        }
+    }
+
     private List<String> expectLinesWithLongTimeout(final TestTailerListener listener, final long minDelay, final int count) throws Exception {
         for (int i = 0; i < count; i++) {
             TestUtils.sleep(minDelay);
@@ -228,6 +319,20 @@ class TailerTest {
         }
         fail("Waiting for TestTailerListener.getLines() timed out after " + count * minDelay + " ms");
         return null;
+    }
+
+    private void runWithBoundedPolls(final File file, final TailerListener listener, final boolean reOpen) {
+        try (Tailer tailer = new Tailer(file, StandardCharsets.UTF_8, listener, 0, true, reOpen, TEST_BUFFER_SIZE) {
+            private int checks;
+
+            @Override
+            protected boolean getRun() {
+                // Bound synchronous execution even when no lines are delivered.
+                return super.getRun() && ++checks < 50;
+            }
+        }) {
+            tailer.run();
+        }
     }
 
     @Test
@@ -261,7 +366,7 @@ class TailerTest {
                 .setTailerListener(listener)
                 .get()) {
             assertTrue(tailer.getTailable() instanceof NonStandardTailable);
-            validateTailer(listener, file);
+            validateTailer(tailer, listener, file);
         }
     }
 
@@ -271,7 +376,7 @@ class TailerTest {
         createFile(file, 0);
         final TestTailerListener listener = new TestTailerListener(1);
         try (Tailer tailer = Tailer.create(file, listener)) {
-            validateTailer(listener, file);
+            validateTailer(tailer, listener, file);
         }
     }
 
@@ -281,7 +386,7 @@ class TailerTest {
         createFile(file, 0);
         final TestTailerListener listener = new TestTailerListener(1);
         try (Tailer tailer = Tailer.create(file, listener, TEST_DELAY_MILLIS)) {
-            validateTailer(listener, file);
+            validateTailer(tailer, listener, file);
         }
     }
 
@@ -291,7 +396,7 @@ class TailerTest {
         createFile(file, 0);
         final TestTailerListener listener = new TestTailerListener(1);
         try (Tailer tailer = Tailer.create(file, listener, TEST_DELAY_MILLIS, false)) {
-            validateTailer(listener, file);
+            validateTailer(tailer, listener, file);
         }
     }
 
@@ -301,7 +406,7 @@ class TailerTest {
         createFile(file, 0);
         final TestTailerListener listener = new TestTailerListener(1);
         try (Tailer tailer = Tailer.create(file, listener, TEST_DELAY_MILLIS, false, TEST_BUFFER_SIZE)) {
-            validateTailer(listener, file);
+            validateTailer(tailer, listener, file);
         }
     }
 
@@ -311,7 +416,7 @@ class TailerTest {
         createFile(file, 0);
         final TestTailerListener listener = new TestTailerListener(1);
         try (Tailer tailer = Tailer.create(file, listener, TEST_DELAY_MILLIS, false, true, TEST_BUFFER_SIZE)) {
-            validateTailer(listener, file);
+            validateTailer(tailer, listener, file);
         }
     }
 
@@ -321,7 +426,7 @@ class TailerTest {
         createFile(file, 0);
         final TestTailerListener listener = new TestTailerListener(1);
         try (Tailer tailer = Tailer.create(file, StandardCharsets.UTF_8, listener, TEST_DELAY_MILLIS, false, true, TEST_BUFFER_SIZE)) {
-            validateTailer(listener, file);
+            validateTailer(tailer, listener, file);
         }
     }
 
@@ -331,7 +436,7 @@ class TailerTest {
         createFile(file, 0);
         final TestTailerListener listener = new TestTailerListener(1);
         try (Tailer tailer = Tailer.create(file, listener, TEST_DELAY_MILLIS, false, false)) {
-            validateTailer(listener, file);
+            validateTailer(tailer, listener, file);
         }
     }
 
@@ -420,11 +525,9 @@ class TailerTest {
         final File file = new File(temporaryFolder, "testMultiByteBreak.txt");
         createFile(file, 0);
         final TestTailerListener listener = new TestTailerListener();
-        final String osname = SystemProperties.getOsName();
-        final boolean isWindows = osname.startsWith("Windows");
         // Need to use UTF-8 to read & write the file otherwise it can be corrupted (depending on the default charset)
         final Charset charsetUTF8 = StandardCharsets.UTF_8;
-        try (Tailer tailer = new Tailer(file, charsetUTF8, listener, delay, false, isWindows, IOUtils.DEFAULT_BUFFER_SIZE)) {
+        try (Tailer tailer = new Tailer(file, charsetUTF8, listener, delay, false, isOsWindows(), IOUtils.DEFAULT_BUFFER_SIZE)) {
             final Thread thread = new Thread(tailer, "commons-io-tailer-testMultiByteBreak");
             thread.start();
             try (Writer out = new OutputStreamWriter(Files.newOutputStream(file.toPath()), charsetUTF8);
@@ -460,7 +563,7 @@ class TailerTest {
         try (Tailer tailer = new Tailer(file, listener)) {
             final Thread thread = new Thread(tailer, "commons-io-tailer-testSimpleConstructor");
             thread.start();
-            validateTailer(listener, file);
+            validateTailer(tailer, listener, file);
         }
     }
 
@@ -472,7 +575,7 @@ class TailerTest {
         try (Tailer tailer = new Tailer(file, listener, TEST_DELAY_MILLIS)) {
             final Thread thread = new Thread(tailer, "commons-io-tailer-testSimpleConstructorWithDelay");
             thread.start();
-            validateTailer(listener, file);
+            validateTailer(tailer, listener, file);
         }
     }
 
@@ -484,7 +587,7 @@ class TailerTest {
         try (Tailer tailer = new Tailer(file, listener, TEST_DELAY_MILLIS, false)) {
             final Thread thread = new Thread(tailer, "commons-io-tailer-testSimpleConstructorWithDelayAndFromStart");
             thread.start();
-            validateTailer(listener, file);
+            validateTailer(tailer, listener, file);
         }
     }
 
@@ -496,7 +599,7 @@ class TailerTest {
         try (Tailer tailer = new Tailer(file, listener, TEST_DELAY_MILLIS, false, TEST_BUFFER_SIZE)) {
             final Thread thread = new Thread(tailer, "commons-io-tailer-testSimpleConstructorWithDelayAndFromStartWithBufferSize");
             thread.start();
-            validateTailer(listener, file);
+            validateTailer(tailer, listener, file);
         }
     }
 
@@ -508,7 +611,7 @@ class TailerTest {
         try (Tailer tailer = new Tailer(file, listener, TEST_DELAY_MILLIS, false, false)) {
             final Thread thread = new Thread(tailer, "commons-io-tailer-testSimpleConstructorWithDelayAndFromStartWithReopen");
             thread.start();
-            validateTailer(listener, file);
+            validateTailer(tailer, listener, file);
         }
     }
 
@@ -520,7 +623,7 @@ class TailerTest {
         try (Tailer tailer = new Tailer(file, listener, TEST_DELAY_MILLIS, false, true, TEST_BUFFER_SIZE)) {
             final Thread thread = new Thread(tailer, "commons-io-tailer-testSimpleConstructorWithDelayAndFromStartWithReopenAndBufferSize");
             thread.start();
-            validateTailer(listener, file);
+            validateTailer(tailer, listener, file);
         }
     }
 
@@ -532,7 +635,7 @@ class TailerTest {
         try (Tailer tailer = new Tailer(file, StandardCharsets.UTF_8, listener, TEST_DELAY_MILLIS, false, true, TEST_BUFFER_SIZE)) {
             final Thread thread = new Thread(tailer, "commons-io-tailer-testSimpleConstructorWithDelayAndFromStartWithReopenAndBufferSizeAndCharset");
             thread.start();
-            validateTailer(listener, file);
+            validateTailer(tailer, listener, file);
         }
     }
 
@@ -584,8 +687,7 @@ class TailerTest {
         final File file = new File(temporaryFolder, "tailer1-test.txt");
         createFile(file, 0);
         final TestTailerListener listener = new TestTailerListener();
-        final String osname = SystemProperties.getOsName();
-        final boolean isWindows = osname.startsWith("Windows");
+        final boolean isWindows = isOsWindows();
         try (Tailer tailer = new Tailer(file, listener, delayMillis, false, isWindows)) {
             final Thread thread = new Thread(tailer, "commons-io-tailer-testTailer");
             thread.start();
@@ -612,7 +714,8 @@ class TailerTest {
             assertEquals("Line two", lines.get(1), "3 line 2");
             assertEquals("Line three", lines.get(2), "3 line 3");
             // Delete & re-create
-            file.delete();
+            // reOpen releases the Windows file handle only between reads.
+            deleteWhenReleased(file);
             assertFalse(file.exists(), "File should not exist");
             createFile(file, 0);
             assertTrue(file.exists(), "File should now exist");
@@ -646,9 +749,7 @@ class TailerTest {
         final File file = new File(temporaryFolder, "tailer-eof-test.txt");
         createFile(file, 0);
         final TestTailerListener listener = new TestTailerListener();
-        final String osname = SystemProperties.getOsName();
-        final boolean isWindows = osname.startsWith("Windows");
-        try (Tailer tailer = new Tailer(file, listener, delayMillis, false, isWindows)) {
+        try (Tailer tailer = new Tailer(file, listener, delayMillis, false, isOsWindows())) {
             final Thread thread = new Thread(tailer, "commons-io-tailer-testTailerEndOfFileReached");
             thread.start();
             // write a few lines
@@ -708,7 +809,9 @@ class TailerTest {
             listener.clear();
             // touch the file
             TestUtils.sleepToNextSecond(); // ensure to be within the next second because of posix fs limitation
-            file.setLastModified(System.currentTimeMillis());
+            final FileTime previousTimestamp = Files.getLastModifiedTime(file.toPath());
+            assertTrue(file.setLastModified(System.currentTimeMillis()), "Failed to update the file timestamp");
+            assertTrue(Files.getLastModifiedTime(file.toPath()).compareTo(previousTimestamp) > 0, "File timestamp must advance");
             TestUtils.sleep(delayMillis * 10);
             lines = listener.getLines();
             assertEquals(0, lines.size(), "nothing should have changed by touching");
@@ -734,7 +837,9 @@ class TailerTest {
             listener.clear();
             // touch the file
             TestUtils.sleepToNextSecond(); // ensure to be within the next second because of posix fs limitation
-            file.setLastModified(System.currentTimeMillis());
+            final FileTime previousTimestamp = Files.getLastModifiedTime(file.toPath());
+            assertTrue(file.setLastModified(System.currentTimeMillis()), "Failed to update the file timestamp");
+            assertTrue(Files.getLastModifiedTime(file.toPath()).compareTo(previousTimestamp) > 0, "File timestamp must advance");
             lines = expectLinesWithLongTimeout(listener, delayMillis, 20);
             assertEquals(1, lines.size(), "1 line count");
             assertEquals("Line one", lines.get(0), "1 line 1");
@@ -742,12 +847,219 @@ class TailerTest {
         }
     }
 
-    private void validateTailer(final TestTailerListener listener, final File file) throws IOException, InterruptedException {
-        writeLines(file, "foo");
-        final int timeout = 30;
-        final TimeUnit timeoutUnit = TimeUnit.SECONDS;
-        assertTrue(listener.awaitExpectedLines(timeout, timeoutUnit), () -> String.format("await timed out after %s %s", timeout, timeoutUnit));
-        assertEquals(listener.getLines(), Arrays.asList("foo"), "lines");
+    private void testTailerTimestampChanges(final Boolean ignoreTouch) throws Exception {
+        final File file = new File(temporaryFolder, "tailer-timestamp-changes-" + ignoreTouch + ".txt");
+        Files.write(file.toPath(), "alpha\n".getBytes(StandardCharsets.UTF_8));
+        final TestTailerListener listener = new TestTailerListener();
+        final NonStandardTailable delegate = new NonStandardTailable(file);
+        final List<String> expected = new ArrayList<>();
+        // Drive changes between polls on the tailer's own thread, without filesystem timestamp resolution or scheduling races.
+        final class TimestampTailable implements Tailer.Tailable {
+            private int poll;
+            private Tailer tailer;
+            private long timestamp = 1;
+
+            @Override
+            public Tailer.RandomAccessResourceBridge getRandomAccess(final String mode) throws FileNotFoundException {
+                return delegate.getRandomAccess(mode);
+            }
+
+            @Override
+            public boolean isNewer(final FileTime fileTime) throws IOException {
+                assertEquals(expected, listener.getLines(), "Lines after poll " + poll);
+                switch (++poll) {
+                case 1:
+                    expected.add("alpha");
+                    break;
+                case 2:
+                case 4:
+                    timestamp++;
+                    if (!Boolean.TRUE.equals(ignoreTouch)) {
+                        expected.add("alpha");
+                    }
+                    break;
+                case 5:
+                    Files.write(file.toPath(), "bravo\n".getBytes(StandardCharsets.UTF_8));
+                    timestamp++;
+                    if (!Boolean.TRUE.equals(ignoreTouch)) {
+                        expected.add("bravo");
+                    }
+                    break;
+                case 6:
+                    writeLines(file, "extra");
+                    timestamp++;
+                    expected.add("extra");
+                    break;
+                case 7:
+                    Files.write(file.toPath(), "x\n".getBytes(StandardCharsets.UTF_8));
+                    timestamp++;
+                    break;
+                case 8:
+                    // The preceding poll detected truncation and reset the read position.
+                    expected.add("x");
+                    break;
+                case 10:
+                    tailer.close();
+                    break;
+                default:
+                    // An unchanged timestamp must not replay lines on subsequent polls.
+                    break;
+                }
+                return lastModifiedFileTime().compareTo(fileTime) > 0;
+            }
+
+            @Override
+            public FileTime lastModifiedFileTime() {
+                return FileTime.fromMillis(timestamp);
+            }
+
+            @Override
+            public long size() {
+                return delegate.size();
+            }
+        }
+        final TimestampTailable tailable = new TimestampTailable();
+        final Tailer.Builder builder = Tailer.builder().setTailable(tailable).setTailerListener(listener).setCharset(StandardCharsets.UTF_8)
+                .setDelayDuration(Duration.ofMillis(1)).setStartThread(false);
+        if (ignoreTouch != null) {
+            builder.setIgnoreTouch(ignoreTouch);
+        }
+        try (Tailer tailer = builder.get()) {
+            tailable.tailer = tailer;
+            tailer.run();
+        }
+        assertNull(listener.exception);
+        assertEquals(10, tailable.poll, "All scripted polls must complete");
+        assertEquals(expected, listener.getLines());
+        assertEquals(1, listener.rotated);
+    }
+
+    @Test
+    void testTailerTimestampChangesDefault() throws Exception {
+        testTailerTimestampChanges(null);
+    }
+
+    @Test
+    void testTailerTimestampChangesIgnored() throws Exception {
+        testTailerTimestampChanges(Boolean.TRUE);
+    }
+
+    @Test
+    void testTailerTimestampChangesReplayed() throws Exception {
+        testTailerTimestampChanges(Boolean.FALSE);
+    }
+
+    @ParameterizedTest
+    @CsvSource({"0, true, false", "1, true, false", "2, true, false", "0, false, false", "1, false, false", "2, false, false",
+        "0, true, true", "1, true, true", "2, true, true", "0, false, true", "1, false, true", "2, false, true"})
+    void testTailFromEndAfterInitialOpen(final int failedOpens, final boolean tailFromEnd, final boolean reOpen) throws Exception {
+        checkInitialOpen(failedOpens, tailFromEnd, reOpen, new NoSuchFileException("missing"));
+    }
+
+    @ParameterizedTest
+    @ValueSource(booleans = {false, true})
+    void testTailFromEndAfterUnconfirmedAbsence(final boolean reOpen) throws Exception {
+        checkInitialOpen(1, true, reOpen, null);
+        checkInitialOpen(1, true, reOpen, new AccessDeniedException("denied"));
+        checkInitialOpen(1, true, reOpen, new FileNotFoundException("cannot open"));
+        checkInitialOpen(1, true, reOpen, new FileSystemException("file", null, "sharing violation"));
+        checkInitialOpen(1, true, reOpen, new IOException("metadata unavailable"));
+    }
+
+    @ParameterizedTest
+    @CsvSource({"false, false", "false, true", "true, false", "true, true"})
+    void testTailFromEndNewFile(final boolean reOpen, final boolean missingParent) throws Exception {
+        final File parent = missingParent ? new File(temporaryFolder, "new-parent-" + reOpen) : temporaryFolder;
+        final File file = new File(parent, "new-file-" + reOpen);
+        assertFalse(file.exists());
+        final List<String> lines = new ArrayList<>();
+        final AtomicInteger failures = new AtomicInteger();
+        final TailerListener listener = new TailerListenerAdapter() {
+            @Override
+            public void fileNotFound() {
+                failures.incrementAndGet();
+                try {
+                    Files.createDirectories(file.toPath().getParent());
+                    Files.write(file.toPath(), "first\nsecond\n".getBytes(StandardCharsets.UTF_8));
+                } catch (final IOException e) {
+                    fail(e);
+                }
+            }
+
+            @Override
+            public void handle(final Exception exception) {
+                fail(exception);
+            }
+
+            @Override
+            public void handle(final String line) {
+                lines.add(line);
+            }
+        };
+        runWithBoundedPolls(file, listener, reOpen);
+        assertEquals(1, failures.get());
+        assertEquals(Arrays.asList("first", "second"), lines);
+    }
+
+    @ParameterizedTest
+    @ValueSource(booleans = {false, true})
+    void testTailFromEndPermissionRecovery(final boolean reOpen) throws Exception {
+        final File file = Files.createTempFile(temporaryFolder.toPath(), "tailer-permissions", ".txt").toFile();
+        assumeTrue(Files.getFileAttributeView(file.toPath(), PosixFileAttributeView.class) != null);
+        writeLines(file, "historical");
+        final Set<PosixFilePermission> permissions = Files.getPosixFilePermissions(file.toPath());
+        final List<String> lines = new ArrayList<>();
+        final AtomicInteger failures = new AtomicInteger();
+        try {
+            Files.setPosixFilePermissions(file.toPath(), Collections.emptySet());
+            assumeTrue(!Files.isReadable(file.toPath()), "Requires a user subject to file permissions");
+            final TailerListener listener = new TailerListenerAdapter() {
+                @Override
+                public void fileNotFound() {
+                    failures.incrementAndGet();
+                    try {
+                        Files.setPosixFilePermissions(file.toPath(), permissions);
+                    } catch (final IOException e) {
+                        fail(e);
+                    }
+                }
+
+                @Override
+                public void handle(final Exception exception) {
+                    fail(exception);
+                }
+
+                @Override
+                public void handle(final String line) {
+                    lines.add(line);
+                }
+            };
+            runWithBoundedPolls(file, listener, reOpen);
+            assertEquals(1, failures.get());
+            assertTrue(lines.isEmpty());
+        } finally {
+            Files.setPosixFilePermissions(file.toPath(), permissions);
+        }
+    }
+
+    private void validateTailer(final Tailer tailer, final TestTailerListener listener, final File file) throws Exception {
+        // close() only requests shutdown. On Windows the reader can still hold the file
+        // until its current loop finishes, so wait for deletion before JUnit temp cleanup.
+        // A resource preserves a validation failure if cleanup also throws.
+        try (AutoCloseable cleanup = () -> {
+            tailer.close();
+            // POSIX permits unlinking an open file, which would race with the tailer's
+            // remaining metadata reads. Leave normal temporary-directory cleanup in place there.
+            if (isOsWindows()) {
+                deleteWhenReleased(file);
+            }
+        }) {
+            writeLines(file, "foo");
+            final int timeout = 30;
+            final TimeUnit timeoutUnit = TimeUnit.SECONDS;
+            assertTrue(listener.awaitExpectedLines(timeout, timeoutUnit), () -> String.format("await timed out after %s %s", timeout, timeoutUnit));
+            assertEquals(listener.getLines(), Arrays.asList("foo"), "lines");
+        }
     }
 
     /** Appends lines to a file */

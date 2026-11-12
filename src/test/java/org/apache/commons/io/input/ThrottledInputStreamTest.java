@@ -112,7 +112,7 @@ class ThrottledInputStreamTest extends ProxyInputStreamTest<ThrottledInputStream
             assertEquals(2.0, inputStream.getMaxBytesPerSecond());
         }
         //
-        // 1 bytes per 1/2 second (30_000 millis)
+        // 1 byte per 1/2 second (500 millis) = 2 bytes per second
         // @formatter:on
         maxBytesPer = maxBytesPer.dividedBy(2);
         // @formatter:off
@@ -120,24 +120,34 @@ class ThrottledInputStreamTest extends ProxyInputStreamTest<ThrottledInputStream
                 .setInputStream(createOriginInputStream())
                 .setMaxBytes(1, maxBytesPer)
                 .get()) {
-            assertEquals(0.5, inputStream.getMaxBytesPerSecond());
+            assertEquals(2.0, inputStream.getMaxBytesPerSecond());
         }
-        // 1 byte/millis
+        // 1 byte/millis = 1000 bytes per second
         try (ThrottledInputStream inputStream = builder
                 .setInputStream(createOriginInputStream())
                 .setMaxBytes(1, ChronoUnit.MILLIS)
                 .get()) {
-            assertEquals(0.001, inputStream.getMaxBytesPerSecond());
+            assertEquals(1_000.0, inputStream.getMaxBytesPerSecond());
         }
         // @formatter:on
-        // 1 byte per 10_0011 millis.
+        // 1 byte per 20_011 millis.
         maxBytesPer = Duration.ofSeconds(20).plusMillis(11);
         // @formatter:off
         try (ThrottledInputStream inputStream = builder
                 .setInputStream(createOriginInputStream())
                 .setMaxBytes(1, maxBytesPer)
                 .get()) {
-            assertEquals(20.011, inputStream.getMaxBytesPerSecond());
+            assertEquals(1_000d / 20_011, inputStream.getMaxBytesPerSecond());
+        }
+        // @formatter:on
+        // Javadoc example: 1 byte per minute = 1/60 bytes per second
+        // @formatter:off
+        try (ThrottledInputStream inputStream = builder
+                .setInputStream(createOriginInputStream())
+                .setMaxBytes(1, ChronoUnit.MINUTES)
+                .get()) {
+            assertEquals(1_000d / 60_000, inputStream.getMaxBytesPerSecond());
+            assertEquals(1d / 60, inputStream.getMaxBytesPerSecond(), 1e-12);
         }
         // @formatter:on
         // Javadoc example
@@ -149,6 +159,41 @@ class ThrottledInputStreamTest extends ProxyInputStreamTest<ThrottledInputStream
             assertEquals(100_000.0, inputStream.getMaxBytesPerSecond());
         }
         // @formatter:on
+    }
+
+    @Test
+    void testBuilderRejectsInvalidMaxBytes() {
+        final Builder builder = ThrottledInputStream.builder();
+        for (final long value : new long[] { 0, -1, Long.MIN_VALUE }) {
+            assertThrows(IllegalArgumentException.class, () -> builder.setMaxBytes(value, ChronoUnit.SECONDS));
+            assertThrows(IllegalArgumentException.class, () -> builder.setMaxBytes(value, Duration.ofSeconds(1)));
+        }
+        assertThrows(IllegalArgumentException.class, () -> builder.setMaxBytes(-1, Duration.ofMillis(-1)));
+    }
+
+    @Test
+    void testBuilderRejectsSubMillisecondDurations() {
+        final Builder builder = ThrottledInputStream.builder();
+        assertThrows(IllegalArgumentException.class, () -> builder.setMaxBytes(1, ChronoUnit.NANOS));
+        assertThrows(IllegalArgumentException.class, () -> builder.setMaxBytes(1, ChronoUnit.MICROS));
+        assertThrows(IllegalArgumentException.class, () -> builder.setMaxBytes(1, Duration.ofNanos(1)));
+        assertThrows(IllegalArgumentException.class, () -> builder.setMaxBytes(1, Duration.ofNanos(999_999)));
+        builder.setMaxBytes(1, Duration.ofMillis(1));
+        assertEquals(1_000.0, builder.getMaxBytesPerSecond());
+    }
+
+    @Test
+    void testBuilderTruncatesFractionalMilliseconds() {
+        final Builder builder = ThrottledInputStream.builder();
+        builder.setMaxBytes(1, Duration.ofNanos(1_500_000));
+        assertEquals(1_000.0, builder.getMaxBytesPerSecond());
+    }
+
+    @Test
+    void testBuilderWithMaxByteCount() {
+        final Builder builder = ThrottledInputStream.builder();
+        builder.setMaxBytes(Long.MAX_VALUE, ChronoUnit.MILLIS);
+        assertEquals(9.223372036854776E21, builder.getMaxBytesPerSecond());
     }
 
     @Test
@@ -172,6 +217,22 @@ class ThrottledInputStreamTest extends ProxyInputStreamTest<ThrottledInputStream
         assertEquals(0, ThrottledInputStream.toSleepMillis(1, 1_000, 2.0));
         assertEquals(0, ThrottledInputStream.toSleepMillis(1, 1_000, 1));
         assertEquals(0, ThrottledInputStream.toSleepMillis(1, 1_000, 1.0));
+    }
+
+    @Test
+    void testCalSleepTimeMsWithConfiguredRates() throws IOException {
+        try (ThrottledInputStream inputStream = ThrottledInputStream.builder()
+                .setInputStream(createOriginInputStream())
+                .setMaxBytes(1, ChronoUnit.MINUTES)
+                .get()) {
+            assertEquals(59_000, ThrottledInputStream.toSleepMillis(1, 1_000, inputStream.getMaxBytesPerSecond()));
+        }
+        try (ThrottledInputStream inputStream = ThrottledInputStream.builder()
+                .setInputStream(createOriginInputStream())
+                .setMaxBytes(1, ChronoUnit.MILLIS)
+                .get()) {
+            assertEquals(1_000, ThrottledInputStream.toSleepMillis(2_000, 1_000, inputStream.getMaxBytesPerSecond()));
+        }
     }
 
     @Test

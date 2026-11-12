@@ -234,7 +234,7 @@ public final class MemoryMappedFileInputStream extends AbstractInputStream {
                 return EOF;
             }
         }
-        return Short.toUnsignedInt(buffer.get());
+        return buffer.get() & 0xFF;
     }
 
     @Override

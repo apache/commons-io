@@ -61,6 +61,11 @@ import org.apache.commons.io.function.IOConsumer;
  * Determining the character encoding of a feed</a>.
  * </p>
  * <p>
+ * When inspecting XML for security-sensitive purposes, use the same decoding policy for inspection and consumption. Different encoding choices can cause
+ * inspectors and consumers to interpret the same bytes as different characters. Strict detection does not reject every disagreement between the HTTP
+ * charset and the XML declaration.
+ * </p>
+ * <p>
  * To build an instance, use {@link Builder}.
  * </p>
  * <p>
@@ -79,8 +84,10 @@ public class XmlStreamReader extends Reader {
      *
      * Constructs a Reader using an InputStream and the associated content-type header. This constructor is lenient regarding the encoding detection.
      * <p>
-     * First it checks if the stream has BOM. If there is not BOM checks the content-type encoding. If there is not content-type encoding checks the XML prolog
-     * encoding. If there is not XML prolog encoding uses the default encoding mandated by the content-type MIME type.
+     * In lenient mode, a detected XML prolog encoding is selected immediately, before checking the HTTP content-type charset or BOM consistency.
+     * Otherwise, detection uses the HTTP content type, BOM, XML encoding guess, and XML prolog as applicable. Strict mode rejects certain invalid
+     * combinations, but does not reject every HTTP charset/prolog mismatch. For example, in strict mode, {@code application/xml; charset=UTF-8}
+     * selects UTF-8 even if the prolog declares ISO-8859-1.
      * </p>
      * <p>
      * If lenient detection is indicated and the detection above fails as per specifications it then attempts the following:
@@ -186,7 +193,11 @@ public class XmlStreamReader extends Reader {
         }
 
         /**
-         * Sets the lenient toggle.
+         * Sets whether encoding detection is lenient.
+         * <p>
+         * The default is {@code true}. When an HTTP content type is supplied, lenient detection immediately prefers an encoding declared in the XML prolog.
+         * Strict detection rejects certain invalid encoding combinations, but does not reject every disagreement between the HTTP charset and XML prolog.
+         * </p>
          *
          * @param lenient The lenient toggle.
          * @return {@code this} instance.
@@ -504,8 +515,10 @@ public class XmlStreamReader extends Reader {
     /**
      * Constructs a Reader using an InputStream and the associated content-type header.
      * <p>
-     * First it checks if the stream has BOM. If there is not BOM checks the content-type encoding. If there is not content-type encoding checks the XML prolog
-     * encoding. If there is not XML prolog encoding uses the default encoding mandated by the content-type MIME type.
+     * In lenient mode, a detected XML prolog encoding is selected immediately, before checking the HTTP content-type charset or BOM consistency.
+     * Otherwise, detection uses the HTTP content type, BOM, XML encoding guess, and XML prolog as applicable. Strict mode rejects certain invalid
+     * combinations, but does not reject every HTTP charset/prolog mismatch. For example, in strict mode, {@code application/xml; charset=UTF-8}
+     * selects UTF-8 even if the prolog declares ISO-8859-1.
      * </p>
      * <p>
      * It does a lenient charset encoding detection, check the constructor with the lenient parameter for details.
@@ -525,8 +538,10 @@ public class XmlStreamReader extends Reader {
     /**
      * Constructs a Reader using an InputStream and the associated content-type header. This constructor is lenient regarding the encoding detection.
      * <p>
-     * First it checks if the stream has BOM. If there is not BOM checks the content-type encoding. If there is not content-type encoding checks the XML prolog
-     * encoding. If there is not XML prolog encoding uses the default encoding mandated by the content-type MIME type.
+     * In lenient mode, a detected XML prolog encoding is selected immediately, before checking the HTTP content-type charset or BOM consistency.
+     * Otherwise, detection uses the HTTP content type, BOM, XML encoding guess, and XML prolog as applicable. Strict mode rejects certain invalid
+     * combinations, but does not reject every HTTP charset/prolog mismatch. For example, in strict mode, {@code application/xml; charset=UTF-8}
+     * selects UTF-8 even if the prolog declares ISO-8859-1.
      * </p>
      * <p>
      * If lenient detection is indicated and the detection above fails as per specifications it then attempts the following:
@@ -563,8 +578,10 @@ public class XmlStreamReader extends Reader {
     /**
      * Constructs a Reader using an InputStream and the associated content-type header. This constructor is lenient regarding the encoding detection.
      * <p>
-     * First it checks if the stream has BOM. If there is not BOM checks the content-type encoding. If there is not content-type encoding checks the XML prolog
-     * encoding. If there is not XML prolog encoding uses the default encoding mandated by the content-type MIME type.
+     * In lenient mode, a detected XML prolog encoding is selected immediately, before checking the HTTP content-type charset or BOM consistency.
+     * Otherwise, detection uses the HTTP content type, BOM, XML encoding guess, and XML prolog as applicable. Strict mode rejects certain invalid
+     * combinations, but does not reject every HTTP charset/prolog mismatch. For example, in strict mode, {@code application/xml; charset=UTF-8}
+     * selects UTF-8 even if the prolog declares ISO-8859-1.
      * </p>
      * <p>
      * If lenient detection is indicated and the detection above fails as per specifications it then attempts the following:

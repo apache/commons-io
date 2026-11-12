@@ -19,11 +19,16 @@ package org.apache.commons.io;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTimeoutPreemptively;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
+import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
+import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -33,8 +38,36 @@ class FilenameUtilsWildcardTest {
 
     private static final boolean WINDOWS = File.separatorChar == '\\';
 
-    // Testing:
-    //   FilenameUtils.wildcardMatch(String,String)
+    private static List<String> generateStrings(final String alphabet, final int maxLength) {
+        final List<String> strings = new ArrayList<>();
+        strings.add("");
+        for (int i = 0; i < strings.size(); i++) {
+            final String prefix = strings.get(i);
+            if (prefix.length() < maxLength) {
+                for (int j = 0; j < alphabet.length(); j++) {
+                    strings.add(prefix + alphabet.charAt(j));
+                }
+            }
+        }
+        return strings;
+    }
+
+    // Independent dynamic programming reference, without the production matcher's tokenization or backtracking.
+    private static boolean referenceMatch(final String text, final String pattern, final IOCase ioCase) {
+        final boolean[][] matches = new boolean[text.length() + 1][pattern.length() + 1];
+        matches[0][0] = true;
+        for (int i = 0; i <= text.length(); i++) {
+            for (int j = 1; j <= pattern.length(); j++) {
+                final char token = pattern.charAt(j - 1);
+                if (token == '*') {
+                    matches[i][j] = matches[i][j - 1] || i > 0 && matches[i - 1][j];
+                } else if (i > 0 && (token == '?' || ioCase.checkRegionMatches(text, i - 1, String.valueOf(token)))) {
+                    matches[i][j] = matches[i - 1][j - 1];
+                }
+            }
+        }
+        return matches[text.length()][pattern.length()];
+    }
 
     private void assertMatch(final String text, final String wildcard, final boolean expected) {
         assertEquals(expected, FilenameUtils.wildcardMatch(text, wildcard), text + " " + wildcard);
@@ -48,9 +81,8 @@ class FilenameUtilsWildcardTest {
 
         // Tests for "*?"
         assertMatch("aaa", "aa*?", true);
-        // these ought to work as well, but "*?" does not work properly at present
-//      assertMatch("aaa", "a*?", true);
-//      assertMatch("aaa", "*?", true);
+        assertMatch("aaa", "a*?", true);
+        assertMatch("aaa", "*?", true);
 
         // Tests for "?*"
         assertMatch("",    "?*",   false);
@@ -208,6 +240,43 @@ class FilenameUtilsWildcardTest {
     }
 
     @Test
+    void testMatchCombinatorialBacktracking() {
+        final String text = StringUtils.repeat("ab", 60) + "ac";
+        final String pattern = StringUtils.repeat("*ab", 30) + "*ac*ad";
+        assertTimeoutPreemptively(Duration.ofSeconds(10), () -> {
+            assertFalse(FilenameUtils.wildcardMatch(text, pattern));
+            assertFalse(FilenameUtils.wildcardMatch(text, pattern, IOCase.INSENSITIVE));
+            assertFalse(FilenameUtils.wildcardMatchOnSystem(text, pattern));
+            assertTrue(FilenameUtils.wildcardMatch(text + "ad", pattern));
+            assertFalse(FilenameUtils.wildcardMatch(text, pattern.toUpperCase(Locale.ROOT), IOCase.INSENSITIVE));
+            assertTrue(FilenameUtils.wildcardMatch(text + "ad", pattern.toUpperCase(Locale.ROOT), IOCase.INSENSITIVE));
+        });
+    }
+
+    @Test
+    void testMatchLongInput() {
+        final String text = StringUtils.repeat('a', 65_535);
+        final String pattern = StringUtils.repeat("*a", 64);
+        assertTimeoutPreemptively(Duration.ofSeconds(10), () -> {
+            assertFalse(FilenameUtils.wildcardMatch(text, "*a*b"));
+            assertFalse(FilenameUtils.wildcardMatch(text, pattern + "*b"));
+            assertTrue(FilenameUtils.wildcardMatch(text, pattern));
+        });
+    }
+
+    @Test
+    void testMatchLongQuestionPattern() {
+        final String text = StringUtils.repeat('a', 131_072);
+        final String pattern = StringUtils.repeat('?', text.length());
+        assertTimeoutPreemptively(Duration.ofSeconds(10), () -> {
+            assertTrue(FilenameUtils.wildcardMatch(text, pattern));
+            assertFalse(FilenameUtils.wildcardMatch(text + "a", pattern));
+            assertFalse(FilenameUtils.wildcardMatch(text, "Z" + pattern.substring(1)));
+            assertTrue(FilenameUtils.wildcardMatch(text, "a*"));
+        });
+    }
+
+    @Test
     void testMatchOnSystem() {
         assertFalse(FilenameUtils.wildcardMatchOnSystem(null, "Foo"));
         assertFalse(FilenameUtils.wildcardMatchOnSystem("Foo", null));
@@ -229,6 +298,91 @@ class FilenameUtilsWildcardTest {
         assertEquals(WINDOWS, FilenameUtils.wildcardMatchOnSystem("BARFOO", "*Foo"));
         assertEquals(WINDOWS, FilenameUtils.wildcardMatchOnSystem("FOO", "Foo*"));
         assertEquals(WINDOWS, FilenameUtils.wildcardMatchOnSystem("FOOBAR", "Foo*"));
+    }
+
+    @Test
+    void testMatchOverlappingLiterals() {
+        assertMatch("ababb", "*ab*ab*b", true);
+        assertMatch("abab", "*ab*ab*b", false);
+        assertMatch("aaaaab", "*aa*ab", true);
+        assertMatch("aaaab", "*aaa*ab", true);
+        assertMatch("aaab", "*aaa*ab", false);
+        assertTrue(FilenameUtils.wildcardMatch("aAaAAb", "*AA*AB", IOCase.INSENSITIVE));
+        assertFalse(FilenameUtils.wildcardMatch("aAaAAb", "*AA*AB", IOCase.SENSITIVE));
+    }
+
+    @Test
+    void testMatchStarQuestion() {
+        assertMatch("", "*?", false);
+        assertMatch("a", "*?", true);
+        assertMatch("a", "*??", false);
+        assertMatch("ab", "*??", true);
+        assertMatch("a.b", "*?", true);
+        assertMatch("a/b", "*?", true);
+        assertMatch("ab", "*?", true);
+        assertMatch("ab", "**?", true);
+        assertMatch("ab", "a*?", true);
+        assertMatch("abc", "a*?c", true);
+        assertMatch("abxc", "a*?c", true);
+        assertMatch("abc", "*?*", true);
+        assertMatch("", "*?*", false);
+        assertMatch("aab", "*a*?", true);
+        assertMatch("ab", "*?*?", true);
+        assertMatch("abc", "*?*?", true);
+    }
+
+    @Test
+    void testMatchStarQuestionBacktracking() {
+        final String text = StringUtils.repeat('a', 4096);
+        final String pattern = StringUtils.repeat("*?", 64);
+        assertTimeoutPreemptively(Duration.ofSeconds(10), () -> {
+            assertTrue(FilenameUtils.wildcardMatch(text, pattern));
+            assertFalse(FilenameUtils.wildcardMatch(text, pattern + "b"));
+            assertFalse(FilenameUtils.wildcardMatch(text, pattern + "B", IOCase.INSENSITIVE));
+            assertFalse(FilenameUtils.wildcardMatchOnSystem(text, pattern + "b"));
+        });
+    }
+
+    @Test
+    void testMatchSurrogates() {
+        final String high = "\uD801";
+        final String low = "\uDC28";
+        final String upper = "\uD801\uDC00";
+        final String lower = high + low;
+        assertMatch(lower, "??", true);
+        assertMatch(lower, "?", false);
+        assertMatch(lower, "*" + high + "?", true);
+        assertMatch(lower, "?" + low, true);
+        assertMatch(high, "*" + high, true);
+        assertMatch(low, "*" + low, true);
+        assertMatch(high, "*" + lower, false);
+        assertMatch(lower, "*" + lower, true);
+        assertMatch(lower, "*" + upper, false);
+        // Compare a whole literal run, even when its UTF-16 contains an unpaired surrogate.
+        assertEquals(IOCase.INSENSITIVE.checkEquals(high + upper, upper + high),
+                FilenameUtils.wildcardMatch(high + upper, upper + high + "*", IOCase.INSENSITIVE));
+        assertEquals(upper.equalsIgnoreCase(lower), FilenameUtils.wildcardMatch(lower, "*" + upper, IOCase.INSENSITIVE));
+        assertEquals(upper.equalsIgnoreCase(lower), FilenameUtils.wildcardMatch("x" + lower + "y", "?" + upper + "*", IOCase.INSENSITIVE));
+    }
+
+    @Test
+    void testMatchWithReference() {
+        final List<String> texts = generateStrings("aAb.", 3);
+        final List<String> patterns = generateStrings("aAb.*?", 4);
+        for (final String text : texts) {
+            for (final String pattern : patterns) {
+                for (final IOCase ioCase : IOCase.values()) {
+                    final boolean expected = referenceMatch(text, pattern, ioCase);
+                    assertEquals(expected, FilenameUtils.wildcardMatch(text, pattern, ioCase),
+                            () -> "text=" + text + ", pattern=" + pattern + ", case=" + ioCase);
+                }
+                final boolean expected = referenceMatch(text, pattern, IOCase.SENSITIVE);
+                assertEquals(expected, FilenameUtils.wildcardMatch(text, pattern), () -> "text=" + text + ", pattern=" + pattern);
+                assertEquals(expected, FilenameUtils.wildcardMatch(text, pattern, null), () -> "text=" + text + ", pattern=" + pattern);
+                assertEquals(referenceMatch(text, pattern, IOCase.SYSTEM), FilenameUtils.wildcardMatchOnSystem(text, pattern),
+                        () -> "text=" + text + ", pattern=" + pattern);
+            }
+        }
     }
 
     @Test

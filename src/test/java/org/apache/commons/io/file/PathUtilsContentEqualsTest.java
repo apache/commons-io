@@ -23,12 +23,14 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.Collections;
 
 import org.apache.commons.io.file.Counters.PathCounters;
 import org.junit.jupiter.api.Test;
@@ -73,7 +75,7 @@ class PathUtilsContentEqualsTest {
 
     private void assertDirectoryAndFileContentEquals(final Path dir1, final Path dir2) throws IOException {
         assertTrue(PathUtils.directoryAndFileContentEquals(dir1, dir2));
-        assertTrue(PathUtils.directoryAndFileContentEquals(dir2, dir2));
+        assertTrue(PathUtils.directoryAndFileContentEquals(dir2, dir1));
         assertTrue(PathUtils.directoryAndFileContentEquals(dir1, dir1));
         assertTrue(PathUtils.directoryAndFileContentEquals(dir2, dir2));
     }
@@ -101,6 +103,84 @@ class PathUtilsContentEqualsTest {
 
     private String getName() {
         return this.getClass().getSimpleName();
+    }
+
+    @Test
+    void testDirectoryContentEqualsCrossFileSystemSeparatorCollision() throws Exception {
+        try (FileSystem unixFs = Jimfs.newFileSystem(Configuration.unix());
+                FileSystem windowsFs = Jimfs.newFileSystem(Configuration.windows())) {
+            final Path dir1 = unixFs.getPath("/tree");
+            final Path dir2 = windowsFs.getPath("C:\\tree");
+            Files.createDirectories(dir1.resolve("a"));
+            Files.write(dir1.resolve("a>b"), new byte[] { 1 });
+            Files.createDirectories(dir2.resolve("a"));
+            Files.write(dir2.resolve("a").resolve("b"), new byte[] { 1 });
+            assertFalse(PathUtils.directoryContentEquals(dir1, dir2));
+            assertFalse(PathUtils.directoryContentEquals(dir2, dir1));
+            assertDirectoryAndFileContentNotEquals(dir1, dir2);
+        }
+    }
+
+    @Test
+    void testDirectoryAndFileContentEqualsCrossFileSystemSeparators() throws Exception {
+        try (FileSystem unixFs = Jimfs.newFileSystem(Configuration.unix());
+                FileSystem windowsFs = Jimfs.newFileSystem(Configuration.windows())) {
+            final Path dir1 = unixFs.getPath("/tree");
+            final Path dir2 = windowsFs.getPath("C:\\tree");
+            Files.createDirectories(dir1.resolve("a"));
+            Files.createDirectories(dir2.resolve("a"));
+            final Path file1 = dir1.resolve("a").resolve("b");
+            final Path file2 = dir2.resolve("a").resolve("b");
+            Files.write(file1, new byte[] { 1 });
+            Files.write(file2, new byte[] { 1 });
+            assertTrue(PathUtils.directoryContentEquals(dir1, dir2));
+            assertTrue(PathUtils.directoryContentEquals(dir2, dir1));
+            assertDirectoryAndFileContentEquals(dir1, dir2);
+            Files.write(file2, new byte[] { 2 });
+            assertDirectoryAndFileContentNotEquals(dir1, dir2);
+        }
+    }
+
+    @Test
+    void testDirectoryContentEqualsCrossFileSystemOrdering() throws Exception {
+        try (FileSystem fileSystem = Jimfs.newFileSystem(Configuration.unix())) {
+            final Path dir1 = temporaryFolder.toPath().resolve("tree");
+            final Path dir2 = fileSystem.getPath("/tree");
+            for (final Path dir : new Path[] { dir1, dir2 }) {
+                Files.createDirectories(dir.resolve("a"));
+                Files.write(dir.resolve("a").resolve("b"), new byte[] { 1 });
+                Files.write(dir.resolve("a.b"), new byte[] { 1 });
+            }
+            assertTrue(PathUtils.directoryContentEquals(dir1, dir2));
+            assertTrue(PathUtils.directoryContentEquals(dir2, dir1));
+            assertDirectoryAndFileContentEquals(dir1, dir2);
+            // Exercise directory ordering as well as file ordering.
+            Files.createDirectory(dir1.resolve("a").resolve("c"));
+            Files.createDirectory(dir2.resolve("a").resolve("c"));
+            Files.createDirectory(dir1.resolve("a.c"));
+            Files.createDirectory(dir2.resolve("a.c"));
+            assertTrue(PathUtils.directoryContentEquals(dir1, dir2));
+            assertTrue(PathUtils.directoryContentEquals(dir2, dir1));
+            assertDirectoryAndFileContentEquals(dir1, dir2);
+        }
+    }
+
+    @Test
+    void testDirectoryAndFileContentEqualsCrossFileSystemSearchOrdering() throws Exception {
+        final Path zipPath = temporaryFolder.toPath().resolve("tree.zip");
+        final URI uri = URI.create("jar:" + zipPath.toUri());
+        try (FileSystem fileSystem = FileSystems.newFileSystem(uri, Collections.singletonMap("create", "true"))) {
+            final Path dir1 = temporaryFolder.toPath().resolve("tree");
+            final Path dir2 = fileSystem.getPath("/tree");
+            for (final Path dir : new Path[] { dir1, dir2 }) {
+                Files.createDirectories(dir.resolve("a"));
+                Files.write(dir.resolve("a").resolve("b"), new byte[] { 1 });
+                Files.write(dir.resolve("a0"), new byte[] { 1 });
+            }
+            assertDirectoryAndFileContentEquals(dir1, dir2);
+            Files.write(dir1.resolve("a0"), new byte[] { 2 });
+            assertDirectoryAndFileContentNotEquals(dir1, dir2);
+        }
     }
 
     @ParameterizedTest
