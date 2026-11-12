@@ -1317,7 +1317,7 @@ public class FileUtils {
             return false;
         }
         try {
-            if (file.isDirectory()) {
+            if (file.isDirectory() && !isLinkLikeDirectory(file)) {
                 cleanDirectory(file);
             }
         } catch (final Exception ignored) {

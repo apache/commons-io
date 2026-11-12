@@ -151,6 +151,25 @@ class FileUtilsDeleteDirectoryLinksTest {
 
     @ParameterizedTest
     @ValueSource(booleans = { false, true })
+    void testDeleteQuietlyDirectoryWithOtherAttributes(final boolean directoryAttribute) throws IOException {
+        final Path directory = Files.createDirectory(tempDir.resolve("quiet-directory"));
+        final File directoryFile = spy(directory.toFile());
+        final Path sentinel = Files.write(directory.resolve("sentinel"), new byte[] { 1 });
+        final BasicFileAttributes attributes = mock(BasicFileAttributes.class);
+        when(attributes.isDirectory()).thenReturn(directoryAttribute);
+        when(attributes.isOther()).thenReturn(true);
+        try (MockedStatic<Files> files = mockStatic(Files.class)) {
+            files.when(() -> Files.readAttributes(directory, BasicFileAttributes.class, LinkOption.NOFOLLOW_LINKS)).thenReturn(attributes);
+            assertFalse(FileUtils.deleteQuietly(directoryFile));
+            verify(directoryFile, never()).listFiles((FileFilter) null);
+            files.verify(() -> Files.readAttributes(directory, BasicFileAttributes.class, LinkOption.NOFOLLOW_LINKS));
+            files.verifyNoMoreInteractions();
+        }
+        assertEquals(1, Files.size(sentinel));
+    }
+
+    @ParameterizedTest
+    @ValueSource(booleans = { false, true })
     void testDisappearedBeforeAttributeRead(final boolean onExit) throws IOException {
         final Path directory = Files.createDirectory(tempDir.resolve("directory"));
         final File directoryFile = spy(directory.toFile());
@@ -175,6 +194,28 @@ class FileUtilsDeleteDirectoryLinksTest {
     @EnabledOnOs(OS.WINDOWS)
     void testJunction(final boolean onExit) throws Exception {
         testJunction(onExit, false);
+    }
+
+    @Test
+    @EnabledOnOs(OS.WINDOWS)
+    void testDeleteQuietlyJunctionPreservesTarget() throws Exception {
+        final Path target = Files.createDirectory(tempDir.resolve("quiet-target"));
+        final Path sentinel = Files.write(target.resolve("sentinel"), new byte[] { 1 });
+        final Path junction = tempDir.resolve("quiet-junction");
+        final Process process = new ProcessBuilder("cmd", "/c", "mklink", "/J", junction.toString(), target.toString()).redirectErrorStream(true).start();
+        try {
+            assertTrue(process.waitFor(30, TimeUnit.SECONDS), "mklink did not exit");
+            assertEquals(0, process.exitValue());
+            assertTrue(Files.exists(junction, LinkOption.NOFOLLOW_LINKS));
+            assertTrue(FileUtils.deleteQuietly(junction.toFile()));
+            assertFalse(Files.exists(junction, LinkOption.NOFOLLOW_LINKS));
+            assertTrue(Files.isDirectory(target));
+            assertEquals(1, Files.size(sentinel));
+        } finally {
+            process.destroyForcibly();
+            // Unlink directly so even a failing test never recursively cleans the target through this junction.
+            Files.deleteIfExists(junction);
+        }
     }
 
     private void testJunction(final boolean onExit, final boolean nested) throws Exception {
