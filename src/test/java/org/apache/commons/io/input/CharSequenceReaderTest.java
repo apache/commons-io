@@ -32,6 +32,8 @@ import java.util.Arrays;
 
 import org.apache.commons.io.TestResources;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 /**
  * Test case for {@link CharSequenceReader}.
@@ -303,6 +305,59 @@ class CharSequenceReaderTest {
         subReader.close();
         assertEquals(6, subReader.skip(20));
         assertEquals(-1, subReader.read());
+    }
+
+    @Test
+    void testSkipAfterSequenceShrinks() throws IOException {
+        final StringBuilder sequence = new StringBuilder("abc");
+        try (Reader reader = new CharSequenceReader(sequence)) {
+            checkRead(reader, "ab");
+            sequence.setLength(1);
+            assertEquals(0, reader.skip(Long.MAX_VALUE));
+            assertEquals(-1, reader.read());
+            sequence.append("bc");
+            assertEquals('c', reader.read());
+        }
+    }
+
+    @ParameterizedTest
+    @ValueSource(longs = {Integer.MAX_VALUE, Long.MAX_VALUE - 1, Long.MAX_VALUE})
+    void testSkipLargeCount(final long count) throws IOException {
+        try (Reader reader = new CharSequenceReader("abcde")) {
+            checkRead(reader, "ab");
+            reader.mark(0);
+            assertEquals(3, reader.skip(count));
+            assertFalse(reader.ready());
+            assertEquals(-1, reader.read());
+            assertEquals(0, reader.skip(count));
+            reader.reset();
+            assertEquals('c', reader.read());
+        }
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = {0, 1, 2, 3, 4})
+    void testSkipLargeCountFromStart(final int start) throws IOException {
+        try (Reader reader = new CharSequenceReader("abc", start)) {
+            assertEquals(Math.max(0, 3 - start), reader.skip(Long.MAX_VALUE));
+            assertFalse(reader.ready());
+            assertEquals(-1, reader.read());
+        }
+    }
+
+    @ParameterizedTest
+    @ValueSource(longs = {Integer.MAX_VALUE, Long.MAX_VALUE - 1, Long.MAX_VALUE})
+    void testSkipLargeCountInSubSequence(final long count) throws IOException {
+        try (Reader reader = new CharSequenceReader("xabcdey", 1, 6)) {
+            assertEquals('a', reader.read());
+            reader.mark(0);
+            assertEquals(4, reader.skip(count));
+            assertFalse(reader.ready());
+            assertEquals(-1, reader.read());
+            assertEquals(0, reader.skip(count));
+            reader.reset();
+            assertEquals('b', reader.read());
+        }
     }
 
     @Test
