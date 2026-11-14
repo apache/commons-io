@@ -994,7 +994,7 @@ public class Tailer implements Runnable, AutoCloseable {
                             seenCR = false; // swallow final CR
                             listener.handle(new String(lineBuf.toByteArray(), charset));
                             lineBuf.reset();
-                            rePos = pos + i + 1;
+                            rePos = pos + i; // The current byte belongs to the next line.
                         }
                         lineBuf.write(ch);
                     }
