@@ -283,9 +283,8 @@ public class CharSequenceReader extends Reader implements Serializable {
         if (idx >= end()) {
             return 0;
         }
-        final int dest = (int) Math.min(end(), idx + n);
-        final int count = dest - idx;
-        idx = dest;
+        final int count = (int) Math.min(n, end() - idx);
+        idx += count;
         return count;
     }
 
