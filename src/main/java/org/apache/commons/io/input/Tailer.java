@@ -284,6 +284,12 @@ public class Tailer implements Runnable, AutoCloseable {
         /**
          * Sets the re-open behavior.
          *
+         * <p>
+         * Closing the file between polling cycles allows it to be renamed or deleted on systems that lock open files, such as Windows. Failed opens are
+         * reported to {@link TailerListener#fileNotFound()} and retried after the configured delay. The current position is retained unless rotation is
+         * detected, including a last-modified-time lookup confirming absence with {@link NoSuchFileException}; a replacement is then read from the beginning.
+         * </p>
+         *
          * @param reOpen whether to close/reopen the file between chunks.
          * @return {@code this} instance.
          */
@@ -332,7 +338,7 @@ public class Tailer implements Runnable, AutoCloseable {
          * When an initial open fails and the tailable's last-modified-time lookup confirms absence with {@link NoSuchFileException}, the file is read from the
          * beginning when it becomes available, even if {@code end} is {@code true}. Other open failures preserve the configured start position. The decision
          * is made while {@link Tailer#run()} attempts to open the file, not when the tailer is constructed. Reopening between polling cycles retains the
-         * current read position, and rotation handling is unchanged.
+         * current read position unless rotation or a missing file is detected. See {@link #setReOpen(boolean)}.
          * </p>
          *
          * @param end Set to true to tail from the end of an existing file, false to tail from the beginning.
@@ -447,8 +453,8 @@ public class Tailer implements Runnable, AutoCloseable {
          * Gets the last modification {@link FileTime}.
          *
          * @return See {@link java.nio.file.Files#getLastModifiedTime(Path, LinkOption...)}.
-         * @throws NoSuchFileException if the tailable does not exist. This confirms absence after an initial open failure, allowing tailing from the beginning.
-         * @throws IOException Thrown if an I/O error occurs. Other exceptions do not confirm absence and preserve the configured start position.
+         * @throws NoSuchFileException if the tailable does not exist. This confirms absence after an open failure, allowing tailing from the beginning.
+         * @throws IOException Thrown if an I/O error occurs. Other exceptions do not confirm absence and preserve the configured or current position.
          */
         FileTime lastModifiedFileTime() throws IOException;
 
@@ -955,7 +961,7 @@ public class Tailer implements Runnable, AutoCloseable {
         } catch (final NoSuchFileException e) {
             return true;
         } catch (final IOException e) {
-            // An inaccessible tailable may still exist. Preserve the configured start position.
+            // An inaccessible tailable may still exist. Preserve the configured or current position.
         }
         return false;
     }
@@ -1014,6 +1020,11 @@ public class Tailer implements Runnable, AutoCloseable {
 
     /**
      * Follows changes in the file, calling {@link TailerListener#handle(String)} with each new line.
+     *
+     * <p>
+     * A detected rotation is retried until the replacement can be opened or the tailer is stopped. Any open reader for the old file is retained until the
+     * replacement opens, allowing remaining complete lines to be delivered before reading the replacement from the beginning.
+     * </p>
      */
     @Override
     public void run() {
@@ -1022,6 +1033,7 @@ public class Tailer implements Runnable, AutoCloseable {
             FileTime last = FileTimes.EPOCH; // The last time the file was checked for changes
             long position = 0; // position within the file
             boolean tailFromEndOnOpen = tailFromEnd;
+            boolean rotationPending = false;
             // Open the file
             while (getRun() && reader == null) {
                 try {
@@ -1042,65 +1054,78 @@ public class Tailer implements Runnable, AutoCloseable {
                 }
             }
             while (getRun()) {
-                final boolean newer = tailable.isNewer(last); // IO-279, must be done first
-                // Check the file length to see if it was rotated
-                final long length = tailable.size();
-                if (length < position) {
-                    // File was rotated
-                    listener.fileRotated();
-                    // Reopen the reader after rotation ensuring that the old file is closed iff we re-open it
-                    // successfully
-                    try (RandomAccessResourceBridge save = reader) {
+                if (reader == null || rotationPending) {
+                    final RandomAccessResourceBridge previous = reader;
+                    try {
                         reader = tailable.getRandomAccess(RAF_READ_ONLY_MODE);
-                        // At this point, we're sure that the old file is rotated
-                        // Finish scanning the old file and then we'll start with the new one
-                        try {
-                            readLines(save);
-                        } catch (final IOException ioe) {
-                            listener.handle(ioe);
-                        }
-                        position = 0;
                     } catch (final FileNotFoundException e) {
-                        // in this case we continue to use the previous reader and position values
+                        // A failed periodic reopen does not necessarily mean the file was replaced.
+                        if (!rotationPending && isTailableMissing()) {
+                            rotationPending = true;
+                            listener.fileRotated();
+                        }
                         listener.fileNotFound();
                         ThreadUtils.sleep(delayDuration);
+                        continue;
                     }
+                    // Keep the old reader open until its replacement has opened successfully.
+                    try (RandomAccessResourceBridge save = previous) {
+                        if (rotationPending && save != null) {
+                            try {
+                                readLines(save);
+                            } catch (final IOException e) {
+                                listener.handle(e);
+                            }
+                        }
+                    }
+                    if (rotationPending) {
+                        position = 0;
+                        rotationPending = false;
+                    }
+                    reader.seek(position);
+                    if (!getRun()) {
+                        break;
+                    }
+                }
+                try {
+                    final boolean newer = tailable.isNewer(last); // IO-279, must be done first
+                    final long length = tailable.size();
+                    if (length < position) {
+                        rotationPending = true;
+                        listener.fileRotated();
+                        continue;
+                    }
+                    if (length > position) {
+                        position = readLines(reader);
+                        last = tailable.lastModifiedFileTime();
+                    } else if (newer) {
+                        /*
+                         * This can happen if the file
+                         * - is overwritten with the exact same length of information
+                         * - gets "touched"
+                         * - Files.getLastModifiedTime returns a new timestamp but newer data is not yet there (
+                         *   was reported to happen on busy systems or samba network shares, see IO-279)
+                         * The default behavior is to replay the whole file. If this is undesired in your usecase,
+                         * use the ignoreTouch builder flag
+                         */
+                        if (!ignoreTouch) {
+                            position = 0;
+                            reader.seek(position);
+                            position = readLines(reader);
+                        }
+                        last = tailable.lastModifiedFileTime();
+                    }
+                } catch (final NoSuchFileException e) {
+                    // The path can disappear during any metadata lookup, even while its old reader remains usable.
+                    rotationPending = true;
+                    listener.fileRotated();
                     continue;
                 }
-                // File was not rotated
-                // See if the file needs to be read again
-                if (length > position) {
-                    // The file has more content than it did last time
-                    position = readLines(reader);
-                    last = tailable.lastModifiedFileTime();
-                } else if (newer) {
-                    /*
-                     * This can happen if the file
-                     * - is overwritten with the exact same length of information
-                     * - gets "touched"
-                     * - Files.getLastModifiedTime returns a new timestamp but newer data is not yet there (
-                     *   was reported to happen on busy systems or samba network shares, see IO-279)
-                     * The default behavior is to replay the whole file. If this is undesired in your usecase,
-                     * use the ignoreTouch builder flag
-                     */
-                    if (!ignoreTouch) {
-                        position = 0;
-                        reader.seek(position); // cannot be null here
-
-                        // Now we can read new lines
-                        position = readLines(reader);
-                    }
-                    // we eitherway continue with the new timestamp
-                    last = tailable.lastModifiedFileTime();
-                }
-                if (reOpen && reader != null) {
+                if (reOpen) {
                     reader.close();
+                    reader = null;
                 }
                 ThreadUtils.sleep(delayDuration);
-                if (getRun() && reOpen) {
-                    reader = tailable.getRandomAccess(RAF_READ_ONLY_MODE);
-                    reader.seek(position);
-                }
             }
         } catch (final InterruptedException e) {
             Thread.currentThread().interrupt();
@@ -1112,8 +1137,9 @@ public class Tailer implements Runnable, AutoCloseable {
                 IOUtils.close(reader);
             } catch (final IOException e) {
                 listener.handle(e);
+            } finally {
+                close();
             }
-            close();
         }
     }
 
