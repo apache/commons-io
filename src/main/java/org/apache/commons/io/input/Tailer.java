@@ -35,8 +35,10 @@ import java.nio.file.attribute.FileTime;
 import java.time.Duration;
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.ThreadUtils;
@@ -110,11 +112,21 @@ import org.apache.commons.io.file.attribute.FileTimes;
  * </pre>
  * <h2>3. Stopping a Tailer</h2>
  * <p>
- * Remember to stop the tailer when you have done with it:
+ * Remember to stop the tailer when you are done with it:
  * </p>
  * <pre>
- * tailer.stop();
+ * tailer.close();
  * </pre>
+ * <p>
+ * Closing requests a stop without waiting for the reader to close. To wait for cleanup before moving or deleting the file, use
+ * {@link #awaitTermination(Duration)} and check its result:
+ * </p>
+ * <pre>{@code
+ * tailer.close();
+ * if (!tailer.awaitTermination(Duration.ofSeconds(10))) {
+ *     throw new IOException("Timed out waiting for the tailer to close its reader");
+ * }
+ * }</pre>
  * <h2>4. Interrupting a Tailer</h2>
  * <p>
  * You can interrupt the thread a tailer is running on by calling {@link Thread#interrupt()}.
@@ -737,6 +749,16 @@ public class Tailer implements Runnable, AutoCloseable {
     private volatile boolean run = true;
 
     /**
+     * The thread executing the current run.
+     */
+    private volatile Thread runThread;
+
+    /**
+     * Completion of the single run's cleanup attempt.
+     */
+    private final CountDownLatch termination = new CountDownLatch(1);
+
+    /**
      * Whether to ignore timestamp advances when the file length equals the current read position.
      */
     private final boolean ignoreTouch;
@@ -889,7 +911,53 @@ public class Tailer implements Runnable, AutoCloseable {
     }
 
     /**
+     * Waits for this tailer's single {@link #run()} execution to complete its cleanup attempt.
+     *
+     * <p>
+     * This method does not request a stop, interrupt the tailer thread, or shut down an executor. Call {@link #close()} first to request a stop.
+     * A run that has never started remains incomplete even after {@code close()}. Repeated or concurrent invocations of {@code run()} are outside
+     * this method's contract.
+     * </p>
+     *
+     * <p>
+     * Completion is signaled after cleanup, including when cleanup throws an exception. A {@code true} result does not guarantee that a resource's
+     * close operation succeeded. Callers can be notified of I/O failures through {@link TailerListener#handle(Exception)}.
+     * </p>
+     *
+     * <p>
+     * Non-positive durations only test for completion. Positive durations are converted to nanoseconds, with values exceeding {@link Long#MAX_VALUE}
+     * nanoseconds capped at that value.
+     * </p>
+     *
+     * @param timeout The maximum duration to wait.
+     * @return {@code true} if the run's cleanup attempt completed, or {@code false} if the wait timed out.
+     * @throws InterruptedException if the waiting thread is interrupted.
+     * @throws IllegalStateException if called by the active tailer thread, including from a listener callback.
+     * @throws NullPointerException if {@code timeout} is {@code null}.
+     * @since 2.23.0
+     */
+    public boolean awaitTermination(final Duration timeout) throws InterruptedException {
+        Objects.requireNonNull(timeout, "timeout");
+        if (Thread.currentThread() == runThread) {
+            throw new IllegalStateException("Cannot await termination from the tailer thread");
+        }
+        long timeoutNanos = 0;
+        if (!timeout.isNegative()) {
+            try {
+                timeoutNanos = timeout.toNanos();
+            } catch (final ArithmeticException e) {
+                timeoutNanos = Long.MAX_VALUE;
+            }
+        }
+        return termination.await(timeoutNanos, TimeUnit.NANOSECONDS);
+    }
+
+    /**
      * Requests the tailer to complete its current loop and return.
+     *
+     * <p>
+     * This method does not wait for the reader to close. Use {@link #awaitTermination(Duration)} to wait for cleanup to finish.
+     * </p>
      */
     @Override
     public void close() {
@@ -1028,6 +1096,7 @@ public class Tailer implements Runnable, AutoCloseable {
      */
     @Override
     public void run() {
+        runThread = Thread.currentThread();
         RandomAccessResourceBridge reader = null;
         try {
             FileTime last = FileTimes.EPOCH; // The last time the file was checked for changes
@@ -1134,11 +1203,16 @@ public class Tailer implements Runnable, AutoCloseable {
             listener.handle(e);
         } finally {
             try {
-                IOUtils.close(reader);
-            } catch (final IOException e) {
-                listener.handle(e);
+                try {
+                    IOUtils.close(reader);
+                } catch (final IOException e) {
+                    listener.handle(e);
+                } finally {
+                    close();
+                }
             } finally {
-                close();
+                runThread = null;
+                termination.countDown();
             }
         }
     }

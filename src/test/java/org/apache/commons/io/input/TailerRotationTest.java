@@ -159,7 +159,7 @@ class TailerRotationTest {
     }
 
     @Test
-    void testCloseFailureListenerThrows() {
+    void testCloseFailureListenerThrows() throws InterruptedException {
         final SingleRotationTailable tailable = new SingleRotationTailable(0);
         final IOException readFailure = new IOException("read failed");
         final IOException closeFailure = new IOException("close failed");
@@ -182,6 +182,7 @@ class TailerRotationTest {
             assertSame(listenerFailure, assertThrows(IllegalStateException.class, tailer::run));
             // Check before try-with-resources closes the Tailer, so automatic cleanup cannot hide a running flag left set by run().
             assertFalse(tailer.getRun());
+            assertTrue(tailer.awaitTermination(Duration.ZERO));
         }
         assertEquals(Arrays.asList(readFailure, closeFailure), errors);
         assertEquals(1, tailable.oldBridge.closeCalls);

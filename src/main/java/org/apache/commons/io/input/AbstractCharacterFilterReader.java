@@ -90,7 +90,10 @@ public abstract class AbstractCharacterFilterReader extends FilterReader {
             int pos = off;
             for (int readPos = off; readPos < off + read; readPos++) {
                 if (!filter(cbuf[readPos])) {
-                    cbuf[pos++] = cbuf[readPos];
+                    if (pos < readPos) {
+                        cbuf[pos] = cbuf[readPos];
+                    }
+                    pos++;
                 }
             }
             count = pos - off;
@@ -98,8 +101,27 @@ public abstract class AbstractCharacterFilterReader extends FilterReader {
         return count;
     }
 
+    /**
+     * Skips characters retained by this reader's filter.
+     *
+     * <p>
+     * Positive skips read and filter the underlying input until {@code n} retained characters have been skipped or the end of the stream is reached.
+     * Discarded characters do not count toward {@code n}, so more than {@code n} underlying characters may be consumed. This may be less efficient than
+     * skipping directly on the underlying reader.
+     * </p>
+     *
+     * <p>
+     * A zero skip delegates to the underlying reader without reading or filtering characters.
+     * </p>
+     *
+     * @param n The number of retained characters to skip.
+     * @return The number of retained characters actually skipped.
+     * @throws IllegalArgumentException If {@code n} is negative.
+     * @throws IOException If an I/O error occurs.
+     */
     @Override
     public long skip(final long n) throws IOException {
+        // Preserve the delegate's validation, including its closed-state check, for zero skips.
         return n == 0 ? super.skip(0) : IOUtils.skip(this, n);
     }
 }
