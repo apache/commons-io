@@ -23,6 +23,8 @@ import java.io.IOException;
 import java.io.Reader;
 import java.util.function.IntPredicate;
 
+import org.apache.commons.io.IOUtils;
+
 /**
  * A filter reader that filters out characters where subclasses decide which characters to filter out.
  */
@@ -79,20 +81,25 @@ public abstract class AbstractCharacterFilterReader extends FilterReader {
 
     @Override
     public int read(final char[] cbuf, final int off, final int len) throws IOException {
-        final int read = super.read(cbuf, off, len);
-        if (read == EOF) {
-            return EOF;
-        }
-        int pos = off - 1;
-        for (int readPos = off; readPos < off + read; readPos++) {
-            if (filter(cbuf[readPos])) {
-                continue;
+        int count;
+        do {
+            final int read = super.read(cbuf, off, len);
+            if (read == EOF) {
+                return EOF;
             }
-            pos++;
-            if (pos < readPos) {
-                cbuf[pos] = cbuf[readPos];
+            int pos = off;
+            for (int readPos = off; readPos < off + read; readPos++) {
+                if (!filter(cbuf[readPos])) {
+                    cbuf[pos++] = cbuf[readPos];
+                }
             }
-        }
-        return pos - off + 1;
+            count = pos - off;
+        } while (count == 0 && len > 0);
+        return count;
+    }
+
+    @Override
+    public long skip(final long n) throws IOException {
+        return n == 0 ? super.skip(0) : IOUtils.skip(this, n);
     }
 }
