@@ -270,10 +270,11 @@ public class CharSequenceReader extends Reader implements Serializable {
     }
 
     /**
-     * Skip the specified number of characters.
+     * Skips up to the specified number of characters within this reader's bounds.
      *
-     * @param n The number of characters to skip.
-     * @return The actual number of characters skipped.
+     * @param n The non-negative number of characters to skip.
+     * @return The actual number of characters skipped, or zero if {@code n} is zero or no characters remain.
+     * @throws IllegalArgumentException if {@code n} is negative.
      */
     @Override
     public long skip(final long n) {
@@ -283,6 +284,7 @@ public class CharSequenceReader extends Reader implements Serializable {
         if (idx >= end()) {
             return 0;
         }
+        // Clamp the count before adding to avoid overflow.
         final int count = (int) Math.min(n, end() - idx);
         idx += count;
         return count;
