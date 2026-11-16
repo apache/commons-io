@@ -276,6 +276,19 @@ public class CharSequenceInputStream extends InputStream {
     }
 
     /**
+     * Tests whether the encoder has consumed all input and completed flushing.
+     *
+     * <p>
+     * Buffered bytes may still remain to be read. An open stream reaches EOF only when encoding is complete and the byte buffer is empty.
+     * </p>
+     *
+     * @return whether no additional encoded bytes can be produced.
+     */
+    private boolean encodingComplete() {
+        return !cBuf.hasRemaining() && endOfInputDrained && encoderFlushed;
+    }
+
+    /**
      * Fills the byte output buffer from the input char buffer.
      * <p>
      * Once all input characters have been encoded, this method flushes the encoder so that any final bytes a stateful
@@ -308,19 +321,6 @@ public class CharSequenceInputStream extends InputStream {
             // on OVERFLOW, the next call flushes the remainder.
         }
         this.bBuf.flip();
-    }
-
-    /**
-     * Tests whether the encoder has consumed all input and completed flushing.
-     *
-     * <p>
-     * Buffered bytes may still remain to be read. An open stream reaches EOF only when encoding is complete and the byte buffer is empty.
-     * </p>
-     *
-     * @return whether no additional encoded bytes can be produced.
-     */
-    private boolean encodingComplete() {
-        return !cBuf.hasRemaining() && endOfInputDrained && encoderFlushed;
     }
 
     /**
