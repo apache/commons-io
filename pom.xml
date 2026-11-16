@@ -144,6 +144,8 @@ file comparators, endian transformation classes, and much more.
     <commons.jacoco.complexityRatio>0.85</commons.jacoco.complexityRatio>
     <!-- Java 21 and up -->
     <EnableDynamicAgentLoading></EnableDynamicAgentLoading>
+    <!-- Java 28 and up -->
+    <AllowNonSerializableConstruction></AllowNonSerializableConstruction>
   </properties>
   <build>
     <!-- japicmp:cmp needs package to work from a jar -->
@@ -203,7 +205,7 @@ file comparators, endian transformation classes, and much more.
           <reuseForks>false</reuseForks>
           <!-- Limit memory size see IO-161 -->
           <!-- Mockito inline may need -XX:+EnableDynamicAgentLoading -->
-          <argLine>@{argLine} -Xmx25M ${EnableDynamicAgentLoading}</argLine>
+          <argLine>@{argLine} -Xmx25M ${EnableDynamicAgentLoading} ${AllowNonSerializableConstruction}</argLine>
         </configuration>
       </plugin>
       <plugin>
@@ -328,6 +330,16 @@ file comparators, endian transformation classes, and much more.
       </activation>
       <properties>
         <EnableDynamicAgentLoading>-XX:+EnableDynamicAgentLoading</EnableDynamicAgentLoading>  
+      </properties>
+    </profile>
+    <profile>
+      <id>java28-up</id>
+      <activation>
+        <jdk>[28,)</jdk>
+      </activation>
+      <properties>
+        <!-- Mockito/Objenesis uses ReflectionFactory to construct instances. -->
+        <AllowNonSerializableConstruction>-Djdk.reflect.allowNonSerializableConstruction=true</AllowNonSerializableConstruction>
       </properties>
     </profile>
     <profile>
