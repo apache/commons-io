@@ -284,15 +284,15 @@ public class TailerCloseTest {
             private Tailer callbackTailer;
 
             @Override
-            public void init(final Tailer instance) {
-                callbackTailer = instance;
-            }
-
-            @Override
             public void handle(final String line) {
                 callbackTailer.close();
                 result.complete(assertThrows(IllegalStateException.class,
                         () -> callbackTailer.awaitTermination(Duration.ofSeconds(10))).getMessage());
+            }
+
+            @Override
+            public void init(final Tailer instance) {
+                callbackTailer = instance;
             }
         }).get();
         assertEquals("Cannot await termination from the tailer thread", result.get(10, TimeUnit.SECONDS));

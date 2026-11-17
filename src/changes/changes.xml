@@ -114,6 +114,7 @@ The <action> type attribute can be add,update,fix,remove.
       <action type="fix" dev="ggregory" due-to="Artem Bilan, hang4309, Gary Gregory" issue="IO-399">Fix Tailer retries and reader cleanup after transient file disappearance during rotation or periodic reopening (#878).</action>
       <action type="fix" dev="ggregory" due-to="Amar Ghugare, Gary Gregory">Prevent CharSequenceReader skip overflow (#932).</action>
       <action type="fix" dev="ggregory" due-to="Sofia Luiza, Gary Gregory">Separate FileCleaningTracker reaper task from its thread.</action>
+      <action type="fix" dev="ggregory" due-to="Amar Ghugare, Gary Gregory">Preserve Tailer partial lines after CR (#930).</action>
       <!-- ADD -->
       <action type="add" dev="ggregory" due-to="Gary Gregory">Add IOConsumer.accept(IOConsumer, T) (#846).</action>
       <action type="add" dev="ggregory" due-to="Gary Gregory">Add UnsynchronizedBufferedReader.unwrap() (#850).</action>
