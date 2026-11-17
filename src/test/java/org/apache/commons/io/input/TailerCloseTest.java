@@ -111,7 +111,7 @@ public class TailerCloseTest {
     }
 
     @AfterEach
-    public void tearDown() throws Exception {
+    void tearDown() throws Exception {
         release.countDown();
         if (tailer != null) {
             tailer.close();
@@ -376,7 +376,7 @@ public class TailerCloseTest {
     }
 
     @Test
-    public void testCloseTailer() throws Exception {
+    void testCloseTailer() throws Exception {
         executorService = Executors.newSingleThreadExecutor(TailerCloseTest::newDaemonThread);
         tailer = newBuilder().setExecutorService(executorService).get();
         assertEquals("aaa", result.get(10, TimeUnit.SECONDS));
