@@ -30,8 +30,7 @@ import org.apache.commons.io.IOUtils;
  * when this limit is reached, regardless of state of underlying reader.
  *
  * <p>
- * One use case is to avoid overrunning the readAheadLimit supplied to {@link Reader#mark(int)}, since reading
- * too many characters removes the ability to do a successful reset.
+ * One use case is to avoid overrunning the read-ahead limit supplied to {@link Reader#mark(int)}, since reading too many characters may invalidate the mark.
  * </p>
  *
  * @since 2.5
@@ -44,7 +43,7 @@ public class BoundedReader extends ProxyReader {
 
     private int markedAt = INVALID;
 
-    private int readAheadLimit; // Internally, this value will never exceed the allowed size
+    private int readAheadLimit;
 
     private final int maxCharsFromTargetReader;
 
@@ -60,18 +59,19 @@ public class BoundedReader extends ProxyReader {
     }
 
     /**
-     * marks the target stream.
+     * Marks the target reader at its current position.
      *
-     * @param readAheadLimit The number of characters that can be read while still retaining the ability to do #reset().
-     *                       Note that this parameter is not validated with respect to maxCharsFromTargetReader. There
-     *                       is no way to pass past maxCharsFromTargetReader, even if this value is greater.
+     * <p>
+     * The read-ahead limit is measured from the marked position. The overall character limit supplied to the constructor still applies.
+     * </p>
      *
+     * @param readAheadLimit The number of characters allowed to be read from the marked position, subject to the overall character limit.
      * @throws IOException If an I/O error occurs while calling the underlying reader's mark method.
      * @see Reader#mark(int)
      */
     @Override
     public void mark(final int readAheadLimit) throws IOException {
-        this.readAheadLimit = readAheadLimit - charsRead;
+        this.readAheadLimit = readAheadLimit;
         markedAt = charsRead;
         super.mark(readAheadLimit);
     }
@@ -130,6 +130,23 @@ public class BoundedReader extends ProxyReader {
         super.reset();
     }
 
+    /**
+     * Skips characters in the target reader.
+     *
+     * <p>
+     * Positive requests are limited to the remaining overall character limit supplied to the constructor. The read-ahead limit set by {@link #mark(int)}
+     * does not restrict skipping, so a skip may invalidate the target reader's mark.
+     * </p>
+     *
+     * <p>
+     * Zero and negative requests are passed directly to the target reader.
+     * </p>
+     *
+     * @param n The number of characters to skip.
+     * @return The actual number of characters skipped, or 0 if no characters were skipped.
+     * @throws IOException If an I/O error occurs while calling the underlying reader's skip method.
+     * @see Reader#skip(long)
+     */
     @Override
     public long skip(final long n) throws IOException {
         if (n <= 0) {

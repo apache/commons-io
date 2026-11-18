@@ -38,6 +38,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.file.TempFile;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 /**
  * Tests {@link BoundedReader}.
@@ -125,6 +127,38 @@ class BoundedReaderTest {
         }
     }
 
+    @ParameterizedTest
+    @ValueSource(ints = { 0, 1, 2, 5 })
+    void testMarkResetAfterInitialRead(final int offset) throws IOException {
+        try (BoundedReader mr = new BoundedReader(new BufferedReader(new StringReader("01234567890"), 2), 10)) {
+            for (int i = 0; i < offset; i++) {
+                assertEquals('0' + i, mr.read());
+            }
+            mr.mark(2);
+            for (int i = 0; i < 2; i++) {
+                assertEquals('0' + offset, mr.read());
+                assertEquals('1' + offset, mr.read());
+                assertEquals(-1, mr.read());
+                mr.reset();
+            }
+        }
+    }
+
+    @Test
+    void testMarkResetAfterInitialSkip() throws IOException {
+        try (BoundedReader mr = new BoundedReader(new BufferedReader(new StringReader("01234567890"), 2), 10)) {
+            assertEquals(5, mr.skip(5));
+            mr.mark(2);
+            final char[] cbuf = new char[4];
+            assertEquals(2, mr.read(cbuf, 0, cbuf.length));
+            assertEquals('5', cbuf[0]);
+            assertEquals('6', cbuf[1]);
+            assertEquals(-1, mr.read());
+            mr.reset();
+            assertEquals('5', mr.read());
+        }
+    }
+
     @Test
     void testMarkResetFromOffset1() throws IOException {
         try (BoundedReader mr = new BoundedReader(bufReader1, 3)) {
@@ -169,11 +203,28 @@ class BoundedReaderTest {
     @Test
     void testMarkResetWithMarkOutsideBoundedReaderMaxAndInitialOffset() throws IOException {
         try (BoundedReader mr = new BoundedReader(bufReader1, 3)) {
-            mr.read();
+            assertEquals('0', mr.read());
             mr.mark(3);
-            mr.read();
-            mr.read();
+            for (int i = 0; i < 2; i++) {
+                assertEquals('1', mr.read());
+                assertEquals('2', mr.read());
+                assertEquals(-1, mr.read());
+                mr.reset();
+            }
+        }
+    }
+
+    @Test
+    void testReadAfterSkipWithinReadAheadLimit() throws IOException {
+        try (BoundedReader mr = new BoundedReader(new BufferedReader(new StringReader("01234567890"), 2), 10)) {
+            assertEquals('0', mr.read());
+            mr.mark(4);
+            assertEquals(2, mr.skip(2));
+            assertEquals('3', mr.read());
+            assertEquals('4', mr.read());
             assertEquals(-1, mr.read());
+            mr.reset();
+            assertEquals('1', mr.read());
         }
     }
 
@@ -251,6 +302,20 @@ class BoundedReaderTest {
         }
     }
 
+    @ParameterizedTest
+    @ValueSource(ints = { 0, 1, 2, 5 })
+    void testSkipIgnoresReadAheadLimit(final int offset) throws IOException {
+        try (BoundedReader mr = new BoundedReader(new StringReader("01234567890"), 10)) {
+            assertEquals(offset, mr.skip(offset));
+            mr.mark(2);
+            assertEquals(3, mr.skip(3));
+            assertEquals(7 - offset, mr.skip(Long.MAX_VALUE));
+            assertEquals(0, mr.skip(1));
+            mr.reset();
+            assertEquals('0' + offset, mr.read());
+        }
+    }
+
     @Test
     void testSkipTest() throws IOException {
         try (BoundedReader mr = new BoundedReader(bufReader1, 3)) {
@@ -270,6 +335,34 @@ class BoundedReaderTest {
         }, 5)) {
             assertEquals(2, mr.skip(5));
             assertEquals('2', mr.read());
+        }
+    }
+
+    @Test
+    void testSkipWithMarkUsesActualSkippedCount() throws IOException {
+        try (BoundedReader mr = new BoundedReader(new FilterReader(new StringReader("01234567890")) {
+            @Override
+            public long skip(final long n) throws IOException {
+                return super.skip(Math.min(n, 2));
+            }
+        }, 5)) {
+            mr.mark(1);
+            assertEquals(2, mr.skip(4));
+            assertEquals(2, mr.skip(4));
+            assertEquals(1, mr.skip(4));
+            assertEquals(0, mr.skip(1));
+            mr.reset();
+            assertEquals('0', mr.read());
+        }
+    }
+
+    @Test
+    void testSkipWithZeroReadAheadLimit() throws IOException {
+        try (BoundedReader mr = new BoundedReader(new StringReader("01234567890"), 3)) {
+            mr.mark(0);
+            assertEquals(2, mr.skip(2));
+            assertEquals(1, mr.skip(2));
+            assertEquals(0, mr.skip(1));
         }
     }
 }
