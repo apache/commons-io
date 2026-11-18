@@ -129,6 +129,25 @@ public final class RandomAccessFileOutputStream extends OutputStream {
         return randomAccessFile;
     }
 
+    /**
+     * Writes a range of bytes to the underlying random access file.
+     *
+     * <p>
+     * Delegates to {@link RandomAccessFile#write(byte[], int, int)}.
+     * </p>
+     *
+     * @param b   The bytes to write.
+     * @param off The start offset in the data.
+     * @param len The number of bytes to write.
+     * @throws IOException               if an I/O error occurs.
+     * @throws NullPointerException      if {@code b} is {@code null}.
+     * @throws IndexOutOfBoundsException if the offset or length is negative, or the range exceeds the array bounds.
+     */
+    @Override
+    public void write(final byte[] b, final int off, final int len) throws IOException {
+        randomAccessFile.write(b, off, len);
+    }
+
     @Override
     public void write(final int b) throws IOException {
         randomAccessFile.write(b);
