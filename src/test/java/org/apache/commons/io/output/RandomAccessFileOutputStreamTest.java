@@ -216,12 +216,14 @@ class RandomAccessFileOutputStreamTest {
         final Path fixturePath = temporaryFolder.resolve("empty.txt");
         final byte[] bytes = { 1, 2, 3 };
         Files.write(fixturePath, bytes);
-        try (RandomAccessFile randomAccessFile = new RandomAccessFile(fixturePath.toFile(), "rw");
+        try (TrackingRandomAccessFile randomAccessFile = new TrackingRandomAccessFile(fixturePath);
                 RandomAccessFileOutputStream os = RandomAccessFileOutputStream.builder().setRandomAccessFile(randomAccessFile).get()) {
             randomAccessFile.seek(1);
             os.write(new byte[0]);
             os.write(bytes, 0, 0);
             os.write(bytes, bytes.length, 0);
+            assertEquals(0, randomAccessFile.bulkWriteCalls);
+            assertEquals(0, randomAccessFile.singleByteWriteCalls);
             assertEquals(1, randomAccessFile.getFilePointer());
             assertEquals(bytes.length, randomAccessFile.length());
         }
@@ -238,6 +240,8 @@ class RandomAccessFileOutputStreamTest {
                 throw failure;
             }
         }; RandomAccessFileOutputStream os = RandomAccessFileOutputStream.builder().setRandomAccessFile(randomAccessFile).get()) {
+            os.write(new byte[0]);
+            os.write(new byte[2], 2, 0);
             assertSame(failure, assertThrows(IOException.class, () -> os.write(new byte[] { 1, 2 })));
             assertSame(failure, assertThrows(IOException.class, () -> os.write(new byte[] { 1, 2 }, 1, 1)));
         }
