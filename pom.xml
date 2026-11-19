@@ -78,7 +78,7 @@ file comparators, endian transformation classes, and much more.
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
-      <version>3.21.0</version>
+      <version>3.22.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -131,7 +131,7 @@ file comparators, endian transformation classes, and much more.
     </commons.osgi.import>
     <commons.scmPubUrl>https://svn.apache.org/repos/infra/websites/production/commons/content/proper/commons-io/</commons.scmPubUrl>
     <commons.scmPubCheckoutDirectory>site-content</commons.scmPubCheckoutDirectory>
-    <commons.bytebuddy.version>1.18.14</commons.bytebuddy.version>
+    <commons.bytebuddy.version>1.18.17</commons.bytebuddy.version>
     <japicmp.skip>false</japicmp.skip>
     <commons.release.isDistModule>true</commons.release.isDistModule>
     <!-- JaCoCo: Don't make code coverage worse than: -->
@@ -144,6 +144,8 @@ file comparators, endian transformation classes, and much more.
     <commons.jacoco.complexityRatio>0.85</commons.jacoco.complexityRatio>
     <!-- Java 21 and up -->
     <EnableDynamicAgentLoading></EnableDynamicAgentLoading>
+    <!-- Java 28 and up -->
+    <AllowNonSerializableConstruction></AllowNonSerializableConstruction>
   </properties>
   <build>
     <!-- japicmp:cmp needs package to work from a jar -->
@@ -203,7 +205,7 @@ file comparators, endian transformation classes, and much more.
           <reuseForks>false</reuseForks>
           <!-- Limit memory size see IO-161 -->
           <!-- Mockito inline may need -XX:+EnableDynamicAgentLoading -->
-          <argLine>@{argLine} -Xmx25M ${EnableDynamicAgentLoading}</argLine>
+          <argLine>@{argLine} -Xmx25M ${EnableDynamicAgentLoading} ${AllowNonSerializableConstruction}</argLine>
         </configuration>
       </plugin>
       <plugin>
@@ -378,6 +380,16 @@ file comparators, endian transformation classes, and much more.
       </activation>
       <properties>
         <EnableDynamicAgentLoading>-XX:+EnableDynamicAgentLoading</EnableDynamicAgentLoading>  
+      </properties>
+    </profile>
+    <profile>
+      <id>java28-up</id>
+      <activation>
+        <jdk>[28,)</jdk>
+      </activation>
+      <properties>
+        <!-- Mockito/Objenesis uses ReflectionFactory to construct instances. -->
+        <AllowNonSerializableConstruction>-Djdk.reflect.allowNonSerializableConstruction=true</AllowNonSerializableConstruction>
       </properties>
     </profile>
     <profile>

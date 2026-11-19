@@ -57,7 +57,8 @@ import org.apache.commons.io.function.IOConsumer;
  * </p>
  * <p>
  * By default the charset encoding detection is lenient, the constructor with the lenient flag can be used for a script (following HTTP MIME and XML
- * specifications). All this is nicely explained by Mark Pilgrim in his blog, <a href="https://diveintomark.org/archives/2004/02/13/xml-media-types">
+ * specifications). All this is nicely explained by Mark Pilgrim in his blog,
+ * <a href="https://web.archive.org/web/20060601015331/http://diveintomark.org/archives/2004/02/13/xml-media-types">
  * Determining the character encoding of a feed</a>.
  * </p>
  * <p>
@@ -69,7 +70,7 @@ import org.apache.commons.io.function.IOConsumer;
  * To build an instance, use {@link Builder}.
  * </p>
  * <p>
- * Originally developed for <a href="https://rome.dev.java.net">ROME</a> under Apache License 2.0.
+ * Originally developed for <a href="https://rometools.github.io/rome/">ROME</a> under Apache License 2.0.
  * </p>
  *
  * @see Builder

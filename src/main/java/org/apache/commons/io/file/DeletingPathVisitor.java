@@ -172,11 +172,9 @@ public class DeletingPathVisitor extends CountingPathVisitor {
         if (accept(file)) {
             // Include dangling links so their parent permissions can also be overridden.
             if (Files.exists(file, linkOptions) || Files.isSymbolicLink(file)) {
-                if (overrideReadOnly) {
-                    // An absolute path supplies the parent needed by the POSIX permission override.
-                    PathUtils.setReadOnly(file.toAbsolutePath(), false, PathUtils.noFollowLinkOptionArray());
-                }
-                Files.deleteIfExists(file);
+                // An absolute path supplies the parent needed by the POSIX permission override.
+                PathUtils.withReadOnlyOverride(overrideReadOnly ? file.toAbsolutePath() : file, PathUtils.noFollowLinkOptionArray(), overrideReadOnly,
+                        () -> Files.deleteIfExists(file));
             }
             // invalid links will survive previous delete, different approach needed:
             if (Files.isSymbolicLink(file)) {

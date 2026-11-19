@@ -23,6 +23,7 @@ import java.io.OutputStream;
 import java.io.RandomAccessFile;
 import java.nio.file.StandardOpenOption;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.build.AbstractOrigin;
 import org.apache.commons.io.build.AbstractStreamBuilder;
 
@@ -127,6 +128,29 @@ public final class RandomAccessFileOutputStream extends OutputStream {
      */
     public RandomAccessFile getRandomAccessFile() {
         return randomAccessFile;
+    }
+
+    /**
+     * Writes a range of bytes to the underlying random access file.
+     *
+     * <p>
+     * After validation, zero-length writes have no effect. Nonempty writes delegate to {@link RandomAccessFile#write(byte[], int, int)}.
+     * </p>
+     *
+     * @param b   The bytes to write.
+     * @param off The start offset in the data.
+     * @param len The number of bytes to write.
+     * @throws IOException               if an I/O error occurs.
+     * @throws NullPointerException      if {@code b} is {@code null}.
+     * @throws IndexOutOfBoundsException if the offset or length is negative, or the range exceeds the array bounds.
+     */
+    @Override
+    public void write(final byte[] b, final int off, final int len) throws IOException {
+        IOUtils.checkFromIndexSize(b, off, len);
+        if (len == 0) {
+            return;
+        }
+        randomAccessFile.write(b, off, len);
     }
 
     @Override

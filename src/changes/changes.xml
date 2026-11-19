@@ -106,6 +106,19 @@ The <action> type attribute can be add,update,fix,remove.
       <action type="fix" dev="ggregory" due-to="Ivan Kurnosov, Hyun Lee, Gary Gregory" issue="IO-460" >Fix Tailer startup after missing-file retries (#880, #918).</action>
       <action type="fix" dev="ggregory" due-to="Kapil Verma, Jake Wang, Gary Gregory" issue="IO-893" >Rebuild the BOM buffer when resetting without a mark (#879).</action>
       <action type="fix" dev="ggregory" due-to="Claude Security, Gary Gregory">Javadoc: Fix @return for WildcardFileFilter.accept(Path, BasicFileAttributes).</action>
+      <action type="fix" dev="ggregory" due-to="Gary Gregory, simpleqt">Fix UnsynchronizedByteArrayInputStream.skip(long) advancing past the end of the stream and overflowing for large counts.</action>
+      <action type="fix" dev="ggregory" due-to="Sita Geßner, Gary Gregory" issue="IO-770">Support RFC 3986 registered-name syntax in FilenameUtils (#926).</action>
+      <action type="fix" dev="ggregory" due-to="Gary Gregory, Piotr Karwasz" issue="IO-879">Restore the DOS read-only attribute after an override-enabled deletion fails (#927).</action>
+      <action type="fix" dev="ggregory" due-to="Gary Gregory">Fix Windows file deletion races in TailerTest (#928).</action>
+      <action type="fix" dev="ggregory" due-to="Amar Ghugare, Gary Gregory">Fix AbstractCharacterFilterReader bulk reads and skip counts (#931).</action>
+      <action type="fix" dev="ggregory" due-to="Artem Bilan, hang4309, Gary Gregory" issue="IO-399">Fix Tailer retries and reader cleanup after transient file disappearance during rotation or periodic reopening (#878).</action>
+      <action type="fix" dev="ggregory" due-to="Amar Ghugare, Gary Gregory">Prevent CharSequenceReader skip overflow (#932).</action>
+      <action type="fix" dev="ggregory" due-to="Sofia Luiza, Gary Gregory">Separate FileCleaningTracker reaper task from its thread.</action>
+      <action type="fix" dev="ggregory" due-to="Amar Ghugare, Gary Gregory">Preserve Tailer partial lines after CR (#930).</action>
+      <action type="fix" dev="ggregory" due-to="Analice Mendes, Gary Gregory">RandomAccessFileOutputStream now delegates nonempty byte-array writes as a single bulk write (#936).</action>
+      <action type="fix" dev="ggregory" due-to="Analice Mendes, Gary Gregory">DemuxOutputStream now delegates nonempty byte-array writes in bulk while preserving subclass write(int) overrides (#937).</action>
+      <action type="fix" dev="ggregory" due-to="Faris Basha TM, Gary Gregory">Javadoc: Fix dead links in XmlStreamReader (#939).</action>
+      <action type="fix" dev="ggregory" due-to="Analice Mendes, Gary Gregory">Fix BoundedReader.mark(int) read-ahead accounting after characters have already been read or skipped.</action>
       <!-- ADD -->
       <action type="add" dev="ggregory" due-to="Gary Gregory">Add IOConsumer.accept(IOConsumer, T) (#846).</action>
       <action type="add" dev="ggregory" due-to="Gary Gregory">Add UnsynchronizedBufferedReader.unwrap() (#850).</action>
@@ -124,11 +137,12 @@ The <action> type attribute can be add,update,fix,remove.
       <action type="add" dev="ggregory" due-to="Claude Security, Gary Gregory">Add optional deserialization resource limits to ValidatingObjectInputStream while preserving existing filter restrictions (f003).</action>
       <action type="add" dev="ggregory" due-to="Gary Gregory">Add AGENTS.md.</action>
       <action type="add" dev="ggregory" due-to="Gary Gregory">Add NotFileFilter.getFileFilter().</action>
+      <action type="add" dev="ggregory" due-to="Ilya Basin, Kyon, Gary Gregory" issue="IO-889">Add Tailer.awaitTermination(Duration) to wait for reader cleanup after requesting a stop (#889).</action>
       <!-- UPDATE -->
       <action type="update" dev="ggregory" due-to="Gary Gregory">Bump org.apache.commons:commons-parent from 98 to 107 (#849).</action>
       <action type="update" dev="ggregory" due-to="Gary Gregory">[test] Bump commons-codec:commons-codec from 1.21.0 to 1.23.0.</action>
-      <action type="update" dev="ggregory" due-to="Gary Gregory, Dependabot">[test] Bump commons.bytebuddy.version from 1.18.8 to 1.18.14.</action>
-      <action type="update" dev="ggregory" due-to="Gary Gregory">[test] Bump commons-lang3 from 3.20.0 to 3.21.0.</action>
+      <action type="update" dev="ggregory" due-to="Gary Gregory, Dependabot">[test] Bump commons.bytebuddy.version from 1.18.8 to 1.18.17 (#935).</action>
+      <action type="update" dev="ggregory" due-to="Gary Gregory">[test] Bump commons-lang3 from 3.20.0 to 3.22.0.</action>
       <action type="update" dev="ggregory" due-to="Gary Gregory">[test] Bump com.google.jimfs:jimfs from 1.3.1 to 1.3.2 (#884).</action>
     </release>
     <release version="2.22.0" date="2026-04-19" description="This is a feature and maintenance release. Java 8 or later is required.">

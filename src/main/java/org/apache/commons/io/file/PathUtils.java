@@ -17,6 +17,7 @@
 
 package org.apache.commons.io.file;
 
+import java.io.Closeable;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -723,8 +724,8 @@ public final class PathUtils {
             throw new NoSuchFileException(file.toString());
         }
         final PathCounters pathCounts = Counters.longPathCounters();
-        boolean exists = exists(file, linkOptions);
-        long size = exists && !Files.isSymbolicLink(file) ? Files.size(file) : 0;
+        final boolean exists = exists(file, linkOptions);
+        final long size = exists && !Files.isSymbolicLink(file) ? Files.size(file) : 0;
         try {
             if (Files.deleteIfExists(file)) {
                 pathCounts.getFileCounter().increment();
@@ -734,26 +735,26 @@ public final class PathUtils {
         } catch (final AccessDeniedException ignored) {
             // Ignore and try again below.
         }
+        final boolean override = overrideReadOnly(deleteOptions);
         final Path parent = getParent(file);
-        PosixFileAttributes posixFileAttributes = null;
-        try {
-            if (overrideReadOnly(deleteOptions)) {
-                posixFileAttributes = readPosixFileAttributes(parent, linkOptions);
-                setReadOnly(file, false, linkOptions);
+        final PosixFileAttributes parentAttributes = override ? readPosixFileAttributes(parent, linkOptions) : null;
+        // Preserve the deletion failure if restoring parent permissions also fails.
+        try (Closeable restoreParent = () -> { // NOPMD UnusedLocalVariable: Closing this resource restores permissions.
+            if (parentAttributes != null) {
+                Files.setPosixFilePermissions(parent, parentAttributes.permissions());
             }
-            // Read size _after_ having read/execute access on POSIX.
-            exists = exists(file, linkOptions);
-            size = exists && !Files.isSymbolicLink(file) ? Files.size(file) : 0;
-            if (Files.deleteIfExists(file)) {
-                pathCounts.getFileCounter().increment();
-                pathCounts.getByteCounter().add(size);
-            }
-        } finally {
-            if (posixFileAttributes != null) {
-                Files.setPosixFilePermissions(parent, posixFileAttributes.permissions());
-            }
+        }) {
+            return withReadOnlyOverride(file, linkOptions, override, () -> {
+                // Read size after having read/execute access on POSIX.
+                final boolean fileExists = exists(file, linkOptions);
+                final long fileSize = fileExists && !Files.isSymbolicLink(file) ? Files.size(file) : 0;
+                if (Files.deleteIfExists(file)) {
+                    pathCounts.getFileCounter().increment();
+                    pathCounts.getByteCounter().add(fileSize);
+                }
+                return pathCounts;
+            });
         }
-        return pathCounts;
     }
 
     /**
@@ -2120,6 +2121,63 @@ public final class PathUtils {
             if (posixFileAttributes != null && path != null && Files.exists(path, linkOptions)) {
                 Files.setPosixFilePermissions(path, posixFileAttributes.permissions());
             }
+        }
+    }
+
+    /**
+     * Overrides read-only state for an operation, restoring DOS state on failure.
+     *
+     * @param path the file to operate on.
+     * @param linkOptions how to handle symbolic links.
+     * @param override whether to override read-only state.
+     * @param action the operation.
+     * @param <R> the result type.
+     * @return the operation result.
+     * @throws IOException if the operation or restoration fails.
+     */
+    static <R> R withReadOnlyOverride(final Path path, final LinkOption[] linkOptions, final boolean override, final IOSupplier<R> action)
+            throws IOException {
+        if (!override) {
+            return action.get();
+        }
+        final DosFileAttributes dosAttributes;
+        try {
+            dosAttributes = Files.readAttributes(path, DosFileAttributes.class, linkOptions);
+        } catch (final UnsupportedOperationException ignored) {
+            // The provider has no DOS attributes; preserve the existing POSIX override behavior.
+            setReadOnly(path, false, linkOptions);
+            return action.get();
+        } catch (final IOException failure) {
+            final Path parent = getParent(path);
+            if (!isPosix(parent, linkOptions)) {
+                // Do not clear a DOS attribute when its original value could not be saved.
+                throw failure;
+            }
+            // DOS views may be unavailable for individual paths, such as POSIX symbolic links.
+            // Override only the parent permissions, leaving the unknown DOS state untouched.
+            setPosixDeletePermissions(parent, true, linkOptions);
+            return action.get();
+        }
+        try {
+            setReadOnly(path, false, linkOptions);
+            return action.get();
+        } catch (final IOException | RuntimeException | Error failure) {
+            if (dosAttributes != null && dosAttributes.isReadOnly()) {
+                try {
+                    // Do not use setReadOnly: its POSIX fallback can change file permissions.
+                    final DosFileAttributeView view = Files.getFileAttributeView(path, DosFileAttributeView.class, linkOptions);
+                    if (view != null) {
+                        view.setReadOnly(true);
+                    }
+                } catch (final NoSuchFileException ignored) {
+                    // The file no longer exists, so there is no attribute to restore.
+                } catch (final IOException | RuntimeException | Error restorationFailure) {
+                    if (failure != restorationFailure) {
+                        failure.addSuppressed(restorationFailure);
+                    }
+                }
+            }
+            throw failure;
         }
     }
 

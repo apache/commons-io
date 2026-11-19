@@ -25,8 +25,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.SystemProperties;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledOnOs;
+import org.junit.jupiter.api.condition.OS;
 import org.junit.jupiter.api.io.TempDir;
 
 /**
@@ -54,12 +55,8 @@ class FileUtilsCleanSymlinksTest {
     }
 
     @Test
+    @DisabledOnOs(OS.WINDOWS) // Can't use "ln" for symlinks on the command line in Windows.
     void testCleanDirWithASymlinkDir() throws Exception {
-        if (SystemProperties.getOsName().startsWith("Win")) {
-            // Can't use "ln" for symlinks on the command line in Windows.
-            return;
-        }
-
         final File realOuter = new File(top, "realouter");
         assertTrue(realOuter.mkdirs());
 
@@ -90,12 +87,8 @@ class FileUtilsCleanSymlinksTest {
     }
 
     @Test
+    @DisabledOnOs(OS.WINDOWS) // Can't use "ln" for symlinks on the command line in Windows.
     void testCleanDirWithParentSymlinks() throws Exception {
-        if (SystemProperties.getOsName().startsWith("Win")) {
-            // Can't use "ln" for symlinks on the command line in Windows.
-            return;
-        }
-
         final File realParent = new File(top, "realparent");
         assertTrue(realParent.mkdirs());
 
@@ -131,12 +124,8 @@ class FileUtilsCleanSymlinksTest {
     }
 
     @Test
+    @DisabledOnOs(OS.WINDOWS) // Can't use "ln" for symlinks on the command line in Windows.
     void testCleanDirWithSymlinkFile() throws Exception {
-        if (SystemProperties.getOsName().startsWith("Win")) {
-            // Can't use "ln" for symlinks on the command line in Windows.
-            return;
-        }
-
         final File realOuter = new File(top, "realouter");
         assertTrue(realOuter.mkdirs());
 
@@ -166,12 +155,8 @@ class FileUtilsCleanSymlinksTest {
     }
 
     @Test
+    @DisabledOnOs(OS.WINDOWS) // Can't use "ln" for symlinks on the command line in Windows.
     void testCorrectlyIdentifySymlinkWithParentSymLink() throws Exception {
-        if (SystemProperties.getOsName().startsWith("Win")) {
-            // Can't use "ln" for symlinks on the command line in Windows.
-            return;
-        }
-
         final File realParent = new File(top, "realparent");
         assertTrue(realParent.mkdirs());
 
@@ -189,12 +174,8 @@ class FileUtilsCleanSymlinksTest {
     }
 
     @Test
+    @DisabledOnOs(OS.WINDOWS) // Can't use "ln" for symlinks on the command line in Windows.
     void testIdentifiesBrokenSymlinkFile() throws Exception {
-        if (SystemProperties.getOsName().startsWith("Win")) {
-            // Can't use "ln" for symlinks on the command line in Windows.
-            return;
-        }
-
         final File nonExistentFile = new File(top, "non-existent");
         final File symlinkFile = new File(top, "fakeinner");
         final File badSymlinkInPathFile = new File(symlinkFile, "fakeinner");
@@ -209,12 +190,8 @@ class FileUtilsCleanSymlinksTest {
     }
 
     @Test
+    @DisabledOnOs(OS.WINDOWS) // Can't use "ln" for symlinks on the command line in Windows.
     void testIdentifiesSymlinkDir() throws Exception {
-        if (SystemProperties.getOsName().startsWith("Win")) {
-            // Can't use "ln" for symlinks on the command line in Windows.
-            return;
-        }
-
         final File randomDirectory = new File(top, "randomDir");
         assertTrue(randomDirectory.mkdirs());
 
@@ -226,12 +203,8 @@ class FileUtilsCleanSymlinksTest {
     }
 
     @Test
+    @DisabledOnOs(OS.WINDOWS) // Can't use "ln" for symlinks on the command line in Windows.
     void testIdentifiesSymlinkFile() throws Exception {
-        if (SystemProperties.getOsName().startsWith("Win")) {
-            // Can't use "ln" for symlinks on the command line in Windows.
-            return;
-        }
-
         final File randomFile = new File(top, "randomfile");
         FileUtils.touch(randomFile);
 
@@ -243,12 +216,8 @@ class FileUtilsCleanSymlinksTest {
     }
 
     @Test
+    @DisabledOnOs(OS.WINDOWS) // Can't use "ln" for symlinks on the command line in Windows.
     void testStillClearsIfGivenDirectoryIsASymlink() throws Exception {
-        if (SystemProperties.getOsName().startsWith("Win")) {
-            // Can't use "ln" for symlinks on the command line in Windows.
-            return;
-        }
-
         final File randomDirectory = new File(top, "randomDir");
         assertTrue(randomDirectory.mkdirs());
 

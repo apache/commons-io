@@ -23,6 +23,8 @@ import java.io.IOException;
 import java.io.Reader;
 import java.util.function.IntPredicate;
 
+import org.apache.commons.io.IOUtils;
+
 /**
  * A filter reader that filters out characters where subclasses decide which characters to filter out.
  */
@@ -79,20 +81,47 @@ public abstract class AbstractCharacterFilterReader extends FilterReader {
 
     @Override
     public int read(final char[] cbuf, final int off, final int len) throws IOException {
-        final int read = super.read(cbuf, off, len);
-        if (read == EOF) {
-            return EOF;
-        }
-        int pos = off - 1;
-        for (int readPos = off; readPos < off + read; readPos++) {
-            if (filter(cbuf[readPos])) {
-                continue;
+        int count;
+        do {
+            final int read = super.read(cbuf, off, len);
+            if (read == EOF) {
+                return EOF;
             }
-            pos++;
-            if (pos < readPos) {
-                cbuf[pos] = cbuf[readPos];
+            int pos = off;
+            for (int readPos = off; readPos < off + read; readPos++) {
+                if (!filter(cbuf[readPos])) {
+                    if (pos < readPos) {
+                        cbuf[pos] = cbuf[readPos];
+                    }
+                    pos++;
+                }
             }
-        }
-        return pos - off + 1;
+            count = pos - off;
+        } while (count == 0 && len > 0);
+        return count;
+    }
+
+    /**
+     * Skips characters retained by this reader's filter.
+     *
+     * <p>
+     * Positive skips read and filter the underlying input until {@code n} retained characters have been skipped or the end of the stream is reached.
+     * Discarded characters do not count toward {@code n}, so more than {@code n} underlying characters may be consumed. This may be less efficient than
+     * skipping directly on the underlying reader.
+     * </p>
+     *
+     * <p>
+     * A zero skip delegates to the underlying reader without reading or filtering characters.
+     * </p>
+     *
+     * @param n The number of retained characters to skip.
+     * @return The number of retained characters actually skipped.
+     * @throws IllegalArgumentException If {@code n} is negative.
+     * @throws IOException If an I/O error occurs.
+     */
+    @Override
+    public long skip(final long n) throws IOException {
+        // Preserve the delegate's validation, including its closed-state check, for zero skips.
+        return n == 0 ? super.skip(0) : IOUtils.skip(this, n);
     }
 }
