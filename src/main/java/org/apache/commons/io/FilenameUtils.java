@@ -681,7 +681,7 @@ public class FilenameUtils {
      * C:           --&gt; C:
      * C:\          --&gt; C:\
      * ~            --&gt; ~
-     * ~/           --&gt; ~
+     * ~/           --&gt; ~/
      * ~user        --&gt; ~user
      * ~user/       --&gt; ~user
      * </pre>
