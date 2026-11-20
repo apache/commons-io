@@ -779,6 +779,12 @@ public class IOUtils {
      * Closes a {@link Closeable} unconditionally.
      * <p>
      * Equivalent to {@link Closeable#close()}, except any exceptions will be ignored. This is typically used in finally blocks.
+     *
+     * <p>
+     * Closing an output stream or writer can flush buffered data. Close it directly or use try-with-resources when the caller needs to know if the write
+     * completed successfully.
+     * </p>
+     *
      * <p>
      * Example code:
      * </p>
@@ -796,19 +802,17 @@ public class IOUtils {
      * }
      * </pre>
      * <p>
-     * Closing all streams:
+     * Use try-with-resources to report close failures when copying between two streams.
      * </p>
      *
      * <pre>
-     * try {
-     *     return IOUtils.copy(inputStream, outputStream);
-     * } finally {
-     *     IOUtils.closeQuietly(inputStream);
-     *     IOUtils.closeQuietly(outputStream);
+     * try (InputStream input = inputStream; OutputStream output = outputStream) {
+     *     return IOUtils.copy(input, output);
      * }
      * </pre>
+     *
      * <p>
-     * Also consider using a try-with-resources statement where appropriate.
+     * If the copy succeeds, any failure to close a stream is reported to the caller.
      * </p>
      *
      * @param closeable The objects to close, may be null or already closed.
@@ -848,18 +852,17 @@ public class IOUtils {
      * }
      * </pre>
      * <p>
-     * Closing all streams:
+     * Use try-with-resources to report close failures when copying between two streams.
      * </p>
      *
      * <pre>
-     * try {
-     *     return IOUtils.copy(inputStream, outputStream);
-     * } finally {
-     *     IOUtils.closeQuietly(inputStream, outputStream);
+     * try (InputStream input = inputStream; OutputStream output = outputStream) {
+     *     return IOUtils.copy(input, output);
      * }
      * </pre>
+     *
      * <p>
-     * Also consider using a try-with-resources statement where appropriate.
+     * If the copy succeeds, any failure to close a stream is reported to the caller.
      * </p>
      *
      * @param closeables The objects to close, may be null or already closed.
