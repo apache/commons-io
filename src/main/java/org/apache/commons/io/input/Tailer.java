@@ -714,6 +714,11 @@ public class Tailer implements Runnable, AutoCloseable {
     private final byte[] inbuf;
 
     /**
+     * One byte buffer to test whether a reader has data (IO-591).
+     */
+    private final byte[] probe = new byte[1];
+
+    /**
      * The file which will be tailed.
      */
     private final Tailable tailable;
@@ -1019,6 +1024,22 @@ public class Tailer implements Runnable, AutoCloseable {
     }
 
     /**
+     * Tests whether a new reader on the tailable has data at the given position.
+     *
+     * @param position The position to test.
+     * @return whether a new reader on the tailable has data at the given position, false if the tailable cannot be opened.
+     * @throws IOException Thrown if an I/O error occurs.
+     */
+    private boolean hasDataAt(final long position) throws IOException {
+        try (RandomAccessResourceBridge fresh = tailable.getRandomAccess(RAF_READ_ONLY_MODE)) {
+            fresh.seek(position);
+            return fresh.read(probe) != EOF;
+        } catch (final FileNotFoundException e) {
+            return false;
+        }
+    }
+
+    /**
      * Tests whether the tailable can be confirmed absent after an open failure.
      *
      * @return whether the last-modified-time lookup reports that the tailable does not exist.
@@ -1093,6 +1114,10 @@ public class Tailer implements Runnable, AutoCloseable {
      * A detected rotation is retried until the replacement can be opened or the tailer is stopped. Any open reader for the old file is retained until the
      * replacement opens, allowing remaining complete lines to be delivered before reading the replacement from the beginning.
      * </p>
+     * <p>
+     * A rotation is also detected when the path is longer than the current position but the open reader is at end of file while a new reader is not, for
+     * example after rotating to an empty file twice without a write in between.
+     * </p>
      */
     @Override
     public void run() {
@@ -1165,6 +1190,14 @@ public class Tailer implements Runnable, AutoCloseable {
                         continue;
                     }
                     if (length > position) {
+                        // IO-591: The path is longer than the current position, yet the open reader is at EOF.
+                        // If a new reader has data at the current position, then the path names another file.
+                        if (reader.read(probe) == EOF && hasDataAt(position)) {
+                            rotationPending = true;
+                            listener.fileRotated();
+                            continue;
+                        }
+                        reader.seek(position);
                         position = readLines(reader);
                         last = tailable.lastModifiedFileTime();
                     } else if (newer) {
