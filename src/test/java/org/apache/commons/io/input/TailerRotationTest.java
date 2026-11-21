@@ -103,6 +103,105 @@ class TailerRotationTest {
     }
 
     /**
+     * Simulates two rotations to empty files without any write in between (IO-591), followed by a write to the second replacement.
+     */
+    private static final class DoubleRotationTailable implements Tailer.Tailable {
+
+        private final Bridge firstBridge = new Bridge("first\n");
+        private final Bridge secondBridge = new Bridge("");
+        private final List<Bridge> replacementBridges = new ArrayList<>();
+        private final AtomicInteger openCalls = new AtomicInteger();
+        private final AtomicInteger sizeCalls = new AtomicInteger();
+        private final AtomicReference<Tailer> tailer = new AtomicReference<>();
+
+        @Override
+        public Tailer.RandomAccessResourceBridge getRandomAccess(final String mode) throws FileNotFoundException {
+            final int attempt = openCalls.incrementAndGet();
+            if (attempt == 1) {
+                return firstBridge;
+            }
+            if (attempt == 2) {
+                return secondBridge;
+            }
+            if (attempt > 10) {
+                throw new AssertionError("open budget exceeded");
+            }
+            final Bridge bridge = new Bridge("after\n");
+            replacementBridges.add(bridge);
+            return bridge;
+        }
+
+        @Override
+        public boolean isNewer(final FileTime previous) {
+            return false;
+        }
+
+        @Override
+        public FileTime lastModifiedFileTime() {
+            return FileTime.fromMillis(0);
+        }
+
+        @Override
+        public long size() {
+            final int call = sizeCalls.incrementAndGet();
+            if (call == 1) {
+                return 6; // "first\n" is available in the first file.
+            }
+            if (call == 2 || call == 3) {
+                return 0; // The first rotation is visible, the second one (to another empty file) is not.
+            }
+            if (call > 30) {
+                // Stop instead of failing here, so that a tailer stuck on a stale reader fails on the line assertion.
+                tailer.get().close();
+            }
+            return 6; // "after\n" was written to the second replacement.
+        }
+    }
+
+    /**
+     * Simulates a tailable that never rotates: each open returns a new reader over the same content, and the size is fixed.
+     */
+    private static final class FixedTailable implements Tailer.Tailable {
+
+        private final String content;
+        private final long size;
+        private final AtomicInteger openCalls = new AtomicInteger();
+        private final AtomicInteger sizeCalls = new AtomicInteger();
+        private final AtomicReference<Tailer> tailer = new AtomicReference<>();
+
+        FixedTailable(final String content, final long size) {
+            this.content = content;
+            this.size = size;
+        }
+
+        @Override
+        public Tailer.RandomAccessResourceBridge getRandomAccess(final String mode) throws FileNotFoundException {
+            if (openCalls.incrementAndGet() > 30) {
+                throw new AssertionError("open budget exceeded");
+            }
+            return new Bridge(content);
+        }
+
+        @Override
+        public boolean isNewer(final FileTime previous) {
+            return false;
+        }
+
+        @Override
+        public FileTime lastModifiedFileTime() {
+            return FileTime.fromMillis(0);
+        }
+
+        @Override
+        public long size() {
+            if (sizeCalls.incrementAndGet() > 10) {
+                tailer.get().close();
+            }
+            return size;
+        }
+    }
+
+    /**
      * Simulates one rotation with a configurable number of failed opens, followed by a replacement larger than the old read position.
      */
     private static final class SingleRotationTailable implements Tailer.Tailable {
@@ -156,6 +255,34 @@ class TailerRotationTest {
             }
             return 9; // replacement is present and never shrinks again.
         }
+    }
+
+    private static void runFixedTailable(final FixedTailable tailable, final List<String> lines, final AtomicInteger rotations) {
+        final List<Exception> errors = new ArrayList<>();
+        final TailerListener listener = new TailerListenerAdapter() {
+
+            @Override
+            public void fileRotated() {
+                rotations.incrementAndGet();
+            }
+
+            @Override
+            public void handle(final Exception exception) {
+                errors.add(exception);
+            }
+
+            @Override
+            public void handle(final String line) {
+                lines.add(line);
+            }
+        };
+        try (Tailer tailer = Tailer.builder().setTailable(tailable).setTailerListener(listener).setCharset(StandardCharsets.UTF_8).setStartThread(false)
+                .setDelayDuration(Duration.ZERO).get()) {
+            tailable.tailer.set(tailer);
+            assertTimeoutPreemptively(Duration.ofSeconds(2), tailer::run);
+            assertFalse(tailer.getRun());
+        }
+        assertEquals(new ArrayList<>(), errors);
     }
 
     @Test
@@ -301,6 +428,20 @@ class TailerRotationTest {
         assertEquals(1, tailable.newBridge.closeCalls);
     }
 
+    /**
+     * Tests that a trailing partial line, which the reader re-reads on each pass, is not mistaken for a rotation.
+     */
+    @Test
+    void testPartialLineIsNotRotation() {
+        final FixedTailable tailable = new FixedTailable("first\npartial", 13);
+        final List<String> lines = new ArrayList<>();
+        final AtomicInteger rotations = new AtomicInteger();
+        runFixedTailable(tailable, lines, rotations);
+        assertEquals(Arrays.asList("first"), lines);
+        assertEquals(0, rotations.get());
+        assertEquals(1, tailable.openCalls.get());
+    }
+
     @ParameterizedTest
     @CsvSource({ "0,false,1", "1,false,1", "2,false,1", "0,true,1", "1,true,1", "2,true,1", "0,false,4096", "1,false,4096", "2,false,4096", "0,true,4096",
             "1,true,4096", "2,true,4096" })
@@ -350,6 +491,66 @@ class TailerRotationTest {
             assertEquals(1, tailable.newBridge.closeCalls);
             assertFalse(tailer.getRun());
         }
+    }
+
+    /**
+     * Tests that lines written after two rotations to empty files are not lost (IO-591).
+     */
+    @Test
+    void testRotationToEmptyFileTwiceWithoutWrites() {
+        final DoubleRotationTailable tailable = new DoubleRotationTailable();
+        final List<String> lines = new ArrayList<>();
+        final List<Exception> errors = new ArrayList<>();
+        final AtomicInteger rotations = new AtomicInteger();
+        final TailerListener listener = new TailerListenerAdapter() {
+
+            @Override
+            public void fileRotated() {
+                rotations.incrementAndGet();
+            }
+
+            @Override
+            public void handle(final Exception exception) {
+                errors.add(exception);
+            }
+
+            @Override
+            public void handle(final String line) {
+                lines.add(line);
+                if ("after".equals(line)) {
+                    tailable.tailer.get().close();
+                }
+            }
+        };
+        try (Tailer tailer = Tailer.builder().setTailable(tailable).setTailerListener(listener).setCharset(StandardCharsets.UTF_8).setStartThread(false)
+                .setDelayDuration(Duration.ZERO).get()) {
+            tailable.tailer.set(tailer);
+            assertTimeoutPreemptively(Duration.ofSeconds(2), tailer::run);
+            assertFalse(tailer.getRun());
+        }
+        assertEquals(Arrays.asList("first", "after"), lines);
+        assertEquals(new ArrayList<>(), errors);
+        assertEquals(1, rotations.get());
+        assertEquals(1, tailable.firstBridge.closeCalls);
+        assertEquals(1, tailable.secondBridge.closeCalls);
+        // Refresh the stale empty reader without inferring another rotation from the differing data views.
+        assertEquals(1, tailable.replacementBridges.size());
+        for (final Bridge bridge : tailable.replacementBridges) {
+            assertEquals(1, bridge.closeCalls);
+        }
+    }
+
+    /**
+     * Tests that a size ahead of the readable data, for example on a caching network file system, is not mistaken for a rotation.
+     */
+    @Test
+    void testSizeAheadOfDataIsNotRotation() {
+        final FixedTailable tailable = new FixedTailable("", 1);
+        final List<String> lines = new ArrayList<>();
+        final AtomicInteger rotations = new AtomicInteger();
+        runFixedTailable(tailable, lines, rotations);
+        assertEquals(new ArrayList<>(), lines);
+        assertEquals(0, rotations.get());
     }
 
     @ParameterizedTest

@@ -119,6 +119,7 @@ The <action> type attribute can be add,update,fix,remove.
       <action type="fix" dev="ggregory" due-to="Analice Mendes, Gary Gregory">DemuxOutputStream now delegates nonempty byte-array writes in bulk while preserving subclass write(int) overrides (#937).</action>
       <action type="fix" dev="ggregory" due-to="Faris Basha TM, Gary Gregory">Javadoc: Fix dead links in XmlStreamReader (#939).</action>
       <action type="fix" dev="ggregory" due-to="Analice Mendes, Gary Gregory">Fix BoundedReader.mark(int) read-ahead accounting after characters have already been read or skipped.</action>
+      <action type="fix" dev="ggregory" due-to="Atharva Dudhe, Gary Gregory" issue="IO-591">Fix Tailer losing lines after consecutive rotations to empty files by refreshing stale readers without resetting their position.</action>
       <!-- ADD -->
       <action type="add" dev="ggregory" due-to="Gary Gregory">Add IOConsumer.accept(IOConsumer, T) (#846).</action>
       <action type="add" dev="ggregory" due-to="Gary Gregory">Add UnsynchronizedBufferedReader.unwrap() (#850).</action>
