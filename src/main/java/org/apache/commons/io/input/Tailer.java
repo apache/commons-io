@@ -714,6 +714,11 @@ public class Tailer implements Runnable, AutoCloseable {
     private final byte[] inbuf;
 
     /**
+     * One byte buffer to test whether a reader has data (IO-591).
+     */
+    private final byte[] probe = new byte[1];
+
+    /**
      * The file which will be tailed.
      */
     private final Tailable tailable;
@@ -1093,6 +1098,12 @@ public class Tailer implements Runnable, AutoCloseable {
      * A detected rotation is retried until the replacement can be opened or the tailer is stopped. Any open reader for the old file is retained until the
      * replacement opens, allowing remaining complete lines to be delivered before reading the replacement from the beginning.
      * </p>
+     *
+     * <p>
+     * If the tailable grows beyond the current position but the open reader is at end of file, the reader is refreshed at the same position. This recovers
+     * from consecutive rotations to empty files, for which the position is zero. Different views of the available data do not establish that a file was
+     * replaced, so this refresh preserves the position and does not call {@link TailerListener#fileRotated()}.
+     * </p>
      */
     @Override
     public void run() {
@@ -1165,6 +1176,20 @@ public class Tailer implements Runnable, AutoCloseable {
                         continue;
                     }
                     if (length > position) {
+                        // IO-591: A stale reader can remain at EOF after consecutive rotations to empty files.
+                        // Refresh without resetting the position: differing views of the data do not prove rotation.
+                        if (reader.read(probe) == EOF) {
+                            final RandomAccessResourceBridge previous = reader;
+                            try {
+                                reader = tailable.getRandomAccess(RAF_READ_ONLY_MODE);
+                            } catch (final FileNotFoundException e) {
+                                // Retain the old reader and its position if the optional refresh cannot open the path.
+                            }
+                            if (reader != previous) {
+                                previous.close();
+                            }
+                        }
+                        reader.seek(position);
                         position = readLines(reader);
                         last = tailable.lastModifiedFileTime();
                     } else if (newer) {

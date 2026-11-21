@@ -19,6 +19,7 @@ package org.apache.commons.io.input;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTimeoutPreemptively;
 
@@ -36,11 +37,77 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.DisabledOnOs;
 import org.junit.jupiter.api.condition.OS;
 import org.junit.jupiter.api.io.TempDir;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 /**
  * Checks pending rotation retries with the built-in path implementation.
  */
 class TailerRotationMissingPathTest {
+
+    @ParameterizedTest
+    @ValueSource(ints = { 1, 4096 })
+    @DisabledOnOs(OS.WINDOWS)
+    void testDoubleEmptyRotation(final int bufferSize, @TempDir final Path directory) throws Exception {
+        final Path path = directory.resolve("current.log");
+        Files.write(path, "first\n".getBytes(StandardCharsets.UTF_8));
+        final List<String> lines = new ArrayList<>();
+        final AtomicInteger rotations = new AtomicInteger();
+        final AtomicReference<Exception> error = new AtomicReference<>();
+        final TailerListener listener = new TailerListenerAdapter() {
+
+            private Tailer tailer;
+            private int eofCalls;
+
+            @Override
+            public void endOfFileReached() {
+                if (++eofCalls == 2) {
+                    // The first replacement is already open while the original reader is being drained.
+                    assertDoesNotThrow(() -> {
+                        Files.move(path, directory.resolve("empty.log"));
+                        Files.createFile(path);
+                        Files.write(path, "after\n".getBytes(StandardCharsets.UTF_8));
+                    });
+                }
+            }
+
+            @Override
+            public void fileRotated() {
+                rotations.incrementAndGet();
+            }
+
+            @Override
+            public void handle(final Exception exception) {
+                error.compareAndSet(null, exception);
+            }
+
+            @Override
+            public void handle(final String line) {
+                lines.add(line);
+                if ("first".equals(line)) {
+                    assertDoesNotThrow(() -> {
+                        Files.move(path, directory.resolve("first.log"));
+                        Files.createFile(path);
+                    });
+                } else if ("after".equals(line)) {
+                    tailer.close();
+                }
+            }
+
+            @Override
+            public void init(final Tailer tailer) {
+                this.tailer = tailer;
+            }
+        };
+        try (Tailer tailer = Tailer.builder().setPath(path).setTailerListener(listener).setCharset(StandardCharsets.UTF_8).setStartThread(false)
+                .setBufferSize(bufferSize).setDelayDuration(Duration.ofMillis(1)).get()) {
+            assertTimeoutPreemptively(Duration.ofSeconds(2), tailer::run);
+            assertFalse(tailer.getRun());
+        }
+        assertNull(error.get());
+        assertEquals(Arrays.asList("first", "after"), lines);
+        assertEquals(1, rotations.get());
+    }
 
     @Test
     @DisabledOnOs(OS.WINDOWS)
