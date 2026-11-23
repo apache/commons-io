@@ -21,6 +21,9 @@ import static org.apache.commons.io.IOUtils.EOF;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.Charset;
+import java.nio.charset.IllegalCharsetNameException;
+import java.nio.charset.UnsupportedCharsetException;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
@@ -340,6 +343,21 @@ public class BOMInputStream extends ProxyInputStream {
      */
     public ByteOrderMark getBOM() {
         return byteOrderMark;
+    }
+
+    /**
+     * Gets the {@link Charset} of the detected byte order mark.
+     * <p>
+     * This method delegates to {@link ByteOrderMark#getCharset()} without reading or consuming any additional bytes.
+     * </p>
+     *
+     * @return The BOM charset, or {@code null} if no BOM was found.
+     * @throws IllegalCharsetNameException if the detected BOM's charset name is illegal.
+     * @throws UnsupportedCharsetException if the detected BOM's charset is not supported.
+     * @since 2.23.0
+     */
+    public Charset getBOMCharset() {
+        return byteOrderMark == null ? null : byteOrderMark.getCharset();
     }
 
     /**
