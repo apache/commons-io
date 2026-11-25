@@ -26,25 +26,54 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assumptions.assumeFalse;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.CALLS_REAL_METHODS;
+import static org.mockito.Mockito.RETURNS_SELF;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.mockConstruction;
+import static org.mockito.Mockito.mockStatic;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.withSettings;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InterruptedIOException;
 import java.io.OutputStream;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.ClosedFileSystemException;
 import java.nio.file.DirectoryStream;
+import java.nio.file.FileAlreadyExistsException;
+import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.attribute.AclEntry;
+import java.nio.file.attribute.AclEntryFlag;
+import java.nio.file.attribute.AclEntryPermission;
+import java.nio.file.attribute.AclEntryType;
+import java.nio.file.attribute.AclFileAttributeView;
 import java.nio.file.attribute.DosFileAttributeView;
+import java.nio.file.attribute.FileAttribute;
 import java.nio.file.attribute.FileTime;
+import java.nio.file.attribute.PosixFileAttributeView;
 import java.nio.file.attribute.PosixFileAttributes;
+import java.nio.file.attribute.PosixFilePermissions;
+import java.nio.file.attribute.UserPrincipal;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.EnumSet;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.file.attribute.FileTimes;
 import org.apache.commons.io.filefilter.NameFileFilter;
 import org.apache.commons.io.function.IOConsumer;
@@ -52,11 +81,18 @@ import org.apache.commons.io.test.TestUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.SystemProperties;
-import org.apache.commons.lang3.SystemUtils;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledOnOs;
+import org.junit.jupiter.api.condition.EnabledOnOs;
+import org.junit.jupiter.api.condition.OS;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.mockito.MockedConstruction;
+import org.mockito.MockedStatic;
+
+import com.google.common.jimfs.Configuration;
+import com.google.common.jimfs.Jimfs;
 
 /**
  * Tests {@link PathUtils}.
@@ -69,6 +105,28 @@ class PathUtilsTest extends AbstractTempDirTest {
 
     private static final String PATH_FIXTURE = "NOTICE.txt";
 
+    private void assertCreateOwnerTempFile(final String prefix, final String suffix, final IOConsumer<Path> assertPermissions) throws IOException {
+        final Path file = PathUtils.createOwnerTempFile(prefix, suffix);
+        try {
+            assertTrue(Files.isRegularFile(file));
+            assertEquals(0, Files.size(file));
+            assertTrue(prefix == null || file.getFileName().toString().startsWith(prefix));
+            assertTrue(file.getFileName().toString().endsWith(suffix == null ? ".tmp" : suffix));
+            assertPermissions.accept(file);
+            Files.write(file, BYTE_ARRAY_FIXTURE);
+            assertArrayEquals(BYTE_ARRAY_FIXTURE, Files.readAllBytes(file));
+        } finally {
+            Files.delete(file);
+        }
+    }
+
+    private void assertOwnerOnlyAcl(final Path file) throws IOException {
+        final AclFileAttributeView view = Files.getFileAttributeView(file, AclFileAttributeView.class);
+        assertNotNull(view);
+        assertEquals(Collections.singletonList(AclEntry.newBuilder().setType(AclEntryType.ALLOW).setPrincipal(view.getOwner())
+                .setPermissions(EnumSet.allOf(AclEntryPermission.class)).build()), view.getAcl());
+    }
+
     private Path current() {
         return PathUtils.current();
     }
@@ -79,6 +137,31 @@ class PathUtilsTest extends AbstractTempDirTest {
 
     private Path getNonExistentPath() {
         return Paths.get("/does not exist/for/certain");
+    }
+
+    /**
+     * Runs a native macOS command for ACL regression tests.
+     *
+     * @param command The executable and its arguments.
+     * @return The merged standard output and standard error, decoded as UTF-8.
+     * @throws Exception If starting, waiting for, or reading from the command fails.
+     * @throws AssertionError If waiting times out or the command exits with a nonzero status.
+     */
+    private String runMacOsCommand(final String... command) throws Exception {
+        final Process process = new ProcessBuilder(command).redirectErrorStream(true).start();
+        try {
+            assertTrue(process.waitFor(30, TimeUnit.SECONDS), "Native command did not exit");
+            final String output;
+            try (InputStream input = process.getInputStream()) {
+                output = IOUtils.toString(input, StandardCharsets.UTF_8);
+            }
+            assertEquals(0, process.exitValue(), output);
+            return output;
+        } finally {
+            process.destroyForcibly();
+            process.getOutputStream().close();
+            process.getErrorStream().close();
+        }
     }
 
     private void setLastModifiedMillis(final Path file, final long millis) throws IOException {
@@ -208,8 +291,8 @@ class PathUtilsTest extends AbstractTempDirTest {
 
     @ParameterizedTest
     @ValueSource(booleans = { false, true })
+    @DisabledOnOs(value = OS.WINDOWS, disabledReason = "Windows resolves parent traversal differently from POSIX systems")
     void testCreateDirectoriesSymlinkParentTraversal(final boolean absoluteTarget) throws IOException {
-        assumeFalse(SystemUtils.IS_OS_WINDOWS, "Windows resolves parent traversal differently from POSIX systems");
         final Path fixture = Files.createTempDirectory(current().toAbsolutePath().normalize(), "path-utils-");
         try {
             final Path linkDir = Files.createDirectories(fixture.resolve("linkDir"));
@@ -260,6 +343,211 @@ class PathUtilsTest extends AbstractTempDirTest {
         assertFalse(Files.exists(tempDirPath.resolve("target")));
     }
 
+    @ParameterizedTest
+    @ValueSource(booleans = { false, true })
+    void testCreateOwnerTempFileAclMustBeAtomic(final boolean posix) throws IOException {
+        // Jimfs exposes ACLs but does not support setting them as initial creation attributes for files or directories.
+        final String[] views = posix ? new String[] { "owner", "acl", "posix" } : new String[] { "owner", "acl" };
+        final Configuration configuration = Configuration.windows().toBuilder().setAttributeViews("basic", views).build();
+        try (FileSystem fileSystem = Jimfs.newFileSystem(configuration)) {
+            final Path directory = Files.createDirectory(fileSystem.getPath("C:\\temp"));
+            assertThrows(UnsupportedOperationException.class, () -> PathUtils.createOwnerTempFile(directory, "owner-", ".tmp"));
+            assertTrue(PathUtils.isEmptyDirectory(directory));
+        }
+    }
+
+    @Test
+    @EnabledOnOs(OS.WINDOWS)
+    void testCreateOwnerTempFileDoesNotInheritAcl() throws IOException {
+        assumeTrue(Files.getFileStore(tempDirPath).supportsFileAttributeView(AclFileAttributeView.class));
+        final AclFileAttributeView parentView = Files.getFileAttributeView(tempDirPath, AclFileAttributeView.class);
+        final UserPrincipal owner = parentView.getOwner();
+        // Reuse a real principal so this also works with localized Windows account names.
+        final List<AclEntry> originalAcl = parentView.getAcl();
+        final UserPrincipal other = originalAcl.stream().map(AclEntry::principal).filter(principal -> !owner.equals(principal)).findFirst().orElse(null);
+        assumeTrue(other != null);
+        final AclEntry ownerEntry = AclEntry.newBuilder().setType(AclEntryType.ALLOW).setPrincipal(owner)
+                .setPermissions(EnumSet.allOf(AclEntryPermission.class)).setFlags(AclEntryFlag.FILE_INHERIT).build();
+        final AclEntry otherEntry = AclEntry.newBuilder().setType(AclEntryType.ALLOW).setPrincipal(other)
+                .setPermissions(AclEntryPermission.READ_DATA).setFlags(AclEntryFlag.FILE_INHERIT).build();
+        try {
+            parentView.setAcl(Arrays.asList(ownerEntry, otherEntry));
+            final Path inherited = Files.createTempFile(tempDirPath, "inherited-", ".tmp");
+            assertTrue(PathUtils.getAclEntryList(inherited).stream().anyMatch(entry -> entry.type() == AclEntryType.ALLOW
+                    && entry.principal().equals(other) && entry.permissions().contains(AclEntryPermission.READ_DATA)));
+            final Path file;
+            try (MockedStatic<Files> files = mockStatic(Files.class, CALLS_REAL_METHODS)) {
+                files.when(() -> Files.createTempFile(any(Path.class), any(String.class), any(String.class), any(FileAttribute.class)))
+                        .thenAnswer(invocation -> {
+                            final Path created = (Path) invocation.callRealMethod();
+                            // Check before the implementation replaces the file ACL; checking only the returned file misses an access window.
+                            assertTrue(PathUtils.getAclEntryList(created).isEmpty());
+                            assertOwnerOnlyAcl(created.getParent());
+                            return created;
+                        });
+                file = PathUtils.createOwnerTempFile(tempDirPath, "owner-", ".tmp");
+                files.verify(() -> Files.createTempFile(any(Path.class), any(String.class), any(String.class), any(FileAttribute.class)));
+            }
+            assertOwnerOnlyAcl(file);
+            Files.write(file, BYTE_ARRAY_FIXTURE);
+            assertArrayEquals(BYTE_ARRAY_FIXTURE, Files.readAllBytes(file));
+            Files.delete(file);
+        } finally {
+            parentView.setAcl(originalAcl);
+        }
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = { "file_inherit", "file_inherit,directory_inherit" })
+    @EnabledOnOs(OS.MAC)
+    void testCreateOwnerTempFileDoesNotInheritMacOsAcl(final String inheritance) throws Exception {
+        final Path directory = Files.createDirectory(tempDirPath.resolve("ACL test ' ; &"));
+        runMacOsCommand("/bin/chmod", "+a", "everyone allow read,write,execute," + inheritance, directory.toString());
+        final Path inherited = Files.createTempFile(directory, "inherited-", ".tmp",
+                PosixFilePermissions.asFileAttribute(PosixFilePermissions.fromString("rw-------")));
+        assertTrue(runMacOsCommand("/bin/ls", "-lde", inherited.toString()).contains("inherited allow read,write,execute"));
+        Files.delete(inherited);
+        final Path file;
+        try (MockedStatic<Files> files = mockStatic(Files.class, CALLS_REAL_METHODS)) {
+            files.when(() -> Files.createTempFile(any(Path.class), any(String.class), any(String.class), any(FileAttribute.class)))
+                    .thenAnswer(invocation -> {
+                        final Path created = (Path) invocation.callRealMethod();
+                        // Check at creation, before any subsequent operation could strip an inherited ACL from the file.
+                        assertEquals(1, runMacOsCommand("/bin/ls", "-lde", created.toString()).split("\\R").length);
+                        assertEquals(PosixFilePermissions.fromString("rwx------"), Files.getPosixFilePermissions(created.getParent()));
+                        return created;
+                    });
+            file = PathUtils.createOwnerTempFile(directory, "owner- ' ; &", " .tmp");
+            files.verify(() -> Files.createTempFile(any(Path.class), any(String.class), any(String.class), any(FileAttribute.class)));
+        }
+        try {
+            assertEquals(directory, file.getParent());
+            assertEquals(0, Files.size(file));
+            assertEquals(PosixFilePermissions.fromString("rw-------"), Files.getPosixFilePermissions(file));
+            // ls -e emits additional lines for ACL entries; the new file must have none.
+            assertEquals(1, runMacOsCommand("/bin/ls", "-lde", file.toString()).split("\\R").length);
+            Files.write(file, BYTE_ARRAY_FIXTURE);
+            assertArrayEquals(BYTE_ARRAY_FIXTURE, Files.readAllBytes(file));
+        } finally {
+            Files.delete(file);
+        }
+        assertTrue(PathUtils.isEmptyDirectory(directory));
+    }
+
+    @Test
+    @EnabledOnOs(OS.MAC)
+    void testCreateOwnerTempFileMacOsCleansUpOnInvalidName() throws IOException {
+        assertThrows(IllegalArgumentException.class, () -> PathUtils.createOwnerTempFile(tempDirPath, "invalid/", ".tmp"));
+        assertTrue(PathUtils.isEmptyDirectory(tempDirPath));
+    }
+
+    @Test
+    @EnabledOnOs(OS.MAC)
+    void testCreateOwnerTempFileMacOsDoesNotReplaceExistingFile() throws IOException {
+        final Path[] existingFile = new Path[1];
+        try (MockedStatic<Files> files = mockStatic(Files.class, CALLS_REAL_METHODS)) {
+            files.when(() -> Files.createLink(any(Path.class), any(Path.class))).thenAnswer(invocation -> {
+                existingFile[0] = Files.write(invocation.getArgument(0), BYTE_ARRAY_FIXTURE);
+                return invocation.callRealMethod();
+            });
+            assertThrows(FileAlreadyExistsException.class, () -> PathUtils.createOwnerTempFile(tempDirPath, "owner-", ".tmp"));
+        }
+        assertArrayEquals(BYTE_ARRAY_FIXTURE, Files.readAllBytes(existingFile[0]));
+        Files.delete(existingFile[0]);
+        assertTrue(PathUtils.isEmptyDirectory(tempDirPath));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = { "start", "exit", "timeout", "interrupt" })
+    @EnabledOnOs(OS.MAC)
+    void testCreateOwnerTempFileMacOsNativeFailure(final String failureMode) throws Exception {
+        final Process process = mock(Process.class);
+        when(process.waitFor(30, TimeUnit.SECONDS)).thenAnswer(invocation -> {
+            if ("interrupt".equals(failureMode)) {
+                throw new InterruptedException("native ACL removal interrupted");
+            }
+            return !"timeout".equals(failureMode);
+        });
+        when(process.exitValue()).thenReturn(1);
+        final IOException startFailure = new IOException("native ACL command unavailable");
+        try (MockedConstruction<ProcessBuilder> commands = mockConstruction(ProcessBuilder.class, withSettings().defaultAnswer(RETURNS_SELF),
+                (builder, context) -> when(builder.start()).thenAnswer(invocation -> {
+                    final String[] command = (String[]) context.arguments().get(0);
+                    assertEquals("/bin/chmod", command[0]);
+                    assertEquals("-N", command[1]);
+                    // The native operation must run before there is a file an observer could open.
+                    assertTrue(PathUtils.isEmptyDirectory(Paths.get(command[2])));
+                    if ("start".equals(failureMode)) {
+                        throw startFailure;
+                    }
+                    return process;
+                }))) {
+            final IOException failure = assertThrows(IOException.class, () -> PathUtils.createOwnerTempFile(tempDirPath, "owner-", ".tmp"));
+            if ("start".equals(failureMode)) {
+                assertSame(startFailure, failure);
+            } else {
+                verify(process).destroyForcibly();
+            }
+            if ("interrupt".equals(failureMode)) {
+                assertTrue(failure instanceof InterruptedIOException);
+                assertTrue(Thread.currentThread().isInterrupted());
+            }
+            assertEquals(1, commands.constructed().size());
+            assertTrue(PathUtils.isEmptyDirectory(tempDirPath));
+        } finally {
+            Thread.interrupted();
+        }
+    }
+
+    @Test
+    void testCreateOwnerTempFileNonDefaultPosixProvider() throws IOException {
+        try (FileSystem fileSystem = Jimfs.newFileSystem(Configuration.unix().toBuilder().setAttributeViews("basic", "owner", "posix").build())) {
+            final Path directory = Files.createDirectory(fileSystem.getPath("/temp"));
+            final Path file = PathUtils.createOwnerTempFile(directory, "owner-", ".tmp");
+            assertEquals(PosixFilePermissions.fromString("rw-------"), Files.getPosixFilePermissions(file));
+            Files.write(file, BYTE_ARRAY_FIXTURE);
+            assertArrayEquals(BYTE_ARRAY_FIXTURE, Files.readAllBytes(file));
+        }
+    }
+
+    @ParameterizedTest
+    @CsvSource({ "owner-,.bin", "owner-,", ",.bin", "," })
+    @DisabledOnOs(OS.WINDOWS)
+    void testCreateOwnerTempFilePosix(final String prefix, final String suffix) throws IOException {
+        assumeTrue(Files.getFileStore(PathUtils.getTempDirectory()).supportsFileAttributeView(PosixFileAttributeView.class));
+        assertCreateOwnerTempFile(prefix, suffix,
+                file -> assertEquals(PosixFilePermissions.fromString("rw-------"), Files.getPosixFilePermissions(file)));
+    }
+
+    @Test
+    @EnabledOnOs({ OS.MAC, OS.WINDOWS })
+    void testCreateOwnerTempFileRemovesPublishedFileOnFailure() throws IOException {
+        final IOException failure = new IOException("Could not remove the staging file");
+        try (MockedStatic<Files> files = mockStatic(Files.class, CALLS_REAL_METHODS)) {
+            files.when(() -> Files.delete(any(Path.class))).thenThrow(failure);
+            assertSame(failure, assertThrows(IOException.class, () -> PathUtils.createOwnerTempFile(tempDirPath, "owner-", ".tmp")));
+        }
+        assertTrue(PathUtils.isEmptyDirectory(tempDirPath));
+    }
+
+    @ParameterizedTest
+    @CsvSource({ "owner-,.bin", "owner-,", ",.bin", "," })
+    @EnabledOnOs(OS.WINDOWS)
+    void testCreateOwnerTempFileWindows(final String prefix, final String suffix) throws IOException {
+        assumeTrue(Files.getFileStore(PathUtils.getTempDirectory()).supportsFileAttributeView(AclFileAttributeView.class));
+        assertCreateOwnerTempFile(prefix, suffix, this::assertOwnerOnlyAcl);
+    }
+
+    @Test
+    void testCreateOwnerTempFileWithoutPermissionSupport() throws IOException {
+        final Configuration configuration = Configuration.windows().toBuilder().setAttributeViews("basic", "dos").build();
+        try (FileSystem fileSystem = Jimfs.newFileSystem(configuration)) {
+            final Path directory = Files.createDirectory(fileSystem.getPath("C:\\temp"));
+            assertThrows(UnsupportedOperationException.class, () -> PathUtils.createOwnerTempFile(directory, "owner-", ".tmp"));
+            assertTrue(PathUtils.isEmptyDirectory(directory));
+        }
+    }
+
     @Test
     void testGetBaseNamePathBaseCases() {
         assertEquals("bar", PathUtils.getBaseName(Paths.get("a/b/c/bar.foo")));
@@ -268,9 +556,6 @@ class PathUtilsTest extends AbstractTempDirTest {
         assertEquals("", PathUtils.getBaseName(Paths.get(".")));
         for (final File f : File.listRoots()) {
             assertNull(PathUtils.getBaseName(f.toPath()));
-        }
-        if (SystemUtils.IS_OS_WINDOWS) {
-            assertNull(PathUtils.getBaseName(Paths.get("C:\\")));
         }
     }
 
@@ -282,21 +567,34 @@ class PathUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
+    @EnabledOnOs(OS.WINDOWS)
+    void testGetBaseNamePathWindowsRoot() {
+        assertNull(PathUtils.getBaseName(Paths.get("C:\\")));
+    }
+
+    @Test
+    @DisabledOnOs(OS.MAC)
     void testGetDosFileAttributeView() {
         // dir
         final DosFileAttributeView dosFileAttributeView = PathUtils.getDosFileAttributeView(current());
         final Path path = Paths.get("this-file-does-not-exist-at.all");
         assertFalse(Files.exists(path));
-        if (SystemUtils.IS_OS_MAC) {
-            assertNull(dosFileAttributeView);
-            // missing file
-            assertNull(PathUtils.getDosFileAttributeView(path));
-        } else {
-            assertNotNull(dosFileAttributeView);
-            // missing file
-            assertNotNull(PathUtils.getDosFileAttributeView(path));
-        }
-        // null
+        assertNotNull(dosFileAttributeView);
+        // missing file
+        assertNotNull(PathUtils.getDosFileAttributeView(path));
+    }
+
+    @Test
+    @EnabledOnOs(OS.MAC)
+    void testGetDosFileAttributeViewMac() {
+        assertNull(PathUtils.getDosFileAttributeView(current()));
+        final Path path = Paths.get("this-file-does-not-exist-at.all");
+        assertFalse(Files.exists(path));
+        assertNull(PathUtils.getDosFileAttributeView(path));
+    }
+
+    @Test
+    void testGetDosFileAttributeViewNull() {
         assertThrows(NullPointerException.class, () -> PathUtils.getDosFileAttributeView(null));
     }
 
@@ -315,11 +613,12 @@ class PathUtilsTest extends AbstractTempDirTest {
         assertEquals("", PathUtils.getExtension(Paths.get("a\\b\\c")));
         assertEquals("", PathUtils.getExtension(Paths.get("C:\\temp\\foo.bar\\README")));
         assertEquals("ext", PathUtils.getExtension(Paths.get("../filename.ext")));
+    }
 
-        if (File.separatorChar != '\\') {
-            // Upwards compatibility:
-            assertEquals("txt", PathUtils.getExtension(Paths.get("foo.exe:bar.txt")));
-        }
+    @Test
+    @DisabledOnOs(OS.WINDOWS)
+    void testGetExtensionWithColon() {
+        assertEquals("txt", PathUtils.getExtension(Paths.get("foo.exe:bar.txt")));
     }
 
     @Test
@@ -541,13 +840,58 @@ class PathUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
+    void testSetOwnerOnlyAcl() throws IOException {
+        final Configuration configuration = Configuration.windows().toBuilder().setAttributeViews("basic", "owner", "acl").build();
+        try (FileSystem fileSystem = Jimfs.newFileSystem(configuration)) {
+            final Path file = Files.createFile(fileSystem.getPath("C:\\owner.tmp"));
+            final AclFileAttributeView view = Files.getFileAttributeView(file, AclFileAttributeView.class);
+            final UserPrincipal other = fileSystem.getUserPrincipalLookupService().lookupPrincipalByName("other");
+            view.setAcl(Collections.singletonList(AclEntry.newBuilder().setType(AclEntryType.ALLOW).setPrincipal(other)
+                    .setPermissions(AclEntryPermission.READ_DATA).build()));
+            assertSame(file, PathUtils.setOwnerOnlyAcl(file));
+            assertOwnerOnlyAcl(file);
+        }
+    }
+
+    @Test
+    void testSetOwnerOnlyAclDeletesFileOnFailure() throws IOException {
+        try (FileSystem fileSystem = Jimfs.newFileSystem(Configuration.windows())) {
+            final Path file = Files.createFile(fileSystem.getPath("C:\\owner.tmp"));
+            assertThrows(IOException.class, () -> PathUtils.setOwnerOnlyAcl(file));
+            assertFalse(Files.exists(file));
+        }
+    }
+
+    @Test
+    void testSetOwnerOnlyAclPreservesCleanupFailure() throws IOException {
+        final Path file;
+        try (FileSystem fileSystem = Jimfs.newFileSystem(Configuration.windows())) {
+            file = Files.createFile(fileSystem.getPath("C:\\owner.tmp"));
+        }
+        final ClosedFileSystemException exception = assertThrows(ClosedFileSystemException.class, () -> PathUtils.setOwnerOnlyAcl(file));
+        assertEquals(1, exception.getSuppressed().length);
+        assertTrue(exception.getSuppressed()[0] instanceof ClosedFileSystemException);
+    }
+
+    @Test
+    void testSetOwnerOnlyAclRejectsUnretainedPermissions() throws IOException {
+        final Path file = Files.createFile(tempDirPath.resolve("owner.tmp"));
+        final AclFileAttributeView view = mock(AclFileAttributeView.class);
+        when(view.getOwner()).thenReturn(Files.getOwner(file));
+        when(view.getAcl()).thenReturn(Collections.emptyList());
+        try (MockedStatic<Files> files = mockStatic(Files.class, CALLS_REAL_METHODS)) {
+            files.when(() -> Files.getFileAttributeView(file, AclFileAttributeView.class, LinkOption.NOFOLLOW_LINKS)).thenReturn(view);
+            assertThrows(IOException.class, () -> PathUtils.setOwnerOnlyAcl(file));
+        }
+        assertFalse(Files.exists(file));
+    }
+
+    @Test
+    @DisabledOnOs(OS.LINUX)
     void testSetReadOnlyFile() throws IOException {
         final Path resolved = tempDirPath.resolve("testSetReadOnlyFile.txt");
         // Ask now, as we are allowed before editing parent permissions.
         final boolean isPosix = PathUtils.isPosix(tempDirPath);
-
-        // TEMP HACK
-        assumeFalse(SystemUtils.IS_OS_LINUX);
 
         PathUtils.writeString(resolved, "test", StandardCharsets.UTF_8);
         final boolean readable = Files.isReadable(resolved);
