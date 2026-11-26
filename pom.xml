@@ -322,6 +322,56 @@ file comparators, endian transformation classes, and much more.
       <properties>
         <maven.compiler.release>8</maven.compiler.release>
       </properties>
+           <build>
+        <plugins>
+          <plugin>
+            <groupId>org.moditect</groupId>
+            <artifactId>moditect-maven-plugin</artifactId>
+            <version>${commons.moditect-maven-plugin.version}</version>
+            <executions>
+              <execution>
+                <id>add-module-infos</id>
+                <phase>package</phase>
+                <goals>
+                  <goal>add-module-info</goal>
+                </goals>
+                <configuration>
+                  <jvmVersion>${moditect.java.version}</jvmVersion>
+                  <jdepsExtraArgs>
+                    <arg>--multi-release=${moditect.java.version}</arg>
+                  </jdepsExtraArgs>
+                  <outputDirectory>${project.build.directory}</outputDirectory>
+                  <overwriteExistingFiles>true</overwriteExistingFiles>
+                  <failOnWarning>false</failOnWarning>
+                  <module combine.self="override">            
+                    <!-- Moditect doesn't automatically add jdk.unsupported because it doesn't see static reference to sun.misc.Unsafe because it is loaded with Class.forName -->
+                    <moduleInfoSource>
+                      module org.apache.commons.io {
+                        requires jdk.unsupported;
+                        exports org.apache.commons.io;
+                        exports org.apache.commons.io.build;
+                        exports org.apache.commons.io.channels;
+                        exports org.apache.commons.io.charset;
+                        exports org.apache.commons.io.comparator;
+                        exports org.apache.commons.io.file;
+                        exports org.apache.commons.io.file.attribute;
+                        exports org.apache.commons.io.file.spi;
+                        exports org.apache.commons.io.filefilter;
+                        exports org.apache.commons.io.function;
+                        exports org.apache.commons.io.input;
+                        exports org.apache.commons.io.input.buffer;
+                        exports org.apache.commons.io.monitor;
+                        exports org.apache.commons.io.output;
+                        exports org.apache.commons.io.serialization;
+                      }
+                    </moduleInfoSource>
+                  </module>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
     </profile>
     <profile>
       <id>java21-up</id>
@@ -364,7 +414,7 @@ file comparators, endian transformation classes, and much more.
             <version>${commons.compiler.version}</version>
             <configuration combine.self="override">
               <testIncludes>
-                <testInclude>**/*.java</testInclude>
+                <testInclude>**/*</testInclude>
               </testIncludes>
             </configuration>
           </plugin>
