@@ -21,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -28,17 +29,20 @@ import static org.junit.jupiter.api.Assumptions.assumeFalse;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.nio.charset.UnsupportedCharsetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.stream.Stream;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -51,6 +55,7 @@ import org.apache.commons.lang3.SystemProperties;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -60,6 +65,10 @@ import org.xml.sax.SAXParseException;
  * Test case for {@link BOMInputStream}.
  */
 class BOMInputStreamTest {
+
+    private static Stream<ByteOrderMark> byteOrderMarks() {
+        return Stream.of(ByteOrderMark.UTF_8, ByteOrderMark.UTF_16BE, ByteOrderMark.UTF_16LE, ByteOrderMark.UTF_32BE, ByteOrderMark.UTF_32LE);
+    }
 
     /**
      *  A mock InputStream that tracks if {@code close()} is called.
@@ -530,6 +539,49 @@ class BOMInputStreamTest {
         try (BOMInputStream in = BOMInputStream.builder().setInputStream(createUtf8Input(data, false)).get()) {
             final byte[] buf = new byte[1024];
             assertEquals(-1, in.read(buf));
+        }
+    }
+
+    @ParameterizedTest
+    @MethodSource("byteOrderMarks")
+    void testGetBOMCharset(final ByteOrderMark bom) throws Exception {
+        final String text = "A\u00e9\u4e2d";
+        final ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        bytes.write(bom.getBytes());
+        bytes.write(text.getBytes(Charset.forName(bom.getCharsetName())));
+        try (BOMInputStream in = BOMInputStream.builder().setByteArray(bytes.toByteArray())
+                .setByteOrderMarks(ByteOrderMark.UTF_8, ByteOrderMark.UTF_16BE, ByteOrderMark.UTF_16LE, ByteOrderMark.UTF_32BE, ByteOrderMark.UTF_32LE).get()) {
+            assertSame(bom.getCharset(), in.getBOMCharset());
+            assertEquals(text, IOUtils.toString(in, in.getBOMCharset()));
+        }
+    }
+
+    @Test
+    void testGetBOMCharsetInclude() throws Exception {
+        final byte[] data = { (byte) 0xEF, (byte) 0xBB, (byte) 0xBF, 'A' };
+        try (BOMInputStream in = BOMInputStream.builder().setByteArray(data).setInclude(true).get()) {
+            assertSame(StandardCharsets.UTF_8, in.getBOMCharset());
+            assertSame(StandardCharsets.UTF_8, in.getBOMCharset());
+            assertArrayEquals(data, IOUtils.toByteArray(in));
+        }
+    }
+
+    @Test
+    void testGetBOMCharsetNoBOM() throws Exception {
+        final byte[] data = { 'A', 'B', 'C' };
+        try (BOMInputStream in = BOMInputStream.builder().setByteArray(data).get()) {
+            assertNull(in.getBOMCharset());
+            assertArrayEquals(data, IOUtils.toByteArray(in));
+        }
+    }
+
+    @Test
+    void testGetBOMCharsetUnsupported() throws Exception {
+        final ByteOrderMark bom = new ByteOrderMark("X-commons-io-unsupported", 1);
+        try (BOMInputStream in = BOMInputStream.builder().setByteArray(new byte[] { 1, 'A' }).setByteOrderMarks(bom).get()) {
+            assertEquals(bom.getCharsetName(), in.getBOMCharsetName());
+            assertThrows(UnsupportedCharsetException.class, in::getBOMCharset);
+            assertEquals('A', in.read());
         }
     }
 

@@ -17,7 +17,10 @@
 package org.apache.commons.io;
 
 import java.io.Serializable;
+import java.nio.charset.Charset;
+import java.nio.charset.IllegalCharsetNameException;
 import java.nio.charset.StandardCharsets;
+import java.nio.charset.UnsupportedCharsetException;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -121,6 +124,11 @@ public class ByteOrderMark implements Serializable {
     private final String charsetName;
 
     /**
+     * Lazily resolved charset, excluded from the serialized form.
+     */
+    private transient volatile Charset charset;
+
+    /**
      * Bytes.
      */
     private final int[] bytes;
@@ -191,6 +199,32 @@ public class ByteOrderMark implements Serializable {
             copy[i] = (byte) bytes[i];
         }
         return copy;
+    }
+
+    /**
+     * Gets the {@link Charset} the BOM represents.
+     * <p>
+     * The charset is resolved from {@link #getCharsetName()} on first use and cached. Constructing a byte order mark does not require its charset to
+     * be supported. The cached charset is not serialized and is resolved again after deserialization.
+     * </p>
+     *
+     * @return The character set.
+     * @throws IllegalCharsetNameException if the charset name is illegal.
+     * @throws UnsupportedCharsetException if the named charset is not supported.
+     * @since 2.23.0
+     */
+    public Charset getCharset() {
+        Charset result = charset;
+        if (result == null) {
+            synchronized (this) {
+                result = charset;
+                if (result == null) {
+                    result = Charset.forName(getCharsetName());
+                    charset = result;
+                }
+            }
+        }
+        return result;
     }
 
     /**

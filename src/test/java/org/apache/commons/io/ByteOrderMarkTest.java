@@ -21,11 +21,23 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.nio.charset.Charset;
+import java.nio.charset.IllegalCharsetNameException;
+import java.nio.charset.StandardCharsets;
+import java.nio.charset.UnsupportedCharsetException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 
+import org.apache.commons.lang3.SerializationUtils;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -90,6 +102,70 @@ class ByteOrderMarkTest {
         assertArrayEquals(TEST_BOM_1.getBytes(), new byte[] { (byte) 1 }, "test1 bytes");
         assertArrayEquals(TEST_BOM_2.getBytes(), new byte[] { (byte) 1, (byte) 2 }, "test1 bytes");
         assertArrayEquals(TEST_BOM_3.getBytes(), new byte[] { (byte) 1, (byte) 2, (byte) 3 }, "test1 bytes");
+    }
+
+    @Test
+    void testGetCharset() {
+        for (final ByteOrderMark bom : new ByteOrderMark[] {
+                ByteOrderMark.UTF_8, ByteOrderMark.UTF_16BE, ByteOrderMark.UTF_16LE, ByteOrderMark.UTF_32BE, ByteOrderMark.UTF_32LE }) {
+            final Charset charset = bom.getCharset();
+            assertEquals(Charset.forName(bom.getCharsetName()), charset);
+            assertSame(charset, bom.getCharset());
+        }
+        assertEquals(StandardCharsets.UTF_8, new ByteOrderMark("UTF8", 0xEF, 0xBB, 0xBF).getCharset());
+    }
+
+    @Test
+    void testGetCharsetConcurrent() throws Exception {
+        final ByteOrderMark bom = new ByteOrderMark("UTF-8", 0xEF, 0xBB, 0xBF);
+        final ExecutorService executor = Executors.newFixedThreadPool(4);
+        final CountDownLatch ready = new CountDownLatch(4);
+        final CountDownLatch start = new CountDownLatch(1);
+        final List<Future<Charset>> results = new ArrayList<>();
+        try {
+            for (int i = 0; i < 4; i++) {
+                results.add(executor.submit(() -> {
+                    ready.countDown();
+                    start.await();
+                    return bom.getCharset();
+                }));
+            }
+            assertTrue(ready.await(5, TimeUnit.SECONDS));
+            start.countDown();
+            for (final Future<Charset> result : results) {
+                assertSame(StandardCharsets.UTF_8, result.get(5, TimeUnit.SECONDS));
+            }
+        } finally {
+            start.countDown();
+            executor.shutdownNow();
+            assertTrue(executor.awaitTermination(5, TimeUnit.SECONDS));
+        }
+    }
+
+    @Test
+    void testGetCharsetInvalidName() {
+        final ByteOrderMark bom = new ByteOrderMark("invalid charset", 1);
+        assertEquals("invalid charset", bom.getCharsetName());
+        assertThrows(IllegalCharsetNameException.class, bom::getCharset);
+    }
+
+    @Test
+    void testGetCharsetSerialization() {
+        final ByteOrderMark original = new ByteOrderMark("UTF-8", 0xEF, 0xBB, 0xBF);
+        final byte[] serialized = SerializationUtils.serialize(original);
+        assertSame(StandardCharsets.UTF_8, original.getCharset());
+        assertArrayEquals(serialized, SerializationUtils.serialize(original));
+        final ByteOrderMark restored = SerializationUtils.deserialize(serialized);
+        assertEquals(original, restored);
+        assertEquals(original.getCharsetName(), restored.getCharsetName());
+        assertSame(StandardCharsets.UTF_8, restored.getCharset());
+    }
+
+    @Test
+    void testGetCharsetUnsupported() {
+        final ByteOrderMark bom = new ByteOrderMark("X-commons-io-unsupported", 1);
+        assertEquals("X-commons-io-unsupported", bom.getCharsetName());
+        assertThrows(UnsupportedCharsetException.class, bom::getCharset);
     }
 
     /** Tests {@link ByteOrderMark#getCharsetName()} */
