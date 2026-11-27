@@ -710,7 +710,7 @@ public enum FileSystem {
     }
 
     /**
-     * Converts all separators to the Windows separator of backslash.
+     * Converts all separators to the this file system's name separator ('\\' on Windows, '/' on Linux).
      *
      * @param path The path to be changed, null ignored.
      * @return The updated path.
