@@ -710,10 +710,15 @@ public enum FileSystem {
     }
 
     /**
-     * Converts all separators to this file system's name separator ('\\' on Windows, '/' on Linux).
+     * Converts all forward slashes and backslashes to this file system's name separator.
      *
-     * @param path The path to be changed, null ignored.
-     * @return The updated path.
+     * <p>
+     * The target separator is returned by {@link #getNameSeparator()}: a backslash ({@code \}) for Windows ({@link #WINDOWS}), or a forward
+     * slash ({@code /}) for Linux ({@link #LINUX}), macOS ({@link #MAC_OSX}), and the generic file system ({@link #GENERIC}).
+     * </p>
+     *
+     * @param path The path to be changed, or {@code null}.
+     * @return The updated path, or {@code null} if the input is {@code null}.
      * @since 2.12.0
      */
     public String normalizeSeparators(final String path) {
