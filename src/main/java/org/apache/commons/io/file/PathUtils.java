@@ -22,6 +22,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InterruptedIOException;
 import java.io.OutputStream;
 import java.io.RandomAccessFile;
 import java.math.BigInteger;
@@ -32,7 +33,9 @@ import java.nio.charset.Charset;
 import java.nio.file.AccessDeniedException;
 import java.nio.file.CopyOption;
 import java.nio.file.DirectoryStream;
+import java.nio.file.FileStore;
 import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
 import java.nio.file.FileVisitOption;
 import java.nio.file.FileVisitResult;
 import java.nio.file.FileVisitor;
@@ -45,6 +48,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.nio.file.attribute.AclEntry;
+import java.nio.file.attribute.AclEntryPermission;
+import java.nio.file.attribute.AclEntryType;
 import java.nio.file.attribute.AclFileAttributeView;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.nio.file.attribute.DosFileAttributeView;
@@ -54,6 +59,7 @@ import java.nio.file.attribute.FileTime;
 import java.nio.file.attribute.PosixFileAttributeView;
 import java.nio.file.attribute.PosixFileAttributes;
 import java.nio.file.attribute.PosixFilePermission;
+import java.nio.file.attribute.PosixFilePermissions;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.chrono.ChronoZonedDateTime;
@@ -68,6 +74,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
@@ -518,6 +525,140 @@ public final class PathUtils {
     }
 
     /**
+     * Creates an empty temporary file with owner-only permissions in the given directory.
+     *
+     * @param directory The directory in which to create the file.
+     * @param prefix    The file name prefix, or {@code null}.
+     * @param suffix    The file name suffix, or {@code null}.
+     * @return The path to the newly created file.
+     * @throws IOException If file creation, establishing owner-only access, publication, or removal of staging entries fails.
+     * @see #createOwnerTempFile(String, String)
+     */
+    static Path createOwnerTempFile(final Path directory, final String prefix, final String suffix) throws IOException {
+        final FileStore fileStore = Files.getFileStore(directory);
+        if (!fileStore.supportsFileAttributeView(AclFileAttributeView.class)) {
+            if (!fileStore.supportsFileAttributeView(PosixFileAttributeView.class)) {
+                throw new UnsupportedOperationException("The temporary-file directory supports neither POSIX permissions nor ACLs");
+            }
+            if (directory.getFileSystem() == FileSystems.getDefault()
+                    && org.apache.commons.io.FileSystem.getCurrent() == org.apache.commons.io.FileSystem.MAC_OSX) {
+                return createOwnerTempFileMacOs(directory, prefix, suffix);
+            }
+            return Files.createTempFile(directory, prefix, suffix, PosixFilePermissions.asFileAttribute(PosixFilePermissions.fromString("rw-------")));
+        }
+        final FileAttribute<List<AclEntry>> emptyAcl = new FileAttribute<List<AclEntry>>() {
+
+            @Override
+            public String name() {
+                return "acl:acl";
+            }
+
+            @Override
+            public List<AclEntry> value() {
+                return Collections.emptyList();
+            }
+        };
+        final Path stagingDirectory = Files.createTempDirectory(directory, "commons-io-", emptyAcl);
+        return publishOwnerTempFile(directory, stagingDirectory, () -> {
+            // Windows can merge inherited entries into an initial ACL. Remove them before creating the file.
+            setOwnerOnlyAcl(stagingDirectory);
+            return setOwnerOnlyAcl(Files.createTempFile(stagingDirectory, prefix, suffix, emptyAcl));
+        });
+    }
+
+    /**
+     * Creates an empty temporary file with owner-only permissions.
+     *
+     * <p>
+     * The returned path is in the {@link #getTempDirectory() default temporary-file directory}. ACL support takes precedence over POSIX permission support.
+     * When the file store supports ACLs, this method first creates an empty staging directory with an initial empty ACL, then replaces its ACL with a single
+     * owner-only entry without inheritance flags. The file is then created inside it with an empty ACL, and a single entry grants every
+     * {@link AclEntryPermission} to the file's actual owner. Both replacement ACLs are read back and checked before continuing. On Windows, the owner retains
+     * the right to update an empty ACL. Securing the staging directory first avoids inheritable entries being merged into the file's initial ACL, as described
+     * in Microsoft's <a href="https://learn.microsoft.com/en-us/windows/win32/secauthz/dacl-for-a-new-object">DACL for a New Object</a>.
+     * </p>
+     *
+     * <p>
+     * If ACL support is unavailable, file creation requires POSIX permission support and requests {@code rw-------} atomically. The actual permissions may be
+     * more restrictive, for example because of the process umask, as described by {@link PosixFileAttributeView}. This also applies to the file created inside
+     * a macOS staging directory.
+     * </p>
+     *
+     * <p>
+     * When the default macOS file system exposes POSIX permissions but not ACLs, native ACLs can still grant access independently of POSIX permissions. This
+     * method creates an empty staging directory, invokes {@code /bin/chmod -N} to remove its ACL, and sets its permissions to {@code rwx------} before creating
+     * the file inside it. No shell is used. This requires permission to execute {@code /bin/chmod}. After starting the process, this method waits up to
+     * 30 seconds for exit. A nonzero exit status or an expired wait causes an {@link IOException}. If waiting is interrupted, this method restores the thread's
+     * interrupted status and throws an {@link InterruptedIOException}. Forcible process termination is requested after the wait, including on timeout or
+     * interruption. See
+     * Apple's <a href=
+     * "https://developer.apple.com/library/archive/documentation/FileManagement/Conceptual/FileSystemProgrammingGuide/FileSystemDetails/FileSystemDetails.html"
+     * >File System Details</a> for ACL evaluation and inheritance, its
+     * <a href="https://developer.apple.com/library/archive/documentation/OpenSource/Conceptual/ShellScripting/ShellScriptSecurity/ShellScriptSecurity.html">
+     * Shell Script Security</a> guide for native ACL commands and temporary-file access windows, and the
+     * <a href="https://developer.apple.com/library/archive/documentation/System/Conceptual/ManPages_iPhoneOS/man2/link.2.html">link(2) manual</a> for atomic
+     * hard-link creation and preservation of access rights.
+     * </p>
+     *
+     * <p>
+     * Both staging paths publish the secured file using a hard link in the temporary-file directory. This preserves the file's permissions without inheriting
+     * the destination directory's ACL or replacing an existing entry. The staging file link and directory are removed before returning. After a staging
+     * directory has been created, an {@link IOException} or {@link RuntimeException} causes this method to attempt cleanup of the newly created file links and
+     * directory, with cleanup failures suppressed on the original exception.
+     * </p>
+     *
+     * <p>
+     * File systems that support neither POSIX permissions nor ACLs, or cannot set the initial permissions atomically, are not supported. The ACL and default
+     * macOS paths also require hard-link support.
+     * </p>
+     *
+     * <p>
+     * As with other temporary-file APIs, the temporary-file directory and its ancestors must prevent untrusted users from replacing directory entries owned by
+     * the caller. Owner-only file permissions do not prevent deletion or replacement by users with the corresponding directory permissions.
+     * </p>
+     *
+     * <p>
+     * The caller is responsible for deleting the file when it is no longer needed.
+     * </p>
+     *
+     * @param prefix The prefix used to generate the file name, or {@code null} to use an implementation-dependent default.
+     * @param suffix The suffix used to generate the file name, or {@code null} to use {@code ".tmp"}.
+     * @return The path to the newly created empty file.
+     * @throws IllegalArgumentException      If the prefix or suffix cannot be used to generate a candidate file name.
+     * @throws UnsupportedOperationException If neither permission model is supported, initial permissions cannot be set atomically, or required hard links are
+     *                                       unsupported.
+     * @throws InterruptedIOException        If waiting for native macOS ACL removal is interrupted; the thread's interrupted status is restored.
+     * @throws IOException                   If an I/O error occurs, the default temporary-file directory does not exist, or establishing owner-only access
+     *                                       fails.
+     * @since 2.23.0
+     * @see Files#createTempFile(String, String, FileAttribute...)
+     */
+    public static Path createOwnerTempFile(final String prefix, final String suffix) throws IOException {
+        return createOwnerTempFile(getTempDirectory(), prefix, suffix);
+    }
+
+    /**
+     * Creates a macOS temporary file without inheriting native ACLs that override POSIX permissions.
+     *
+     * @param directory The directory in which to publish the file.
+     * @param prefix The file name prefix, or {@code null}.
+     * @param suffix The file name suffix, or {@code null}.
+     * @return The path to the newly created file.
+     * @throws IOException If ACL removal, creation, publication, or cleanup fails.
+     */
+    private static Path createOwnerTempFileMacOs(final Path directory, final String prefix, final String suffix) throws IOException {
+        final Set<PosixFilePermission> directoryPermissions = PosixFilePermissions.fromString("rwx------");
+        final Path stagingDirectory = Files.createTempDirectory(directory, "commons-io-", PosixFilePermissions.asFileAttribute(directoryPermissions));
+        return publishOwnerTempFile(directory, stagingDirectory, () -> {
+            // The directory may inherit permissive ACLs. Do not create the file until those ACLs have been removed.
+            removeMacOsAcl(stagingDirectory);
+            Files.setPosixFilePermissions(stagingDirectory, directoryPermissions);
+            return Files.createTempFile(stagingDirectory, prefix, suffix,
+                    PosixFilePermissions.asFileAttribute(PosixFilePermissions.fromString("rw-------")));
+        });
+    }
+
+    /**
      * Creates the parent directories for the given {@code path}.
      * <p>
      * If the parent directory already exists, then return it.
@@ -777,6 +918,24 @@ public final class PathUtils {
      */
     public static void deleteOnExit(final Path path) {
         Objects.requireNonNull(path, "path").toFile().deleteOnExit();
+    }
+
+    /**
+     * Attempts to delete newly created entries after an operation fails, suppressing cleanup exceptions on the original failure.
+     *
+     * @param failure The original failure.
+     * @param paths Entries to delete in order, ignoring {@code null} and missing entries.
+     */
+    private static void deleteOnFailure(final Throwable failure, final Path... paths) {
+        for (final Path path : paths) {
+            if (path != null) {
+                try {
+                    Files.deleteIfExists(path);
+                } catch (final IOException | RuntimeException cleanupException) {
+                    failure.addSuppressed(cleanupException);
+                }
+            }
+        }
     }
 
     /**
@@ -1513,6 +1672,33 @@ public final class PathUtils {
     }
 
     /**
+     * Creates and publishes a secured temporary file, removing staging entries and attempting cleanup on an I/O or runtime exception.
+     *
+     * @param directory The directory in which to publish the file.
+     * @param stagingDirectory The newly created staging directory.
+     * @param createFile The operation securing the staging directory and creating a secured file inside it. It must attempt to delete any file it creates if
+     *                   it fails before returning that file's path.
+     * @return The published file.
+     * @throws IOException If creation, publication, or removal of staging entries fails.
+     */
+    private static Path publishOwnerTempFile(final Path directory, final Path stagingDirectory, final IOSupplier<Path> createFile) throws IOException {
+        Path stagingFile = null;
+        Path publishedFile = null;
+        try {
+            stagingFile = createFile.get();
+            // A hard link preserves the secured inode's permissions and fails if the destination already exists.
+            publishedFile = Files.createLink(directory.resolve(stagingFile.getFileName()), stagingFile);
+            Files.delete(stagingFile);
+            stagingFile = null;
+            Files.delete(stagingDirectory);
+            return publishedFile;
+        } catch (final IOException | RuntimeException e) {
+            deleteOnFailure(e, publishedFile, stagingFile, stagingDirectory);
+            throw e;
+        }
+    }
+
+    /**
      * Reads the BasicFileAttributes from the given path. Returns null if the attributes can't be read.
      *
      * @param <A>     The {@link BasicFileAttributes} type.
@@ -1647,6 +1833,41 @@ public final class PathUtils {
     }
 
     /**
+     * Removes native ACLs from an empty macOS staging directory before any file is created in it.
+     *
+     * <p>
+     * Invokes the fixed {@code /bin/chmod} executable with separate arguments and redirects all standard streams to {@code /dev/null}. After startup, waits
+     * up to 30 seconds for exit and requires a zero exit status. Forcible termination is requested in the {@code finally} block; this method does not wait for
+     * that termination to complete.
+     * </p>
+     *
+     * @param directory The newly created staging directory.
+     * @throws InterruptedIOException If waiting is interrupted; the thread's interrupted status is restored.
+     * @throws IOException If starting the command fails, the wait times out, or the command exits with a nonzero status.
+     */
+    private static void removeMacOsAcl(final Path directory) throws IOException {
+        // Absolute paths and separate arguments avoid PATH lookups, option injection, and shell interpretation.
+        final File nullDevice = new File("/dev/null");
+        final Process process = new ProcessBuilder("/bin/chmod", "-N", directory.toAbsolutePath().toString())
+                .redirectInput(nullDevice).redirectOutput(nullDevice).redirectError(nullDevice).start();
+        try {
+            if (!process.waitFor(30, TimeUnit.SECONDS)) {
+                throw new IOException("Timed out removing the native ACL from " + directory);
+            }
+            if (process.exitValue() != 0) {
+                throw new IOException("Could not remove the native ACL from " + directory + "; chmod exit code: " + process.exitValue());
+            }
+        } catch (final InterruptedException e) {
+            Thread.currentThread().interrupt();
+            final InterruptedIOException failure = new InterruptedIOException("Interrupted removing the native ACL from " + directory);
+            failure.initCause(e);
+            throw failure;
+        } finally {
+            process.destroyForcibly();
+        }
+    }
+
+    /**
      * Requires that the given {@link File} exists and throws an {@link IllegalArgumentException} if it doesn't.
      *
      * @param file          The {@link File} to check.
@@ -1698,6 +1919,37 @@ public final class PathUtils {
     public static void setLastModifiedTime(final Path sourceFile, final Path targetFile) throws IOException {
         Objects.requireNonNull(sourceFile, "sourceFile");
         Files.setLastModifiedTime(targetFile, getLastModifiedTime(sourceFile));
+    }
+
+    /**
+     * Sets and verifies owner-only ACL permissions on a new temporary file or empty staging directory.
+     *
+     * <p>
+     * Replaces the ACL with one {@link AclEntryType#ALLOW} entry granting every {@link AclEntryPermission} to the actual owner, without inheritance flags,
+     * then verifies the ACL by reading it back. On an I/O or runtime exception, attempts to delete the entry and suppresses any cleanup failure.
+     * </p>
+     *
+     * @param file A new temporary file or empty staging directory.
+     * @return The given file.
+     * @throws IOException If the ACL view is unavailable, reading the owner fails, or setting or verifying the ACL fails, with any cleanup failure suppressed.
+     */
+    static Path setOwnerOnlyAcl(final Path file) throws IOException {
+        try {
+            final AclFileAttributeView view = Files.getFileAttributeView(file, AclFileAttributeView.class, LinkOption.NOFOLLOW_LINKS);
+            if (view == null) {
+                throw new IOException("The temporary file does not support ACLs: " + file);
+            }
+            final List<AclEntry> acl = Collections.singletonList(AclEntry.newBuilder().setType(AclEntryType.ALLOW).setPrincipal(view.getOwner())
+                    .setPermissions(EnumSet.allOf(AclEntryPermission.class)).build());
+            view.setAcl(acl);
+            if (!acl.equals(view.getAcl())) {
+                throw new IOException("The temporary entry did not retain its owner-only ACL: " + file);
+            }
+            return file;
+        } catch (final IOException | RuntimeException e) {
+            deleteOnFailure(e, file);
+            throw e;
+        }
     }
 
     /**
