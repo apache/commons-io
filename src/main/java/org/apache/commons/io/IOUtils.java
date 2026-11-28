@@ -779,6 +779,10 @@ public class IOUtils {
      * Closes a {@link Closeable} unconditionally.
      * <p>
      * Equivalent to {@link Closeable#close()}, except any exceptions will be ignored. This is typically used in finally blocks.
+     *
+     * <p>
+     * Closing an output stream or writer can flush buffered data. Use this method only when a failure to close the resource can safely be ignored.
+     * </p>
      * <p>
      * Example code:
      * </p>
@@ -796,7 +800,7 @@ public class IOUtils {
      * }
      * </pre>
      * <p>
-     * Closing all streams:
+     * Closing both streams when close failures can be ignored.
      * </p>
      *
      * <pre>
@@ -848,7 +852,7 @@ public class IOUtils {
      * }
      * </pre>
      * <p>
-     * Closing all streams:
+     * Closing both streams when close failures can be ignored.
      * </p>
      *
      * <pre>
